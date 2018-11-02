@@ -19,7 +19,7 @@ public class EventControllerAdvice {
   @ExceptionHandler(EventPublishException.class)
   public Errors handleEventPublishException(EventPublishException exception) {
     logger.debug(exception.getMessage(), exception);
-    return ErrorUtility.craftErrors(exception, HttpStatus.INTERNAL_SERVER_ERROR);
+    return ErrorUtility.buildError(exception, HttpStatus.INTERNAL_SERVER_ERROR);
   }
 
 }

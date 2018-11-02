@@ -21,21 +21,21 @@ public class WorkflowControllerAdvice {
   @ExceptionHandler(WorkflowNotFoundException.class)
   public Errors handleWorkflowNotFoundException(WorkflowNotFoundException exception) {
     logger.debug(exception.getMessage(), exception);
-    return ErrorUtility.craftErrors(exception, HttpStatus.NOT_FOUND);
+    return ErrorUtility.buildError(exception, HttpStatus.NOT_FOUND);
   }
 
   @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
   @ExceptionHandler(WorkflowDeploymentException.class)
   public Errors handleWorkflowDeploymentException(WorkflowDeploymentException exception) {
     logger.debug(exception.getMessage(), exception);
-    return ErrorUtility.craftErrors(exception, HttpStatus.INTERNAL_SERVER_ERROR);
+    return ErrorUtility.buildError(exception, HttpStatus.INTERNAL_SERVER_ERROR);
   }
 
   @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
   @ExceptionHandler(CamundaServiceException.class)
   public Errors handleCamundaServiceException(CamundaServiceException exception) {
     logger.debug(exception.getMessage(), exception);
-    return ErrorUtility.craftErrors(exception, HttpStatus.INTERNAL_SERVER_ERROR);
+    return ErrorUtility.buildError(exception, HttpStatus.INTERNAL_SERVER_ERROR);
   }
 
 }
