@@ -7,6 +7,7 @@ import javax.annotation.PostConstruct;
 import javax.jms.JMSException;
 import javax.jms.Queue;
 
+import org.folio.rest.jms.model.Event;
 import org.folio.rest.model.repo.WorkflowRepo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,7 +40,7 @@ public class EventProducer {
   }
 
   public void send(Event event) throws JMSException, IOException {
-    workflowRepo.findByStartTriggerId(event.getTrigger().getId()).forEach(workflow -> {
+    workflowRepo.findByStartTriggerId(event.getTriggerId()).forEach(workflow -> {
       event.setProcessDefinitionIds(new ArrayList<String>(workflow.getProcessDefinitionIds()));
     });
     String message = mapper.writeValueAsString(event);

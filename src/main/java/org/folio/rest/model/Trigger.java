@@ -8,6 +8,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.folio.rest.domain.model.AbstractBaseEntity;
+import org.folio.rest.jms.model.TriggerType;
 import org.springframework.http.HttpMethod;
 
 @Entity
@@ -25,6 +26,10 @@ public class Trigger extends AbstractBaseEntity {
 
   @NotNull
   @Enumerated(EnumType.STRING)
+  private TriggerType type;
+
+  @NotNull
+  @Enumerated(EnumType.STRING)
   private HttpMethod method;
 
   @NotNull
@@ -35,10 +40,11 @@ public class Trigger extends AbstractBaseEntity {
     super();
   }
 
-  public Trigger(String name, String description, HttpMethod method, String pathPattern) {
+  public Trigger(String name, String description, TriggerType type, HttpMethod method, String pathPattern) {
     this();
     this.name = name;
     this.description = description;
+    this.type = type;
     this.method = method;
     this.pathPattern = pathPattern;
   }
@@ -57,6 +63,14 @@ public class Trigger extends AbstractBaseEntity {
 
   public void setDescription(String description) {
     this.description = description;
+  }
+
+  public TriggerType getType() {
+    return type;
+  }
+
+  public void setType(TriggerType type) {
+    this.type = type;
   }
 
   public HttpMethod getMethod() {

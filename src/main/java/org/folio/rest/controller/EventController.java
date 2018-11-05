@@ -7,8 +7,8 @@ import javax.jms.JMSException;
 import javax.servlet.http.HttpServletRequest;
 
 import org.folio.rest.exception.EventPublishException;
-import org.folio.rest.jms.Event;
 import org.folio.rest.jms.EventProducer;
+import org.folio.rest.jms.model.Event;
 import org.folio.rest.model.Trigger;
 import org.folio.rest.model.repo.TriggerRepo;
 import org.folio.rest.tenant.annotation.TenantHeader;
@@ -64,7 +64,20 @@ public class EventController {
     if (trigger.isPresent()) {
       logger.debug("Publishing event: {}: {}", trigger.get().getName(), trigger.get().getDescription());
       try {
-        eventProducer.send(new Event(trigger.get(), tenant, path, body, headers));
+        // @formatter:off
+        eventProducer.send(
+          new Event(
+            trigger.get().getId(),
+            trigger.get().getType(),
+            trigger.get().getPathPattern(),
+            trigger.get().getMethod().toString(),
+            tenant,
+            path,
+            headers.toSingleValueMap(),
+            body
+          )
+        );
+        // @formatter:on
       } catch (JMSException | IOException e) {
         throw new EventPublishException("Unable to publish event!", e);
       }

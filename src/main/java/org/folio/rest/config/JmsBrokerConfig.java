@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class JmsConfig {
+public class JmsBrokerConfig {
 
   @Value("${event.queue.name}")
   private String eventQueueName;
