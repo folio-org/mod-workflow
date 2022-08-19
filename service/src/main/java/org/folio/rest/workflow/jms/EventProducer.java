@@ -24,7 +24,8 @@ public class EventProducer {
   private Queue queue;
 
   public void send(Event event) throws JMSException, IOException {
-    logger.info("Send [{}]: {}, {}, {}", queue.getQueueName(), event.getMethod(), event.getPath(), event.getPayload());
+    // CAUTION: payload not allowed in logs
+    logger.info("Send [{}]: {}, {}, {}", queue.getQueueName(), event.getMethod(), event.getPath());
     this.jmsMessagingTemplate.convertAndSend(queue, event);
   }
 
