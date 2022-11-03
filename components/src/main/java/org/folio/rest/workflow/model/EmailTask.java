@@ -59,6 +59,9 @@ public class EmailTask extends Node implements DelegateTask {
   @Column(nullable = true)
   private String attachmentPath;
 
+  @Column(nullable = false)
+  private Boolean includeAttachment;
+
   public EmailTask() {
     super();
     inputVariables = new HashSet<EmbeddedVariable>();
@@ -68,6 +71,7 @@ public class EmailTask extends Node implements DelegateTask {
     mailFrom = "";
     mailSubject = "";
     mailText = "";
+    includeAttachment = true;
   }
 
   public Set<EmbeddedVariable> getInputVariables() {
@@ -164,6 +168,14 @@ public class EmailTask extends Node implements DelegateTask {
 
   public void setAttachmentPath(String attachmentPath) {
     this.attachmentPath = attachmentPath;
+  }
+
+  public boolean isIncludeAttachment() {
+    return includeAttachment;
+  }
+
+  public void setIncludeAttachment(boolean includeAttachment) {
+    this.includeAttachment = includeAttachment;
   }
 
 }
