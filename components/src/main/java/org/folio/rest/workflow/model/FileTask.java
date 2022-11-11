@@ -30,6 +30,9 @@ public class FileTask extends Node implements DelegateTask {
   @Column(nullable = false)
   private String path;
 
+  @Column(nullable = true)
+  private String line;
+
   @Enumerated(EnumType.STRING)
   @Column(nullable = false)
   private FileOp op;
@@ -87,6 +90,14 @@ public class FileTask extends Node implements DelegateTask {
 
   public void setOp(FileOp op) {
     this.op = op;
+  }
+
+  public String getLine() {
+    return line;
+  }
+
+  public void setLine(String line) {
+    this.line = line;
   }
 
 }

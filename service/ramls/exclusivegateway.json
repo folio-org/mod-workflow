@@ -1173,6 +1173,9 @@
         "path" : {
           "type" : "string"
         },
+        "line" : {
+          "type" : "string"
+        },
         "op" : {
           "type" : "string",
           "enum" : [ "LIST", "READ", "WRITE", "DELETE", "LINE_COUNT", "READ_LINE" ]
