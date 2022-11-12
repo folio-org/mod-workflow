@@ -27,15 +27,18 @@ public class FileTask extends Node implements DelegateTask {
   @Column(nullable = false)
   private boolean asyncAfter;
 
+  @Enumerated(EnumType.STRING)
+  @Column(nullable = false)
+  private FileOp op;
+
   @Column(nullable = false)
   private String path;
 
   @Column(nullable = true)
-  private String line;
+  private String target;
 
-  @Enumerated(EnumType.STRING)
-  @Column(nullable = false)
-  private FileOp op;
+  @Column(nullable = true)
+  private String line;
 
   public FileTask() {
     super();
@@ -76,6 +79,14 @@ public class FileTask extends Node implements DelegateTask {
     this.asyncAfter = asyncAfter;
   }
 
+  public FileOp getOp() {
+    return op;
+  }
+
+  public void setOp(FileOp op) {
+    this.op = op;
+  }
+
   public String getPath() {
     return path;
   }
@@ -84,12 +95,12 @@ public class FileTask extends Node implements DelegateTask {
     this.path = path;
   }
 
-  public FileOp getOp() {
-    return op;
+  public String getTarget() {
+    return target;
   }
 
-  public void setOp(FileOp op) {
-    this.op = op;
+  public void setTarget(String target) {
+    this.target = target;
   }
 
   public String getLine() {
