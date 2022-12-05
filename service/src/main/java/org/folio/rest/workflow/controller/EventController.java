@@ -13,16 +13,13 @@ import java.util.stream.Collectors;
 import javax.jms.JMSException;
 import javax.servlet.http.HttpServletRequest;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-
 import org.apache.commons.lang3.StringUtils;
 import org.folio.rest.workflow.exception.EventPublishException;
 import org.folio.rest.workflow.jms.EventProducer;
 import org.folio.rest.workflow.jms.model.Event;
 import org.folio.rest.workflow.model.Trigger;
 import org.folio.rest.workflow.model.repo.TriggerRepo;
+import org.folio.spring.tenant.annotation.TenantHeader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +32,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.HandlerMapping;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 @RestController
 @RequestMapping("/events")
@@ -69,12 +70,13 @@ public class EventController {
   public JsonNode postHandleEventsWithFile(
     @RequestParam("file") MultipartFile multipartFile,
     @RequestParam("path") String directoryPath,
+    @TenantHeader String tenant,
     HttpServletRequest request
   ) throws EventPublishException, IOException {
   // @formatter:on
 
     ObjectNode body = objectMapper.createObjectNode();
-    String filePath = StringUtils.appendIfMissing(directoryPath, File.separator) + multipartFile.getOriginalFilename();
+    String filePath = StringUtils.appendIfMissing(tenant, File.separator, directoryPath, File.separator) + multipartFile.getOriginalFilename();
     body.put("inputFilePath", filePath);
 
     Collections.list(request.getParameterNames())
