@@ -10,6 +10,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import javax.jms.JMSException;
@@ -44,6 +45,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 public class EventController {
 
   private static final Logger logger = LoggerFactory.getLogger(EventController.class);
+  private static final Pattern TENANT_PATTERN = Pattern.compile("^[a-z0-9_-]+$");
 
   @Value("${event.uploads.path}")
   private String eventUploadsDirectory;
@@ -79,6 +81,10 @@ public class EventController {
     HttpServletRequest request
   ) throws EventPublishException, IOException {
   // @formatter:on
+
+    if (! TENANT_PATTERN.matcher(tenant).matches()) {
+      throw new FileSystemException("Invalid tenant directory name");
+    }
 
     ObjectNode body = objectMapper.createObjectNode();
 
