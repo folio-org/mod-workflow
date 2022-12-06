@@ -3,7 +3,9 @@ package org.folio.rest.workflow.controller;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.FileSystemException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.Collections;
 import java.util.Map;
@@ -13,7 +15,6 @@ import java.util.stream.Collectors;
 import javax.jms.JMSException;
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.lang3.StringUtils;
 import org.folio.rest.workflow.exception.EventPublishException;
 import org.folio.rest.workflow.jms.EventProducer;
 import org.folio.rest.workflow.jms.model.Event;
@@ -23,6 +24,7 @@ import org.folio.spring.tenant.annotation.TenantHeader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.util.PathMatcher;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -42,6 +44,9 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 public class EventController {
 
   private static final Logger logger = LoggerFactory.getLogger(EventController.class);
+
+  @Value("${event.uploads.path}")
+  private String eventUploadsDirectory;
 
   @Autowired
   private EventProducer eventProducer;
@@ -76,8 +81,24 @@ public class EventController {
   // @formatter:on
 
     ObjectNode body = objectMapper.createObjectNode();
-    String filePath = StringUtils.appendIfMissing(tenant, File.separator, directoryPath, File.separator) + multipartFile.getOriginalFilename();
-    body.put("inputFilePath", filePath);
+
+    Path tenantPath = Path.of(eventUploadsDirectory)
+      .resolve(tenant)
+      .normalize();
+
+    Path filePath = tenantPath.resolve(directoryPath)
+      .resolve(multipartFile.getOriginalFilename())
+      .normalize();
+
+    if (!filePath.startsWith(tenantPath)) {
+      throw new FileSystemException("Path/directory traversal attack");
+    }
+
+    File file = filePath.toFile();
+
+    file.mkdirs();
+
+    body.put("inputFilePath", file.getPath());
 
     Collections.list(request.getParameterNames())
       .stream()
@@ -87,12 +108,8 @@ public class EventController {
         body.put(name, request.getParameter(name));
       });
 
-    File file = new File(filePath);
-
-    file.mkdirs();
-
     try (InputStream is = multipartFile.getInputStream()) {
-      Files.copy(is, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
+      Files.copy(is, filePath, StandardCopyOption.REPLACE_EXISTING);
     }
 
     return processRequest(request, body);

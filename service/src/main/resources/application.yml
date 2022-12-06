@@ -1,5 +1,7 @@
 logging:
-  file: logs/mod-workflow.log
+  file:
+    path: logs
+    name: mod-workflow.log
   level:
     com:
       zaxxer:
@@ -20,6 +22,11 @@ spring:
   data.rest:
     returnBodyOnCreate: true
     returnBodyOnUpdate: true
+
+  sql:
+    init:
+      platform: postgres
+
   datasource:
     hikari:
       leakDetectionThreshold: 180000
@@ -27,7 +34,6 @@ spring:
       idleTimeout: 600000
       maxLifetime: 1800000
       maximumPoolSize: 16
-    platform: postgres
     driverClassName: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/mod_workflow
 
@@ -48,7 +54,11 @@ spring:
     mode: TEXT
     suffix: .sql
 
-event.queue.name: event.queue
+event:
+  uploads:
+    path: events
+  queue:
+    name: event.queue
 
 tenant:
   header-name: X-Okapi-Tenant

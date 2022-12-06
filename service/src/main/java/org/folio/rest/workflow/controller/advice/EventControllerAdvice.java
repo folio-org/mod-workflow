@@ -1,5 +1,7 @@
 package org.folio.rest.workflow.controller.advice;
 
+import java.nio.file.FileSystemException;
+
 import org.folio.rest.workflow.exception.EventPublishException;
 import org.folio.spring.model.response.ResponseErrors;
 import org.folio.spring.utility.ErrorUtility;
@@ -20,6 +22,13 @@ public class EventControllerAdvice {
   public ResponseErrors handleEventPublishException(EventPublishException exception) {
     logger.debug(exception.getMessage(), exception);
     return ErrorUtility.buildError(exception, HttpStatus.INTERNAL_SERVER_ERROR);
+  }
+
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  @ExceptionHandler(FileSystemException.class)
+  public ResponseErrors handleFileSystemException(FileSystemException exception) {
+    logger.debug(exception.getMessage(), exception);
+    return ErrorUtility.buildError(exception, HttpStatus.BAD_REQUEST);
   }
 
 }

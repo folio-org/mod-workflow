@@ -1,11 +1,12 @@
 logging:
-  file: logs/mod-workflow-tests.log
+  file:
+    path: logs
+    name: mod-workflow-test.log
   level:
     org:
       folio: INFO
       hibernate: INFO
       springframework: INFO
-  path:
 
 server:
   port: 9101
@@ -16,8 +17,10 @@ spring:
   data.rest:
     returnBodyOnCreate: true
     returnBodyOnUpdate: true
+  sql:
+    init:
+      platform: h2
   datasource:
-    platform: h2
     url: jdbc:h2:mem:AZ;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
     driverClassName: org.h2.Driver
     username: folio
@@ -39,7 +42,11 @@ spring:
     mode: TEXT
     suffix: .sql
 
-event.queue.name: event.queue
+event:
+  uploads:
+    path: events
+  queue:
+    name: event.queue
 
 tenant:
   header-name: X-Okapi-Tenant
