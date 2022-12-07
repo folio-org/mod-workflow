@@ -47,6 +47,9 @@ public class EventController {
   private static final Logger logger = LoggerFactory.getLogger(EventController.class);
   private static final Pattern TENANT_PATTERN = Pattern.compile("^[a-z0-9_-]+$");
 
+  @Value("${tenant.headerName:X-Okapi-Tenant}")
+  private String tenantHeaderName;
+
   @Value("${event.uploads.path}")
   private String eventUploadsDirectory;
 
@@ -125,7 +128,7 @@ public class EventController {
     HttpServletRequest request,
     JsonNode body
   ) throws EventPublishException {
-    String tenant = request.getHeader("X-Okapi-Tenant");
+    String tenant = request.getHeader(tenantHeaderName);
 
     String requestPath = (String) request.getAttribute(HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE);
     HttpMethod method = HttpMethod.valueOf(request.getMethod());
