@@ -275,8 +275,12 @@ public class WorkflowEngineService {
 
   private HttpHeaders headers(String tenant, String token) {
     HttpHeaders requestHeaders = new HttpHeaders();
-    requestHeaders.add(tenantHeaderName, tenant);
-    requestHeaders.add(tokenHeaderName, token);
+    if (tenant != null) {
+      requestHeaders.add(tenantHeaderName, tenant);
+    }
+    if (token != null) {
+      requestHeaders.add(tokenHeaderName, token);
+    }
     requestHeaders.add("Content-Type", "application/json");
     return requestHeaders;
   }

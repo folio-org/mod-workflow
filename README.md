@@ -24,7 +24,7 @@ The [Workflow Documentation](docs/README.md) describes additional information on
 
 ```
 docker build -t folio/mod-workflow .
-docker run -d -p 9001:9001 folio/mod-workflow
+docker run -d -p 9001:8081 folio/mod-workflow
 ```
 
 ### Publish docker image
