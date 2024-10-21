@@ -14,7 +14,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.FileSystemException;
 import java.util.stream.Stream;
 import org.apache.commons.io.FileUtils;
-import org.folio.rest.workflow.jms.EventProducer;
+import org.folio.rest.workflow.kafka.EventProducer;
 import org.folio.rest.workflow.model.repo.TriggerRepo;
 import org.folio.spring.tenant.properties.TenantProperties;
 import org.folio.spring.tenant.resolver.TenantHeaderResolver;
