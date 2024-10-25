@@ -3,7 +3,6 @@ package org.folio.rest.workflow.controller;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import jakarta.jms.JMSException;
 import jakarta.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
@@ -20,7 +19,7 @@ import java.util.stream.Collectors;
 import org.folio.rest.workflow.dto.TriggerDto;
 import org.folio.rest.workflow.enums.HttpMethod;
 import org.folio.rest.workflow.exception.EventPublishException;
-import org.folio.rest.workflow.jms.EventProducer;
+import org.folio.rest.workflow.kafka.EventProducer;
 import org.folio.rest.workflow.model.repo.TriggerRepo;
 import org.folio.spring.messaging.model.Event;
 import org.folio.spring.tenant.annotation.TenantHeader;
@@ -173,7 +172,7 @@ public class EventController {
     logger.debug("Publishing event: {}: {}", trigger.getName(), trigger.getDescription());
     try {
       eventProducer.send(event);
-    } catch (JMSException | IOException e) {
+    } catch (Exception e) {
       throw new EventPublishException("Unable to publish event!", e);
     }
   }

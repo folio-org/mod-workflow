@@ -40,9 +40,6 @@ public class OkapiDiscoveryService {
   @Value("${okapi.url}")
   private String okapiUrl;
 
-  @Value("${okapi.camunda.base-path}")
-  private String basePath;
-
   private HttpService httpService;
 
   private ObjectMapper objectMapper;
@@ -94,7 +91,7 @@ public class OkapiDiscoveryService {
   }
 
   public JsonNode getModules(String tenant) {
-    String url = okapiUrl + basePath + PROXY_TENANT_BASE_PATH + tenant + MODULES_SUB_PATH;
+    String url = okapiUrl + PROXY_TENANT_BASE_PATH + tenant + MODULES_SUB_PATH;
     ResponseEntity<JsonNode> response = request(url, tenant);
     if (logger.isDebugEnabled()) {
       logger.debug("Response status code {}", response.getStatusCode());
@@ -104,7 +101,7 @@ public class OkapiDiscoveryService {
   }
 
   public JsonNode getModuleDescriptor(String tenant, String id) {
-    String url = okapiUrl + basePath + PROXY_MODULE_BASE_PATH + id;
+    String url = okapiUrl + PROXY_MODULE_BASE_PATH + id;
     ResponseEntity<JsonNode> response = request(url, tenant);
     if (logger.isDebugEnabled()) {
       logger.debug("Response status code {}", response.getStatusCode());
