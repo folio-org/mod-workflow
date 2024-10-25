@@ -7,9 +7,9 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
-import org.apache.activemq.broker.BrokerService;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.compress.archivers.ArchiveException;
 import org.apache.commons.compress.compressors.CompressorException;
 import org.folio.rest.workflow.exception.WorkflowImportAlreadyImported;
@@ -25,20 +25,19 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
-import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
+import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest(webEnvironment = WebEnvironment.MOCK)
 @ExtendWith(MockitoExtension.class)
+@ActiveProfiles("test")
 class WorkflowImportServiceTest {
 
   private static final String WORKFLOW_UUID = "7dcd302f-a438-4ca5-a7eb-21653610d46f";
@@ -342,25 +341,6 @@ class WorkflowImportServiceTest {
     Workflow imported = workflowImportService.importFile(fwzZipAsZipResource);
     assertNotNull(imported);
     assertEquals(workflow.getId(), imported.getId());
-  }
-
-  /**
-   * Forcibly disable JmsBroker due to port conflict problems.
-   *
-   * The SpringBootTest annotation is resulting in the JmsBroker being loaded.
-   * Other tests classes may be doing this as well.
-   * Spring fails to close the broker connection between tests.
-   *
-   * The Broker is not needed, so mock it into nothingness.
-   * The `allow-bean-definition-overriding` must be set to true.
-   */
-  @TestConfiguration
-  public static class JmsBrokerConfig {
-
-    @Bean
-    public BrokerService broker() {
-      return Mockito.mock(BrokerService.class);
-    }
   }
 
 }
