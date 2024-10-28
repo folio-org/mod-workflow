@@ -101,9 +101,9 @@ application:
   kafka:
     producer:
       events:
-        topic: ${ENV:folio}.workflow.events
+        topic: ${ENV:folio}.workflow-engine.events
 
-# use to store uploads shared over kafka
+# Used by Kafka to manage uploads.
 event:
   uploads:
     path: events
