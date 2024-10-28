@@ -39,19 +39,11 @@ class EventProducerTest {
 
   static Stream<Event> eventStream() {
     return Stream.of(new Event[] {
-        new Event(
-            "triggerId",
-            "pathPattern",
-            "method",
-            "tenant",
-            "path"),
-        new Event(
-            "triggerId",
-            "pathPattern",
-            "method",
-            "tenant",
-            "path",
-            new HashMap<String, String>())
+      new Event("triggerId", "pathPattern", "method", "tenant", "path"),
+      new Event(
+        "triggerId", "pathPattern", "method", "tenant", "path",
+        new HashMap<String, String>()
+      )
     });
   }
 

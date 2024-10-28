@@ -45,9 +45,6 @@ import org.springframework.web.client.RestTemplate;
 @ExtendWith(MockitoExtension.class)
 class WorkflowEngineServiceTest {
 
-  private static final String MOCK_TENANT = "diku";
-  private static final String MOCK_TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJGT0xJTyIsIm5hbWUiOiJEaWt1IiwiaWF0IjoxNTE2MjM5MDIyfQ.Ue85MTPJjXrPDnyBOQB88in2FAw9DVW_Vi_kMMZiPY8";
-
   @Mock
   private WorkflowRepo workflowRepo;
 
@@ -94,7 +91,7 @@ class WorkflowEngineServiceTest {
     when(restTemplate.exchange(anyString(), any(HttpMethod.class), any(HttpEntity.class), ArgumentMatchers.<Class<Workflow>>any())).thenReturn(responseEntity);
     when(workflowRepo.save(any())).thenReturn(workflow);
 
-    workflowEngineService.activate(UUID, MOCK_TENANT, MOCK_TOKEN);
+    workflowEngineService.activate(UUID, OKAPI_TENANT, OKAPI_TOKEN);
 
     verify(workflowRepo).save(any());
     verify(workflowRepo, never()).deleteById(anyString());
@@ -126,7 +123,7 @@ class WorkflowEngineServiceTest {
     when(restTemplate.exchange(anyString(), any(HttpMethod.class), any(HttpEntity.class), ArgumentMatchers.<Class<Workflow>>any())).thenReturn(responseEntity);
     when(workflowRepo.save(any())).thenReturn(workflow);
 
-    workflowEngineService.deactivate(UUID, MOCK_TENANT, MOCK_TOKEN);
+    workflowEngineService.deactivate(UUID, OKAPI_TENANT, OKAPI_TOKEN);
 
     verify(workflowRepo).save(any());
     verify(workflowRepo, never()).deleteById(anyString());
@@ -143,7 +140,7 @@ class WorkflowEngineServiceTest {
     when(workflowRepo.save(any())).thenReturn(workflow);
     doNothing().when(workflowRepo).deleteById(anyString());
 
-    workflowEngineService.delete(UUID, MOCK_TENANT, MOCK_TOKEN);
+    workflowEngineService.delete(UUID, OKAPI_TENANT, OKAPI_TOKEN);
 
     verify(workflowRepo).save(any());
     verify(workflowRepo).deleteById(anyString());
@@ -159,7 +156,7 @@ class WorkflowEngineServiceTest {
     when(restTemplate.exchange(anyString(), any(HttpMethod.class), any(HttpEntity.class), ArgumentMatchers.<Class<Workflow>>any())).thenReturn(responseEntity);
 
     assertThrows(WorkflowEngineServiceException.class, () ->
-      workflowEngineService.delete(UUID, MOCK_TENANT, MOCK_TOKEN)
+      workflowEngineService.delete(UUID, OKAPI_TENANT, OKAPI_TOKEN)
     );
 
     verify(workflowRepo, never()).save(any());
@@ -177,7 +174,7 @@ class WorkflowEngineServiceTest {
     when(workflowRepo.save(any())).thenThrow(new RuntimeException("Trigger Failure"));
 
     assertThrows(WorkflowEngineServiceException.class, () -> {
-      workflowEngineService.delete(UUID, MOCK_TENANT, MOCK_TOKEN);
+      workflowEngineService.delete(UUID, OKAPI_TENANT, OKAPI_TOKEN);
     });
 
     verify(workflowRepo).save(any());
@@ -194,7 +191,7 @@ class WorkflowEngineServiceTest {
     when(restTemplate.exchange(anyString(), any(HttpMethod.class), any(HttpEntity.class), ArgumentMatchers.<Class<Workflow>>any())).thenReturn(responseEntity);
 
     assertThrows(WorkflowEngineServiceException.class, () -> {
-      workflowEngineService.delete(UUID, MOCK_TENANT, MOCK_TOKEN);
+      workflowEngineService.delete(UUID, OKAPI_TENANT, OKAPI_TOKEN);
     });
 
     verify(workflowRepo, never()).save(any());
@@ -232,7 +229,7 @@ class WorkflowEngineServiceTest {
     when(workflowRepo.getViewById(anyString(), ArgumentMatchers.<Class<WorkflowOperationalDto>>any())).thenReturn(workflowOperationalDto);
     when(restTemplate.exchange(anyString(), any(HttpMethod.class), any(HttpEntity.class), ArgumentMatchers.<Class<ArrayNode>>any())).thenReturn(responseEntity);
 
-    JsonNode response = workflowEngineService.start(UUID, MOCK_TENANT, MOCK_TOKEN, context);
+    JsonNode response = workflowEngineService.start(UUID, OKAPI_TENANT, OKAPI_TOKEN, context);
     assertEquals(arrayNode, response);
   }
 
@@ -252,7 +249,7 @@ class WorkflowEngineServiceTest {
     when(restTemplate.exchange(anyString(), any(HttpMethod.class), any(HttpEntity.class), ArgumentMatchers.<Class<ArrayNode>>any())).thenReturn(responseEntity);
 
     assertThrows(WorkflowEngineServiceException.class, () -> {
-      workflowEngineService.start(UUID, MOCK_TENANT, MOCK_TOKEN, context);
+      workflowEngineService.start(UUID, OKAPI_TENANT, OKAPI_TOKEN, context);
     });
   }
 
@@ -271,13 +268,13 @@ class WorkflowEngineServiceTest {
     when(restTemplate.exchange(anyString(), any(HttpMethod.class), any(HttpEntity.class), ArgumentMatchers.<Class<ArrayNode>>any())).thenReturn(responseEntity);
 
     assertThrows(WorkflowEngineServiceException.class, () -> {
-      workflowEngineService.start(UUID, MOCK_TENANT, MOCK_TOKEN, context);
+      workflowEngineService.start(UUID, OKAPI_TENANT, OKAPI_TOKEN, context);
     });
 
     setField(responseEntity, "body", null);
 
     assertThrows(WorkflowEngineServiceException.class, () -> {
-      workflowEngineService.start(UUID, MOCK_TENANT, MOCK_TOKEN, context);
+      workflowEngineService.start(UUID, OKAPI_TENANT, OKAPI_TOKEN, context);
     });
   }
 
@@ -305,7 +302,7 @@ class WorkflowEngineServiceTest {
     }).when(restTemplate).exchange(anyString(), any(HttpMethod.class), any(HttpEntity.class), ArgumentMatchers.<Class<ArrayNode>>any());
 
     assertThrows(WorkflowEngineServiceException.class, () -> {
-      workflowEngineService.start(UUID, MOCK_TENANT, MOCK_TOKEN, context);
+      workflowEngineService.start(UUID, OKAPI_TENANT, OKAPI_TOKEN, context);
     });
   }
 
@@ -336,7 +333,7 @@ class WorkflowEngineServiceTest {
       return (exchangeCount.getAndIncrement() > 0) ? historyResponseEntity : responseEntity;
     }).when(restTemplate).exchange(anyString(), any(HttpMethod.class), any(HttpEntity.class), ArgumentMatchers.<Class<ArrayNode>>any());
 
-    JsonNode response = workflowEngineService.history(UUID, MOCK_TENANT, MOCK_TOKEN);
+    JsonNode response = workflowEngineService.history(UUID, OKAPI_TENANT, OKAPI_TOKEN);
     assertEquals(historyArrayNode, response);
   }
 
@@ -362,7 +359,7 @@ class WorkflowEngineServiceTest {
     }).when(restTemplate).exchange(anyString(), any(HttpMethod.class), any(HttpEntity.class), ArgumentMatchers.<Class<ArrayNode>>any());
 
     assertThrows(WorkflowEngineServiceException.class, () -> {
-      workflowEngineService.history(UUID, MOCK_TENANT, MOCK_TOKEN);
+      workflowEngineService.history(UUID, OKAPI_TENANT, OKAPI_TOKEN);
     });
   }
 
@@ -388,7 +385,7 @@ class WorkflowEngineServiceTest {
     }).when(restTemplate).exchange(anyString(), any(HttpMethod.class), any(HttpEntity.class), ArgumentMatchers.<Class<ArrayNode>>any());
 
     assertThrows(WorkflowEngineServiceException.class, () -> {
-      workflowEngineService.history(UUID, MOCK_TENANT, MOCK_TOKEN);
+      workflowEngineService.history(UUID, OKAPI_TENANT, OKAPI_TOKEN);
     });
   }
 
@@ -424,7 +421,7 @@ class WorkflowEngineServiceTest {
     }).when(restTemplate).exchange(anyString(), any(HttpMethod.class), any(HttpEntity.class), ArgumentMatchers.<Class<ArrayNode>>any());
 
     assertThrows(WorkflowEngineServiceException.class, () -> {
-      workflowEngineService.history(UUID, MOCK_TENANT, MOCK_TOKEN);
+      workflowEngineService.history(UUID, OKAPI_TENANT, OKAPI_TOKEN);
     });
   }
 
@@ -461,7 +458,7 @@ class WorkflowEngineServiceTest {
     }).when(restTemplate).exchange(anyString(), any(HttpMethod.class), any(HttpEntity.class), ArgumentMatchers.<Class<ArrayNode>>any());
 
     assertThrows(WorkflowEngineServiceException.class, () -> {
-      workflowEngineService.history(UUID, MOCK_TENANT, MOCK_TOKEN);
+      workflowEngineService.history(UUID, OKAPI_TENANT, OKAPI_TOKEN);
     });
   }
 
@@ -498,7 +495,7 @@ class WorkflowEngineServiceTest {
     }).when(restTemplate).exchange(anyString(), any(HttpMethod.class), any(HttpEntity.class), ArgumentMatchers.<Class<ArrayNode>>any());
 
     assertThrows(WorkflowEngineServiceException.class, () -> {
-      workflowEngineService.history(UUID, MOCK_TENANT, MOCK_TOKEN);
+      workflowEngineService.history(UUID, OKAPI_TENANT, OKAPI_TOKEN);
     });
   }
 

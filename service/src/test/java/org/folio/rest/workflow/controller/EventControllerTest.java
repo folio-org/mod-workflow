@@ -5,7 +5,6 @@ import static java.lang.String.join;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -17,7 +16,6 @@ import java.nio.file.FileSystemException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
-
 import org.apache.commons.io.FileUtils;
 import org.folio.rest.workflow.dto.TriggerDto;
 import org.folio.rest.workflow.enums.HttpMethod;
@@ -29,6 +27,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -53,24 +52,27 @@ class EventControllerTest {
   @MockBean
   private TriggerRepo triggerRepo;
 
+  @Mock
+  private TriggerDto trigger;
+
   @MockBean
   private TenantProperties tenantProperties;
+
+  private List<TriggerDto> triggers;
 
   @BeforeEach
   void beforeEach() {
     mockMvc = MockMvcBuilders.standaloneSetup(eventController)
         .setCustomArgumentResolvers(new TenantHeaderResolver("X-Okapi-Tenant"))
         .build();
+
+    triggers = new ArrayList<>();
+    triggers.add(trigger);
   }
 
   @ParameterizedTest
   @MethodSource
   void upload(String tenant, String dir, String file, String expectedPath) throws Exception {
-
-    List<TriggerDto> triggers = new ArrayList<>();
-    TriggerDto trigger = mock(TriggerDto.class);
-    triggers.add(trigger);
-
     when(trigger.getId()).thenReturn("id");
     when(trigger.getMethod()).thenReturn(HttpMethod.POST);
     when(trigger.getPathPattern()).thenReturn("/events");
@@ -79,6 +81,7 @@ class EventControllerTest {
 
     mockMvc.perform(upload(tenant, dir, file))
         .andExpectAll(status().isOk(), jsonPath("inputFilePath").value(expectedPath));
+
     assertThat(readFile(expectedPath)).isEqualTo("This is the file content");
   }
 
