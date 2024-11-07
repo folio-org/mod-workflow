@@ -33,7 +33,7 @@ class DirectoryTaskTest {
 
   @BeforeEach
   void beforeEach() {
-    directoryTask = new DirectoryTask();
+    directoryTask = new Impl();
     inputVariables = new HashSet<>();
     inputVariables.add(embeddedVariable);
   }
@@ -253,6 +253,14 @@ class DirectoryTaskTest {
         helperFieldMap("", VALUE, DirectoryAction.LIST)
       ),
       Arguments.of(
+        helperFieldMap(null, null, DirectoryAction.WRITE), 
+        helperFieldMap("", "", DirectoryAction.WRITE)
+      ),
+      Arguments.of(
+        helperFieldMap(null, null, DirectoryAction.READ_NEXT), 
+        helperFieldMap("", "", DirectoryAction.READ_NEXT)
+      ),
+      Arguments.of(
         helperFieldMap(null, null, DirectoryAction.DELETE_NEXT), 
         helperFieldMap("", "", DirectoryAction.DELETE_NEXT)
       )
@@ -269,10 +277,14 @@ class DirectoryTaskTest {
    */
   private static Map<String, Object> helperFieldMap(String path, String workflow, DirectoryAction action) {
     Map<String, Object> map = new HashMap<>();
+
     map.put("path", path);
     map.put("workflow", workflow);
     map.put("action", action);
+
     return map;
   }
+
+  private static class Impl extends DirectoryTask { }
 
 }
