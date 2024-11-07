@@ -27,8 +27,8 @@ import org.springframework.web.client.RestTemplate;
 @Service
 public class WorkflowEngineService {
 
-  private static final String WORKFLOW_ENGINE_ACTIVATE_URL_TEMPLATE = "%s/workflow-engine/workflows/activate";
-  private static final String WORKFLOW_ENGINE_DEACTIVATE_URL_TEMPLATE = "%s/workflow-engine/workflows/deactivate";
+  private static final String WORKFLOW_ENGINE_ACTIVATE_URL_TEMPLATE = "%s%s/workflow-engine/workflows/activate";
+  private static final String WORKFLOW_ENGINE_DEACTIVATE_URL_TEMPLATE = "%s%s/workflow-engine/workflows/deactivate";
 
   private static final String PROCESS_DEFINITION_START_URL_TEMPLATE = "%s%s/process-definition/%s/start";
   private static final String PROCESS_DEFINITION_GET_URL_TEMPLATE = "%s%s/process-definition%s";
@@ -47,8 +47,11 @@ public class WorkflowEngineService {
   @Value("${okapi.url}")
   private String okapiUrl;
 
-  @Value("${okapi.workflow-engine.path:/camunda}")
-  private String workflowEnginePath;
+  @Value("${okapi.camunda.base-path:/}")
+  private String basePath;
+
+  @Value("${okapi.camunda.rest-path:/camunda}")
+  private String restPath;
 
   @Autowired
   private WorkflowRepo workflowRepo;
@@ -124,7 +127,7 @@ public class WorkflowEngineService {
 
     HttpEntity<JsonNode> contextHttpEntity = new HttpEntity<>(context, headers(tenant, token));
 
-    String url = String.format(PROCESS_DEFINITION_START_URL_TEMPLATE, okapiUrl, workflowEnginePath, definitionId);
+    String url = String.format(PROCESS_DEFINITION_START_URL_TEMPLATE, okapiUrl, restPath, definitionId);
     try {
       ResponseEntity<JsonNode> response = exchange(url, HttpMethod.POST, contextHttpEntity, JsonNode.class);
 
@@ -163,7 +166,7 @@ public class WorkflowEngineService {
     HttpEntity<Void> httpEntity = new HttpEntity<>(headers(tenant, token));
 
     String arguments = String.format("?deploymentId=%s&versionTag=%s&maxResults=1", deploymentId, version);
-    String url = String.format(PROCESS_DEFINITION_GET_URL_TEMPLATE, okapiUrl, workflowEnginePath, arguments);
+    String url = String.format(PROCESS_DEFINITION_GET_URL_TEMPLATE, okapiUrl, restPath, arguments);
 
     try {
       ResponseEntity<ArrayNode> response = exchange(url, HttpMethod.GET, httpEntity, ArrayNode.class);
@@ -187,7 +190,7 @@ public class WorkflowEngineService {
     HttpEntity<Void> httpEntity = new HttpEntity<>(headers(tenant, token));
 
     String arguments = String.format("?processDefinitionId=%s&sortBy=startTime&sortOrder=asc", processDefinitionId);
-    String url = String.format(HISTORY_PROCESS_INSTANCE_URL_TEMPLATE, okapiUrl, workflowEnginePath, arguments);
+    String url = String.format(HISTORY_PROCESS_INSTANCE_URL_TEMPLATE, okapiUrl, restPath, arguments);
 
     try {
       ResponseEntity<ArrayNode> response = exchange(url, HttpMethod.GET, httpEntity, ArrayNode.class);
@@ -210,7 +213,7 @@ public class WorkflowEngineService {
     HttpEntity<Void> httpEntity = new HttpEntity<>(headers(tenant, token));
 
     String arguments = String.format("?processInstanceId=%s&sortBy=createTime&sortOrder=asc", processInstanceId);
-    String url = String.format(HISTORY_INCIDENT_URL_TEMPLATE, okapiUrl, workflowEnginePath, arguments);
+    String url = String.format(HISTORY_INCIDENT_URL_TEMPLATE, okapiUrl, restPath, arguments);
 
     try {
       ResponseEntity<ArrayNode> response = exchange(url, HttpMethod.GET, httpEntity, ArrayNode.class);
@@ -247,8 +250,7 @@ public class WorkflowEngineService {
       throws WorkflowEngineServiceException {
 
     HttpEntity<WorkflowDto> entity = new HttpEntity<>(workflow, headers(tenant, token));
-    String url = String.format(requestPath, okapiUrl);
-
+    String url = String.format(requestPath, okapiUrl, basePath);
     log.debug("Send Okapi workflow engine request {} {}", HttpMethod.POST, url);
 
     try {
@@ -266,23 +268,24 @@ public class WorkflowEngineService {
         }
       }
     } catch (Exception e) {
-      log.error("Failed to send workflow request: {}!", e.getMessage());
       throw new WorkflowEngineServiceException(String.format("Failed to send workflow request: %s!", e.getMessage()), e);
     }
-    log.error("Unable to get updated workflow from workflow engine!");
+
     throw new WorkflowEngineServiceException("Unable to get updated workflow from workflow engine!");
   }
 
   private HttpHeaders headers(String tenant, String token) {
     HttpHeaders requestHeaders = new HttpHeaders();
+    log.debug("Request Headers: tenant '{}' and token '{}'.", tenant, token);
+
     if (tenant != null) {
-      log.debug("With tenant {}", tenant);
       requestHeaders.add(tenantHeaderName, tenant);
     }
+
     if (token != null) {
-      log.debug("With token {}", token);
       requestHeaders.add(tokenHeaderName, token);
     }
+
     requestHeaders.add("Content-Type", "application/json");
     return requestHeaders;
   }

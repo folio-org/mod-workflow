@@ -12112,6 +12112,64 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/JsonNode'
+  /workflows/{id}/:
+    get:
+      tags:
+      - workflow-controller
+      operationId: getWorkflow
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: tenant
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: token
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        "500":
+          description: Internal Server Error
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ResponseErrors'
+        "400":
+          description: Bad Request
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ResponseErrors'
+        "404":
+          description: Not Found
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ResponseErrors'
+        "403":
+          description: Forbidden
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ResponseErrors'
+        "204":
+          description: No Content
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/ResponseErrors'
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Workflow'
   /workflows/search:
     get:
       tags:
@@ -12959,79 +13017,6 @@ components:
       properties:
         _links:
           $ref: '#/components/schemas/Links'
-    EntityModelTrigger:
-      required:
-      - method
-      - name
-      - pathPattern
-      type: object
-      properties:
-        name:
-          maxLength: 64
-          minLength: 4
-          type: string
-        description:
-          maxLength: 256
-          minLength: 0
-          type: string
-        pathPattern:
-          maxLength: 256
-          minLength: 2
-          type: string
-        method:
-          type: string
-          enum:
-          - GET
-          - HEAD
-          - POST
-          - PUT
-          - PATCH
-          - DELETE
-          - OPTIONS
-          - TRACE
-        _links:
-          $ref: '#/components/schemas/Links'
-    PageMetadata:
-      type: object
-      properties:
-        size:
-          type: integer
-          format: int64
-        totalElements:
-          type: integer
-          format: int64
-        totalPages:
-          type: integer
-          format: int64
-        number:
-          type: integer
-          format: int64
-    PagedModelEntityModelTrigger:
-      type: object
-      properties:
-        _embedded:
-          type: object
-          properties:
-            triggers:
-              type: array
-              items:
-                $ref: '#/components/schemas/EntityModelTrigger'
-        _links:
-          $ref: '#/components/schemas/Links'
-        page:
-          $ref: '#/components/schemas/PageMetadata'
-    CollectionModelEntityModelTrigger:
-      type: object
-      properties:
-        _embedded:
-          type: object
-          properties:
-            triggers:
-              type: array
-              items:
-                $ref: '#/components/schemas/EntityModelTrigger'
-        _links:
-          $ref: '#/components/schemas/Links'
     EmbeddedInput:
       required:
       - inputType
@@ -13180,6 +13165,135 @@ components:
           type: boolean
         asTransient:
           type: boolean
+    EntityModelNode:
+      required:
+      - name
+      type: object
+      properties:
+        name:
+          maxLength: 64
+          minLength: 3
+          type: string
+        description:
+          maxLength: 512
+          minLength: 0
+          type: string
+        deserializeAs:
+          type: string
+          readOnly: true
+        identifier:
+          type: string
+        _links:
+          $ref: '#/components/schemas/Links'
+    Node:
+      required:
+      - name
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          maxLength: 64
+          minLength: 3
+          type: string
+        description:
+          maxLength: 512
+          minLength: 0
+          type: string
+        deserializeAs:
+          type: string
+          readOnly: true
+        identifier:
+          type: string
+      discriminator:
+        propertyName: deserializeAs
+    PageMetadata:
+      type: object
+      properties:
+        size:
+          type: integer
+          format: int64
+        totalElements:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer
+          format: int64
+        number:
+          type: integer
+          format: int64
+    PagedModelEntityModelNode:
+      type: object
+      properties:
+        _embedded:
+          type: object
+          properties:
+            nodes:
+              type: array
+              items:
+                $ref: '#/components/schemas/EntityModelNode'
+        _links:
+          $ref: '#/components/schemas/Links'
+        page:
+          $ref: '#/components/schemas/PageMetadata'
+    EntityModelTrigger:
+      required:
+      - method
+      - name
+      - pathPattern
+      type: object
+      properties:
+        name:
+          maxLength: 64
+          minLength: 4
+          type: string
+        description:
+          maxLength: 256
+          minLength: 0
+          type: string
+        pathPattern:
+          maxLength: 256
+          minLength: 2
+          type: string
+        method:
+          type: string
+          enum:
+          - GET
+          - HEAD
+          - POST
+          - PUT
+          - PATCH
+          - DELETE
+          - OPTIONS
+          - TRACE
+        _links:
+          $ref: '#/components/schemas/Links'
+    PagedModelEntityModelTrigger:
+      type: object
+      properties:
+        _embedded:
+          type: object
+          properties:
+            triggers:
+              type: array
+              items:
+                $ref: '#/components/schemas/EntityModelTrigger'
+        _links:
+          $ref: '#/components/schemas/Links'
+        page:
+          $ref: '#/components/schemas/PageMetadata'
+    CollectionModelEntityModelTrigger:
+      type: object
+      properties:
+        _embedded:
+          type: object
+          properties:
+            triggers:
+              type: array
+              items:
+                $ref: '#/components/schemas/EntityModelTrigger'
+        _links:
+          $ref: '#/components/schemas/Links'
     EntityModelWorkflow:
       required:
       - name
@@ -13216,28 +13330,20 @@ components:
           $ref: '#/components/schemas/Links'
     JsonNode:
       type: object
-    Node:
-      required:
-      - name
+    PagedModelEntityModelWorkflow:
       type: object
       properties:
-        id:
-          type: string
-        name:
-          maxLength: 64
-          minLength: 3
-          type: string
-        description:
-          maxLength: 512
-          minLength: 0
-          type: string
-        deserializeAs:
-          type: string
-          readOnly: true
-        identifier:
-          type: string
-      discriminator:
-        propertyName: deserializeAs
+        _embedded:
+          type: object
+          properties:
+            workflows:
+              type: array
+              items:
+                $ref: '#/components/schemas/EntityModelWorkflow'
+        _links:
+          $ref: '#/components/schemas/Links'
+        page:
+          $ref: '#/components/schemas/PageMetadata'
     Setup:
       type: object
       properties:
@@ -13283,32 +13389,6 @@ components:
           maxLength: 64
           minLength: 1
           type: string
-    PagedModelEntityModelWorkflow:
-      type: object
-      properties:
-        _embedded:
-          type: object
-          properties:
-            workflows:
-              type: array
-              items:
-                $ref: '#/components/schemas/EntityModelWorkflow'
-        _links:
-          $ref: '#/components/schemas/Links'
-        page:
-          $ref: '#/components/schemas/PageMetadata'
-    CollectionModelObject:
-      type: object
-      properties:
-        _embedded:
-          type: object
-          properties:
-            objects:
-              type: array
-              items:
-                type: object
-        _links:
-          $ref: '#/components/schemas/Links'
     CollectionModelNode:
       type: object
       properties:
@@ -13345,40 +13425,18 @@ components:
                 - $ref: '#/components/schemas/SubprocessResponse'
         _links:
           $ref: '#/components/schemas/Links'
-    EntityModelNode:
-      required:
-      - name
-      type: object
-      properties:
-        name:
-          maxLength: 64
-          minLength: 3
-          type: string
-        description:
-          maxLength: 512
-          minLength: 0
-          type: string
-        deserializeAs:
-          type: string
-          readOnly: true
-        identifier:
-          type: string
-        _links:
-          $ref: '#/components/schemas/Links'
-    PagedModelEntityModelNode:
+    CollectionModelObject:
       type: object
       properties:
         _embedded:
           type: object
           properties:
-            nodes:
+            objects:
               type: array
               items:
-                $ref: '#/components/schemas/EntityModelNode'
+                type: object
         _links:
           $ref: '#/components/schemas/Links'
-        page:
-          $ref: '#/components/schemas/PageMetadata'
     TriggerRequestBody:
       required:
       - method
