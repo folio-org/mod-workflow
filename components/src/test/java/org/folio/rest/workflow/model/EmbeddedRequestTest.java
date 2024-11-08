@@ -5,9 +5,16 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.util.ReflectionTestUtils.getField;
 import static org.springframework.test.util.ReflectionTestUtils.setField;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Stream;
+
 import org.folio.rest.workflow.enums.HttpMethod;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 class EmbeddedRequestTest {
 
@@ -121,6 +128,67 @@ class EmbeddedRequestTest {
 
     embeddedRequest.setResponseKey(VALUE);
     assertEquals(VALUE, getField(embeddedRequest, "responseKey"));
+  }
+
+  @ParameterizedTest
+  @MethodSource("providePrePersistFor")
+  void prePersistWorksTest(Map<String, Object> initial, Map<String, Object> expected) {
+    initial.forEach((String attribute, Object value) -> {
+      setField(embeddedRequest, attribute, value);
+    });
+
+    embeddedRequest.prePersist();
+
+    expected.forEach((String attribute, Object value) -> {
+      assertEquals(value, getField(embeddedRequest, attribute));
+    });
+  }
+
+  /**
+   * Helper function for parameterized tests for the prePersist function.
+   *
+   * @return
+   *   The arguments array stream with the stream columns as:
+   *     - Arguments initial The initial values.
+   *     - Arguments expect The expected values.
+   */
+  private static Stream<Arguments> providePrePersistFor() {
+    final String APPLICATION_JSON_VALUE = "application/json";
+    final String url = "url";
+
+    return Stream.of(
+      Arguments.of(
+        helperFieldMap(null,  null, null, null, null),
+        helperFieldMap(APPLICATION_JSON_VALUE, "{}", APPLICATION_JSON_VALUE, HttpMethod.GET, "")
+      ),
+      Arguments.of(
+        helperFieldMap(APPLICATION_JSON_VALUE,  null , null, HttpMethod.POST, url),
+        helperFieldMap(APPLICATION_JSON_VALUE, "{}", APPLICATION_JSON_VALUE, HttpMethod.POST, url)
+      )
+    );
+  }
+
+  /**
+   * Helper for reducing inline code repititon for assignments.
+   *
+   * @param accept The accept value.
+   * @param bodyTemplate The bodyTemplate value.
+   * @param contentType The contentType value.
+   * @param method The method value.
+   * @param url The url value.
+   *
+   * @return The built arguments map.
+   */
+  private static Map<String, Object> helperFieldMap(String accept, String bodyTemplate, String contentType, HttpMethod method, String url) {
+    final Map<String, Object> map = new HashMap<>();
+
+    map.put("accept", accept);
+    map.put("bodyTemplate", bodyTemplate);
+    map.put("contentType", contentType);
+    map.put("method", method);
+    map.put("url", url);
+
+    return map;
   }
 
 }
