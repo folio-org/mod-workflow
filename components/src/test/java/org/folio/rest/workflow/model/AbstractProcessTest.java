@@ -6,10 +6,16 @@ import static org.springframework.test.util.ReflectionTestUtils.getField;
 import static org.springframework.test.util.ReflectionTestUtils.setField;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Stream;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -135,6 +141,73 @@ class AbstractProcessTest {
     assertEquals(nodes, getField(abstractProcess, "nodes"));
   }
 
+  @ParameterizedTest
+  @MethodSource("providePrePersistFor")
+  void prePersistWorksTest(Map<String, Object> initial, Map<String, Object> expected) {
+    initial.forEach((String attribute, Object value) -> {
+      setField(abstractProcess, attribute, value);
+    });
+
+    abstractProcess.prePersist();
+
+    expected.forEach((String attribute, Object value) -> {
+      assertEquals(value, getField(abstractProcess, attribute));
+    });
+  }
+
+  /**
+   * Helper function for parameterized tests for the prePersist function.
+   *
+   * @return
+   *   The arguments array stream with the stream columns as:
+   *     - Arguments initial The initial values.
+   *     - Arguments expect The expected values.
+   */
+  private static Stream<Arguments> providePrePersistFor() {
+    final List<Node> nodeList = new ArrayList<>();
+    nodeList.add(new NodeImpl());
+
+    return Stream.of(
+      Arguments.of(
+        helperFieldMap(null,  null,  null),
+        helperFieldMap(false, false, new ArrayList<>())
+      ),
+      Arguments.of(
+        helperFieldMap(true,  null,  null),
+        helperFieldMap(true,  false, new ArrayList<>())
+      ),
+      Arguments.of(
+        helperFieldMap(null,  true,  null),
+        helperFieldMap(false, true,  new ArrayList<>())
+      ),
+      Arguments.of(
+        helperFieldMap(null,  null,  nodeList),
+        helperFieldMap(false, false, nodeList)
+      )
+    );
+  }
+
+  /**
+   * Helper for reducing inline code repititon for assignments.
+   *
+   * @param asyncBefore The asyncBefore value.
+   * @param asyncAfter The asyncAfter value.
+   * @param nodes The nodes value.
+   *
+   * @return The built arguments map.
+   */
+  private static Map<String, Object> helperFieldMap(Boolean asyncBefore, Boolean asyncAfter, List<Node> nodes) {
+    final Map<String, Object> map = new HashMap<>();
+
+    map.put("asyncBefore", asyncBefore);
+    map.put("asyncAfter", asyncAfter);
+    map.put("nodes", nodes);
+
+    return map;
+  }
+
   private static class Impl extends AbstractProcess { }
+
+  private static class NodeImpl extends Node { }
 
 }
