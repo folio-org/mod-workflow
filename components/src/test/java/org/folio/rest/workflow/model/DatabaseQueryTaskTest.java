@@ -5,12 +5,19 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.util.ReflectionTestUtils.getField;
 import static org.springframework.test.util.ReflectionTestUtils.setField;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
+import java.util.stream.Stream;
+
 import org.folio.rest.workflow.enums.DatabaseResultType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -26,7 +33,7 @@ class DatabaseQueryTaskTest {
 
   @BeforeEach
   void beforeEach() {
-    databaseQueryTask = new DatabaseQueryTask();
+    databaseQueryTask = new Impl();
     inputVariables = new HashSet<>();
     inputVariables.add(embeddedVariable);
   }
@@ -225,5 +232,80 @@ class DatabaseQueryTaskTest {
     databaseQueryTask.setIncludeHeader(true);
     assertEquals(true, getField(databaseQueryTask, "includeHeader"));
   }
+
+  @ParameterizedTest
+  @MethodSource("providePrePersistFor")
+  void prePersistWorksTest(Map<String, Object> initial, Map<String, Object> expected) {
+    initial.forEach((String attribute, Object value) -> {
+      setField(databaseQueryTask, attribute, value);
+    });
+
+    databaseQueryTask.prePersist();
+
+    expected.forEach((String attribute, Object value) -> {
+      assertEquals(value, getField(databaseQueryTask, attribute));
+    });
+  }
+
+  /**
+   * Helper function for parameterized tests for the prePersist function.
+   *
+   * @return
+   *   The arguments array stream with the stream columns as:
+   *     - Arguments initial The initial values.
+   *     - Arguments expect The expected values.
+   */
+  private static Stream<Arguments> providePrePersistFor() {
+    final String designation = "designationValue";
+    final String query = "queryValue";
+
+    return Stream.of(
+      Arguments.of(
+        helperFieldMap(null, null, null),
+        helperFieldMap("", "", false)
+      ),
+      Arguments.of(
+        helperFieldMap("", null, true),
+        helperFieldMap("", "", true)
+      ),
+      Arguments.of(
+        helperFieldMap(null, null, true),
+        helperFieldMap("", "", true)
+      ),
+      Arguments.of(
+        helperFieldMap(designation, "", null),
+        helperFieldMap(designation, "", false)
+      ),
+      Arguments.of(
+        helperFieldMap(null, query, false),
+        helperFieldMap("", query, false)
+      ),
+      Arguments.of(
+        helperFieldMap(designation, query, true),
+        helperFieldMap(designation, query, true)
+      )
+    );
+  }
+
+  /**
+   * Helper for reducing inline code repititon for assignments.
+   *
+   * @param designation The designation value.
+   * @param query The query value.
+   * @param includeHeader The includeHeader value.
+   *
+   * @return The built arguments map.
+   */
+  private static Map<String, Object> helperFieldMap(String designation, String query, Boolean includeHeader) {
+    final Map<String, Object> map = new HashMap<>();
+
+    map.put("designation", designation);
+    map.put("query", query);
+    map.put("includeHeader", includeHeader);
+
+    return map;
+  }
+
+  private static class Impl extends DatabaseQueryTask { }
 
 }

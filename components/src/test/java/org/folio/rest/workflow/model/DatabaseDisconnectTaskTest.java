@@ -5,11 +5,18 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.util.ReflectionTestUtils.getField;
 import static org.springframework.test.util.ReflectionTestUtils.setField;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
+import java.util.stream.Stream;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -25,7 +32,7 @@ class DatabaseDisconnectTaskTest {
 
   @BeforeEach
   void beforeEach() {
-    databaseDisconnectTask = new DatabaseDisconnectTask();
+    databaseDisconnectTask = new Impl();
     inputVariables = new HashSet<>();
     inputVariables.add(embeddedVariable);
   }
@@ -165,4 +172,61 @@ class DatabaseDisconnectTaskTest {
     assertEquals(VALUE, getField(databaseDisconnectTask, "designation"));
   }
 
+  @ParameterizedTest
+  @MethodSource("providePrePersistFor")
+  void prePersistWorksTest(Map<String, Object> initial, Map<String, Object> expected) {
+    initial.forEach((String attribute, Object value) -> {
+      setField(databaseDisconnectTask, attribute, value);
+    });
+
+    databaseDisconnectTask.prePersist();
+
+    expected.forEach((String attribute, Object value) -> {
+      assertEquals(value, getField(databaseDisconnectTask, attribute));
+    });
+  }
+
+  /**
+   * Helper function for parameterized tests for the prePersist function.
+   *
+   * @return
+   *   The arguments array stream with the stream columns as:
+   *     - Arguments initial The initial values.
+   *     - Arguments expect The expected values.
+   */
+  private static Stream<Arguments> providePrePersistFor() {
+    final String designation = "designation";
+
+    return Stream.of(
+      Arguments.of(
+        helperFieldMap(null),
+        helperFieldMap("")
+      ),
+      Arguments.of(
+        helperFieldMap(designation),
+        helperFieldMap(designation)
+      ),
+      Arguments.of(
+        helperFieldMap(""),
+        helperFieldMap("")
+      )
+    );
+  }
+
+  /**
+   * Helper for reducing inline code repititon for assignments.
+   *
+   * @param designation The designation value.
+   *
+   * @return The built arguments map.
+   */
+  private static Map<String, Object> helperFieldMap(String designation) {
+    final Map<String, Object> map = new HashMap<>();
+
+    map.put("designation", designation);
+
+    return map;
+  }
+
+  private static class Impl extends DatabaseDisconnectTask { }
 }
