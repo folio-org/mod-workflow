@@ -1,5 +1,6 @@
 package org.folio.rest.workflow.model;
 
+import static org.folio.spring.test.mock.MockMvcConstant.NULL_STR;
 import static org.folio.spring.test.mock.MockMvcConstant.VALUE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.util.ReflectionTestUtils.getField;
@@ -8,7 +9,6 @@ import static org.springframework.test.util.ReflectionTestUtils.setField;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -113,12 +113,38 @@ class EmbeddedLoopReferenceTest {
     });
   }
 
+  @ParameterizedTest
+  @MethodSource("provideSimpleHasAndHasNotFor")
+  void hasCardinalityExpressionWorksTest(String value, boolean expect) {
+    setField(embeddedLoopReference, "cardinalityExpression", value);
+
+    assertEquals(expect, embeddedLoopReference.hasCardinalityExpression());
+  }
+
+  @ParameterizedTest
+  @MethodSource("provideSimpleHasAndHasNotFor")
+  void hasCompleteConditionExpressionWorksTest(String value, boolean expect) {
+    setField(embeddedLoopReference, "completeConditionExpression", value);
+
+    assertEquals(expect, embeddedLoopReference.hasCompleteConditionExpression());
+  }
+
+  @ParameterizedTest
+  @MethodSource("provideHasDataInputFor")
+  void hasDataInput(String expression, String name, boolean expect) {
+    setField(embeddedLoopReference, "dataInputRefExpression", expression);
+    setField(embeddedLoopReference, "inputDataName", name);
+
+    assertEquals(expect, embeddedLoopReference.hasDataInput());
+  }
+
   /**
    * Helper function for parameterized tests for the prePersist function.
    *
    * @return
    *   The arguments array stream with the stream columns as:
-   *     - Arguments parallel The parallel value.
+   *     - Arguments initial The initial values.
+   *     - Arguments expect The expected values.
    */
   private static Stream<Arguments> providePrePersistFor() {
 
@@ -131,6 +157,40 @@ class EmbeddedLoopReferenceTest {
         helperFieldMap(true),
         helperFieldMap(true)
       )
+    );
+  }
+
+  /**
+   * Helper function for parameterized tests for the simple has and has not functions.
+   *
+   * @return
+   *   The arguments array stream with the stream columns as:
+   *     - String value The initial value.
+   *     - boolean expect The expected return result.
+   */
+  private static Stream<Arguments> provideSimpleHasAndHasNotFor() {
+
+    return Stream.of(
+      Arguments.of(NULL_STR, false),
+      Arguments.of(VALUE,    true)
+    );
+  }
+
+  /**
+   * Helper function for parameterized tests for the hasDataInputFor function.
+   *
+   * @return
+   *   The arguments array stream with the stream columns as:
+   *     - String value The initial value.
+   *     - boolean expect The expected return result.
+   */
+  private static Stream<Arguments> provideHasDataInputFor() {
+
+    return Stream.of(
+      Arguments.of(NULL_STR, NULL_STR, false),
+      Arguments.of(VALUE,    NULL_STR, false),
+      Arguments.of(NULL_STR, VALUE,    false),
+      Arguments.of(VALUE,    VALUE,    true)
     );
   }
 
