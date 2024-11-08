@@ -5,8 +5,17 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.util.ReflectionTestUtils.getField;
 import static org.springframework.test.util.ReflectionTestUtils.setField;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Stream;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 class ConditionTest {
 
@@ -14,7 +23,7 @@ class ConditionTest {
 
   @BeforeEach
   void beforeEach() {
-    condition = new Condition();
+    condition = new Impl();
   }
 
   @Test
@@ -106,5 +115,66 @@ class ConditionTest {
     condition.setAnswer(VALUE);
     assertEquals(VALUE, getField(condition, "answer"));
   }
+
+  @ParameterizedTest
+  @MethodSource("providePrePersistFor")
+  void prePersistWorksTest(Map<String, Object> initial, Map<String, Object> expected) {
+    initial.forEach((String attribute, Object value) -> {
+      setField(condition, attribute, value);
+    });
+
+    condition.prePersist();
+
+    expected.forEach((String attribute, Object value) -> {
+      assertEquals(value, getField(condition, attribute));
+    });
+  }
+
+  /**
+   * Helper function for parameterized tests for the prePersist function.
+   *
+   * @return
+   *   The arguments array stream with the stream columns as:
+   *     - Arguments initial The initial values.
+   *     - Arguments expect The expected values.
+   */
+  private static Stream<Arguments> providePrePersistFor() {
+
+    return Stream.of(
+      Arguments.of(
+        helperFieldMap(null,  null),
+        helperFieldMap("", "")
+      ),
+      Arguments.of(
+        helperFieldMap("",  null),
+        helperFieldMap("", "")
+      ),Arguments.of(
+        helperFieldMap(null,  ""),
+        helperFieldMap("", "")
+      ),Arguments.of(
+        helperFieldMap("",  ""),
+        helperFieldMap("", "")
+      )
+    );
+  }
+
+  /**
+   * Helper for reducing inline code repititon for assignments.
+   *
+   * @param answer The answer value.
+   * @param expression The expression value.
+   *
+   * @return The built arguments map.
+   */
+  private static Map<String, Object> helperFieldMap(String answer, String expression) {
+    final Map<String, Object> map = new HashMap<>();
+
+    map.put("answer", answer);
+    map.put("expression", expression);
+
+    return map;
+  }
+
+  private static class Impl extends Condition { }
 
 }
