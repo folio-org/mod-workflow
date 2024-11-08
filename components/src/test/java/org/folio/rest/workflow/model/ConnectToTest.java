@@ -1,5 +1,6 @@
 package org.folio.rest.workflow.model;
 
+import static org.folio.spring.test.mock.MockMvcConstant.NULL_STR;
 import static org.folio.spring.test.mock.MockMvcConstant.VALUE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.util.ReflectionTestUtils.getField;
@@ -125,12 +126,12 @@ class ConnectToTest {
 
     return Stream.of(
       Arguments.of(
-        helperFieldMap(null),
+        helperFieldMap(NULL_STR),
         helperFieldMap("")
       ),
       Arguments.of(
-        helperFieldMap(""),
-        helperFieldMap("")
+        helperFieldMap(VALUE),
+        helperFieldMap(VALUE)
       )
     );
   }

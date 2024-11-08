@@ -1,5 +1,6 @@
 package org.folio.rest.workflow.model;
 
+import static org.folio.spring.test.mock.MockMvcConstant.NULL_STR;
 import static org.folio.spring.test.mock.MockMvcConstant.VALUE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.util.ReflectionTestUtils.getField;
@@ -202,19 +203,6 @@ class DirectoryTaskTest {
     assertEquals(VALUE, getField(directoryTask, "workflow"));
   }
 
-  @Test
-  void prePersistDefaultWorksTest() {
-    setField(directoryTask, "path", null);
-    setField(directoryTask, "workflow", null);
-    setField(directoryTask, "action", null);
-
-    directoryTask.prePersist();
-
-    assertEquals("", directoryTask.getPath());
-    assertEquals("", directoryTask.getWorkflow());
-    assertEquals(DirectoryAction.LIST, directoryTask.getAction());
-  }
-
   @ParameterizedTest
   @MethodSource("providePrePersistFor")
   void prePersistWorksTest(Map<String, Object> initial, Map<String, Object> expected) {
@@ -240,28 +228,28 @@ class DirectoryTaskTest {
   private static Stream<Arguments> providePrePersistFor() {
     return Stream.of(
       Arguments.of(
-        helperFieldMap(null, null, null), 
-        helperFieldMap("", "", DirectoryAction.LIST)
+        helperFieldMap(NULL_STR, NULL_STR, null), 
+        helperFieldMap("",       "",       DirectoryAction.LIST)
       ),
       Arguments.of(
-        helperFieldMap(VALUE, null, null), 
-        helperFieldMap(VALUE, "", DirectoryAction.LIST)
+        helperFieldMap(VALUE,    NULL_STR, null), 
+        helperFieldMap(VALUE,    "",       DirectoryAction.LIST)
       ),
       Arguments.of(
-        helperFieldMap(null, VALUE, null), 
-        helperFieldMap("", VALUE, DirectoryAction.LIST)
+        helperFieldMap(NULL_STR, VALUE,    null), 
+        helperFieldMap("",       VALUE,    DirectoryAction.LIST)
       ),
       Arguments.of(
-        helperFieldMap(null, null, DirectoryAction.WRITE), 
-        helperFieldMap("", "", DirectoryAction.WRITE)
+        helperFieldMap(NULL_STR, NULL_STR, DirectoryAction.WRITE), 
+        helperFieldMap("",       "",       DirectoryAction.WRITE)
       ),
       Arguments.of(
-        helperFieldMap(null, null, DirectoryAction.READ_NEXT), 
-        helperFieldMap("", "", DirectoryAction.READ_NEXT)
+        helperFieldMap(NULL_STR, NULL_STR, DirectoryAction.READ_NEXT), 
+        helperFieldMap("",       "",       DirectoryAction.READ_NEXT)
       ),
       Arguments.of(
-        helperFieldMap(null, null, DirectoryAction.DELETE_NEXT), 
-        helperFieldMap("", "", DirectoryAction.DELETE_NEXT)
+        helperFieldMap(NULL_STR, NULL_STR, DirectoryAction.DELETE_NEXT), 
+        helperFieldMap("",       "",       DirectoryAction.DELETE_NEXT)
       )
     );
   }

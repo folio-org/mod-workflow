@@ -1,5 +1,7 @@
 package org.folio.rest.workflow.model;
 
+import static org.folio.spring.test.mock.MockMvcConstant.APP_JSON;
+import static org.folio.spring.test.mock.MockMvcConstant.NULL_STR;
 import static org.folio.spring.test.mock.MockMvcConstant.VALUE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.util.ReflectionTestUtils.getField;
@@ -153,17 +155,31 @@ class EmbeddedRequestTest {
    *     - Arguments expect The expected values.
    */
   private static Stream<Arguments> providePrePersistFor() {
-    final String APPLICATION_JSON_VALUE = "application/json";
-    final String url = "url";
 
     return Stream.of(
       Arguments.of(
-        helperFieldMap(null,  null, null, null, null),
-        helperFieldMap(APPLICATION_JSON_VALUE, "{}", APPLICATION_JSON_VALUE, HttpMethod.GET, "")
+        helperFieldMap(NULL_STR, NULL_STR, NULL_STR, null,            NULL_STR),
+        helperFieldMap(APP_JSON, "{}",     APP_JSON, HttpMethod.GET,  "")
       ),
       Arguments.of(
-        helperFieldMap(APPLICATION_JSON_VALUE,  null , null, HttpMethod.POST, url),
-        helperFieldMap(APPLICATION_JSON_VALUE, "{}", APPLICATION_JSON_VALUE, HttpMethod.POST, url)
+        helperFieldMap(VALUE,    NULL_STR, NULL_STR, null,            NULL_STR),
+        helperFieldMap(VALUE,    "{}",     APP_JSON, HttpMethod.GET,  "")
+      ),
+      Arguments.of(
+        helperFieldMap(NULL_STR, VALUE,    NULL_STR, null,            NULL_STR),
+        helperFieldMap(APP_JSON, VALUE,    APP_JSON, HttpMethod.GET,  "")
+      ),
+      Arguments.of(
+        helperFieldMap(NULL_STR, NULL_STR, VALUE,    null,            NULL_STR),
+        helperFieldMap(APP_JSON, "{}",     VALUE,    HttpMethod.GET,  "")
+      ),
+      Arguments.of(
+        helperFieldMap(NULL_STR, NULL_STR, NULL_STR, HttpMethod.POST, NULL_STR),
+        helperFieldMap(APP_JSON, "{}",     APP_JSON, HttpMethod.POST, "")
+      ),
+      Arguments.of(
+        helperFieldMap(NULL_STR, NULL_STR, NULL_STR, null,            VALUE),
+        helperFieldMap(APP_JSON, "{}",     APP_JSON, HttpMethod.GET,  VALUE)
       )
     );
   }

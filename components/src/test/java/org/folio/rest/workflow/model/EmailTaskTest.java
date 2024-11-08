@@ -1,5 +1,6 @@
 package org.folio.rest.workflow.model;
 
+import static org.folio.spring.test.mock.MockMvcConstant.NULL_STR;
 import static org.folio.spring.test.mock.MockMvcConstant.VALUE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.util.ReflectionTestUtils.getField;
@@ -315,43 +316,27 @@ class EmailTaskTest {
    *     - Arguments expect The expected values.
    */
   private static Stream<Arguments> providePrePersistFor() {
-    final String mailFrom = "mailFromValue";
-    final String mailText = "mailTextValue";
-    final String mailTo = "mailToValue";
-    final String mailSubject = "mailSubjectValue";
 
     return Stream.of(
       Arguments.of(
-        helperFieldMap(null, null, null, null),
-        helperFieldMap("", "", "", "")
+        helperFieldMap(NULL_STR, NULL_STR, NULL_STR, NULL_STR),
+        helperFieldMap("",       "",       "",       "")
       ),
       Arguments.of(
-        helperFieldMap(null, mailText, mailTo, mailSubject),
-        helperFieldMap("", mailText, mailTo, mailSubject)
+        helperFieldMap(VALUE,    NULL_STR, NULL_STR, NULL_STR),
+        helperFieldMap(VALUE,    "",       "",       "")
       ),
       Arguments.of(
-        helperFieldMap(mailFrom, null, mailTo, mailSubject),
-        helperFieldMap(mailFrom, "", mailTo, mailSubject)
+        helperFieldMap(NULL_STR, VALUE,    NULL_STR, NULL_STR),
+        helperFieldMap("",       VALUE,    "",       "")
       ),
       Arguments.of(
-        helperFieldMap(mailFrom, mailText, null, mailSubject),
-        helperFieldMap(mailFrom, mailText, "", mailSubject)
+        helperFieldMap(NULL_STR, NULL_STR, VALUE,    NULL_STR),
+        helperFieldMap("",       "",       VALUE,    "")
       ),
       Arguments.of(
-        helperFieldMap(null, mailText, mailTo, null),
-        helperFieldMap("", mailText, mailTo, "")
-      ),
-      Arguments.of(
-        helperFieldMap(mailFrom, null, null, mailSubject),
-        helperFieldMap(mailFrom, "", "", mailSubject)
-      ),
-      Arguments.of(
-        helperFieldMap(mailFrom, mailText, mailTo, null),
-        helperFieldMap(mailFrom, mailText, mailTo, "")
-      ),
-      Arguments.of(
-        helperFieldMap(mailFrom, mailText, mailTo, mailSubject),
-        helperFieldMap(mailFrom, mailText, mailTo, mailSubject)
+        helperFieldMap(NULL_STR, NULL_STR, NULL_STR, VALUE),
+        helperFieldMap("",       "",       "",       VALUE)
       )
     );
   }

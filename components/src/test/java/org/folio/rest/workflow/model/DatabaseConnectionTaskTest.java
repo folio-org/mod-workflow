@@ -1,5 +1,6 @@
 package org.folio.rest.workflow.model;
 
+import static org.folio.spring.test.mock.MockMvcConstant.NULL_STR;
 import static org.folio.spring.test.mock.MockMvcConstant.VALUE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.util.ReflectionTestUtils.getField;
@@ -241,29 +242,19 @@ class DatabaseConnectionTaskTest {
    *     - Arguments expect The expected values.
    */
   private static Stream<Arguments> providePrePersistFor() {
-    final String designation = "designation";
-    final String url = "url";
 
     return Stream.of(
       Arguments.of(
-        helperFieldMap(null,  null),
-        helperFieldMap("", "")
+        helperFieldMap(NULL_STR, NULL_STR),
+        helperFieldMap("",       "")
       ),
       Arguments.of(
-        helperFieldMap("",  ""),
-        helperFieldMap("", "")
+        helperFieldMap(VALUE,    NULL_STR),
+        helperFieldMap(VALUE,    "")
       ),
       Arguments.of(
-        helperFieldMap(designation,url),
-        helperFieldMap(designation, url)
-      ),
-      Arguments.of(
-        helperFieldMap(designation,  null),
-        helperFieldMap(designation, "")
-      ),
-      Arguments.of(
-        helperFieldMap(null,  url),
-        helperFieldMap("", url)
+        helperFieldMap(NULL_STR, VALUE),
+        helperFieldMap("",       VALUE)
       )
     );
   }

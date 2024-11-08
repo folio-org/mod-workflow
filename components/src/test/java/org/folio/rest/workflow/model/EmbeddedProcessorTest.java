@@ -1,5 +1,7 @@
 package org.folio.rest.workflow.model;
 
+import static org.folio.spring.test.mock.MockMvcConstant.INT_VALUE;
+import static org.folio.spring.test.mock.MockMvcConstant.NULL_STR;
 import static org.folio.spring.test.mock.MockMvcConstant.VALUE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.util.ReflectionTestUtils.getField;
@@ -123,23 +125,27 @@ class EmbeddedProcessorTest {
    *     - Arguments expect The expected values.
    */
   private static Stream<Arguments> providePrePersistFor() {
-    final Integer buffer = 0;
-    final String code = "codeValue";
-    final Integer delay = 0;
-    final String functionName = "functionNameValue";
 
     return Stream.of(
       Arguments.of(
-        helperFieldMap(null, null, null, null),
-        helperFieldMap(0, "", 0, "")
+        helperFieldMap(null,      NULL_STR, null,      NULL_STR),
+        helperFieldMap(0,         "",       0,         "")
       ),
       Arguments.of(
-        helperFieldMap(buffer, null, null, functionName),
-        helperFieldMap(buffer, "", delay, functionName)
+        helperFieldMap(INT_VALUE, NULL_STR, null,      NULL_STR),
+        helperFieldMap(INT_VALUE, "",       0,         "")
       ),
       Arguments.of(
-        helperFieldMap(buffer, code, delay, functionName),
-        helperFieldMap(buffer, code, delay, functionName)
+        helperFieldMap(null,      VALUE,    null,      NULL_STR),
+        helperFieldMap(0,         VALUE,    0,         "")
+      ),
+      Arguments.of(
+        helperFieldMap(null,      NULL_STR, INT_VALUE, NULL_STR),
+        helperFieldMap(0,         "",       INT_VALUE, "")
+      ),
+      Arguments.of(
+        helperFieldMap(null,      NULL_STR, null,      VALUE),
+        helperFieldMap(0,         "",       0,         VALUE)
       )
     );
   }

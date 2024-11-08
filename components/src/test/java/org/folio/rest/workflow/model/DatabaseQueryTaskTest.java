@@ -1,5 +1,6 @@
 package org.folio.rest.workflow.model;
 
+import static org.folio.spring.test.mock.MockMvcConstant.NULL_STR;
 import static org.folio.spring.test.mock.MockMvcConstant.VALUE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.util.ReflectionTestUtils.getField;
@@ -256,33 +257,23 @@ class DatabaseQueryTaskTest {
    *     - Arguments expect The expected values.
    */
   private static Stream<Arguments> providePrePersistFor() {
-    final String designation = "designationValue";
-    final String query = "queryValue";
 
     return Stream.of(
       Arguments.of(
-        helperFieldMap(null, null, null),
-        helperFieldMap("", "", false)
+        helperFieldMap(NULL_STR, NULL_STR, null),
+        helperFieldMap("",       "",       false)
       ),
       Arguments.of(
-        helperFieldMap("", null, true),
-        helperFieldMap("", "", true)
+        helperFieldMap(VALUE,    NULL_STR, null),
+        helperFieldMap(VALUE,    "",       false)
       ),
       Arguments.of(
-        helperFieldMap(null, null, true),
-        helperFieldMap("", "", true)
+        helperFieldMap(NULL_STR, VALUE,    null),
+        helperFieldMap("",       VALUE,    false)
       ),
       Arguments.of(
-        helperFieldMap(designation, "", null),
-        helperFieldMap(designation, "", false)
-      ),
-      Arguments.of(
-        helperFieldMap(null, query, false),
-        helperFieldMap("", query, false)
-      ),
-      Arguments.of(
-        helperFieldMap(designation, query, true),
-        helperFieldMap(designation, query, true)
+        helperFieldMap(NULL_STR, NULL_STR, true),
+        helperFieldMap("",       "",       true)
       )
     );
   }
