@@ -241,6 +241,8 @@ class DatabaseConnectionTaskTest {
    *     - Arguments expect The expected values.
    */
   private static Stream<Arguments> providePrePersistFor() {
+    final String designation = "designation";
+    final String url = "url";
 
     return Stream.of(
       Arguments.of(
@@ -250,6 +252,18 @@ class DatabaseConnectionTaskTest {
       Arguments.of(
         helperFieldMap("",  ""),
         helperFieldMap("", "")
+      ),
+      Arguments.of(
+        helperFieldMap(designation,url),
+        helperFieldMap(designation, url)
+      ),
+      Arguments.of(
+        helperFieldMap(designation,  null),
+        helperFieldMap(designation, "")
+      ),
+      Arguments.of(
+        helperFieldMap(null,  url),
+        helperFieldMap("", url)
       )
     );
   }
