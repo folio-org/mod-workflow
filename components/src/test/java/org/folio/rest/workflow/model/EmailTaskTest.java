@@ -5,11 +5,18 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.util.ReflectionTestUtils.getField;
 import static org.springframework.test.util.ReflectionTestUtils.setField;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
+import java.util.stream.Stream;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -25,7 +32,7 @@ class EmailTaskTest {
 
   @BeforeEach
   void beforeEach() {
-    emailTask = new EmailTask();
+    emailTask = new Impl();
     inputVariables = new HashSet<>();
     inputVariables.add(embeddedVariable);
   }
@@ -284,5 +291,91 @@ class EmailTaskTest {
     emailTask.setIncludeAttachment(VALUE);
     assertEquals(VALUE, getField(emailTask, "includeAttachment"));
   }
+  @ParameterizedTest
+  @MethodSource("providePrePersistFor")
+  void prePersistWorksTest(Map<String, Object> initial, Map<String, Object> expected) {
+    initial.forEach((String attribute, Object value) -> {
+      setField(emailTask, attribute, value);
+    });
+
+    emailTask.prePersist();
+
+    expected.forEach((String attribute, Object value) -> {
+      assertEquals(value, getField(emailTask, attribute));
+    });
+  }
+
+  /**
+   * Helper function for parameterized tests for the prePersist function.
+   *
+   * @return
+   *   The arguments array stream with the stream columns as:
+   *     - Arguments initial The initial values.
+   *     - Arguments expect The expected values.
+   */
+  private static Stream<Arguments> providePrePersistFor() {
+    final String mailFrom = "mailFromValue";
+    final String mailText = "mailTextValue";
+    final String mailTo = "mailToValue";
+    final String mailSubject = "mailSubjectValue";
+
+    return Stream.of(
+      Arguments.of(
+        helperFieldMap(null, null, null, null),
+        helperFieldMap("", "", "", "")
+      ),
+      Arguments.of(
+        helperFieldMap(null, mailText, mailTo, mailSubject),
+        helperFieldMap("", mailText, mailTo, mailSubject)
+      ),
+      Arguments.of(
+        helperFieldMap(mailFrom, null, mailTo, mailSubject),
+        helperFieldMap(mailFrom, "", mailTo, mailSubject)
+      ),
+      Arguments.of(
+        helperFieldMap(mailFrom, mailText, null, mailSubject),
+        helperFieldMap(mailFrom, mailText, "", mailSubject)
+      ),
+      Arguments.of(
+        helperFieldMap(null, mailText, mailTo, null),
+        helperFieldMap("", mailText, mailTo, "")
+      ),
+      Arguments.of(
+        helperFieldMap(mailFrom, null, null, mailSubject),
+        helperFieldMap(mailFrom, "", "", mailSubject)
+      ),
+      Arguments.of(
+        helperFieldMap(mailFrom, mailText, mailTo, null),
+        helperFieldMap(mailFrom, mailText, mailTo, "")
+      ),
+      Arguments.of(
+        helperFieldMap(mailFrom, mailText, mailTo, mailSubject),
+        helperFieldMap(mailFrom, mailText, mailTo, mailSubject)
+      )
+    );
+  }
+
+  /**
+   * Helper for reducing inline code repititon for assignments.
+   *
+   * @param mailFrom The mailFrom value.
+   * @param mailText The mailText value.
+   * @param mailTo The mailTo value.
+   * @param mailSubject The mailSubject value.
+   *
+   * @return The built arguments map.
+   */
+  private static Map<String, Object> helperFieldMap(String mailFrom, String mailText, String mailTo, String mailSubject) {
+    final Map<String, Object> map = new HashMap<>();
+
+    map.put("mailFrom", mailFrom);
+    map.put("mailText", mailText);
+    map.put("mailTo", mailTo);
+    map.put("mailSubject", mailSubject);
+
+    return map;
+  }
+
+  private static class Impl extends EmailTask { }
 
 }
