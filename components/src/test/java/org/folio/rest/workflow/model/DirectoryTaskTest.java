@@ -10,7 +10,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Stream;
-
 import org.folio.rest.workflow.enums.DirectoryAction;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,7 +32,7 @@ class DirectoryTaskTest {
 
   @BeforeEach
   void beforeEach() {
-    directoryTask = new Impl();
+    directoryTask = new DirectoryTask();
     inputVariables = new HashSet<>();
     inputVariables.add(embeddedVariable);
   }
@@ -284,7 +283,5 @@ class DirectoryTaskTest {
 
     return map;
   }
-
-  private static class Impl extends DirectoryTask { }
 
 }
