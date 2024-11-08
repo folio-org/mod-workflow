@@ -146,10 +146,12 @@ class ConditionTest {
       Arguments.of(
         helperFieldMap("",  null),
         helperFieldMap("", "")
-      ),Arguments.of(
+      ),
+      Arguments.of(
         helperFieldMap(null,  ""),
         helperFieldMap("", "")
-      ),Arguments.of(
+      ),
+      Arguments.of(
         helperFieldMap("",  ""),
         helperFieldMap("", "")
       )
