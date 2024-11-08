@@ -291,6 +291,7 @@ class EmailTaskTest {
     emailTask.setIncludeAttachment(VALUE);
     assertEquals(VALUE, getField(emailTask, "includeAttachment"));
   }
+
   @ParameterizedTest
   @MethodSource("providePrePersistFor")
   void prePersistWorksTest(Map<String, Object> initial, Map<String, Object> expected) {
