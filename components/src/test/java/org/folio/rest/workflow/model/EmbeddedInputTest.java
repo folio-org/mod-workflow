@@ -1,5 +1,6 @@
 package org.folio.rest.workflow.model;
 
+import static org.folio.spring.test.mock.MockMvcConstant.NULL_STR;
 import static org.folio.spring.test.mock.MockMvcConstant.VALUE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.util.ReflectionTestUtils.getField;
@@ -170,32 +171,32 @@ class EmbeddedInputTest {
 
     return Stream.of(
       Arguments.of(
-        helperFieldMap(null,              null,  null,  null,           null,              null),
-        helperFieldMap(new ArrayList<>(), "",    "",    InputType.TEXT, new ArrayList<>(), false)
+        helperFieldMap(null,              NULL_STR, NULL_STR,  null,           null,              null),
+        helperFieldMap(new ArrayList<>(), "",       "",        InputType.TEXT, new ArrayList<>(), false)
       ),
       Arguments.of(
-        helperFieldMap(attrList         , null,  null,  null,           null,              null),
-        helperFieldMap(attrList         , "",    "",    InputType.TEXT, new ArrayList<>(), false)
+        helperFieldMap(attrList         , NULL_STR, NULL_STR,  null,           null,              null),
+        helperFieldMap(attrList         , "",       "",        InputType.TEXT, new ArrayList<>(), false)
       ),
       Arguments.of(
-        helperFieldMap(null,              VALUE, null,  null,           null,              null),
-        helperFieldMap(new ArrayList<>(), VALUE, "",    InputType.TEXT, new ArrayList<>(), false)
+        helperFieldMap(null,              VALUE,    NULL_STR,  null,           null,              null),
+        helperFieldMap(new ArrayList<>(), VALUE,    "",        InputType.TEXT, new ArrayList<>(), false)
       ),
       Arguments.of(
-        helperFieldMap(null,              null,  VALUE, null,           null,              null),
-        helperFieldMap(new ArrayList<>(), "",    VALUE, InputType.TEXT, new ArrayList<>(), false)
+        helperFieldMap(null,              NULL_STR, VALUE,     null,           null,              null),
+        helperFieldMap(new ArrayList<>(), "",       VALUE,     InputType.TEXT, new ArrayList<>(), false)
       ),
       Arguments.of(
-        helperFieldMap(null,              null,  null,  InputType.DATE, null,              null),
-        helperFieldMap(new ArrayList<>(), "",    "",    InputType.DATE, new ArrayList<>(), false)
+        helperFieldMap(null,              NULL_STR, NULL_STR,  InputType.DATE, null,              null),
+        helperFieldMap(new ArrayList<>(), "",       "",        InputType.DATE, new ArrayList<>(), false)
       ),
       Arguments.of(
-        helperFieldMap(null,              null,  null,  null,           strList,           null),
-        helperFieldMap(new ArrayList<>(), "",    "",    InputType.TEXT, strList,           false)
+        helperFieldMap(null,              NULL_STR, NULL_STR,  null,           strList,           null),
+        helperFieldMap(new ArrayList<>(), "",       "",        InputType.TEXT, strList,           false)
       ),
       Arguments.of(
-        helperFieldMap(null,              null,  null,  null,           null,              true),
-        helperFieldMap(new ArrayList<>(), "",    "",    InputType.TEXT, new ArrayList<>(), true)
+        helperFieldMap(null,              NULL_STR, NULL_STR,  null,           null,              true),
+        helperFieldMap(new ArrayList<>(), "",       "",        InputType.TEXT, new ArrayList<>(), true)
       )
     );
   }

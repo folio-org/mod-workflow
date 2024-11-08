@@ -1,15 +1,23 @@
 package org.folio.rest.workflow.model;
 
+import static org.folio.spring.test.mock.MockMvcConstant.NULL_STR;
 import static org.folio.spring.test.mock.MockMvcConstant.VALUE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.util.ReflectionTestUtils.getField;
 import static org.springframework.test.util.ReflectionTestUtils.setField;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
+import java.util.stream.Stream;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -208,6 +216,64 @@ class DatabaseConnectionTaskTest {
 
     databaseConnectionTask.setPassword(VALUE);
     assertEquals(VALUE, getField(databaseConnectionTask, "password"));
+  }
+
+
+  @ParameterizedTest
+  @MethodSource("providePrePersistFor")
+  void prePersistWorksTest(Map<String, Object> initial, Map<String, Object> expected) {
+    initial.forEach((String attribute, Object value) -> {
+      setField(databaseConnectionTask, attribute, value);
+    });
+
+    databaseConnectionTask.prePersist();
+
+    expected.forEach((String attribute, Object value) -> {
+      assertEquals(value, getField(databaseConnectionTask, attribute));
+    });
+  }
+
+  /**
+   * Helper function for parameterized tests for the prePersist function.
+   *
+   * @return
+   *   The arguments array stream with the stream columns as:
+   *     - Arguments initial The initial values.
+   *     - Arguments expect The expected values.
+   */
+  private static Stream<Arguments> providePrePersistFor() {
+
+    return Stream.of(
+      Arguments.of(
+        helperFieldMap(NULL_STR, NULL_STR),
+        helperFieldMap("",       "")
+      ),
+      Arguments.of(
+        helperFieldMap(VALUE,    NULL_STR),
+        helperFieldMap(VALUE,    "")
+      ),
+      Arguments.of(
+        helperFieldMap(NULL_STR, VALUE),
+        helperFieldMap("",       VALUE)
+      )
+    );
+  }
+
+  /**
+   * Helper for reducing inline code repititon for assignments.
+   *
+   * @param designation The designation value.
+   * @param url The url value.
+   *
+   * @return The built arguments map.
+   */
+  private static Map<String, Object> helperFieldMap(String designation, String url ) {
+    final Map<String, Object> map = new HashMap<>();
+
+    map.put("designation", designation);
+    map.put("url", url);
+
+    return map;
   }
 
 }
