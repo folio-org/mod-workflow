@@ -33,7 +33,7 @@ class DatabaseQueryTaskTest {
 
   @BeforeEach
   void beforeEach() {
-    databaseQueryTask = new Impl();
+    databaseQueryTask = new DatabaseQueryTask();
     inputVariables = new HashSet<>();
     inputVariables.add(embeddedVariable);
   }
@@ -305,7 +305,5 @@ class DatabaseQueryTaskTest {
 
     return map;
   }
-
-  private static class Impl extends DatabaseQueryTask { }
 
 }

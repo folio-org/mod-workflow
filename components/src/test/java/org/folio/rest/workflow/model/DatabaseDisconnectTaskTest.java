@@ -32,7 +32,7 @@ class DatabaseDisconnectTaskTest {
 
   @BeforeEach
   void beforeEach() {
-    databaseDisconnectTask = new Impl();
+    databaseDisconnectTask = new DatabaseDisconnectTask();
     inputVariables = new HashSet<>();
     inputVariables.add(embeddedVariable);
   }
@@ -228,5 +228,4 @@ class DatabaseDisconnectTaskTest {
     return map;
   }
 
-  private static class Impl extends DatabaseDisconnectTask { }
 }

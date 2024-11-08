@@ -5,9 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.util.ReflectionTestUtils.getField;
 import static org.springframework.test.util.ReflectionTestUtils.setField;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
@@ -23,7 +21,7 @@ class ConditionTest {
 
   @BeforeEach
   void beforeEach() {
-    condition = new Impl();
+    condition = new Condition();
   }
 
   @Test
@@ -174,7 +172,5 @@ class ConditionTest {
 
     return map;
   }
-
-  private static class Impl extends Condition { }
 
 }

@@ -32,7 +32,7 @@ class DatabaseConnectionTaskTest {
 
   @BeforeEach
   void beforeEach() {
-    databaseConnectionTask = new Impl();
+    databaseConnectionTask = new DatabaseConnectionTask();
     inputVariables = new HashSet<>();
     inputVariables.add(embeddedVariable);
   }
@@ -284,7 +284,5 @@ class DatabaseConnectionTaskTest {
 
     return map;
   }
-
-  private static class Impl extends DatabaseConnectionTask { }
 
 }

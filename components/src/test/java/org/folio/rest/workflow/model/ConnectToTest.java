@@ -21,7 +21,7 @@ class ConnectToTest {
 
   @BeforeEach
   void beforeEach() {
-    connectTo = new Impl();
+    connectTo = new ConnectTo();
   }
 
   @Test
@@ -149,7 +149,5 @@ class ConnectToTest {
 
     return map;
   }
-
-  private static class Impl extends ConnectTo { }
 
 }

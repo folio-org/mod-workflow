@@ -32,7 +32,7 @@ class EmailTaskTest {
 
   @BeforeEach
   void beforeEach() {
-    emailTask = new Impl();
+    emailTask = new EmailTask();
     inputVariables = new HashSet<>();
     inputVariables.add(embeddedVariable);
   }
@@ -375,7 +375,5 @@ class EmailTaskTest {
 
     return map;
   }
-
-  private static class Impl extends EmailTask { }
 
 }
