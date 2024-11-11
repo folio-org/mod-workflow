@@ -106,7 +106,7 @@ application:
       events:
         topic: ${ENV:folio}.camunda.events
 
-# Used by Kafka to manage uploads.
+# Used to manage uploads.
 event:
   uploads:
     path: events
