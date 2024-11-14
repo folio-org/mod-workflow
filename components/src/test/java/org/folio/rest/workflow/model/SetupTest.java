@@ -89,10 +89,6 @@ class SetupTest {
       Arguments.of(
         helperFieldMap(null,  true),
         helperFieldMap(false, true)
-      ),
-      Arguments.of(
-        helperFieldMap(true,  true),
-        helperFieldMap(true,  true)
       )
     );
   }

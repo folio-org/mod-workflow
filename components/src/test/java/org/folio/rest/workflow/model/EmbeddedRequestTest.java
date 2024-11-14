@@ -4,6 +4,7 @@ import static org.folio.rest.workflow.enums.HttpMethod.DELETE;
 import static org.folio.rest.workflow.enums.HttpMethod.GET;
 import static org.folio.rest.workflow.enums.HttpMethod.POST;
 import static org.folio.spring.test.mock.MockMvcConstant.APP_JSON;
+import static org.folio.spring.test.mock.MockMvcConstant.JSON_OBJECT;
 import static org.folio.spring.test.mock.MockMvcConstant.NULL_STR;
 import static org.folio.spring.test.mock.MockMvcConstant.VALUE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -158,32 +159,31 @@ class EmbeddedRequestTest {
    *     - Arguments expect The expected values.
    */
   private static Stream<Arguments> providePrePersistFor() {
-    final String emptyJson = "{}";
 
     return Stream.of(
       Arguments.of(
-        helperFieldMap(NULL_STR, NULL_STR,  NULL_STR, null, NULL_STR),
-        helperFieldMap(APP_JSON, emptyJson, APP_JSON, GET,  "")
+        helperFieldMap(NULL_STR, NULL_STR,    NULL_STR, null, NULL_STR),
+        helperFieldMap(APP_JSON, JSON_OBJECT, APP_JSON, GET,  "")
       ),
       Arguments.of(
-        helperFieldMap(VALUE,    NULL_STR,  NULL_STR, null, NULL_STR),
-        helperFieldMap(VALUE,    emptyJson, APP_JSON, GET,  "")
+        helperFieldMap(VALUE,    NULL_STR,    NULL_STR, null, NULL_STR),
+        helperFieldMap(VALUE,    JSON_OBJECT, APP_JSON, GET,  "")
       ),
       Arguments.of(
-        helperFieldMap(NULL_STR, VALUE,     NULL_STR, null, NULL_STR),
-        helperFieldMap(APP_JSON, VALUE,     APP_JSON, GET,  "")
+        helperFieldMap(NULL_STR, VALUE,       NULL_STR, null, NULL_STR),
+        helperFieldMap(APP_JSON, VALUE,       APP_JSON, GET,  "")
       ),
       Arguments.of(
-        helperFieldMap(NULL_STR, NULL_STR,  VALUE,    null, NULL_STR),
-        helperFieldMap(APP_JSON, emptyJson, VALUE,    GET,  "")
+        helperFieldMap(NULL_STR, NULL_STR,    VALUE,    null, NULL_STR),
+        helperFieldMap(APP_JSON, JSON_OBJECT, VALUE,    GET,  "")
       ),
       Arguments.of(
-        helperFieldMap(NULL_STR, NULL_STR,  NULL_STR, POST, NULL_STR),
-        helperFieldMap(APP_JSON, emptyJson, APP_JSON, POST, "")
+        helperFieldMap(NULL_STR, NULL_STR,    NULL_STR, POST, NULL_STR),
+        helperFieldMap(APP_JSON, JSON_OBJECT, APP_JSON, POST, "")
       ),
       Arguments.of(
-        helperFieldMap(NULL_STR, NULL_STR,  NULL_STR, null, VALUE),
-        helperFieldMap(APP_JSON, emptyJson, APP_JSON, GET,  VALUE)
+        helperFieldMap(NULL_STR, NULL_STR,    NULL_STR, null, VALUE),
+        helperFieldMap(APP_JSON, JSON_OBJECT, APP_JSON, GET,  VALUE)
       )
     );
   }
