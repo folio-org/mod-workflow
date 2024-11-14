@@ -1,5 +1,10 @@
 package org.folio.rest.workflow.model;
 
+import static org.folio.rest.workflow.enums.InputAttribute.MAX;
+import static org.folio.rest.workflow.enums.InputType.CHECKBOX;
+import static org.folio.rest.workflow.enums.InputType.DATE;
+import static org.folio.rest.workflow.enums.InputType.EMAIL;
+import static org.folio.rest.workflow.enums.InputType.TEXT;
 import static org.folio.spring.test.mock.MockMvcConstant.NULL_STR;
 import static org.folio.spring.test.mock.MockMvcConstant.VALUE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -97,17 +102,17 @@ class EmbeddedInputTest {
 
   @Test
   void getInputTypeWorksTest() {
-    setField(embeddedInput, "inputType", InputType.EMAIL);
+    setField(embeddedInput, "inputType", EMAIL);
 
-    assertEquals(InputType.EMAIL, embeddedInput.getInputType());
+    assertEquals(EMAIL, embeddedInput.getInputType());
   }
 
   @Test
   void setInputTypeWorksTest() {
     setField(embeddedInput, "inputType", null);
 
-    embeddedInput.setInputType(InputType.CHECKBOX);
-    assertEquals(InputType.CHECKBOX, getField(embeddedInput, "inputType"));
+    embeddedInput.setInputType(CHECKBOX);
+    assertEquals(CHECKBOX, getField(embeddedInput, "inputType"));
   }
 
   @Test
@@ -166,37 +171,41 @@ class EmbeddedInputTest {
     final List<String> strList = new ArrayList<>();
     strList.add(VALUE);
 
+    final List<String> emptyList = new ArrayList<>();
+
     final ArrayList<InputAttribute> attrList = new ArrayList<>();
-    attrList.add(InputAttribute.MAX);
+    attrList.add(MAX);
+
+    final ArrayList<InputAttribute> emptyAttrList = new ArrayList<>();
 
     return Stream.of(
       Arguments.of(
-        helperFieldMap(null,              NULL_STR, NULL_STR,  null,           null,              null),
-        helperFieldMap(new ArrayList<>(), "",       "",        InputType.TEXT, new ArrayList<>(), false)
+        helperFieldMap(null,          NULL_STR, NULL_STR, null, null,      null),
+        helperFieldMap(emptyAttrList, "",       "",       TEXT, emptyList, false)
       ),
       Arguments.of(
-        helperFieldMap(attrList         , NULL_STR, NULL_STR,  null,           null,              null),
-        helperFieldMap(attrList         , "",       "",        InputType.TEXT, new ArrayList<>(), false)
+        helperFieldMap(attrList,      NULL_STR, NULL_STR, null, null,      null),
+        helperFieldMap(attrList,      "",       "",       TEXT, emptyList, false)
       ),
       Arguments.of(
-        helperFieldMap(null,              VALUE,    NULL_STR,  null,           null,              null),
-        helperFieldMap(new ArrayList<>(), VALUE,    "",        InputType.TEXT, new ArrayList<>(), false)
+        helperFieldMap(null,          VALUE,    NULL_STR, null, null,      null),
+        helperFieldMap(emptyAttrList, VALUE,    "",       TEXT, emptyList, false)
       ),
       Arguments.of(
-        helperFieldMap(null,              NULL_STR, VALUE,     null,           null,              null),
-        helperFieldMap(new ArrayList<>(), "",       VALUE,     InputType.TEXT, new ArrayList<>(), false)
+        helperFieldMap(null,          NULL_STR, VALUE,    null, null,      null),
+        helperFieldMap(emptyAttrList, "",       VALUE,    TEXT, emptyList, false)
       ),
       Arguments.of(
-        helperFieldMap(null,              NULL_STR, NULL_STR,  InputType.DATE, null,              null),
-        helperFieldMap(new ArrayList<>(), "",       "",        InputType.DATE, new ArrayList<>(), false)
+        helperFieldMap(null,          NULL_STR, NULL_STR, DATE, null,      null),
+        helperFieldMap(emptyAttrList, "",       "",       DATE, emptyList, false)
       ),
       Arguments.of(
-        helperFieldMap(null,              NULL_STR, NULL_STR,  null,           strList,           null),
-        helperFieldMap(new ArrayList<>(), "",       "",        InputType.TEXT, strList,           false)
+        helperFieldMap(null,          NULL_STR, NULL_STR, null, strList,   null),
+        helperFieldMap(emptyAttrList, "",       "",       TEXT, strList,   false)
       ),
       Arguments.of(
-        helperFieldMap(null,              NULL_STR, NULL_STR,  null,           null,              true),
-        helperFieldMap(new ArrayList<>(), "",       "",        InputType.TEXT, new ArrayList<>(), true)
+        helperFieldMap(null,          NULL_STR, NULL_STR, null, null,      true),
+        helperFieldMap(emptyAttrList, "",       "",       TEXT, emptyList, true)
       )
     );
   }

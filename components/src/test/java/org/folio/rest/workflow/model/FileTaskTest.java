@@ -1,16 +1,28 @@
 package org.folio.rest.workflow.model;
 
+import static org.folio.rest.workflow.enums.FileOp.DELETE;
+import static org.folio.rest.workflow.enums.FileOp.READ;
+import static org.folio.rest.workflow.enums.FileOp.WRITE;
+
+import static org.folio.spring.test.mock.MockMvcConstant.NULL_STR;
 import static org.folio.spring.test.mock.MockMvcConstant.VALUE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.util.ReflectionTestUtils.getField;
 import static org.springframework.test.util.ReflectionTestUtils.setField;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
+import java.util.stream.Stream;
+
 import org.folio.rest.workflow.enums.FileOp;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -153,17 +165,17 @@ class FileTaskTest {
 
   @Test
   void getOpWorksTest() {
-    setField(fileTask, "op", FileOp.DELETE);
+    setField(fileTask, "op", DELETE);
 
-    assertEquals(FileOp.DELETE, fileTask.getOp());
+    assertEquals(DELETE, fileTask.getOp());
   }
 
   @Test
   void setOpWorksTest() {
     setField(fileTask, "op", null);
 
-    fileTask.setOp(FileOp.DELETE);
-    assertEquals(FileOp.DELETE, getField(fileTask, "op"));
+    fileTask.setOp(DELETE);
+    assertEquals(DELETE, getField(fileTask, "op"));
   }
 
   @Test
@@ -209,6 +221,63 @@ class FileTaskTest {
 
     fileTask.setLine(VALUE);
     assertEquals(VALUE, getField(fileTask, "line"));
+  }
+
+  @ParameterizedTest
+  @MethodSource("providePrePersistFor")
+  void prePersistWorksTest(Map<String, Object> initial, Map<String, Object> expected) {
+    initial.forEach((String attribute, Object value) -> {
+      setField(fileTask, attribute, value);
+    });
+
+    fileTask.prePersist();
+
+    expected.forEach((String attribute, Object value) -> {
+      assertEquals(value, getField(fileTask, attribute));
+    });
+  }
+
+  /**
+   * Helper function for parameterized tests for the prePersist function.
+   *
+   * @return
+   *   The arguments array stream with the stream columns as:
+   *     - Arguments initial The initial values.
+   *     - Arguments expect The expected values.
+   */
+  private static Stream<Arguments> providePrePersistFor() {
+
+    return Stream.of(
+      Arguments.of(
+        helperFieldMap(null,  NULL_STR),
+        helperFieldMap(READ,  "")
+      ),
+      Arguments.of(
+        helperFieldMap(WRITE, NULL_STR),
+        helperFieldMap(WRITE, "")
+      ),
+      Arguments.of(
+        helperFieldMap(null,  VALUE),
+        helperFieldMap(READ,  VALUE)
+      )
+    );
+  }
+
+  /**
+   * Helper for reducing inline code repititon for assignments.
+   *
+   * @param op The op value.
+   * @param path The path value.
+   *
+   * @return The built arguments map.
+   */
+  private static Map<String, Object> helperFieldMap(FileOp op, String path ) {
+    final Map<String, Object> map = new HashMap<>();
+
+    map.put("op", op);
+    map.put("path", path);
+
+    return map;
   }
 
 }

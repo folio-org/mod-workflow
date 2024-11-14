@@ -1,13 +1,23 @@
 package org.folio.rest.workflow.model;
 
+import static org.folio.rest.workflow.enums.StartEventType.MESSAGE_CORRELATION;
+import static org.folio.rest.workflow.enums.StartEventType.NONE;
+import static org.folio.rest.workflow.enums.StartEventType.SCHEDULED;
 import static org.folio.spring.test.mock.MockMvcConstant.VALUE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.util.ReflectionTestUtils.getField;
 import static org.springframework.test.util.ReflectionTestUtils.setField;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Stream;
+
 import org.folio.rest.workflow.enums.StartEventType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 class StartEventTest {
 
@@ -80,17 +90,17 @@ class StartEventTest {
 
   @Test
   void getTypeWorksTest() {
-    setField(startEvent, "type", StartEventType.MESSAGE_CORRELATION);
+    setField(startEvent, "type", MESSAGE_CORRELATION);
 
-    assertEquals(StartEventType.MESSAGE_CORRELATION, startEvent.getType());
+    assertEquals(MESSAGE_CORRELATION, startEvent.getType());
   }
 
   @Test
   void setTypeWorksTest() {
     setField(startEvent, "type", null);
 
-    startEvent.setType(StartEventType.MESSAGE_CORRELATION);
-    assertEquals(StartEventType.MESSAGE_CORRELATION, getField(startEvent, "type"));
+    startEvent.setType(MESSAGE_CORRELATION);
+    assertEquals(MESSAGE_CORRELATION, getField(startEvent, "type"));
   }
 
   @Test
@@ -138,6 +148,69 @@ class StartEventTest {
     assertEquals(true, getField(startEvent, "asyncBefore"));
   }
 
-  private static class Impl extends StartEvent { };
+  @ParameterizedTest
+  @MethodSource("providePrePersistFor")
+  void prePersistWorksTest(Map<String, Object> initial, Map<String, Object> expected) {
+    initial.forEach((String attribute, Object value) -> {
+      setField(startEvent, attribute, value);
+    });
+
+    startEvent.prePersist();
+
+    expected.forEach((String attribute, Object value) -> {
+      assertEquals(value, getField(startEvent, attribute));
+    });
+  }
+
+  /**
+   * Helper function for parameterized tests for the prePersist function.
+   *
+   * @return
+   *   The arguments array stream with the stream columns as:
+   *     - Arguments initial The initial values.
+   *     - Arguments expect The expected values.
+   */
+  private static Stream<Arguments> providePrePersistFor() {
+
+    return Stream.of(
+      Arguments.of(
+        helperFieldMap(null,  null,  null),
+        helperFieldMap(false, false, NONE)
+      ),
+      Arguments.of(
+        helperFieldMap(true,  null,  null),
+        helperFieldMap(true,  false, NONE)
+      ),
+      Arguments.of(
+        helperFieldMap(null,  true,  null),
+        helperFieldMap(false, true,  NONE)
+      ),
+      Arguments.of(
+        helperFieldMap(null,  null,  SCHEDULED),
+        helperFieldMap(false, false, SCHEDULED)
+      )
+    );
+  }
+
+  /**
+   * Helper for reducing inline code repititon for assignments.
+   *
+   * @param asyncBefore The asyncBefore value.
+   * @param interrupting The interrupting value.
+   * @param type The type value.
+   *
+   * @return The built arguments map.
+   */
+  private static Map<String, Object> helperFieldMap(Boolean asyncBefore, Boolean interrupting, StartEventType type) {
+    final Map<String, Object> map = new HashMap<>();
+
+    map.put("asyncBefore", asyncBefore);
+    map.put("interrupting", interrupting);
+    map.put("type", type);
+
+    return map;
+  }
+
+  private static class Impl extends StartEvent { }
 
 }

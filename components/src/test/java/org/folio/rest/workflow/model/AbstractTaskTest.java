@@ -186,25 +186,27 @@ class AbstractTaskTest {
    *     - Arguments expect The expected values.
    */
   private static Stream<Arguments> providePrePersistFor() {
-    final Set<EmbeddedVariable> ivList = new HashSet<>();
-    ivList.add(new EmbeddedVariable());
+    final Set<EmbeddedVariable> evList = new HashSet<>();
+    evList.add(new EmbeddedVariable());
+
+    final Set<EmbeddedVariable> emptyList = new HashSet<>();
 
     return Stream.of(
       Arguments.of(
         helperFieldMap(null,  null,  null),
-        helperFieldMap(false, false, new HashSet<>())
+        helperFieldMap(false, false, emptyList)
       ),
       Arguments.of(
         helperFieldMap(true,  null,  null),
-        helperFieldMap(true,  false, new HashSet<>())
+        helperFieldMap(true,  false, emptyList)
       ),
       Arguments.of(
         helperFieldMap(null,  true,  null),
-        helperFieldMap(false, true,  new HashSet<>())
+        helperFieldMap(false, true,  emptyList)
       ),
       Arguments.of(
-        helperFieldMap(null,  null,  ivList),
-        helperFieldMap(false, false, ivList)
+        helperFieldMap(null,  null,  evList),
+        helperFieldMap(false, false, evList)
       )
     );
   }

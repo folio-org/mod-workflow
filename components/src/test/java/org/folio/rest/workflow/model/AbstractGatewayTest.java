@@ -1,5 +1,7 @@
 package org.folio.rest.workflow.model;
 
+import static org.folio.rest.workflow.enums.Direction.CONVERGING;
+import static org.folio.rest.workflow.enums.Direction.UNSPECIFIED;
 import static org.folio.spring.test.mock.MockMvcConstant.VALUE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.util.ReflectionTestUtils.getField;
@@ -10,6 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
+
 import org.folio.rest.workflow.enums.Direction;
 import org.folio.rest.workflow.enums.InputAttribute;
 import org.junit.jupiter.api.BeforeEach;
@@ -100,17 +103,17 @@ class AbstractGatewayTest {
 
   @Test
   void getDirectionWorksTest() {
-    setField(abstractGateway, "direction", Direction.CONVERGING);
+    setField(abstractGateway, "direction", CONVERGING);
 
-    assertEquals(Direction.CONVERGING, abstractGateway.getDirection());
+    assertEquals(CONVERGING, abstractGateway.getDirection());
   }
 
   @Test
   void setDirectionWorksTest() {
     setField(abstractGateway, "direction", null);
 
-    abstractGateway.setDirection(Direction.CONVERGING);
-    assertEquals(Direction.CONVERGING, getField(abstractGateway, "direction"));
+    abstractGateway.setDirection(CONVERGING);
+    assertEquals(CONVERGING, getField(abstractGateway, "direction"));
   }
 
   @Test
@@ -154,21 +157,23 @@ class AbstractGatewayTest {
     final List<Node> nodeList = new ArrayList<>();
     nodeList.add(new NodeImpl());
 
+    final List<Node> emptyList = new ArrayList<>();
+
     final ArrayList<InputAttribute> attrList = new ArrayList<>();
     attrList.add(InputAttribute.MAX);
 
     return Stream.of(
       Arguments.of(
-        helperFieldMap(null,                  null),
-        helperFieldMap(Direction.UNSPECIFIED, new ArrayList<>())
+        helperFieldMap(null,        null),
+        helperFieldMap(UNSPECIFIED, emptyList)
       ),
       Arguments.of(
-        helperFieldMap(Direction.CONVERGING,  null),
-        helperFieldMap(Direction.CONVERGING,  new ArrayList<>())
+        helperFieldMap(CONVERGING,  null),
+        helperFieldMap(CONVERGING,  emptyList)
       ),
       Arguments.of(
-        helperFieldMap(null,                  nodeList),
-        helperFieldMap(Direction.UNSPECIFIED, nodeList)
+        helperFieldMap(null,        nodeList),
+        helperFieldMap(UNSPECIFIED, nodeList)
       )
     );
   }
