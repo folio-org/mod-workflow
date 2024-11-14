@@ -1,5 +1,7 @@
 package org.folio.rest.workflow.model;
 
+import static org.folio.rest.workflow.enums.SftpOp.GET;
+import static org.folio.rest.workflow.enums.SftpOp.PUT;
 import static org.folio.spring.test.mock.MockMvcConstant.INT_VALUE;
 import static org.folio.spring.test.mock.MockMvcConstant.NULL_STR;
 import static org.folio.spring.test.mock.MockMvcConstant.VALUE;
@@ -192,17 +194,17 @@ class FtpTaskTest {
 
   @Test
   void getOpWorksTest() {
-    setField(ftpTask, "op", SftpOp.GET);
+    setField(ftpTask, "op", GET);
 
-    assertEquals(SftpOp.GET, ftpTask.getOp());
+    assertEquals(GET, ftpTask.getOp());
   }
 
   @Test
   void setOpWorksTest() {
     setField(ftpTask, "op", null);
 
-    ftpTask.setOp(SftpOp.GET);
-    assertEquals(SftpOp.GET, getField(ftpTask, "op"));
+    ftpTask.setOp(GET);
+    assertEquals(GET, getField(ftpTask, "op"));
   }
 
   @Test
@@ -315,39 +317,40 @@ class FtpTaskTest {
    *     - Arguments expect The expected values.
    */
   private static Stream<Arguments> providePrePersistFor() {
+    final Integer defaultPort = 80;
 
     return Stream.of(
       Arguments.of(
-        helperFieldMap(NULL_STR, NULL_STR, null,       NULL_STR, null,      NULL_STR),
-        helperFieldMap("",       "",       SftpOp.GET, "",       80,        "")
+        helperFieldMap(NULL_STR, NULL_STR, null, NULL_STR, null,        NULL_STR),
+        helperFieldMap("",       "",       GET,  "",       defaultPort, "")
       ),
       Arguments.of(
-        helperFieldMap(VALUE,    NULL_STR, null,       NULL_STR, null,      NULL_STR),
-        helperFieldMap(VALUE,    "",       SftpOp.GET, "",       80,        "")
+        helperFieldMap(VALUE,    NULL_STR, null, NULL_STR, null,        NULL_STR),
+        helperFieldMap(VALUE,    "",       GET,  "",       defaultPort, "")
       ),
       Arguments.of(
-        helperFieldMap(NULL_STR, VALUE,    null,       NULL_STR, null,      NULL_STR),
-        helperFieldMap("",       VALUE,    SftpOp.GET, "",       80,        "")
+        helperFieldMap(NULL_STR, VALUE,    null, NULL_STR, null,        NULL_STR),
+        helperFieldMap("",       VALUE,    GET,  "",       defaultPort, "")
       ),
       Arguments.of(
-        helperFieldMap(NULL_STR, NULL_STR, SftpOp.PUT, NULL_STR, null,      NULL_STR),
-        helperFieldMap("",       "",       SftpOp.PUT, "",       80,        "")
+        helperFieldMap(NULL_STR, NULL_STR, PUT,  NULL_STR, null,        NULL_STR),
+        helperFieldMap("",       "",       PUT,  "",       defaultPort, "")
       ),
       Arguments.of(
-        helperFieldMap(NULL_STR, NULL_STR, null,       VALUE,    null,      NULL_STR),
-        helperFieldMap("",       "",       SftpOp.GET, VALUE,    80,        "")
+        helperFieldMap(NULL_STR, NULL_STR, null, VALUE,    null,        NULL_STR),
+        helperFieldMap("",       "",       GET,  VALUE,    defaultPort, "")
       ),
       Arguments.of(
-        helperFieldMap(NULL_STR, NULL_STR, null,       NULL_STR, INT_VALUE, NULL_STR),
-        helperFieldMap("",       "",       SftpOp.GET, "",       INT_VALUE, "")
+        helperFieldMap(NULL_STR, NULL_STR, null, NULL_STR, INT_VALUE,   NULL_STR),
+        helperFieldMap("",       "",       GET,  "",       INT_VALUE,   "")
       ),
       Arguments.of(
-        helperFieldMap(NULL_STR, NULL_STR, null,       NULL_STR, null,      VALUE),
-        helperFieldMap("",       "",       SftpOp.GET, "",       80,        VALUE)
+        helperFieldMap(NULL_STR, NULL_STR, null, NULL_STR, null,        VALUE),
+        helperFieldMap("",       "",       GET,  "",       defaultPort, VALUE)
       ),
       Arguments.of(
-        helperFieldMap(VALUE,    VALUE,    SftpOp.PUT, VALUE,    INT_VALUE, VALUE),
-        helperFieldMap(VALUE,    VALUE,    SftpOp.PUT, VALUE,    INT_VALUE, VALUE)
+        helperFieldMap(VALUE,    VALUE,    PUT,  VALUE,    INT_VALUE,   VALUE),
+        helperFieldMap(VALUE,    VALUE,    PUT,  VALUE,    INT_VALUE,   VALUE)
       )
     );
   }

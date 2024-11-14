@@ -1,5 +1,7 @@
 package org.folio.rest.workflow.model;
 
+import static org.folio.rest.workflow.enums.SubprocessType.EMBEDDED;
+import static org.folio.rest.workflow.enums.SubprocessType.TRANSACTION;
 import static org.folio.spring.test.mock.MockMvcConstant.VALUE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.util.ReflectionTestUtils.getField;
@@ -150,17 +152,17 @@ class SubprocessTest {
 
   @Test
   void getTypeWorksTest() {
-    setField(subprocess, "type", SubprocessType.EMBEDDED);
+    setField(subprocess, "type", EMBEDDED);
 
-    assertEquals(SubprocessType.EMBEDDED, subprocess.getType());
+    assertEquals(EMBEDDED, subprocess.getType());
   }
 
   @Test
   void setTypeWorksTest() {
     setField(subprocess, "type", null);
 
-    subprocess.setType(SubprocessType.EMBEDDED);
-    assertEquals(SubprocessType.EMBEDDED, getField(subprocess, "type"));
+    subprocess.setType(EMBEDDED);
+    assertEquals(EMBEDDED, getField(subprocess, "type"));
   }
 
   @Test
@@ -207,11 +209,11 @@ class SubprocessTest {
     return Stream.of(
       Arguments.of(
         helperFieldMap(null),
-        helperFieldMap(SubprocessType.EMBEDDED)
+        helperFieldMap(EMBEDDED)
       ),
       Arguments.of(
-        helperFieldMap(SubprocessType.TRANSACTION),
-        helperFieldMap(SubprocessType.TRANSACTION)
+        helperFieldMap(TRANSACTION),
+        helperFieldMap(TRANSACTION)
       )
     );
   }

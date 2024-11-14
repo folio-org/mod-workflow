@@ -167,18 +167,20 @@ class AbstractProcessTest {
     final List<Node> nodeList = new ArrayList<>();
     nodeList.add(new NodeImpl());
 
+    final List<Node> emptyList = new ArrayList<>();
+
     return Stream.of(
       Arguments.of(
         helperFieldMap(null,  null,  null),
-        helperFieldMap(false, false, new ArrayList<>())
+        helperFieldMap(false, false, emptyList)
       ),
       Arguments.of(
         helperFieldMap(true,  null,  null),
-        helperFieldMap(true,  false, new ArrayList<>())
+        helperFieldMap(true,  false, emptyList)
       ),
       Arguments.of(
         helperFieldMap(null,  true,  null),
-        helperFieldMap(false, true,  new ArrayList<>())
+        helperFieldMap(false, true,  emptyList)
       ),
       Arguments.of(
         helperFieldMap(null,  null,  nodeList),

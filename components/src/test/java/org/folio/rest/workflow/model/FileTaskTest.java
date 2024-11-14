@@ -1,5 +1,9 @@
 package org.folio.rest.workflow.model;
 
+import static org.folio.rest.workflow.enums.FileOp.DELETE;
+import static org.folio.rest.workflow.enums.FileOp.READ;
+import static org.folio.rest.workflow.enums.FileOp.WRITE;
+
 import static org.folio.spring.test.mock.MockMvcConstant.NULL_STR;
 import static org.folio.spring.test.mock.MockMvcConstant.VALUE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -161,17 +165,17 @@ class FileTaskTest {
 
   @Test
   void getOpWorksTest() {
-    setField(fileTask, "op", FileOp.DELETE);
+    setField(fileTask, "op", DELETE);
 
-    assertEquals(FileOp.DELETE, fileTask.getOp());
+    assertEquals(DELETE, fileTask.getOp());
   }
 
   @Test
   void setOpWorksTest() {
     setField(fileTask, "op", null);
 
-    fileTask.setOp(FileOp.DELETE);
-    assertEquals(FileOp.DELETE, getField(fileTask, "op"));
+    fileTask.setOp(DELETE);
+    assertEquals(DELETE, getField(fileTask, "op"));
   }
 
   @Test
@@ -245,20 +249,16 @@ class FileTaskTest {
 
     return Stream.of(
       Arguments.of(
-        helperFieldMap(null,             NULL_STR),
-        helperFieldMap(FileOp.READ,      "")
+        helperFieldMap(null,  NULL_STR),
+        helperFieldMap(READ,  "")
       ),
       Arguments.of(
-        helperFieldMap(FileOp.WRITE,     NULL_STR),
-        helperFieldMap(FileOp.WRITE,     "")
+        helperFieldMap(WRITE, NULL_STR),
+        helperFieldMap(WRITE, "")
       ),
       Arguments.of(
-        helperFieldMap(null,             VALUE),
-        helperFieldMap(FileOp.READ,      VALUE)
-      ),
-      Arguments.of(
-        helperFieldMap(FileOp.READ_LINE, VALUE),
-        helperFieldMap(FileOp.READ_LINE, VALUE)
+        helperFieldMap(null,  VALUE),
+        helperFieldMap(READ,  VALUE)
       )
     );
   }

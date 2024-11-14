@@ -1,5 +1,8 @@
 package org.folio.rest.workflow.model;
 
+import static org.folio.rest.workflow.enums.StartEventType.MESSAGE_CORRELATION;
+import static org.folio.rest.workflow.enums.StartEventType.NONE;
+import static org.folio.rest.workflow.enums.StartEventType.SCHEDULED;
 import static org.folio.spring.test.mock.MockMvcConstant.VALUE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.util.ReflectionTestUtils.getField;
@@ -87,17 +90,17 @@ class StartEventTest {
 
   @Test
   void getTypeWorksTest() {
-    setField(startEvent, "type", StartEventType.MESSAGE_CORRELATION);
+    setField(startEvent, "type", MESSAGE_CORRELATION);
 
-    assertEquals(StartEventType.MESSAGE_CORRELATION, startEvent.getType());
+    assertEquals(MESSAGE_CORRELATION, startEvent.getType());
   }
 
   @Test
   void setTypeWorksTest() {
     setField(startEvent, "type", null);
 
-    startEvent.setType(StartEventType.MESSAGE_CORRELATION);
-    assertEquals(StartEventType.MESSAGE_CORRELATION, getField(startEvent, "type"));
+    startEvent.setType(MESSAGE_CORRELATION);
+    assertEquals(MESSAGE_CORRELATION, getField(startEvent, "type"));
   }
 
   @Test
@@ -172,19 +175,19 @@ class StartEventTest {
     return Stream.of(
       Arguments.of(
         helperFieldMap(null,  null,  null),
-        helperFieldMap(false, false, StartEventType.NONE)
+        helperFieldMap(false, false, NONE)
       ),
       Arguments.of(
         helperFieldMap(true,  null,  null),
-        helperFieldMap(true,  false, StartEventType.NONE)
+        helperFieldMap(true,  false, NONE)
       ),
       Arguments.of(
         helperFieldMap(null,  true,  null),
-        helperFieldMap(false, true,  StartEventType.NONE)
+        helperFieldMap(false, true,  NONE)
       ),
       Arguments.of(
-        helperFieldMap(null,  null,  StartEventType.SCHEDULED),
-        helperFieldMap(false, false, StartEventType.SCHEDULED)
+        helperFieldMap(null,  null,  SCHEDULED),
+        helperFieldMap(false, false, SCHEDULED)
       )
     );
   }

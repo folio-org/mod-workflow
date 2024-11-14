@@ -221,15 +221,16 @@ class ScriptTaskTest {
    *     - Arguments expect The expected values.
    */
   private static Stream<Arguments> providePrePersistFor() {
+    final String scriptFormat = "javaScript";
 
     return Stream.of(
       Arguments.of(
         helperFieldMap(NULL_STR, NULL_STR),
-        helperFieldMap("",       "javaScript")
+        helperFieldMap("",       scriptFormat)
       ),
       Arguments.of(
         helperFieldMap(VALUE,    NULL_STR),
-        helperFieldMap(VALUE,    "javaScript")
+        helperFieldMap(VALUE,    scriptFormat)
       ),
       Arguments.of(
         helperFieldMap(NULL_STR, VALUE),

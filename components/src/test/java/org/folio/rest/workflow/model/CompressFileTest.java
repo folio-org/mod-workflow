@@ -1,5 +1,10 @@
 package org.folio.rest.workflow.model;
 
+import static org.folio.rest.workflow.enums.CompressFileContainer.NONE;
+import static org.folio.rest.workflow.enums.CompressFileContainer.TAR;
+import static org.folio.rest.workflow.enums.CompressFileFormat.BZIP2;
+import static org.folio.rest.workflow.enums.CompressFileFormat.GZIP;
+import static org.folio.rest.workflow.enums.CompressFileFormat.ZIP;
 import static org.folio.spring.test.mock.MockMvcConstant.VALUE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.util.ReflectionTestUtils.getField;
@@ -190,32 +195,32 @@ class CompressFileTest {
 
   @Test
   void getFormatWorksTest() {
-    setField(compressFileTask, "format", CompressFileFormat.BZIP2);
+    setField(compressFileTask, "format", BZIP2);
 
-    assertEquals(CompressFileFormat.BZIP2, compressFileTask.getFormat());
+    assertEquals(BZIP2, compressFileTask.getFormat());
   }
 
   @Test
   void setFormatWorksTest() {
     setField(compressFileTask, "format", null);
 
-    compressFileTask.setFormat(CompressFileFormat.BZIP2);
-    assertEquals(CompressFileFormat.BZIP2, getField(compressFileTask, "format"));
+    compressFileTask.setFormat(BZIP2);
+    assertEquals(BZIP2, getField(compressFileTask, "format"));
   }
 
   @Test
   void getContainerWorksTest() {
-    setField(compressFileTask, "container", CompressFileContainer.TAR);
+    setField(compressFileTask, "container", TAR);
 
-    assertEquals(CompressFileContainer.TAR, compressFileTask.getContainer());
+    assertEquals(TAR, compressFileTask.getContainer());
   }
 
   @Test
   void setContainerWorksTest() {
     setField(compressFileTask, "container", null);
 
-    compressFileTask.setContainer(CompressFileContainer.TAR);
-    assertEquals(CompressFileContainer.TAR, getField(compressFileTask, "container"));
+    compressFileTask.setContainer(TAR);
+    assertEquals(TAR, getField(compressFileTask, "container"));
   }
 
   @ParameterizedTest
@@ -241,29 +246,27 @@ class CompressFileTest {
    *     - Arguments expect The expected values.
    */
   private static Stream<Arguments> providePrePersistFor() {
-    final Set<EmbeddedVariable> ivList = new HashSet<>();
-    ivList.add(new EmbeddedVariable());
 
     return Stream.of(
       Arguments.of(
-        helperFieldMap(null,  null,  null,                    null),
-        helperFieldMap("",    "",    CompressFileFormat.ZIP,  CompressFileContainer.NONE)
+        helperFieldMap(null,  null,  null, null),
+        helperFieldMap("",    "",    ZIP,  NONE)
       ),
       Arguments.of(
-        helperFieldMap(VALUE, null,  null,                    null),
-        helperFieldMap(VALUE, "",    CompressFileFormat.ZIP,  CompressFileContainer.NONE)
+        helperFieldMap(VALUE, null,  null, null),
+        helperFieldMap(VALUE, "",    ZIP,  NONE)
       ),
       Arguments.of(
-        helperFieldMap(null,  VALUE, null,                    null),
-        helperFieldMap("",    VALUE, CompressFileFormat.ZIP,  CompressFileContainer.NONE)
+        helperFieldMap(null,  VALUE, null, null),
+        helperFieldMap("",    VALUE, ZIP,  NONE)
       ),
       Arguments.of(
-        helperFieldMap(null,  null,  CompressFileFormat.GZIP, null),
-        helperFieldMap("",    "",    CompressFileFormat.GZIP, CompressFileContainer.NONE)
+        helperFieldMap(null,  null,  GZIP, null),
+        helperFieldMap("",    "",    GZIP, NONE)
       ),
       Arguments.of(
-        helperFieldMap(null,  null,  null,                    CompressFileContainer.TAR),
-        helperFieldMap("",    "",    CompressFileFormat.ZIP,  CompressFileContainer.TAR)
+        helperFieldMap(null,  null,  null, TAR),
+        helperFieldMap("",    "",    ZIP,  TAR)
       )
     );
   }

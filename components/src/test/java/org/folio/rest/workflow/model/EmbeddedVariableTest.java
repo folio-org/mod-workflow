@@ -1,5 +1,7 @@
 package org.folio.rest.workflow.model;
 
+import static org.folio.rest.workflow.enums.VariableType.LOCAL;
+import static org.folio.rest.workflow.enums.VariableType.PROCESS;
 import static org.folio.spring.test.mock.MockMvcConstant.VALUE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.util.ReflectionTestUtils.getField;
@@ -42,17 +44,17 @@ class EmbeddedVariableTest {
 
   @Test
   void getTypeWorksTest() {
-    setField(embeddedVariable, "type", VariableType.PROCESS);
+    setField(embeddedVariable, "type", PROCESS);
 
-    assertEquals(VariableType.PROCESS, embeddedVariable.getType());
+    assertEquals(PROCESS, embeddedVariable.getType());
   }
 
   @Test
   void setTypeWorksTest() {
     setField(embeddedVariable, "type", null);
 
-    embeddedVariable.setType(VariableType.PROCESS);
-    assertEquals(VariableType.PROCESS, getField(embeddedVariable, "type"));
+    embeddedVariable.setType(PROCESS);
+    assertEquals(PROCESS, getField(embeddedVariable, "type"));
   }
 
   @Test
@@ -127,23 +129,23 @@ class EmbeddedVariableTest {
     return Stream.of(
       Arguments.of(
         helperFieldMap(null,  null,  null,  null),
-        helperFieldMap(false, false, false, VariableType.PROCESS)
+        helperFieldMap(false, false, false, PROCESS)
       ),
       Arguments.of(
         helperFieldMap(true,  null,  null,  null),
-        helperFieldMap(true,  false, false, VariableType.PROCESS)
+        helperFieldMap(true,  false, false, PROCESS)
       ),
       Arguments.of(
         helperFieldMap(null,  true,  null,  null),
-        helperFieldMap(false, true,  false, VariableType.PROCESS)
+        helperFieldMap(false, true,  false, PROCESS)
       ),
       Arguments.of(
         helperFieldMap(null,  null,  true,  null),
-        helperFieldMap(false, false, true,  VariableType.PROCESS)
+        helperFieldMap(false, false, true,  PROCESS)
       ),
       Arguments.of(
-        helperFieldMap(null,  null,  null,  VariableType.LOCAL),
-        helperFieldMap(false, false, false, VariableType.LOCAL)
+        helperFieldMap(null,  null,  null,  LOCAL),
+        helperFieldMap(false, false, false, LOCAL)
       )
     );
   }

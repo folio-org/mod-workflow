@@ -204,36 +204,41 @@ class WorkflowTest {
     final Map<String, JsonNode> context = new HashMap<>();
     context.put(VALUE, null);
 
+    final Map<String, JsonNode> emptyContext = new HashMap<>();
+
     final List<Node> nodeList = new ArrayList<>();
+    nodeList.add(new NodeImpl());
+
+    final List<Node> emptyList = new ArrayList<>();
 
     return Stream.of(
       Arguments.of(
-        helperFieldMap(null,  null,      null,  null,            null,              null),
-        helperFieldMap(false, 0,         "",    new HashMap<>(), new ArrayList<>(), "")
+        helperFieldMap(null,  null,      null,  null,         null,      null),
+        helperFieldMap(false, 0,         "",    emptyContext, emptyList, "")
       ),
       Arguments.of(
-        helperFieldMap(true,  null,      null,  null,            null,              null),
-        helperFieldMap(true,  0,         "",    new HashMap<>(), new ArrayList<>(), "")
+        helperFieldMap(true,  null,      null,  null,         null,      null),
+        helperFieldMap(true,  0,         "",    emptyContext, emptyList, "")
       ),
       Arguments.of(
-        helperFieldMap(null,  INT_VALUE, null,  null,            null,              null),
-        helperFieldMap(false, INT_VALUE, "",    new HashMap<>(), new ArrayList<>(), "")
+        helperFieldMap(null,  INT_VALUE, null,  null,         null,      null),
+        helperFieldMap(false, INT_VALUE, "",    emptyContext, emptyList, "")
       ),
       Arguments.of(
-        helperFieldMap(null,  null,      VALUE, null,            null,              null),
-        helperFieldMap(false, 0,         VALUE, new HashMap<>(), new ArrayList<>(), "")
+        helperFieldMap(null,  null,      VALUE, null,         null,      null),
+        helperFieldMap(false, 0,         VALUE, emptyContext, emptyList, "")
       ),
       Arguments.of(
-        helperFieldMap(true,  null,      null,  context,         null,              null),
-        helperFieldMap(true,  0,         "",    context,         new ArrayList<>(), "")
+        helperFieldMap(true,  null,      null,  context,      null,      null),
+        helperFieldMap(true,  0,         "",    context,      emptyList, "")
       ),
       Arguments.of(
-        helperFieldMap(null,  null,      null,  null,            nodeList,          null),
-        helperFieldMap(false, 0,         "",    new HashMap<>(), nodeList,          "")
+        helperFieldMap(null,  null,      null,  null,         nodeList,  null),
+        helperFieldMap(false, 0,         "",    emptyContext, nodeList,  "")
       ),
       Arguments.of(
-        helperFieldMap(null,  null,      null,  null,            null,              VALUE),
-        helperFieldMap(false, 0,         "",    new HashMap<>(), new ArrayList<>(), VALUE)
+        helperFieldMap(null,  null,      null,  null,         null,      VALUE),
+        helperFieldMap(false, 0,         "",    emptyContext, emptyList, VALUE)
       )
     );
   }
@@ -262,5 +267,7 @@ class WorkflowTest {
 
     return map;
   }
+
+  private static class NodeImpl extends Node { }
 
 }

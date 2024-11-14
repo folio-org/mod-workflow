@@ -151,16 +151,19 @@ class MoveToNodeTest {
    *     - Arguments expect The expected values.
    */
   private static Stream<Arguments> providePrePersistFor() {
+    final List<Node> emptyNodeList = new ArrayList<>();
+
     final List<Node> nodeList = new ArrayList<>();
+    nodeList.add(new NodeImpl());
 
     return Stream.of(
       Arguments.of(
         helperFieldMap(NULL_STR, null),
-        helperFieldMap("",       nodeList)
+        helperFieldMap("",       emptyNodeList)
       ),
       Arguments.of(
         helperFieldMap(VALUE,    null),
-        helperFieldMap(VALUE,    nodeList)
+        helperFieldMap(VALUE,    emptyNodeList)
       ),
       Arguments.of(
         helperFieldMap(NULL_STR, nodeList),
@@ -186,4 +189,5 @@ class MoveToNodeTest {
     return map;
   }
 
+  private static class NodeImpl extends Node { }
 }
