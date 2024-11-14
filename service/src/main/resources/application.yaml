@@ -104,9 +104,9 @@ application:
   kafka:
     producer:
       events:
-        topic: ${ENV:folio}.workflow.events
+        topic: ${ENV:folio}.camunda.events
 
-# use to store uploads shared over kafka
+# Used to manage uploads.
 event:
   uploads:
     path: events
@@ -115,7 +115,7 @@ folio:
   tenant.validation: false
 
 tenant:
-  header-name: X-Okapi-Tenant
+  headerName: X-Okapi-Tenant
   force-tenant: false
   default-tenant: diku
 
@@ -130,6 +130,9 @@ tenant:
 
 okapi:
   url: ${OKAPI_URL:http://localhost:9130}
+  camunda:
+    base-path: /
+    rest-path: /camunda
 
 # https://docs.spring.io/spring-boot/docs/current/reference/html/actuator.html
 management:
