@@ -76,7 +76,7 @@ class OkapiDiscoveryServiceWithDefaultPropertiesTest {
   }
 
   @Test
-  void getModulesWorksTest() throws IOException {
+  void getModulesWorksTest() {
     mockJsonResponseEntity(mockJsonNode, 200);
 
     final JsonNode descriptor = okapiDiscoveryService.getModules(VALUE);
@@ -85,7 +85,7 @@ class OkapiDiscoveryServiceWithDefaultPropertiesTest {
   }
 
   @Test
-  void getModuleDescriptorWorksTest() throws IOException {
+  void getModuleDescriptorWorksTest() {
     mockJsonResponseEntity(mockJsonNode, 200);
 
     final JsonNode descriptor = okapiDiscoveryService.getModuleDescriptor(VALUE, VALUE);

@@ -4,7 +4,6 @@ import static org.folio.spring.test.mock.MockMvcConstant.VALUE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import java.io.IOException;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
@@ -27,11 +26,9 @@ class OkapiDiscoveryServiceWithCustomPropertiesTest extends OkapiDiscoveryServic
 
   /**
    * This test is added because `tenant.headerName` is not being lodaded by OkapiDiscoveryService().
-   *
-   * @throws IOException
    */
   @Test
-  void getModuleDescriptorWithTenantHeaderNameWorksTest() throws IOException {
+  void getModuleDescriptorWithTenantHeaderNameWorksTest() {
     ReflectionTestUtils.setField(okapiDiscoveryService, "tenantHeaderName", "X-Okapi-Tenant");
 
     mockJsonResponseEntity(mockJsonNode, 200);
