@@ -47,10 +47,10 @@ public class WorkflowEngineService {
   @Value("${okapi.url}")
   private String okapiUrl;
 
-  @Value("${okapi.camunda.base-path}")
+  @Value("${okapi.camunda.base-path:/}")
   private String basePath;
 
-  @Value("${okapi.camunda.rest-path}")
+  @Value("${okapi.camunda.rest-path:/camunda}")
   private String restPath;
 
   @Autowired
@@ -251,6 +251,7 @@ public class WorkflowEngineService {
 
     HttpEntity<WorkflowDto> entity = new HttpEntity<>(workflow, headers(tenant, token));
     String url = String.format(requestPath, okapiUrl, basePath);
+    log.debug("Send Okapi workflow engine request {} {}", HttpMethod.POST, url);
 
     try {
       ResponseEntity<Workflow> response = exchange(url, HttpMethod.POST, entity, Workflow.class);
@@ -275,17 +276,22 @@ public class WorkflowEngineService {
 
   private HttpHeaders headers(String tenant, String token) {
     HttpHeaders requestHeaders = new HttpHeaders();
+    log.debug("Request Headers: tenant '{}' and token '{}'.", tenant, token);
+
     if (tenant != null) {
       requestHeaders.add(tenantHeaderName, tenant);
     }
+
     if (token != null) {
       requestHeaders.add(tokenHeaderName, token);
     }
+
     requestHeaders.add("Content-Type", "application/json");
     return requestHeaders;
   }
 
   private <T> ResponseEntity<T> exchange(String url, HttpMethod method, HttpEntity<?> request, Class<T> responseType) {
+    log.debug("Exchange for {} {} {}", responseType.getSimpleName(), method, url);
     return this.restTemplate.exchange(url, method, request, responseType, (Object[]) new String[0]);
   }
 

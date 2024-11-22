@@ -20,13 +20,17 @@ server:
       enabled: true
 
 spring:
-  activemq.broker-url: tcp://localhost:61616
   application.name: mod-workflow
   liquibase.changeLog: classpath:/changelog/changelog-master.xml
 
   data.rest:
     returnBodyOnCreate: true
     returnBodyOnUpdate: true
+
+  kafka:
+    admin:
+      auto-create: true
+    bootstrap-servers: ${KAFKA_HOST:localhost}:${KAFKA_PORT:9092}
 
   main:
     allow-bean-definition-overriding: false
@@ -96,17 +100,22 @@ springdoc:
     path: /swagger-ui
   writer-with-default-pretty-printer: true
 
+application:
+  kafka:
+    producer:
+      events:
+        topic: ${ENV:folio}.camunda.events
+
+# Used to manage uploads.
 event:
   uploads:
     path: events
-  queue:
-    name: event.queue
 
 folio:
   tenant.validation: false
 
 tenant:
-  header-name: X-Okapi-Tenant
+  headerName: X-Okapi-Tenant
   force-tenant: false
   default-tenant: diku
 
@@ -123,7 +132,7 @@ okapi:
   url: ${OKAPI_URL:http://localhost:9130}
   camunda:
     base-path: /
-    rest-path: /rest
+    rest-path: /camunda
 
 # https://docs.spring.io/spring-boot/docs/current/reference/html/actuator.html
 management:

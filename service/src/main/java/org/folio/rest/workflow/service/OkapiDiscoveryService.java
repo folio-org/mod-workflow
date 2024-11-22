@@ -1,5 +1,7 @@
 package org.folio.rest.workflow.service;
 
+import static org.springframework.http.HttpMethod.GET;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
@@ -16,7 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -40,7 +41,7 @@ public class OkapiDiscoveryService {
   @Value("${okapi.url}")
   private String okapiUrl;
 
-  @Value("${okapi.camunda.base-path}")
+  @Value("${okapi.camunda.base-path:/}")
   private String basePath;
 
   private HttpService httpService;
@@ -114,15 +115,18 @@ public class OkapiDiscoveryService {
   }
 
   private ResponseEntity<JsonNode> request(String url, String tenant) {
-    HttpMethod method = HttpMethod.GET;
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_JSON);
-    headers.add(tenantHeaderName, tenant);
+    if (tenantHeaderName != null) {
+      headers.add(tenantHeaderName, tenant);
+    }
+
     HttpEntity<?> request = new HttpEntity<>(headers);
     if (logger.isDebugEnabled()) {
       logger.debug("Proxy request for {} to {}", tenant.replaceAll("[\n\r]", " "), url.replaceAll("[\n\r]", " "));
     }
-    return this.httpService.exchange(url, method, request, JsonNode.class);
+
+    return this.httpService.exchange(url, GET, request, JsonNode.class);
   }
 
 }

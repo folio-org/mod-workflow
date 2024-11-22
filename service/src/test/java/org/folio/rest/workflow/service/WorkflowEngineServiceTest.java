@@ -98,6 +98,22 @@ class WorkflowEngineServiceTest {
   }
 
   @Test
+  void activateWithoutHeadersTest() throws WorkflowEngineServiceException {
+    WorkflowDto workflowDto = (WorkflowDto) workflow;
+    ResponseEntity<Workflow> responseEntity = new ResponseEntity<>(HttpStatus.OK);
+    setField(responseEntity, "body", workflow);
+
+    when(workflowRepo.getViewById(anyString(), ArgumentMatchers.<Class<WorkflowDto>>any())).thenReturn(workflowDto);
+    when(restTemplate.exchange(anyString(), any(HttpMethod.class), any(HttpEntity.class), ArgumentMatchers.<Class<Workflow>>any())).thenReturn(responseEntity);
+    when(workflowRepo.save(any())).thenReturn(workflow);
+
+    workflowEngineService.activate(UUID, null, null);
+
+    verify(workflowRepo).save(any());
+    verify(workflowRepo, never()).deleteById(anyString());
+  }
+
+  @Test
   void deactivateWorksTest() throws WorkflowEngineServiceException {
     WorkflowDto workflowDto = (WorkflowDto) workflow;
     ResponseEntity<Workflow> responseEntity = new ResponseEntity<>(HttpStatus.OK);
@@ -218,7 +234,7 @@ class WorkflowEngineServiceTest {
   }
 
   @Test
-  void startThrowsExceptionHttpNotOkTest() throws WorkflowEngineServiceException {
+  void startThrowsExceptionHttpNotOkTest() {
     WorkflowOperationalDto workflowOperationalDto = (WorkflowOperationalDto) workflowOperational;
     ResponseEntity<ArrayNode> responseEntity = new ResponseEntity<>(HttpStatus.RESET_CONTENT);
     JsonNode context = mapper.createObjectNode();
@@ -238,7 +254,7 @@ class WorkflowEngineServiceTest {
   }
 
   @Test
-  void startThrowsExceptionNullOrEmptyDefinitionsTest() throws WorkflowEngineServiceException {
+  void startThrowsExceptionNullOrEmptyDefinitionsTest() {
     WorkflowOperationalDto workflowOperationalDto = (WorkflowOperationalDto) workflowOperational;
     ResponseEntity<ArrayNode> responseEntity = new ResponseEntity<>(HttpStatus.OK);
     JsonNode context = mapper.createObjectNode();
@@ -263,7 +279,7 @@ class WorkflowEngineServiceTest {
   }
 
   @Test
-  void startThrowsExceptionOnBadExchangeTest() throws WorkflowEngineServiceException {
+  void startThrowsExceptionOnBadExchangeTest() {
     WorkflowOperationalDto workflowOperationalDto = (WorkflowOperationalDto) workflowOperational;
     ResponseEntity<ArrayNode> responseEntity = new ResponseEntity<>(HttpStatus.OK);
     JsonNode context = mapper.createObjectNode();
@@ -322,7 +338,7 @@ class WorkflowEngineServiceTest {
   }
 
   @Test
-  void historyThrowsExceptionWithNotOkHttpStatusForProcessTest() throws WorkflowEngineServiceException {
+  void historyThrowsExceptionWithNotOkHttpStatusForProcessTest() {
     WorkflowOperationalDto workflowOperationalDto = (WorkflowOperationalDto) workflowOperational;
     ResponseEntity<ArrayNode> responseEntity = new ResponseEntity<>(HttpStatus.OK);
     ResponseEntity<ArrayNode> historyResponseEntity = new ResponseEntity<>(HttpStatus.RESET_CONTENT);
@@ -348,7 +364,7 @@ class WorkflowEngineServiceTest {
   }
 
   @Test
-  void historyThrowsExceptionWithNullIncidentsForProcessTest() throws WorkflowEngineServiceException {
+  void historyThrowsExceptionWithNullIncidentsForProcessTest() {
     WorkflowOperationalDto workflowOperationalDto = (WorkflowOperationalDto) workflowOperational;
     ResponseEntity<ArrayNode> responseEntity = new ResponseEntity<>(HttpStatus.OK);
     ResponseEntity<ArrayNode> historyResponseEntity = new ResponseEntity<>(HttpStatus.OK);
@@ -374,7 +390,7 @@ class WorkflowEngineServiceTest {
   }
 
   @Test
-  void historyWorksThrowsExceptionForFetchingIncidentsHistoryTest() throws WorkflowEngineServiceException {
+  void historyWorksThrowsExceptionForFetchingIncidentsHistoryTest() {
     WorkflowOperationalDto workflowOperationalDto = (WorkflowOperationalDto) workflowOperational;
     ResponseEntity<ArrayNode> responseEntity = new ResponseEntity<>(HttpStatus.OK);
     ResponseEntity<ArrayNode> historyResponseEntity = new ResponseEntity<>(HttpStatus.OK);
@@ -398,7 +414,7 @@ class WorkflowEngineServiceTest {
     AtomicInteger exchangeCount = new AtomicInteger(0);
     doAnswer(invocation -> {
       if (exchangeCount.getAndIncrement() > 1) {
-        throw new RuntimeException("Failure on third exchange call."); 
+        throw new RuntimeException("Failure on third exchange call.");
       }
 
       return (exchangeCount.get() > 0) ? historyResponseEntity : responseEntity;
@@ -410,7 +426,7 @@ class WorkflowEngineServiceTest {
   }
 
   @Test
-  void historyWorksThrowsExceptionForNotOkHttpOnIncidentsHistoryTest() throws WorkflowEngineServiceException {
+  void historyWorksThrowsExceptionForNotOkHttpOnIncidentsHistoryTest() {
     WorkflowOperationalDto workflowOperationalDto = (WorkflowOperationalDto) workflowOperational;
     ResponseEntity<ArrayNode> responseEntity = new ResponseEntity<>(HttpStatus.OK);
     ResponseEntity<ArrayNode> historyResponseEntity = new ResponseEntity<>(HttpStatus.OK);
@@ -447,7 +463,7 @@ class WorkflowEngineServiceTest {
   }
 
   @Test
-  void historyWorksThrowsExceptionForNullIncidentsOnIncidentsHistoryTest() throws WorkflowEngineServiceException {
+  void historyWorksThrowsExceptionForNullIncidentsOnIncidentsHistoryTest() {
     WorkflowOperationalDto workflowOperationalDto = (WorkflowOperationalDto) workflowOperational;
     ResponseEntity<ArrayNode> responseEntity = new ResponseEntity<>(HttpStatus.OK);
     ResponseEntity<ArrayNode> historyResponseEntity = new ResponseEntity<>(HttpStatus.OK);
@@ -483,8 +499,8 @@ class WorkflowEngineServiceTest {
     });
   }
 
-  private class WorkflowAsDto extends Workflow implements WorkflowDto {};
+  private class WorkflowAsDto extends Workflow implements WorkflowDto {}
 
-  private class WorkflowAsOperationalDto extends Workflow implements WorkflowOperationalDto {};
+  private class WorkflowAsOperationalDto extends Workflow implements WorkflowOperationalDto {}
 
 }
