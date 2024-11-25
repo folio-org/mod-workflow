@@ -16,7 +16,8 @@ public abstract class AbstractConverter<T> implements AttributeConverter<T, Stri
 
   private ObjectMapper objectMapper = JsonMapper.builder()
     .enable(StreamReadFeature.INCLUDE_SOURCE_IN_LOCATION)
-    .enable(MapperFeature.REQUIRE_TYPE_ID_FOR_SUBTYPES)
+    .disable(MapperFeature.REQUIRE_TYPE_ID_FOR_SUBTYPES)
+    .disable(DeserializationFeature.FAIL_ON_MISSING_EXTERNAL_TYPE_ID_PROPERTY)
     .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
     .build();
 

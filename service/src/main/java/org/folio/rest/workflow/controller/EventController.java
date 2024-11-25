@@ -66,13 +66,11 @@ public class EventController {
     this.objectMapper = objectMapper;
   }
 
-  // @formatter:off
   @PostMapping(value = "/**", consumes = "application/json", produces = { MediaType.APPLICATION_JSON_VALUE })
   public JsonNode postHandleEvents(
     @RequestBody(required = false) JsonNode body,
     HttpServletRequest request
   ) throws EventPublishException {
-  // @formatter:on
     return processRequest(request, body);
   }
 
@@ -170,11 +168,13 @@ public class EventController {
 
   private void processEvent(TriggerDto trigger, Event event) throws EventPublishException {
     logger.debug("Publishing event: {}: {}", trigger.getName(), trigger.getDescription());
+
     try {
       eventProducer.send(event);
     } catch (Exception e) {
       throw new EventPublishException("Unable to publish event!", e);
     }
+
   }
 
 }
