@@ -166,11 +166,13 @@ public class EventController {
 
   private void processEvent(TriggerDto trigger, Event event) throws EventPublishException {
     logger.debug("Publishing event: {}: {}", trigger.getName(), trigger.getDescription());
+
     try {
       eventProducer.send(event);
     } catch (Exception e) {
       throw new EventPublishException("Unable to publish event!", e);
     }
+
   }
 
 }
