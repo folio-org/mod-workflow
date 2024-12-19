@@ -34,7 +34,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Slf4j
 @RestController
-@RequestMapping({"/workflows", "/workflows/"})
+@RequestMapping("/workflows")
 public class WorkflowController {
 
   private WorkflowEngineService workflowEngineService;
@@ -53,7 +53,7 @@ public class WorkflowController {
     this.workflowRepo = workflowRepo;
   }
 
-  @PostMapping(value = { "/import", "/import/" }, produces = { MediaType.APPLICATION_JSON_VALUE }, consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+  @PostMapping(value = "/import", produces = { MediaType.APPLICATION_JSON_VALUE }, consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
   public ResponseEntity<Object> importWorkflow(
       @RequestPart(name = "file") MultipartFile fwz,
       @TenantHeader String tenant,
@@ -68,7 +68,7 @@ public class WorkflowController {
     return ResponseEntity.created(location).body(workflow);
   }
 
-  @GetMapping(value = { "/search", "/search/" }, produces = { MediaType.APPLICATION_JSON_VALUE })
+  @GetMapping(value = "/search", produces = { MediaType.APPLICATION_JSON_VALUE })
   public JsonNode searchWorkflows(
     @RequestParam String query,
     @RequestParam(defaultValue="0") Long offset,
@@ -79,7 +79,7 @@ public class WorkflowController {
     return workflowCqlService.findByCql(query, offset, limit);
   }
 
-  @GetMapping(value = {"/{id}", "/{id}/"}, produces = { MediaType.APPLICATION_JSON_VALUE })
+  @GetMapping(value = "/{id}", produces = { MediaType.APPLICATION_JSON_VALUE })
   public Workflow getWorkflow(
     @PathVariable String id,
     @TenantHeader String tenant,
@@ -88,7 +88,7 @@ public class WorkflowController {
     return workflowRepo.getReferenceById(id);
   }
 
-  @PutMapping(value = {"/{id}/activate", "/{id}/activate/"}, produces = { MediaType.APPLICATION_JSON_VALUE })
+  @PutMapping(value = "/{id}/activate", produces = { MediaType.APPLICATION_JSON_VALUE })
   public Workflow activateWorkflow(
     @PathVariable String id,
     @TenantHeader String tenant,
@@ -98,7 +98,7 @@ public class WorkflowController {
     return workflowEngineService.activate(id, tenant, token);
   }
 
-  @PutMapping(value = {"/{id}/deactivate", "/{id}/deactivate/"}, produces = { MediaType.APPLICATION_JSON_VALUE })
+  @PutMapping(value = "/{id}/deactivate", produces = { MediaType.APPLICATION_JSON_VALUE })
   public Workflow deactivateWorkflow(
     @PathVariable String id,
     @TenantHeader String tenant,
@@ -111,7 +111,7 @@ public class WorkflowController {
     return workflowEngineService.deactivate(id, tenant, token);
   }
 
-  @DeleteMapping(value = {"/{id}/delete", "/{id}/delete/"})
+  @DeleteMapping(value = "/{id}/delete")
   public ResponseEntity<Object> deleteWorkflow(
     @PathVariable String id,
     @TenantHeader String tenant,
@@ -127,7 +127,7 @@ public class WorkflowController {
     return ResponseEntity.noContent().build();
   }
 
-  @GetMapping(value = {"/{id}/history", "/{id}/history/"}, produces = { MediaType.APPLICATION_JSON_VALUE })
+  @GetMapping(value = "/{id}/history", produces = { MediaType.APPLICATION_JSON_VALUE })
   public JsonNode workflowHistory(
     @PathVariable String id,
     @TenantHeader String tenant,
@@ -137,7 +137,7 @@ public class WorkflowController {
     return workflowEngineService.history(id, tenant, token);
   }
 
-  @PostMapping(value = {"/{id}/start", "/{id}/start/"}, produces = { MediaType.APPLICATION_JSON_VALUE })
+  @PostMapping(value = "/{id}/start", produces = { MediaType.APPLICATION_JSON_VALUE })
   public JsonNode startWorkflow(
     @PathVariable String id,
     @TenantHeader String tenant,
