@@ -93,8 +93,11 @@ public class WorkflowController {
     @PathVariable String id,
     @TenantHeader String tenant,
     @TokenHeader String token
-  ) throws WorkflowEngineServiceException {
+  ) throws WorkflowEngineServiceException, WorkflowNotFoundException {
     log.info("Activating: {}", id);
+
+    workflowEngineService.exists(id);
+
     return workflowEngineService.activate(id, tenant, token);
   }
 
