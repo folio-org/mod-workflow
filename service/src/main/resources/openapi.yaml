@@ -52,10 +52,10 @@ paths:
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/PagedModelEntityModelNode'
+                $ref: "#/components/schemas/PagedModelEntityModelNode"
             application/x-spring-data-compact+json:
               schema:
-                $ref: '#/components/schemas/PagedModelEntityModelNode'
+                $ref: "#/components/schemas/PagedModelEntityModelNode"
             text/uri-list:
               schema:
                 type: string
@@ -68,31 +68,7 @@ paths:
         content:
           application/json:
             schema:
-              oneOf:
-              - $ref: '#/components/schemas/CompressFileTaskRequestBody'
-              - $ref: '#/components/schemas/ConditionRequestBody'
-              - $ref: '#/components/schemas/ConnectToRequestBody'
-              - $ref: '#/components/schemas/DatabaseConnectionTaskRequestBody'
-              - $ref: '#/components/schemas/DatabaseDisconnectTaskRequestBody'
-              - $ref: '#/components/schemas/DatabaseQueryTaskRequestBody'
-              - $ref: '#/components/schemas/DirectoryTaskRequestBody'
-              - $ref: '#/components/schemas/EmailTaskRequestBody'
-              - $ref: '#/components/schemas/EndEventRequestBody'
-              - $ref: '#/components/schemas/EventSubprocessRequestBody'
-              - $ref: '#/components/schemas/ExclusiveGatewayRequestBody'
-              - $ref: '#/components/schemas/FileTaskRequestBody'
-              - $ref: '#/components/schemas/FtpTaskRequestBody'
-              - $ref: '#/components/schemas/InclusiveGatewayRequestBody'
-              - $ref: '#/components/schemas/InputTaskRequestBody'
-              - $ref: '#/components/schemas/MoveToLastGatewayRequestBody'
-              - $ref: '#/components/schemas/MoveToNodeRequestBody'
-              - $ref: '#/components/schemas/ParallelGatewayRequestBody'
-              - $ref: '#/components/schemas/ProcessorTaskRequestBody'
-              - $ref: '#/components/schemas/ReceiveTaskRequestBody'
-              - $ref: '#/components/schemas/RequestTaskRequestBody'
-              - $ref: '#/components/schemas/ScriptTaskRequestBody'
-              - $ref: '#/components/schemas/StartEventRequestBody'
-              - $ref: '#/components/schemas/SubprocessRequestBody'
+              $ref: "#/components/schemas/NodeRequestBody"
         required: true
       responses:
         "201":
@@ -100,7 +76,7 @@ paths:
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/EntityModelNode'
+                $ref: "#/components/schemas/EntityModelNode"
   /nodes/{id}:
     get:
       tags:
@@ -119,7 +95,7 @@ paths:
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/EntityModelNode'
+                $ref: "#/components/schemas/EntityModelNode"
         "404":
           description: Not Found
     put:
@@ -137,31 +113,7 @@ paths:
         content:
           application/json:
             schema:
-              oneOf:
-              - $ref: '#/components/schemas/CompressFileTaskRequestBody'
-              - $ref: '#/components/schemas/ConditionRequestBody'
-              - $ref: '#/components/schemas/ConnectToRequestBody'
-              - $ref: '#/components/schemas/DatabaseConnectionTaskRequestBody'
-              - $ref: '#/components/schemas/DatabaseDisconnectTaskRequestBody'
-              - $ref: '#/components/schemas/DatabaseQueryTaskRequestBody'
-              - $ref: '#/components/schemas/DirectoryTaskRequestBody'
-              - $ref: '#/components/schemas/EmailTaskRequestBody'
-              - $ref: '#/components/schemas/EndEventRequestBody'
-              - $ref: '#/components/schemas/EventSubprocessRequestBody'
-              - $ref: '#/components/schemas/ExclusiveGatewayRequestBody'
-              - $ref: '#/components/schemas/FileTaskRequestBody'
-              - $ref: '#/components/schemas/FtpTaskRequestBody'
-              - $ref: '#/components/schemas/InclusiveGatewayRequestBody'
-              - $ref: '#/components/schemas/InputTaskRequestBody'
-              - $ref: '#/components/schemas/MoveToLastGatewayRequestBody'
-              - $ref: '#/components/schemas/MoveToNodeRequestBody'
-              - $ref: '#/components/schemas/ParallelGatewayRequestBody'
-              - $ref: '#/components/schemas/ProcessorTaskRequestBody'
-              - $ref: '#/components/schemas/ReceiveTaskRequestBody'
-              - $ref: '#/components/schemas/RequestTaskRequestBody'
-              - $ref: '#/components/schemas/ScriptTaskRequestBody'
-              - $ref: '#/components/schemas/StartEventRequestBody'
-              - $ref: '#/components/schemas/SubprocessRequestBody'
+              $ref: "#/components/schemas/NodeRequestBody"
         required: true
       responses:
         "200":
@@ -169,13 +121,13 @@ paths:
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/EntityModelNode'
+                $ref: "#/components/schemas/EntityModelNode"
         "201":
           description: Created
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/EntityModelNode'
+                $ref: "#/components/schemas/EntityModelNode"
         "204":
           description: No Content
     delete:
@@ -209,31 +161,7 @@ paths:
         content:
           application/json:
             schema:
-              oneOf:
-              - $ref: '#/components/schemas/CompressFileTaskRequestBody'
-              - $ref: '#/components/schemas/ConditionRequestBody'
-              - $ref: '#/components/schemas/ConnectToRequestBody'
-              - $ref: '#/components/schemas/DatabaseConnectionTaskRequestBody'
-              - $ref: '#/components/schemas/DatabaseDisconnectTaskRequestBody'
-              - $ref: '#/components/schemas/DatabaseQueryTaskRequestBody'
-              - $ref: '#/components/schemas/DirectoryTaskRequestBody'
-              - $ref: '#/components/schemas/EmailTaskRequestBody'
-              - $ref: '#/components/schemas/EndEventRequestBody'
-              - $ref: '#/components/schemas/EventSubprocessRequestBody'
-              - $ref: '#/components/schemas/ExclusiveGatewayRequestBody'
-              - $ref: '#/components/schemas/FileTaskRequestBody'
-              - $ref: '#/components/schemas/FtpTaskRequestBody'
-              - $ref: '#/components/schemas/InclusiveGatewayRequestBody'
-              - $ref: '#/components/schemas/InputTaskRequestBody'
-              - $ref: '#/components/schemas/MoveToLastGatewayRequestBody'
-              - $ref: '#/components/schemas/MoveToNodeRequestBody'
-              - $ref: '#/components/schemas/ParallelGatewayRequestBody'
-              - $ref: '#/components/schemas/ProcessorTaskRequestBody'
-              - $ref: '#/components/schemas/ReceiveTaskRequestBody'
-              - $ref: '#/components/schemas/RequestTaskRequestBody'
-              - $ref: '#/components/schemas/ScriptTaskRequestBody'
-              - $ref: '#/components/schemas/StartEventRequestBody'
-              - $ref: '#/components/schemas/SubprocessRequestBody'
+              $ref: "#/components/schemas/NodeRequestBody"
         required: true
       responses:
         "200":
@@ -241,7 +169,7 @@ paths:
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/EntityModelNode'
+                $ref: "#/components/schemas/EntityModelNode"
         "204":
           description: No Content
   /profile:
@@ -255,7 +183,7 @@ paths:
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/RepresentationModelObject'
+                $ref: "#/components/schemas/RepresentationModelObject"
   /profile/nodes:
     get:
       tags:
@@ -273,7 +201,7 @@ paths:
                 type: string
             application/schema+json:
               schema:
-                $ref: '#/components/schemas/JsonSchema'
+                $ref: "#/components/schemas/JsonSchema"
   /profile/triggers:
     get:
       tags:
@@ -291,7 +219,7 @@ paths:
                 type: string
             application/schema+json:
               schema:
-                $ref: '#/components/schemas/JsonSchema'
+                $ref: "#/components/schemas/JsonSchema"
   /profile/workflows:
     get:
       tags:
@@ -309,7 +237,7 @@ paths:
                 type: string
             application/schema+json:
               schema:
-                $ref: '#/components/schemas/JsonSchema'
+                $ref: "#/components/schemas/JsonSchema"
   /triggers:
     get:
       tags:
@@ -348,10 +276,10 @@ paths:
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/PagedModelEntityModelTrigger'
+                $ref: "#/components/schemas/PagedModelEntityModelTrigger"
             application/x-spring-data-compact+json:
               schema:
-                $ref: '#/components/schemas/PagedModelEntityModelTrigger'
+                $ref: "#/components/schemas/PagedModelEntityModelTrigger"
             text/uri-list:
               schema:
                 type: string
@@ -364,7 +292,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/TriggerRequestBody'
+              $ref: "#/components/schemas/TriggerRequestBody"
         required: true
       responses:
         "201":
@@ -372,7 +300,7 @@ paths:
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/EntityModelTrigger'
+                $ref: "#/components/schemas/EntityModelTrigger"
   /triggers/search/findViewAllBy:
     get:
       tags:
@@ -5660,7 +5588,7 @@ paths:
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/CollectionModelEntityModelTrigger'
+                $ref: "#/components/schemas/CollectionModelEntityModelTrigger"
         "404":
           description: Not Found
   /triggers/{id}:
@@ -5681,7 +5609,7 @@ paths:
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/EntityModelTrigger'
+                $ref: "#/components/schemas/EntityModelTrigger"
         "404":
           description: Not Found
     put:
@@ -5699,7 +5627,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/TriggerRequestBody'
+              $ref: "#/components/schemas/TriggerRequestBody"
         required: true
       responses:
         "200":
@@ -5707,13 +5635,13 @@ paths:
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/EntityModelTrigger'
+                $ref: "#/components/schemas/EntityModelTrigger"
         "201":
           description: Created
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/EntityModelTrigger'
+                $ref: "#/components/schemas/EntityModelTrigger"
         "204":
           description: No Content
     delete:
@@ -5747,7 +5675,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/TriggerRequestBody'
+              $ref: "#/components/schemas/TriggerRequestBody"
         required: true
       responses:
         "200":
@@ -5755,7 +5683,7 @@ paths:
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/EntityModelTrigger'
+                $ref: "#/components/schemas/EntityModelTrigger"
         "204":
           description: No Content
   /workflows:
@@ -5796,10 +5724,10 @@ paths:
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/PagedModelEntityModelWorkflow'
+                $ref: "#/components/schemas/PagedModelEntityModelWorkflow"
             application/x-spring-data-compact+json:
               schema:
-                $ref: '#/components/schemas/PagedModelEntityModelWorkflow'
+                $ref: "#/components/schemas/PagedModelEntityModelWorkflow"
             text/uri-list:
               schema:
                 type: string
@@ -5812,7 +5740,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/WorkflowRequestBody'
+              $ref: "#/components/schemas/WorkflowRequestBody"
         required: true
       responses:
         "201":
@@ -5820,7 +5748,7 @@ paths:
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/EntityModelWorkflow'
+                $ref: "#/components/schemas/EntityModelWorkflow"
   /workflows/search/getViewById:
     get:
       tags:
@@ -11112,7 +11040,7 @@ paths:
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/EntityModelWorkflow'
+                $ref: "#/components/schemas/EntityModelWorkflow"
         "404":
           description: Not Found
   /workflows/{id}:
@@ -11143,13 +11071,13 @@ paths:
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ResponseErrors'
+                $ref: "#/components/schemas/ResponseErrors"
         "500":
           description: Internal Server Error
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ResponseErrors'
+                $ref: "#/components/schemas/ResponseErrors"
         "404":
           description: Not Found
         "403":
@@ -11157,22 +11085,22 @@ paths:
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ResponseErrors'
+                $ref: "#/components/schemas/ResponseErrors"
         "204":
           description: No Content
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ResponseErrors'
+                $ref: "#/components/schemas/ResponseErrors"
         "200":
           description: OK
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/EntityModelWorkflow'
+                $ref: "#/components/schemas/EntityModelWorkflow"
             application/json:
               schema:
-                $ref: '#/components/schemas/Workflow'
+                $ref: "#/components/schemas/Workflow"
     put:
       tags:
       - workflow-entity-controller
@@ -11188,7 +11116,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/WorkflowRequestBody'
+              $ref: "#/components/schemas/WorkflowRequestBody"
         required: true
       responses:
         "200":
@@ -11196,13 +11124,13 @@ paths:
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/EntityModelWorkflow'
+                $ref: "#/components/schemas/EntityModelWorkflow"
         "201":
           description: Created
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/EntityModelWorkflow'
+                $ref: "#/components/schemas/EntityModelWorkflow"
         "204":
           description: No Content
     patch:
@@ -11220,7 +11148,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/WorkflowRequestBody'
+              $ref: "#/components/schemas/WorkflowRequestBody"
         required: true
       responses:
         "200":
@@ -11228,7 +11156,7 @@ paths:
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/EntityModelWorkflow'
+                $ref: "#/components/schemas/EntityModelWorkflow"
         "204":
           description: No Content
   /workflows/{id}/nodes:
@@ -11249,7 +11177,7 @@ paths:
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/CollectionModelNode'
+                $ref: "#/components/schemas/CollectionModelNode"
             text/uri-list:
               schema:
                 type: string
@@ -11270,10 +11198,10 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CollectionModelObject'
+              $ref: "#/components/schemas/CollectionModelObject"
           application/x-spring-data-compact+json:
             schema:
-              $ref: '#/components/schemas/CollectionModelObject'
+              $ref: "#/components/schemas/CollectionModelObject"
           text/uri-list:
             schema:
               type: string
@@ -11284,13 +11212,13 @@ paths:
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/CollectionModelNode'
+                $ref: "#/components/schemas/CollectionModelNode"
         "201":
           description: Created
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/CollectionModelNode'
+                $ref: "#/components/schemas/CollectionModelNode"
         "204":
           description: No Content
     patch:
@@ -11308,10 +11236,10 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CollectionModelObject'
+              $ref: "#/components/schemas/CollectionModelObject"
           application/x-spring-data-compact+json:
             schema:
-              $ref: '#/components/schemas/CollectionModelObject'
+              $ref: "#/components/schemas/CollectionModelObject"
           text/uri-list:
             schema:
               type: string
@@ -11322,7 +11250,7 @@ paths:
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/CollectionModelNode'
+                $ref: "#/components/schemas/CollectionModelNode"
         "204":
           description: No Content
   /workflows/{id}/nodes/{propertyId}:
@@ -11348,7 +11276,7 @@ paths:
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/CollectionModelNode'
+                $ref: "#/components/schemas/CollectionModelNode"
         "404":
           description: Not Found
   /workflows/{id}/deactivate:
@@ -11378,37 +11306,37 @@ paths:
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ResponseErrors'
+                $ref: "#/components/schemas/ResponseErrors"
         "500":
           description: Internal Server Error
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ResponseErrors'
+                $ref: "#/components/schemas/ResponseErrors"
         "404":
           description: Not Found
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ResponseErrors'
+                $ref: "#/components/schemas/ResponseErrors"
         "403":
           description: Forbidden
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ResponseErrors'
+                $ref: "#/components/schemas/ResponseErrors"
         "204":
           description: No Content
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ResponseErrors'
+                $ref: "#/components/schemas/ResponseErrors"
         "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Workflow'
+                $ref: "#/components/schemas/Workflow"
   /workflows/{id}/activate:
     put:
       tags:
@@ -11436,37 +11364,37 @@ paths:
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ResponseErrors'
+                $ref: "#/components/schemas/ResponseErrors"
         "500":
           description: Internal Server Error
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ResponseErrors'
+                $ref: "#/components/schemas/ResponseErrors"
         "404":
           description: Not Found
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ResponseErrors'
+                $ref: "#/components/schemas/ResponseErrors"
         "403":
           description: Forbidden
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ResponseErrors'
+                $ref: "#/components/schemas/ResponseErrors"
         "204":
           description: No Content
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ResponseErrors'
+                $ref: "#/components/schemas/ResponseErrors"
         "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Workflow'
+                $ref: "#/components/schemas/Workflow"
   /workflows/{id}/start:
     post:
       tags:
@@ -11489,7 +11417,7 @@ paths:
                 token:
                   type: string
                 context:
-                  $ref: '#/components/schemas/JsonNode'
+                  $ref: "#/components/schemas/JsonNode"
         required: true
       responses:
         "400":
@@ -11497,37 +11425,37 @@ paths:
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ResponseErrors'
+                $ref: "#/components/schemas/ResponseErrors"
         "500":
           description: Internal Server Error
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ResponseErrors'
+                $ref: "#/components/schemas/ResponseErrors"
         "404":
           description: Not Found
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ResponseErrors'
+                $ref: "#/components/schemas/ResponseErrors"
         "403":
           description: Forbidden
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ResponseErrors'
+                $ref: "#/components/schemas/ResponseErrors"
         "204":
           description: No Content
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ResponseErrors'
+                $ref: "#/components/schemas/ResponseErrors"
         "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/JsonNode'
+                $ref: "#/components/schemas/JsonNode"
   /workflows/import:
     post:
       tags:
@@ -11554,31 +11482,31 @@ paths:
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ResponseErrors'
+                $ref: "#/components/schemas/ResponseErrors"
         "500":
           description: Internal Server Error
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ResponseErrors'
+                $ref: "#/components/schemas/ResponseErrors"
         "404":
           description: Not Found
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ResponseErrors'
+                $ref: "#/components/schemas/ResponseErrors"
         "403":
           description: Forbidden
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ResponseErrors'
+                $ref: "#/components/schemas/ResponseErrors"
         "204":
           description: No Content
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ResponseErrors'
+                $ref: "#/components/schemas/ResponseErrors"
         "200":
           description: OK
           content:
@@ -11611,44 +11539,44 @@ paths:
                   type: string
           application/json:
             schema:
-              $ref: '#/components/schemas/JsonNode'
+              $ref: "#/components/schemas/JsonNode"
       responses:
         "400":
           description: Bad Request
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ResponseErrors'
+                $ref: "#/components/schemas/ResponseErrors"
         "500":
           description: Internal Server Error
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ResponseErrors'
+                $ref: "#/components/schemas/ResponseErrors"
         "404":
           description: Not Found
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ResponseErrors'
+                $ref: "#/components/schemas/ResponseErrors"
         "403":
           description: Forbidden
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ResponseErrors'
+                $ref: "#/components/schemas/ResponseErrors"
         "204":
           description: No Content
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ResponseErrors'
+                $ref: "#/components/schemas/ResponseErrors"
         "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/JsonNode'
+                $ref: "#/components/schemas/JsonNode"
   /_/tenant:
     post:
       tags:
@@ -11666,7 +11594,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/tenantAttributes'
+              $ref: "#/components/schemas/tenantAttributes"
         required: true
       responses:
         "400":
@@ -11674,7 +11602,7 @@ paths:
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ResponseErrors'
+                $ref: "#/components/schemas/ResponseErrors"
             application/json:
               schema:
                 type: string
@@ -11686,7 +11614,7 @@ paths:
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ResponseErrors'
+                $ref: "#/components/schemas/ResponseErrors"
             application/json:
               schema:
                 type: string
@@ -11698,19 +11626,19 @@ paths:
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ResponseErrors'
+                $ref: "#/components/schemas/ResponseErrors"
         "403":
           description: Forbidden
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ResponseErrors'
+                $ref: "#/components/schemas/ResponseErrors"
         "204":
           description: Job completed
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ResponseErrors'
+                $ref: "#/components/schemas/ResponseErrors"
         "200":
           description: OK
           content:
@@ -11722,10 +11650,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/errors'
+                $ref: "#/components/schemas/errors"
             text/plain:
               schema:
-                $ref: '#/components/schemas/errors'
+                $ref: "#/components/schemas/errors"
     delete:
       tags:
       - tenant-controller
@@ -11747,31 +11675,31 @@ paths:
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ResponseErrors'
+                $ref: "#/components/schemas/ResponseErrors"
         "500":
           description: Internal Server Error
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ResponseErrors'
+                $ref: "#/components/schemas/ResponseErrors"
         "404":
           description: Not Found
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ResponseErrors'
+                $ref: "#/components/schemas/ResponseErrors"
         "403":
           description: Forbidden
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ResponseErrors'
+                $ref: "#/components/schemas/ResponseErrors"
         "204":
           description: No Content
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ResponseErrors'
+                $ref: "#/components/schemas/ResponseErrors"
         "200":
           description: OK
   /workflows/{id}/history:
@@ -11801,37 +11729,37 @@ paths:
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ResponseErrors'
+                $ref: "#/components/schemas/ResponseErrors"
         "500":
           description: Internal Server Error
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ResponseErrors'
+                $ref: "#/components/schemas/ResponseErrors"
         "404":
           description: Not Found
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ResponseErrors'
+                $ref: "#/components/schemas/ResponseErrors"
         "403":
           description: Forbidden
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ResponseErrors'
+                $ref: "#/components/schemas/ResponseErrors"
         "204":
           description: No Content
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ResponseErrors'
+                $ref: "#/components/schemas/ResponseErrors"
         "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/JsonNode'
+                $ref: "#/components/schemas/JsonNode"
   /workflows/search:
     get:
       tags:
@@ -11868,37 +11796,37 @@ paths:
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ResponseErrors'
+                $ref: "#/components/schemas/ResponseErrors"
         "500":
           description: Internal Server Error
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ResponseErrors'
+                $ref: "#/components/schemas/ResponseErrors"
         "404":
           description: Not Found
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ResponseErrors'
+                $ref: "#/components/schemas/ResponseErrors"
         "403":
           description: Forbidden
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ResponseErrors'
+                $ref: "#/components/schemas/ResponseErrors"
         "204":
           description: No Content
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ResponseErrors'
+                $ref: "#/components/schemas/ResponseErrors"
         "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/JsonNode'
+                $ref: "#/components/schemas/JsonNode"
   /admin:
     get:
       tags:
@@ -11911,31 +11839,31 @@ paths:
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ResponseErrors'
+                $ref: "#/components/schemas/ResponseErrors"
         "500":
           description: Internal Server Error
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ResponseErrors'
+                $ref: "#/components/schemas/ResponseErrors"
         "404":
           description: Not Found
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ResponseErrors'
+                $ref: "#/components/schemas/ResponseErrors"
         "403":
           description: Forbidden
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ResponseErrors'
+                $ref: "#/components/schemas/ResponseErrors"
         "204":
           description: No Content
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ResponseErrors'
+                $ref: "#/components/schemas/ResponseErrors"
         "200":
           description: OK
           content:
@@ -11945,21 +11873,21 @@ paths:
                 additionalProperties:
                   type: object
                   additionalProperties:
-                    $ref: '#/components/schemas/Link'
+                    $ref: "#/components/schemas/Link"
             application/vnd.spring-boot.actuator.v2+json:
               schema:
                 type: object
                 additionalProperties:
                   type: object
                   additionalProperties:
-                    $ref: '#/components/schemas/Link'
+                    $ref: "#/components/schemas/Link"
             application/json:
               schema:
                 type: object
                 additionalProperties:
                   type: object
                   additionalProperties:
-                    $ref: '#/components/schemas/Link'
+                    $ref: "#/components/schemas/Link"
   /admin/info:
     get:
       tags:
@@ -11972,31 +11900,31 @@ paths:
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ResponseErrors'
+                $ref: "#/components/schemas/ResponseErrors"
         "500":
           description: Internal Server Error
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ResponseErrors'
+                $ref: "#/components/schemas/ResponseErrors"
         "404":
           description: Not Found
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ResponseErrors'
+                $ref: "#/components/schemas/ResponseErrors"
         "403":
           description: Forbidden
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ResponseErrors'
+                $ref: "#/components/schemas/ResponseErrors"
         "204":
           description: No Content
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ResponseErrors'
+                $ref: "#/components/schemas/ResponseErrors"
         "200":
           description: OK
           content:
@@ -12021,31 +11949,31 @@ paths:
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ResponseErrors'
+                $ref: "#/components/schemas/ResponseErrors"
         "500":
           description: Internal Server Error
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ResponseErrors'
+                $ref: "#/components/schemas/ResponseErrors"
         "404":
           description: Not Found
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ResponseErrors'
+                $ref: "#/components/schemas/ResponseErrors"
         "403":
           description: Forbidden
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ResponseErrors'
+                $ref: "#/components/schemas/ResponseErrors"
         "204":
           description: No Content
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ResponseErrors'
+                $ref: "#/components/schemas/ResponseErrors"
         "200":
           description: OK
           content:
@@ -12070,31 +11998,31 @@ paths:
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ResponseErrors'
+                $ref: "#/components/schemas/ResponseErrors"
         "500":
           description: Internal Server Error
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ResponseErrors'
+                $ref: "#/components/schemas/ResponseErrors"
         "404":
           description: Not Found
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ResponseErrors'
+                $ref: "#/components/schemas/ResponseErrors"
         "403":
           description: Forbidden
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ResponseErrors'
+                $ref: "#/components/schemas/ResponseErrors"
         "204":
           description: No Content
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ResponseErrors'
+                $ref: "#/components/schemas/ResponseErrors"
         "200":
           description: OK
           content:
@@ -12124,31 +12052,31 @@ paths:
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ResponseErrors'
+                $ref: "#/components/schemas/ResponseErrors"
         "500":
           description: Internal Server Error
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ResponseErrors'
+                $ref: "#/components/schemas/ResponseErrors"
         "404":
           description: Not Found
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ResponseErrors'
+                $ref: "#/components/schemas/ResponseErrors"
         "403":
           description: Forbidden
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ResponseErrors'
+                $ref: "#/components/schemas/ResponseErrors"
         "204":
           description: No Content
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ResponseErrors'
+                $ref: "#/components/schemas/ResponseErrors"
         "200":
           description: OK
           content:
@@ -12156,7 +12084,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Action'
+                  $ref: "#/components/schemas/Action"
   /_/tenant/{operationId}:
     get:
       tags:
@@ -12176,7 +12104,7 @@ paths:
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ResponseErrors'
+                $ref: "#/components/schemas/ResponseErrors"
         "500":
           description: Internal server error
           content:
@@ -12188,19 +12116,19 @@ paths:
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ResponseErrors'
+                $ref: "#/components/schemas/ResponseErrors"
         "403":
           description: Forbidden
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ResponseErrors'
+                $ref: "#/components/schemas/ResponseErrors"
         "204":
           description: No Content
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ResponseErrors'
+                $ref: "#/components/schemas/ResponseErrors"
         "200":
           description: true or false indicator
           content:
@@ -12233,13 +12161,13 @@ paths:
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ResponseErrors'
+                $ref: "#/components/schemas/ResponseErrors"
         "403":
           description: Forbidden
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ResponseErrors'
+                $ref: "#/components/schemas/ResponseErrors"
         "204":
           description: Delete succeeded
         "200":
@@ -12271,31 +12199,31 @@ paths:
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ResponseErrors'
+                $ref: "#/components/schemas/ResponseErrors"
         "500":
           description: Internal Server Error
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ResponseErrors'
+                $ref: "#/components/schemas/ResponseErrors"
         "404":
           description: Not Found
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ResponseErrors'
+                $ref: "#/components/schemas/ResponseErrors"
         "403":
           description: Forbidden
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ResponseErrors'
+                $ref: "#/components/schemas/ResponseErrors"
         "204":
           description: No Content
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ResponseErrors'
+                $ref: "#/components/schemas/ResponseErrors"
         "200":
           description: OK
           content:
@@ -12329,31 +12257,31 @@ paths:
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ResponseErrors'
+                $ref: "#/components/schemas/ResponseErrors"
         "500":
           description: Internal Server Error
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ResponseErrors'
+                $ref: "#/components/schemas/ResponseErrors"
         "404":
           description: Not Found
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ResponseErrors'
+                $ref: "#/components/schemas/ResponseErrors"
         "403":
           description: Forbidden
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ResponseErrors'
+                $ref: "#/components/schemas/ResponseErrors"
         "204":
           description: No Content
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ResponseErrors'
+                $ref: "#/components/schemas/ResponseErrors"
         "200":
           description: OK
           content:
@@ -12387,31 +12315,31 @@ paths:
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ResponseErrors'
+                $ref: "#/components/schemas/ResponseErrors"
         "500":
           description: Internal Server Error
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ResponseErrors'
+                $ref: "#/components/schemas/ResponseErrors"
         "404":
           description: Not Found
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ResponseErrors'
+                $ref: "#/components/schemas/ResponseErrors"
         "403":
           description: Forbidden
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ResponseErrors'
+                $ref: "#/components/schemas/ResponseErrors"
         "204":
           description: No Content
           content:
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ResponseErrors'
+                $ref: "#/components/schemas/ResponseErrors"
         "200":
           description: OK
           content:
@@ -12434,7 +12362,7 @@ components:
         parameters:
           type: array
           items:
-            $ref: '#/components/schemas/Parameter'
+            $ref: "#/components/schemas/Parameter"
     Parameter:
       type: object
       properties:
@@ -12448,7 +12376,7 @@ components:
         errors:
           type: array
           items:
-            $ref: '#/components/schemas/Error'
+            $ref: "#/components/schemas/Error"
         total_records:
           type: integer
           format: int32
@@ -12467,7 +12395,7 @@ components:
         properties:
           type: object
           additionalProperties:
-            $ref: '#/components/schemas/AbstractJsonSchemaPropertyObject'
+            $ref: "#/components/schemas/AbstractJsonSchemaPropertyObject"
         requiredProperties:
           type: array
           items:
@@ -12482,7 +12410,7 @@ components:
         properties:
           type: object
           additionalProperties:
-            $ref: '#/components/schemas/AbstractJsonSchemaPropertyObject'
+            $ref: "#/components/schemas/AbstractJsonSchemaPropertyObject"
         requiredProperties:
           type: array
           items:
@@ -12490,7 +12418,7 @@ components:
         definitions:
           type: object
           additionalProperties:
-            $ref: '#/components/schemas/Item'
+            $ref: "#/components/schemas/Item"
         type:
           type: string
         $schema:
@@ -12498,196 +12426,32 @@ components:
     Links:
       type: object
       additionalProperties:
-        $ref: '#/components/schemas/Link'
+        $ref: "#/components/schemas/Link"
     RepresentationModelObject:
       type: object
       properties:
         _links:
-          $ref: '#/components/schemas/Links'
-    EmbeddedInput:
-      required:
-      - inputType
-      type: object
-      properties:
-        attributes:
-          type: array
-          items:
-            type: string
-            enum:
-            - MAX
-            - MAXLENGTH
-            - MIN
-            - PATTERN
-            - SIZE
-            - STEP
-        defaultValue:
-          type: string
-        fieldId:
-          type: string
-        fieldLabel:
-          type: string
-        inputType:
-          type: string
-          enum:
-          - BUTTON
-          - CHECKBOX
-          - COLOR
-          - DATE
-          - DATETIME
-          - EMAIL
-          - FILE
-          - HIDDEN
-          - IMAGE
-          - MONTH
-          - NUMBER
-          - PASSWORD
-          - RADIO
-          - RANGE
-          - SEARCH
-          - SELECT
-          - SUBMIT
-          - TELEPHONE
-          - TEXT
-          - TIME
-          - URL
-          - WEEK
-        options:
-          type: array
-          items:
-            type: string
-        required:
-          type: boolean
-    EmbeddedLoopReference:
-      required:
-      - parallel
-      type: object
-      properties:
-        cardinalityExpression:
-          type: string
-        completeConditionExpression:
-          type: string
-        dataInputRefExpression:
-          type: string
-        inputDataName:
-          type: string
-        parallel:
-          type: boolean
-    EmbeddedProcessor:
-      required:
-      - code
-      - functionName
-      - scriptType
-      type: object
-      properties:
-        buffer:
-          type: integer
-          format: int32
-        code:
-          type: string
-        delay:
-          type: integer
-          format: int32
-        functionName:
-          maxLength: 128
-          minLength: 4
-          type: string
-        scriptType:
-          type: string
-          enum:
-          - GROOVY
-          - JAVA
-          - JS
-          - PYTHON
-          - RUBY
-    EmbeddedRequest:
-      required:
-      - accept
-      - contentType
-      - method
-      - url
-      type: object
-      properties:
-        accept:
-          type: string
-        bodyTemplate:
-          type: string
-        contentType:
-          type: string
-        iterable:
-          type: boolean
-        iterableKey:
-          type: string
-        method:
-          type: string
-          enum:
-          - GET
-          - HEAD
-          - POST
-          - PUT
-          - PATCH
-          - DELETE
-          - OPTIONS
-          - TRACE
-        responseKey:
-          type: string
-        url:
-          type: string
-    EmbeddedVariable:
-      required:
-      - key
-      type: object
-      properties:
-        key:
-          maxLength: 64
-          minLength: 4
-          type: string
-        type:
-          type: string
-          enum:
-          - PROCESS
-          - LOCAL
-        spin:
-          type: boolean
-        asJson:
-          type: boolean
-        asTransient:
-          type: boolean
-    EntityModelWorkflow:
+          $ref: "#/components/schemas/Links"
+    EntityModelNode:
       required:
       - name
-      - versionTag
       type: object
       properties:
-        active:
-          type: boolean
-        deploymentId:
+        name:
+          maxLength: 64
+          minLength: 3
           type: string
         description:
           maxLength: 512
           minLength: 0
           type: string
-        historyTimeToLive:
-          minimum: 0
-          type: integer
-          format: int32
-        initialContext:
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/JsonNode'
-        name:
-          maxLength: 64
-          minLength: 4
+        deserializeAs:
           type: string
-        setup:
-          $ref: '#/components/schemas/Setup'
-        versionTag:
-          maxLength: 64
-          minLength: 1
+          readOnly: true
+        identifier:
           type: string
         _links:
-          $ref: '#/components/schemas/Links'
-    JsonNode:
-      type: object
+          $ref: "#/components/schemas/Links"
     Node:
       required:
       - name
@@ -12708,8 +12472,6 @@ components:
           readOnly: true
         identifier:
           type: string
-      discriminator:
-        propertyName: deserializeAs
     PageMetadata:
       type: object
       properties:
@@ -12725,133 +12487,6 @@ components:
         number:
           type: integer
           format: int64
-    PagedModelEntityModelWorkflow:
-      type: object
-      properties:
-        _embedded:
-          type: object
-          properties:
-            workflows:
-              type: array
-              items:
-                $ref: '#/components/schemas/EntityModelWorkflow'
-        _links:
-          $ref: '#/components/schemas/Links'
-        page:
-          $ref: '#/components/schemas/PageMetadata'
-    Setup:
-      type: object
-      properties:
-        asyncAfter:
-          type: boolean
-        asyncBefore:
-          type: boolean
-    Workflow:
-      required:
-      - name
-      - versionTag
-      type: object
-      properties:
-        id:
-          type: string
-        active:
-          type: boolean
-        deploymentId:
-          type: string
-        description:
-          maxLength: 512
-          minLength: 0
-          type: string
-        historyTimeToLive:
-          minimum: 0
-          type: integer
-          format: int32
-        initialContext:
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/JsonNode'
-        name:
-          maxLength: 64
-          minLength: 4
-          type: string
-        nodes:
-          type: array
-          items:
-            $ref: '#/components/schemas/Node'
-        setup:
-          $ref: '#/components/schemas/Setup'
-        versionTag:
-          maxLength: 64
-          minLength: 1
-          type: string
-    CollectionModelNode:
-      type: object
-      properties:
-        _embedded:
-          type: object
-          properties:
-            nodes:
-              type: array
-              items:
-                oneOf:
-                - $ref: '#/components/schemas/CompressFileTaskResponse'
-                - $ref: '#/components/schemas/ConditionResponse'
-                - $ref: '#/components/schemas/ConnectToResponse'
-                - $ref: '#/components/schemas/DatabaseConnectionTaskResponse'
-                - $ref: '#/components/schemas/DatabaseDisconnectTaskResponse'
-                - $ref: '#/components/schemas/DatabaseQueryTaskResponse'
-                - $ref: '#/components/schemas/DirectoryTaskResponse'
-                - $ref: '#/components/schemas/EmailTaskResponse'
-                - $ref: '#/components/schemas/EndEventResponse'
-                - $ref: '#/components/schemas/EventSubprocessResponse'
-                - $ref: '#/components/schemas/ExclusiveGatewayResponse'
-                - $ref: '#/components/schemas/FileTaskResponse'
-                - $ref: '#/components/schemas/FtpTaskResponse'
-                - $ref: '#/components/schemas/InclusiveGatewayResponse'
-                - $ref: '#/components/schemas/InputTaskResponse'
-                - $ref: '#/components/schemas/MoveToLastGatewayResponse'
-                - $ref: '#/components/schemas/MoveToNodeResponse'
-                - $ref: '#/components/schemas/ParallelGatewayResponse'
-                - $ref: '#/components/schemas/ProcessorTaskResponse'
-                - $ref: '#/components/schemas/ReceiveTaskResponse'
-                - $ref: '#/components/schemas/RequestTaskResponse'
-                - $ref: '#/components/schemas/ScriptTaskResponse'
-                - $ref: '#/components/schemas/StartEventResponse'
-                - $ref: '#/components/schemas/SubprocessResponse'
-        _links:
-          $ref: '#/components/schemas/Links'
-    CollectionModelObject:
-      type: object
-      properties:
-        _embedded:
-          type: object
-          properties:
-            objects:
-              type: array
-              items:
-                type: object
-        _links:
-          $ref: '#/components/schemas/Links'
-    EntityModelNode:
-      required:
-      - name
-      type: object
-      properties:
-        name:
-          maxLength: 64
-          minLength: 3
-          type: string
-        description:
-          maxLength: 512
-          minLength: 0
-          type: string
-        deserializeAs:
-          type: string
-          readOnly: true
-        identifier:
-          type: string
-        _links:
-          $ref: '#/components/schemas/Links'
     PagedModelEntityModelNode:
       type: object
       properties:
@@ -12861,11 +12496,11 @@ components:
             nodes:
               type: array
               items:
-                $ref: '#/components/schemas/EntityModelNode'
+                $ref: "#/components/schemas/EntityModelNode"
         _links:
-          $ref: '#/components/schemas/Links'
+          $ref: "#/components/schemas/Links"
         page:
-          $ref: '#/components/schemas/PageMetadata'
+          $ref: "#/components/schemas/PageMetadata"
     EntityModelTrigger:
       required:
       - method
@@ -12897,7 +12532,7 @@ components:
           - OPTIONS
           - TRACE
         _links:
-          $ref: '#/components/schemas/Links'
+          $ref: "#/components/schemas/Links"
     PagedModelEntityModelTrigger:
       type: object
       properties:
@@ -12907,11 +12542,11 @@ components:
             triggers:
               type: array
               items:
-                $ref: '#/components/schemas/EntityModelTrigger'
+                $ref: "#/components/schemas/EntityModelTrigger"
         _links:
-          $ref: '#/components/schemas/Links'
+          $ref: "#/components/schemas/Links"
         page:
-          $ref: '#/components/schemas/PageMetadata'
+          $ref: "#/components/schemas/PageMetadata"
     CollectionModelEntityModelTrigger:
       type: object
       properties:
@@ -12921,9 +12556,148 @@ components:
             triggers:
               type: array
               items:
-                $ref: '#/components/schemas/EntityModelTrigger'
+                $ref: "#/components/schemas/EntityModelTrigger"
         _links:
-          $ref: '#/components/schemas/Links'
+          $ref: "#/components/schemas/Links"
+    EntityModelWorkflow:
+      required:
+      - name
+      - versionTag
+      type: object
+      properties:
+        active:
+          type: boolean
+        deploymentId:
+          type: string
+        description:
+          maxLength: 512
+          minLength: 0
+          type: string
+        historyTimeToLive:
+          minimum: 0
+          type: integer
+          format: int32
+        initialContext:
+          type: object
+          additionalProperties:
+            $ref: "#/components/schemas/JsonNode"
+        name:
+          maxLength: 64
+          minLength: 4
+          type: string
+        setup:
+          $ref: "#/components/schemas/Setup"
+        versionTag:
+          maxLength: 64
+          minLength: 1
+          type: string
+        _links:
+          $ref: "#/components/schemas/Links"
+    JsonNode:
+      type: object
+    PagedModelEntityModelWorkflow:
+      type: object
+      properties:
+        _embedded:
+          type: object
+          properties:
+            workflows:
+              type: array
+              items:
+                $ref: "#/components/schemas/EntityModelWorkflow"
+        _links:
+          $ref: "#/components/schemas/Links"
+        page:
+          $ref: "#/components/schemas/PageMetadata"
+    Setup:
+      type: object
+      properties:
+        asyncAfter:
+          type: boolean
+        asyncBefore:
+          type: boolean
+    Workflow:
+      required:
+      - name
+      - versionTag
+      type: object
+      properties:
+        id:
+          type: string
+        active:
+          type: boolean
+        deploymentId:
+          type: string
+        description:
+          maxLength: 512
+          minLength: 0
+          type: string
+        historyTimeToLive:
+          minimum: 0
+          type: integer
+          format: int32
+        initialContext:
+          type: object
+          additionalProperties:
+            $ref: "#/components/schemas/JsonNode"
+        name:
+          maxLength: 64
+          minLength: 4
+          type: string
+        nodes:
+          type: array
+          items:
+            $ref: "#/components/schemas/Node"
+        setup:
+          $ref: "#/components/schemas/Setup"
+        versionTag:
+          maxLength: 64
+          minLength: 1
+          type: string
+    CollectionModelNode:
+      type: object
+      properties:
+        _embedded:
+          type: object
+          properties:
+            nodes:
+              type: array
+              items:
+                $ref: "#/components/schemas/NodeResponse"
+        _links:
+          $ref: "#/components/schemas/Links"
+    CollectionModelObject:
+      type: object
+      properties:
+        _embedded:
+          type: object
+          properties:
+            objects:
+              type: array
+              items:
+                type: object
+        _links:
+          $ref: "#/components/schemas/Links"
+    NodeRequestBody:
+      required:
+      - name
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          maxLength: 64
+          minLength: 3
+          type: string
+        description:
+          maxLength: 512
+          minLength: 0
+          type: string
+        deserializeAs:
+          type: string
+          readOnly: true
+        identifier:
+          type: string
     TriggerRequestBody:
       required:
       - method
@@ -12956,589 +12730,6 @@ components:
           - DELETE
           - OPTIONS
           - TRACE
-    CompressFileTaskRequestBody:
-      required:
-      - name
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/NodeRequestBody'
-      - type: object
-        properties:
-          asyncAfter:
-            type: boolean
-          asyncBefore:
-            type: boolean
-          inputVariables:
-            uniqueItems: true
-            type: array
-            items:
-              $ref: '#/components/schemas/EmbeddedVariable'
-          outputVariable:
-            $ref: '#/components/schemas/EmbeddedVariable'
-          source:
-            type: string
-          destination:
-            type: string
-          format:
-            type: string
-            enum:
-            - BZIP2
-            - GZIP
-            - ZIP
-          container:
-            type: string
-            enum:
-            - NONE
-            - TAR
-    ConditionRequestBody:
-      required:
-      - answer
-      - expression
-      - name
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/NodeRequestBody'
-      - type: object
-        properties:
-          answer:
-            maxLength: 64
-            minLength: 2
-            type: string
-          expression:
-            maxLength: 128
-            minLength: 4
-            type: string
-    ConnectToRequestBody:
-      required:
-      - name
-      - nodeId
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/NodeRequestBody'
-      - type: object
-        properties:
-          nodeId:
-            type: string
-    DatabaseConnectionTaskRequestBody:
-      required:
-      - name
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/NodeRequestBody'
-      - type: object
-        properties:
-          asyncAfter:
-            type: boolean
-          asyncBefore:
-            type: boolean
-          inputVariables:
-            uniqueItems: true
-            type: array
-            items:
-              $ref: '#/components/schemas/EmbeddedVariable'
-          outputVariable:
-            $ref: '#/components/schemas/EmbeddedVariable'
-          designation:
-            type: string
-          password:
-            type: string
-          url:
-            type: string
-          username:
-            type: string
-    DatabaseDisconnectTaskRequestBody:
-      required:
-      - name
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/NodeRequestBody'
-      - type: object
-        properties:
-          asyncAfter:
-            type: boolean
-          asyncBefore:
-            type: boolean
-          inputVariables:
-            uniqueItems: true
-            type: array
-            items:
-              $ref: '#/components/schemas/EmbeddedVariable'
-          outputVariable:
-            $ref: '#/components/schemas/EmbeddedVariable'
-          designation:
-            type: string
-    DatabaseQueryTaskRequestBody:
-      required:
-      - name
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/NodeRequestBody'
-      - type: object
-        properties:
-          asyncAfter:
-            type: boolean
-          asyncBefore:
-            type: boolean
-          inputVariables:
-            uniqueItems: true
-            type: array
-            items:
-              $ref: '#/components/schemas/EmbeddedVariable'
-          outputVariable:
-            $ref: '#/components/schemas/EmbeddedVariable'
-          designation:
-            type: string
-          outputPath:
-            type: string
-          query:
-            type: string
-          resultType:
-            type: string
-            enum:
-            - CSV
-            - TSV
-            - JSON
-          includeHeader:
-            type: boolean
-    DirectoryTaskRequestBody:
-      required:
-      - action
-      - name
-      - path
-      - workflow
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/NodeRequestBody'
-      - type: object
-        properties:
-          asyncAfter:
-            type: boolean
-          asyncBefore:
-            type: boolean
-          inputVariables:
-            uniqueItems: true
-            type: array
-            items:
-              $ref: '#/components/schemas/EmbeddedVariable'
-          outputVariable:
-            $ref: '#/components/schemas/EmbeddedVariable'
-          path:
-            type: string
-          workflow:
-            type: string
-          action:
-            type: string
-            enum:
-            - READ_NEXT
-            - DELETE_NEXT
-            - LIST
-            - WRITE
-    EmailTaskRequestBody:
-      required:
-      - mailFrom
-      - mailSubject
-      - mailText
-      - mailTo
-      - name
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/NodeRequestBody'
-      - type: object
-        properties:
-          asyncAfter:
-            type: boolean
-          asyncBefore:
-            type: boolean
-          inputVariables:
-            uniqueItems: true
-            type: array
-            items:
-              $ref: '#/components/schemas/EmbeddedVariable'
-          outputVariable:
-            $ref: '#/components/schemas/EmbeddedVariable'
-          attachmentPath:
-            type: string
-          includeAttachment:
-            type: string
-          mailBcc:
-            type: string
-          mailCc:
-            type: string
-          mailFrom:
-            maxLength: 256
-            minLength: 3
-            type: string
-          mailText:
-            maxLength: 2147483647
-            minLength: 2
-            type: string
-          mailTo:
-            maxLength: 256
-            minLength: 3
-            type: string
-          mailMarkup:
-            type: string
-          mailSubject:
-            maxLength: 256
-            minLength: 2
-            type: string
-    EndEventRequestBody:
-      required:
-      - name
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/NodeRequestBody'
-    EventSubprocessRequestBody:
-      required:
-      - name
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/NodeRequestBody'
-      - type: object
-        properties:
-          asyncAfter:
-            type: boolean
-          asyncBefore:
-            type: boolean
-    ExclusiveGatewayRequestBody:
-      required:
-      - name
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/NodeRequestBody'
-      - type: object
-        properties:
-          direction:
-            type: string
-            enum:
-            - UNSPECIFIED
-            - CONVERGING
-            - DIVERGING
-            - MIXED
-    FileTaskRequestBody:
-      required:
-      - name
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/NodeRequestBody'
-      - type: object
-        properties:
-          asyncAfter:
-            type: boolean
-          asyncBefore:
-            type: boolean
-          inputVariables:
-            uniqueItems: true
-            type: array
-            items:
-              $ref: '#/components/schemas/EmbeddedVariable'
-          outputVariable:
-            $ref: '#/components/schemas/EmbeddedVariable'
-          line:
-            type: string
-          op:
-            type: string
-            enum:
-            - LIST
-            - READ
-            - WRITE
-            - COPY
-            - MOVE
-            - DELETE
-            - LINE_COUNT
-            - READ_LINE
-            - PUSH
-            - POP
-          path:
-            type: string
-          target:
-            type: string
-    FtpTaskRequestBody:
-      required:
-      - name
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/NodeRequestBody'
-      - type: object
-        properties:
-          asyncAfter:
-            type: boolean
-          asyncBefore:
-            type: boolean
-          inputVariables:
-            uniqueItems: true
-            type: array
-            items:
-              $ref: '#/components/schemas/EmbeddedVariable'
-          outputVariable:
-            $ref: '#/components/schemas/EmbeddedVariable'
-          destinationPath:
-            type: string
-          host:
-            type: string
-          op:
-            type: string
-            enum:
-            - GET
-            - PUT
-          originPath:
-            type: string
-          password:
-            type: string
-          port:
-            type: integer
-            format: int32
-          scheme:
-            type: string
-          username:
-            type: string
-          basePath:
-            type: string
-    InclusiveGatewayRequestBody:
-      required:
-      - name
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/NodeRequestBody'
-      - type: object
-        properties:
-          direction:
-            type: string
-            enum:
-            - UNSPECIFIED
-            - CONVERGING
-            - DIVERGING
-            - MIXED
-    InputTaskRequestBody:
-      required:
-      - name
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/NodeRequestBody'
-      - type: object
-        properties:
-          asyncAfter:
-            type: boolean
-          asyncBefore:
-            type: boolean
-          inputVariables:
-            uniqueItems: true
-            type: array
-            items:
-              $ref: '#/components/schemas/EmbeddedVariable'
-          outputVariable:
-            $ref: '#/components/schemas/EmbeddedVariable'
-          inputs:
-            uniqueItems: true
-            type: array
-            items:
-              $ref: '#/components/schemas/EmbeddedInput'
-    MoveToLastGatewayRequestBody:
-      required:
-      - name
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/NodeRequestBody'
-      - type: object
-        properties:
-          direction:
-            type: string
-            enum:
-            - UNSPECIFIED
-            - CONVERGING
-            - DIVERGING
-            - MIXED
-    MoveToNodeRequestBody:
-      required:
-      - gatewayId
-      - name
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/NodeRequestBody'
-      - type: object
-        properties:
-          gatewayId:
-            type: string
-    NodeRequestBody:
-      required:
-      - name
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          maxLength: 64
-          minLength: 3
-          type: string
-        description:
-          maxLength: 512
-          minLength: 0
-          type: string
-        deserializeAs:
-          type: string
-          readOnly: true
-        identifier:
-          type: string
-      discriminator:
-        propertyName: deserializeAs
-    ParallelGatewayRequestBody:
-      required:
-      - name
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/NodeRequestBody'
-      - type: object
-        properties:
-          direction:
-            type: string
-            enum:
-            - UNSPECIFIED
-            - CONVERGING
-            - DIVERGING
-            - MIXED
-    ProcessorTaskRequestBody:
-      required:
-      - name
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/NodeRequestBody'
-      - type: object
-        properties:
-          asyncAfter:
-            type: boolean
-          asyncBefore:
-            type: boolean
-          inputVariables:
-            uniqueItems: true
-            type: array
-            items:
-              $ref: '#/components/schemas/EmbeddedVariable'
-          outputVariable:
-            $ref: '#/components/schemas/EmbeddedVariable'
-          processor:
-            $ref: '#/components/schemas/EmbeddedProcessor'
-    ReceiveTaskRequestBody:
-      required:
-      - message
-      - name
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/NodeRequestBody'
-      - type: object
-        properties:
-          asyncAfter:
-            type: boolean
-          asyncBefore:
-            type: boolean
-          inputVariables:
-            uniqueItems: true
-            type: array
-            items:
-              $ref: '#/components/schemas/EmbeddedVariable'
-          outputVariable:
-            $ref: '#/components/schemas/EmbeddedVariable'
-          message:
-            maxLength: 256
-            minLength: 4
-            type: string
-    RequestTaskRequestBody:
-      required:
-      - name
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/NodeRequestBody'
-      - type: object
-        properties:
-          asyncAfter:
-            type: boolean
-          asyncBefore:
-            type: boolean
-          inputVariables:
-            uniqueItems: true
-            type: array
-            items:
-              $ref: '#/components/schemas/EmbeddedVariable'
-          outputVariable:
-            $ref: '#/components/schemas/EmbeddedVariable'
-          headerOutputVariables:
-            uniqueItems: true
-            type: array
-            items:
-              $ref: '#/components/schemas/EmbeddedVariable'
-          request:
-            $ref: '#/components/schemas/EmbeddedRequest'
-    ScriptTaskRequestBody:
-      required:
-      - code
-      - name
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/NodeRequestBody'
-      - type: object
-        properties:
-          asyncAfter:
-            type: boolean
-          asyncBefore:
-            type: boolean
-          inputVariables:
-            uniqueItems: true
-            type: array
-            items:
-              $ref: '#/components/schemas/EmbeddedVariable'
-          outputVariable:
-            $ref: '#/components/schemas/EmbeddedVariable'
-          code:
-            type: string
-          resultVariable:
-            type: string
-          scriptFormat:
-            type: string
-    StartEventRequestBody:
-      required:
-      - name
-      - type
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/NodeRequestBody'
-      - type: object
-        properties:
-          asyncBefore:
-            type: boolean
-          expression:
-            maxLength: 256
-            minLength: 4
-            type: string
-          interrupting:
-            type: boolean
-          type:
-            type: string
-            enum:
-            - MESSAGE_CORRELATION
-            - SCHEDULED
-            - SIGNAL
-            - NONE
-    SubprocessRequestBody:
-      required:
-      - name
-      - type
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/NodeRequestBody'
-      - type: object
-        properties:
-          asyncAfter:
-            type: boolean
-          asyncBefore:
-            type: boolean
-          loopRef:
-            $ref: '#/components/schemas/EmbeddedLoopReference'
-          type:
-            type: string
-            enum:
-            - EMBEDDED
-            - TRANSACTION
-          multiInstance:
-            type: boolean
     WorkflowRequestBody:
       required:
       - name
@@ -13562,7 +12753,7 @@ components:
         initialContext:
           type: object
           additionalProperties:
-            $ref: '#/components/schemas/JsonNode'
+            $ref: "#/components/schemas/JsonNode"
         name:
           maxLength: 64
           minLength: 4
@@ -13572,10 +12763,28 @@ components:
           items:
             type: string
         setup:
-          $ref: '#/components/schemas/Setup'
+          $ref: "#/components/schemas/Setup"
         versionTag:
           maxLength: 64
           minLength: 1
+          type: string
+    NodeResponse:
+      required:
+      - name
+      type: object
+      properties:
+        name:
+          maxLength: 64
+          minLength: 3
+          type: string
+        description:
+          maxLength: 512
+          minLength: 0
+          type: string
+        deserializeAs:
+          type: string
+          readOnly: true
+        identifier:
           type: string
     error:
       required:
@@ -13595,7 +12804,7 @@ components:
           type: array
           description: List of key/value parameters
           items:
-            $ref: '#/components/schemas/parameter'
+            $ref: "#/components/schemas/parameter"
       description: An error message
     errors:
       type: object
@@ -13604,7 +12813,7 @@ components:
           type: array
           description: List of error messages
           items:
-            $ref: '#/components/schemas/error'
+            $ref: "#/components/schemas/error"
         total_records:
           type: integer
           description: Total number of errors
@@ -13639,7 +12848,7 @@ components:
           type: array
           description: List of key/value parameters
           items:
-            $ref: '#/components/schemas/parameter'
+            $ref: "#/components/schemas/parameter"
       description: "Configuration how to install, upgrade or delete a module for a\
         \ tenant"
     Link:
