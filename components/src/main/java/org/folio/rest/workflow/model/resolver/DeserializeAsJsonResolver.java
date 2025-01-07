@@ -4,8 +4,12 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 import com.fasterxml.jackson.databind.DatabindContext;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.jsontype.impl.TypeIdResolverBase;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class DeserializeAsJsonResolver extends TypeIdResolverBase {
+
+  private static final Logger logger = LoggerFactory.getLogger(DeserializeAsJsonResolver.class);
 
   @Override
   public String idFromValue(Object value) {
@@ -31,7 +35,7 @@ public class DeserializeAsJsonResolver extends TypeIdResolverBase {
           return context.getTypeFactory().constructType(type);
         }
       } catch (ClassNotFoundException e) {
-        e.printStackTrace();
+        logger.debug("Unknown Workflow Model class " + id, e);
       }
     }
 
