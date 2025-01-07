@@ -28,12 +28,9 @@ public class DeserializeAsJsonResolver extends TypeIdResolverBase {
 
   @Override
   public JavaType typeFromId(DatabindContext context, String id) {
-    if (id.length() > 0) {
+    if (id != null && id.length() > 0) {
       try {
-        Class<?> type = Class.forName("org.folio.rest.workflow.model." + id);
-        if (type != null) {
-          return context.getTypeFactory().constructType(type);
-        }
+        return context.getTypeFactory().constructType(Class.forName("org.folio.rest.workflow.model." + id));
       } catch (ClassNotFoundException e) {
         logger.debug("Unknown Workflow Model class " + id, e);
       }
