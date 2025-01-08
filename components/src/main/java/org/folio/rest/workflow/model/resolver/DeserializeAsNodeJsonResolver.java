@@ -47,9 +47,6 @@ public class DeserializeAsNodeJsonResolver extends TypeIdResolverBase {
    * A map of classes that are allowed to be deserialized.
    */
   public static final Map<String, Class<? extends Node>> CLASSES = Map.ofEntries(
-    entry("AbstractGateway", AbstractGateway.class),
-    entry("AbstractProcess", AbstractProcess.class),
-    entry("AbstractTask", AbstractTask.class),
     entry("CompressFileTask", CompressFileTask.class),
     entry("Condition", Condition.class),
     entry("ConnectTo", ConnectTo.class),
