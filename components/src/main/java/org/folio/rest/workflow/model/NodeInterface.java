@@ -3,9 +3,9 @@ package org.folio.rest.workflow.model;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.annotation.JsonTypeIdResolver;
-import org.folio.rest.workflow.model.resolver.DeserializeAsJsonResolver;
+import org.folio.rest.workflow.model.resolver.DeserializeAsNodeJsonResolver;
 
-@JsonTypeIdResolver(DeserializeAsJsonResolver.class)
+@JsonTypeIdResolver(DeserializeAsNodeJsonResolver.class)
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXISTING_PROPERTY, property = "deserializeAs")
 @JsonSubTypes({
   @JsonSubTypes.Type(value = CompressFileTask.class, name = "CompressFileTask"),
