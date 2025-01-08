@@ -1,10 +1,11 @@
 package org.folio.rest.workflow.model.resolver;
 
+import static java.util.Map.entry;
+
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 import com.fasterxml.jackson.databind.DatabindContext;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.jsontype.impl.TypeIdResolverBase;
-import java.util.HashMap;
 import java.util.Map;
 import org.folio.rest.workflow.model.AbstractGateway;
 import org.folio.rest.workflow.model.AbstractProcess;
@@ -45,37 +46,36 @@ public class DeserializeAsNodeJsonResolver extends TypeIdResolverBase {
   /**
    * A map of classes that are allowed to be deserialized.
    */
-  public static final Map<String, Class<? extends Node>> CLASSES = new HashMap<>();
-  {{
-    CLASSES.put("AbstractGateway", AbstractGateway.class);
-    CLASSES.put("AbstractProcess", AbstractProcess.class);
-    CLASSES.put("AbstractTask", AbstractTask.class);
-    CLASSES.put("CompressFileTask", CompressFileTask.class);
-    CLASSES.put("Condition", Condition.class);
-    CLASSES.put("ConnectTo", ConnectTo.class);
-    CLASSES.put("DatabaseConnectionTask", DatabaseConnectionTask.class);
-    CLASSES.put("DatabaseDisconnectTask", DatabaseDisconnectTask.class);
-    CLASSES.put("DatabaseQueryTask", DatabaseQueryTask.class);
-    CLASSES.put("DirectoryTask", DirectoryTask.class);
-    CLASSES.put("EmailTask", EmailTask.class);
-    CLASSES.put("EndEvent", EndEvent.class);
-    CLASSES.put("EventSubprocess", EventSubprocess.class);
-    CLASSES.put("ExclusiveGateway", ExclusiveGateway.class);
-    CLASSES.put("FileTask", FileTask.class);
-    CLASSES.put("FtpTask", FtpTask.class);
-    CLASSES.put("InclusiveGateway", InclusiveGateway.class);
-    CLASSES.put("InputTask", InputTask.class);
-    CLASSES.put("MoveToLastGateway", MoveToLastGateway.class);
-    CLASSES.put("MoveToNode", MoveToNode.class);
-    CLASSES.put("Node", Node.class);
-    CLASSES.put("ParallelGateway", ParallelGateway.class);
-    CLASSES.put("ProcessorTask", ProcessorTask.class);
-    CLASSES.put("ReceiveTask", ReceiveTask.class);
-    CLASSES.put("RequestTask", RequestTask.class);
-    CLASSES.put("ScriptTask", ScriptTask.class);
-    CLASSES.put("StartEvent", StartEvent.class);
-    CLASSES.put("Subprocess", Subprocess.class);
-  }}
+  public static final Map<String, Class<? extends Node>> CLASSES = Map.ofEntries(
+    entry("AbstractGateway", AbstractGateway.class),
+    entry("AbstractProcess", AbstractProcess.class),
+    entry("AbstractTask", AbstractTask.class),
+    entry("CompressFileTask", CompressFileTask.class),
+    entry("Condition", Condition.class),
+    entry("ConnectTo", ConnectTo.class),
+    entry("DatabaseConnectionTask", DatabaseConnectionTask.class),
+    entry("DatabaseDisconnectTask", DatabaseDisconnectTask.class),
+    entry("DatabaseQueryTask", DatabaseQueryTask.class),
+    entry("DirectoryTask", DirectoryTask.class),
+    entry("EmailTask", EmailTask.class),
+    entry("EndEvent", EndEvent.class),
+    entry("EventSubprocess", EventSubprocess.class),
+    entry("ExclusiveGateway", ExclusiveGateway.class),
+    entry("FileTask", FileTask.class),
+    entry("FtpTask", FtpTask.class),
+    entry("InclusiveGateway", InclusiveGateway.class),
+    entry("InputTask", InputTask.class),
+    entry("MoveToLastGateway", MoveToLastGateway.class),
+    entry("MoveToNode", MoveToNode.class),
+    entry("Node", Node.class),
+    entry("ParallelGateway", ParallelGateway.class),
+    entry("ProcessorTask", ProcessorTask.class),
+    entry("ReceiveTask", ReceiveTask.class),
+    entry("RequestTask", RequestTask.class),
+    entry("ScriptTask", ScriptTask.class),
+    entry("StartEvent", StartEvent.class),
+    entry("Subprocess", Subprocess.class)
+  );
 
   private static final Logger logger = LoggerFactory.getLogger(DeserializeAsNodeJsonResolver.class);
 
@@ -96,11 +96,11 @@ public class DeserializeAsNodeJsonResolver extends TypeIdResolverBase {
 
   @Override
   public JavaType typeFromId(DatabindContext context, String id) {
-    if (CLASSES.containsKey(id)) {
+    if (id != null && CLASSES.containsKey(id)) {
       return context.getTypeFactory().constructType(CLASSES.get(id));
     }
 
-    logger.debug("Unknown or Invalid Workflow Model class " + id + ".");
+    logger.debug("Unknown or Invalid Workflow Model class {}.", id);
     return null;
   }
 
