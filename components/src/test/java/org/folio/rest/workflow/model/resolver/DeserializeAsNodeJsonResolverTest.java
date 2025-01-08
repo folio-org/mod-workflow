@@ -62,7 +62,7 @@ class DeserializeAsNodeJsonResolverTest {
 
   @ParameterizedTest
   @NullAndEmptySource
-  @ValueSource(strings = { "doesNotExist", "12345", "a.b", "1-2+4;", "!\\'", "EmbeddedInput", "Workflow" })
+  @ValueSource(strings = { "doesNotExist", "12345", "a.b", "1-2+4;", "!\\'", "AbstractGateway", "EmbeddedInput", "Node", "Workflow" })
   void typeFromIdWorksExpectNullTest(String id) {
     JavaType result = deserializeAsJsonResolver.typeFromId(databindContext, id);
 
