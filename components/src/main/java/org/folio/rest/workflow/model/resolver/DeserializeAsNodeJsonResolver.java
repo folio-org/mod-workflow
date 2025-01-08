@@ -67,7 +67,6 @@ public class DeserializeAsNodeJsonResolver extends TypeIdResolverBase {
     entry("InputTask", InputTask.class),
     entry("MoveToLastGateway", MoveToLastGateway.class),
     entry("MoveToNode", MoveToNode.class),
-    entry("Node", Node.class),
     entry("ParallelGateway", ParallelGateway.class),
     entry("ProcessorTask", ProcessorTask.class),
     entry("ReceiveTask", ReceiveTask.class),
