@@ -66,11 +66,11 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
@@ -161,19 +161,19 @@ class WorkflowControllerTest {
   @Autowired
   private WorkflowController workflowController;
 
-  @MockBean
+  @MockitoBean
   private WorkflowCqlService workflowCqlService;
 
-  @MockBean
+  @MockitoBean
   private WorkflowEngineService workflowEngineService;
 
-  @MockBean
+  @MockitoBean
   private WorkflowImportService workflowImportService;
 
-  @MockBean
+  @MockitoBean
   private WorkflowRepo workflowRepo;
 
-  @MockBean
+  @MockitoBean
   private TenantProperties tenantProperties;
 
   @BeforeEach
