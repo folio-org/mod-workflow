@@ -156,7 +156,6 @@ management:
     java.enabled: false
     os.enabled: false
 
-
 info:
   build:
     artifact: "@project.artifactId@"
