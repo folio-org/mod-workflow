@@ -137,20 +137,18 @@ okapi:
 # https://docs.spring.io/spring-boot/docs/current/reference/html/actuator.html
 management:
   endpoints:
-    enabled-by-default: false
+    access.default: none
     web:
       base-path: /admin
       exposure:
         include: flyway,health,info
   endpoint:
-    flyway:
-      enabled: true
+    flyway.access: read-only
     health:
-      enabled: true
+      access: read-only
       show-details: always
       show-components: always
-    info:
-      enabled: true
+    info.access: read-only
   health:
     defaults:
       enabled: true

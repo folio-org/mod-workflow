@@ -22,9 +22,11 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.Page;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
@@ -38,15 +40,25 @@ class WorkflowCqlServiceTest {
   @InjectMocks
   private WorkflowCqlService workflowCqlService;
 
-  @MockBean
+  @MockitoBean
   private WorkflowRepo repo;
 
   // Work-around to get ObjectMapper to be loaded in AbstractCqlService.
-  @SpyBean
+  @MockitoSpyBean
   protected ObjectMapper mapper;
 
   @Mock
   private Page<Workflow> page;
+
+  // Provide a bean for `@MockitoSpyBean` above to work without requiring a full spring boot runner.
+  @Configuration
+  static class Config {
+
+    @Bean
+    ObjectMapper objectMapper() {
+      return new ObjectMapper();
+    }
+  }
 
   @Test
   void getTypeNameWorksTest() throws IOException {
