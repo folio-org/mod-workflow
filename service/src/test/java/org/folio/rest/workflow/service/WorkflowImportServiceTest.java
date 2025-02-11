@@ -7,9 +7,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
-import java.io.IOException;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.IOException;
 import org.apache.commons.compress.archivers.ArchiveException;
 import org.apache.commons.compress.compressors.CompressorException;
 import org.folio.rest.workflow.exception.WorkflowImportAlreadyImported;
@@ -29,11 +28,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 
 @SpringBootTest(webEnvironment = WebEnvironment.MOCK)
 @ExtendWith(MockitoExtension.class)
@@ -45,16 +44,16 @@ class WorkflowImportServiceTest {
   @InjectMocks
   private WorkflowImportService workflowImportService;
 
-  @MockBean
+  @MockitoBean
   private NodeRepo nodeRepo;
 
-  @MockBean
+  @MockitoBean
   private TriggerRepo triggerRepo;
 
-  @MockBean
+  @MockitoBean
   private WorkflowRepo workflowRepo;
 
-  @SpyBean
+  @MockitoSpyBean
   private ObjectMapper objectMapper;
 
   @Mock

@@ -18,10 +18,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 /**
@@ -40,7 +40,7 @@ class OkapiDiscoveryServiceWithDefaultPropertiesTest {
   @InjectMocks
   protected OkapiDiscoveryService okapiDiscoveryService;
 
-  @MockBean
+  @MockitoBean
   protected HttpService mockHttpService;
 
   @Mock
