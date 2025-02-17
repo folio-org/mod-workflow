@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping({"/actions", "/actions/"})
+@RequestMapping("/actions")
 public class ActionController {
 
   private OkapiDiscoveryService okapiDiscoveryService;

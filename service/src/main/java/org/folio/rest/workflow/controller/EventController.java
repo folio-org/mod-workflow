@@ -38,7 +38,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.HandlerMapping;
 
 @RestController
-@RequestMapping({"/events", "/events/"})
+@RequestMapping("/events")
 public class EventController {
 
   private static final Logger logger = LoggerFactory.getLogger(EventController.class);
@@ -66,17 +66,14 @@ public class EventController {
     this.objectMapper = objectMapper;
   }
 
-  // @formatter:off
   @PostMapping(value = "/**", consumes = "application/json", produces = { MediaType.APPLICATION_JSON_VALUE })
   public JsonNode postHandleEvents(
     @RequestBody(required = false) JsonNode body,
     HttpServletRequest request
   ) throws EventPublishException {
-  // @formatter:on
     return processRequest(request, body);
   }
 
-  // @formatter:off
   @PostMapping(value = "/**", consumes = "multipart/form-data", produces = { MediaType.APPLICATION_JSON_VALUE })
   public JsonNode postHandleEventsWithFile(
     @RequestParam("file") MultipartFile multipartFile,
@@ -84,7 +81,6 @@ public class EventController {
     @TenantHeader String tenant,
     HttpServletRequest request
   ) throws EventPublishException, IOException {
-  // @formatter:on
 
     if (!TENANT_PATTERN.matcher(tenant).matches()) {
       throw new FileSystemException("Invalid tenant directory name");
@@ -159,6 +155,7 @@ public class EventController {
         )
       );
     }
+
     return body;
   }
 
@@ -170,6 +167,7 @@ public class EventController {
 
   private void processEvent(TriggerDto trigger, Event event) throws EventPublishException {
     logger.debug("Publishing event: {}: {}", trigger.getName(), trigger.getDescription());
+
     try {
       eventProducer.send(event);
     } catch (Exception e) {

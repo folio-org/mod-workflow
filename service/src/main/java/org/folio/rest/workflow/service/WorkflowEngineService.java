@@ -103,7 +103,7 @@ public class WorkflowEngineService {
   }
 
   /**
-   * Check that the Workflow exists or thrown an exception.
+   * Check that the Workflow exists or throw an exception.
    *
    * @param workflowId The Workflow to check.
    *

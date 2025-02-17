@@ -10,7 +10,7 @@ logging:
       folio: WARN
       hibernate: WARN
       springframework: WARN
-      springframework.test: INFO
+      springframework.test: WARN
 
       # Uncomment to enable MockMvc unit test logging.
       #springframework.test.web.servlet.result: DEBUG
@@ -134,20 +134,18 @@ okapi:
 # https://docs.spring.io/spring-boot/docs/current/reference/html/actuator.html
 management:
   endpoints:
-    enabled-by-default: false
+    access.default: none
     web:
       base-path: /admin
       exposure:
         include: flyway,health,info
   endpoint:
-    flyway:
-      enabled: false
+    flyway.access: none
     health:
-      enabled: false
+      access: none
       show-details: always
       show-components: always
-    info:
-      enabled: false
+    info.access: none
   health:
     defaults:
       enabled: true
