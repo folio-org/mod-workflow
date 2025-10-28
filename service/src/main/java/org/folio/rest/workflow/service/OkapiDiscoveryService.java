@@ -99,7 +99,6 @@ public class OkapiDiscoveryService {
     ResponseEntity<JsonNode> response = request(url, tenant);
     if (logger.isDebugEnabled()) {
       logger.debug("Response status code {}", response.getStatusCode());
-      logger.debug("Response body {}", response.getBody());
     }
     return response.getBody();
   }
@@ -109,7 +108,6 @@ public class OkapiDiscoveryService {
     ResponseEntity<JsonNode> response = request(url, tenant);
     if (logger.isDebugEnabled()) {
       logger.debug("Response status code {}", response.getStatusCode());
-      logger.debug("Response body {}", response.getBody());
     }
     return response.getBody();
   }
