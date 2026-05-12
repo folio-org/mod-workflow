@@ -2,6 +2,7 @@ package org.folio.rest.workflow.model.repo;
 
 import org.folio.rest.workflow.model.Workflow;
 import org.folio.spring.cql.JpaCqlRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.data.rest.core.annotation.RestResource;
 
@@ -19,4 +20,7 @@ public interface WorkflowRepo extends JpaCqlRepository<Workflow, String> {
   @Override
   @RestResource(exported = false)
   public void deleteById(String id);
+
+  @Query("SELECT COUNT(*) FROM Workflow")
+  public long countAll();
 }

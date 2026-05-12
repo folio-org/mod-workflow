@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import org.apache.commons.compress.archivers.ArchiveException;
 import org.apache.commons.compress.compressors.CompressorException;
+import org.folio.rest.workflow.config.JunitHelperWebMvcConfig;
 import org.folio.rest.workflow.exception.WorkflowImportAlreadyImported;
 import org.folio.rest.workflow.exception.WorkflowImportException;
 import org.folio.rest.workflow.exception.WorkflowImportInvalidOrMissingProperty;
@@ -26,17 +27,21 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.context.junit.jupiter.web.SpringJUnitWebConfig;
 
-@SpringBootTest(webEnvironment = WebEnvironment.MOCK)
-@ExtendWith(MockitoExtension.class)
 @ActiveProfiles("test")
+@SpringJUnitWebConfig({
+  JunitHelperWebMvcConfig.class,
+  WorkflowImportService.class
+})
+@ExtendWith(MockitoExtension.class)
+@ExtendWith(SpringExtension.class)
 class WorkflowImportServiceTest {
 
   private static final String WORKFLOW_UUID = "7dcd302f-a438-4ca5-a7eb-21653610d46f";

@@ -7,6 +7,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
@@ -21,15 +22,21 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.context.junit.jupiter.web.SpringJUnitWebConfig;
 
 /**
  * This runs the OkapiDiscoveryService tests for when there is no properly configuration application.yml.
  *
  * Do no add additional settings loading or alterations to this test (such as @TestPropertySource).
  */
-@ExtendWith(SpringExtension.class)
+@ActiveProfiles("test")
+@SpringJUnitWebConfig({
+  ObjectMapper.class,
+  OkapiDiscoveryService.class,
+  HttpService.class
+})
 @ExtendWith(MockitoExtension.class)
 class OkapiDiscoveryServiceWithDefaultPropertiesTest {
 

@@ -5,8 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.util.ReflectionTestUtils;
 
@@ -15,7 +13,6 @@ import org.springframework.test.util.ReflectionTestUtils;
  *
  * This is expected to be empty as the OkapiDiscoveryServiceWithDefaultConfigTest() contains all of the tests.
  */
-@SpringBootTest(webEnvironment = WebEnvironment.MOCK)
 @TestPropertySource(properties = {
   "logging.level.org.folio.rest.workflow.service.OkapiDiscoveryService = DEBUG",
   "tenant.headerName = X-Okapi-Tenant",

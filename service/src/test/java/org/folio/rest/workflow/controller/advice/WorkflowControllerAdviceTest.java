@@ -1,24 +1,14 @@
 package org.folio.rest.workflow.controller.advice;
 
-import static org.folio.spring.test.mock.MockMvcConstant.APP_JSON;
-import static org.folio.spring.test.mock.MockMvcConstant.JSON_OBJECT;
-import static org.folio.spring.test.mock.MockMvcConstant.OKAPI_HEAD;
-import static org.folio.spring.test.mock.MockMvcConstant.UUID;
 import static org.folio.spring.test.mock.MockMvcConstant.VALUE;
-import static org.folio.spring.test.mock.MockMvcRequest.appendBody;
-import static org.folio.spring.test.mock.MockMvcRequest.appendHeaders;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.log;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import jakarta.persistence.EntityNotFoundException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
-import org.folio.rest.workflow.controller.WorkflowController;
 import org.folio.rest.workflow.exception.WorkflowAlreadyActiveException;
 import org.folio.rest.workflow.exception.WorkflowDeploymentException;
 import org.folio.rest.workflow.exception.WorkflowEngineServiceException;
@@ -29,85 +19,166 @@ import org.folio.rest.workflow.exception.WorkflowImportJsonFileIsDirectory;
 import org.folio.rest.workflow.exception.WorkflowImportRequiredFileMissing;
 import org.folio.rest.workflow.exception.WorkflowNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-@SpringBootTest(webEnvironment = WebEnvironment.MOCK)
-@AutoConfigureMockMvc
 @ExtendWith(MockitoExtension.class)
 @ActiveProfiles("test")
 class WorkflowControllerAdviceTest {
 
-  private static final String PATH = "/workflows";
+  private static final EntityNotFoundException ENF_EXC = new EntityNotFoundException(VALUE);
 
-  private static final String PATH_ACTIVATE = PATH + "/{id}/activate";
+  private static final WorkflowNotFoundException WNF_EXC = new WorkflowNotFoundException(VALUE);
 
-  @Autowired
-  private WorkflowControllerAdvice workflowControllerAdvice;
+  private static final WorkflowAlreadyActiveException WAA_EXC = new WorkflowAlreadyActiveException(VALUE);
 
-  @Autowired
-  @Mock
-  private WorkflowController workflowController;
+  private static final WorkflowDeploymentException WD_EXC = new WorkflowDeploymentException();
 
-  private MockMvc mvc;
+  private static final WorkflowEngineServiceException WES_EXC = new WorkflowEngineServiceException(VALUE);
+
+  private static final WorkflowImportException WI_EXC = new WorkflowImportException(VALUE);
+
+  private static final WorkflowImportAlreadyImported WIAI_EXC = new WorkflowImportAlreadyImported(VALUE);
+
+  private static final WorkflowImportInvalidOrMissingProperty WIIOMP_EXC = new WorkflowImportInvalidOrMissingProperty(VALUE, VALUE);
+
+  private static final WorkflowImportJsonFileIsDirectory WIJFID_EXC = new WorkflowImportJsonFileIsDirectory(VALUE);
+
+  private static final WorkflowImportRequiredFileMissing WIRFM_EXC = new WorkflowImportRequiredFileMissing(VALUE);
+
+  private WorkflowControllerAdvice advice;
 
   @BeforeEach
   void beforeEach() {
-    mvc = MockMvcBuilders.standaloneSetup(workflowController)
-      .setControllerAdvice(workflowControllerAdvice)
-      .build();
+    advice = new WorkflowControllerAdvice();
+  }
+
+  @Test
+  void handleEntityNotFoundExceptionTest() {
+
+    final String simpleName = EntityNotFoundException.class.getSimpleName();
+    final ResponseEntity<String> response = advice.handleEntityNotFoundException(ENF_EXC);
+
+    assertNotNull(response);
+    assertNotNull(response.getBody());
+
+    assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    assertEquals(MediaType.APPLICATION_JSON, response.getHeaders().getContentType());
+
+    assertTrue(matchBody(response, simpleName));
+  }
+
+  @Test
+  void handleWorkflowNotFoundExceptionTest() {
+
+    final String simpleName = WorkflowNotFoundException.class.getSimpleName();
+    final ResponseEntity<String> response = advice.handleWorkflowNotFoundException(WNF_EXC);
+
+    assertNotNull(response);
+    assertNotNull(response.getBody());
+
+    assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    assertEquals(MediaType.APPLICATION_JSON, response.getHeaders().getContentType());
+    assertTrue(matchBody(response, simpleName));
+  }
+
+  @Test
+  void handleWorkflowAlreadyActiveExceptionTest() {
+
+    final String simpleName = WorkflowAlreadyActiveException.class.getSimpleName();
+    final ResponseEntity<String> response = advice.handleWorkflowAlreadyActiveException(WAA_EXC);
+
+    assertNotNull(response);
+    assertNotNull(response.getBody());
+
+    assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
+    assertEquals(MediaType.APPLICATION_JSON, response.getHeaders().getContentType());
+    assertTrue(matchBody(response, simpleName));
+  }
+
+  @Test
+  void handleWorkflowDeploymentExceptionTest() {
+
+    final String simpleName = WorkflowDeploymentException.class.getSimpleName();
+    final ResponseEntity<String> response = advice.handleWorkflowDeploymentException(WD_EXC);
+
+    assertNotNull(response);
+    assertNotNull(response.getBody());
+
+    assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+    assertEquals(MediaType.APPLICATION_JSON, response.getHeaders().getContentType());
+    assertTrue(matchBody(response, simpleName));
+  }
+
+  @Test
+  void handleWorkflowEngineServiceExceptionTest() {
+
+    final String simpleName = WorkflowEngineServiceException.class.getSimpleName();
+    final ResponseEntity<String> response = advice.handleWorkflowEngineServiceException(WES_EXC);
+
+    assertNotNull(response);
+    assertNotNull(response.getBody());
+
+    assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+    assertEquals(MediaType.APPLICATION_JSON, response.getHeaders().getContentType());
+    assertTrue(matchBody(response, simpleName));
   }
 
   @ParameterizedTest
-  @MethodSource("provideExceptionsToMatchForActivateWorkflow")
-  void exceptionsThrownForActivateWorkflowTest(Exception exception, String simpleName, int status) throws Exception {
-    given(workflowController.activateWorkflow(any(), any(), any())).willAnswer(invocation -> { throw exception; });
+  @MethodSource("provideWorkflowImportExceptions")
+  void handleWorkflowImportExceptionTest(WorkflowImportException exception, String simpleName) {
 
-    MockHttpServletRequestBuilder request = appendHeaders(put(PATH_ACTIVATE, UUID), OKAPI_HEAD, APP_JSON, APP_JSON);
+    final ResponseEntity<String> response = advice.handleWorkflowImportException(exception);
 
-    MvcResult result = mvc.perform(appendBody(request, JSON_OBJECT))
-      .andDo(log()).andExpect(status().is(status)).andReturn();
+    assertNotNull(response);
+    assertNotNull(response.getBody());
 
-    Pattern pattern = Pattern.compile("\"type\":\"" + simpleName + "\"");
-    Matcher matcher = pattern.matcher(result.getResponse().getContentAsString());
-    assertTrue(matcher.find());
+    assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+    assertEquals(MediaType.APPLICATION_JSON, response.getHeaders().getContentType());
+    assertTrue(matchBody(response, simpleName));
   }
 
   /**
-   * Helper function for parameterized test providing the exceptions to be matched for activate workflow.
+   * Match the class simple name in the response.
+   *
+   * @param response The response to search.
+   * @param simpleName The class name to match.
+   *
+   * @return TRUE on match; FALSE otherwise.
+   */
+  private boolean matchBody(ResponseEntity<String> response, String simpleName) {
+
+    final Pattern pattern = Pattern.compile("\"type\":\"" + simpleName + "\"");
+    final Matcher matcher = pattern.matcher(response.getBody());
+
+    return matcher.find();
+  }
+
+  /**
+   * Helper function for parameterized test providing different types of WorkflowImportException.
    *
    * @return
    *   The arguments array stream with the stream columns as:
    *     - Exception exception.
    *     - String simpleName (exception name to match).
-   *     - int status (response HTTP status code for the exception).
    */
-  private static Stream<Arguments> provideExceptionsToMatchForActivateWorkflow() {
+  private static Stream<Arguments> provideWorkflowImportExceptions() {
+
     return Stream.of(
-      Arguments.of(new WorkflowNotFoundException(VALUE), WorkflowNotFoundException.class.getSimpleName(), 404),
-      Arguments.of(new EntityNotFoundException(), EntityNotFoundException.class.getSimpleName(), 404),
-      Arguments.of(new WorkflowAlreadyActiveException(VALUE), WorkflowAlreadyActiveException.class.getSimpleName(), 403),
-      Arguments.of(new WorkflowDeploymentException(), WorkflowDeploymentException.class.getSimpleName(), 500),
-      Arguments.of(new WorkflowEngineServiceException(VALUE), WorkflowEngineServiceException.class.getSimpleName(), 500),
-      Arguments.of(new WorkflowImportException(VALUE), WorkflowImportException.class.getSimpleName(), 400),
-      Arguments.of(new WorkflowImportAlreadyImported(VALUE), WorkflowImportAlreadyImported.class.getSimpleName(), 400),
-      Arguments.of(new WorkflowImportInvalidOrMissingProperty(VALUE, VALUE), WorkflowImportInvalidOrMissingProperty.class.getSimpleName(), 400),
-      Arguments.of(new WorkflowImportJsonFileIsDirectory(VALUE), WorkflowImportJsonFileIsDirectory.class.getSimpleName(), 400),
-      Arguments.of(new WorkflowImportRequiredFileMissing(VALUE), WorkflowImportRequiredFileMissing.class.getSimpleName(), 400)
+      Arguments.of(WIAI_EXC,   WorkflowImportAlreadyImported.class.getSimpleName()),
+      Arguments.of(WIIOMP_EXC, WorkflowImportInvalidOrMissingProperty.class.getSimpleName()),
+      Arguments.of(WIJFID_EXC, WorkflowImportJsonFileIsDirectory.class.getSimpleName()),
+      Arguments.of(WIRFM_EXC,  WorkflowImportRequiredFileMissing.class.getSimpleName())
     );
   }
+
 
 }

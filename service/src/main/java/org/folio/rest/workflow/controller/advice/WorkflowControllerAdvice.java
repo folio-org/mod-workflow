@@ -48,7 +48,7 @@ public class WorkflowControllerAdvice extends AbstractAdvice {
 
   @ResponseStatus(HttpStatus.FORBIDDEN)
   @ExceptionHandler(WorkflowAlreadyActiveException.class)
-  public ResponseEntity<String> handleWorkflowAlreadyActivrException(WorkflowAlreadyActiveException exception) {
+  public ResponseEntity<String> handleWorkflowAlreadyActiveException(WorkflowAlreadyActiveException exception) {
     return buildError(exception, HttpStatus.FORBIDDEN);
   }
 
@@ -66,7 +66,7 @@ public class WorkflowControllerAdvice extends AbstractAdvice {
 
   @ResponseStatus(HttpStatus.BAD_REQUEST)
   @ExceptionHandler(WorkflowImportException.class)
-  public ResponseEntity<String> handleWorkflowImportExceptionException(WorkflowImportException exception) {
+  public ResponseEntity<String> handleWorkflowImportException(WorkflowImportException exception) {
     return buildError(exception, HttpStatus.BAD_REQUEST);
   }
 
