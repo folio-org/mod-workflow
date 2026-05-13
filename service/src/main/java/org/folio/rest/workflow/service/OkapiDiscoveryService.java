@@ -2,8 +2,6 @@ package org.folio.rest.workflow.service;
 
 import static org.springframework.http.HttpMethod.GET;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,6 +18,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.ObjectMapper;
 
 @Service
 public class OkapiDiscoveryService {
@@ -56,7 +56,7 @@ public class OkapiDiscoveryService {
     List<Action> actions = new ArrayList<>();
     JsonNode modulesNode = getModules(tenant);
     for (JsonNode moduleNode : modulesNode) {
-      String id = moduleNode.get("id").asText();
+      String id = moduleNode.get("id").asString();
       actions.addAll(getActionsByTenantAndModuleId(tenant, id));
     }
     return actions;
@@ -81,7 +81,7 @@ public class OkapiDiscoveryService {
     if (moduleDescriptorNode.get(PROVIDES) != null) {
       for (JsonNode interfaceNode : moduleDescriptorNode.get(PROVIDES)) {
         List<Handler> handlers = new ArrayList<>();
-        String interfaceName = interfaceNode.get(ID).asText();
+        String interfaceName = interfaceNode.get(ID).asString();
         for (JsonNode handlersNode : interfaceNode.get(HANDLERS)) {
           handlers.add(objectMapper.readValue(handlersNode.toString(), Handler.class));
         }

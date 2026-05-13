@@ -1,15 +1,12 @@
 package org.folio.rest.workflow.model.converter;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonNode;
 import jakarta.persistence.Converter;
+import tools.jackson.databind.JsonNode;
 
+/**
+ * JSON Node converted.
+ */
 @Converter
 public class JsonNodeConverter extends AbstractConverter<JsonNode> {
-
-  @Override
-  public TypeReference<JsonNode> getTypeReference() {
-    return new TypeReference<JsonNode>() {};
-  }
 
 }

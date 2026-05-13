@@ -2,8 +2,8 @@ package org.folio.rest.workflow.model;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.databind.annotation.JsonTypeIdResolver;
 import org.folio.rest.workflow.model.resolver.DeserializeAsNodeJsonResolver;
+import tools.jackson.databind.annotation.JsonTypeIdResolver;
 
 @JsonTypeIdResolver(DeserializeAsNodeJsonResolver.class)
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXISTING_PROPERTY, property = "deserializeAs")

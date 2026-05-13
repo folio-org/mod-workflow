@@ -1,9 +1,5 @@
 package org.folio.rest.workflow.service;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.util.Iterator;
 import lombok.extern.slf4j.Slf4j;
 import org.folio.rest.workflow.dto.WorkflowDto;
@@ -14,7 +10,7 @@ import org.folio.rest.workflow.model.Workflow;
 import org.folio.rest.workflow.model.repo.WorkflowRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.boot.restclient.RestTemplateBuilder;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -22,6 +18,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.node.ArrayNode;
+import tools.jackson.databind.node.ObjectNode;
 
 @Slf4j
 @Service
@@ -121,7 +121,7 @@ public class WorkflowEngineService {
     String version = workflow.getVersionTag();
 
     JsonNode definition = fetchDeploymentDefinition(id, version, tenant, token);
-    String definitionId = definition.get("id").asText();
+    String definitionId = definition.get("id").asString();
 
     HttpEntity<JsonNode> contextHttpEntity = new HttpEntity<>(context, headers(tenant, token));
 
@@ -141,7 +141,7 @@ public class WorkflowEngineService {
     String version = workflow.getVersionTag();
 
     JsonNode processDefinition = fetchDeploymentDefinition(deploymentId, version, tenant, token);
-    String processDefinitionId = processDefinition.get("id").asText();
+    String processDefinitionId = processDefinition.get("id").asString();
 
     ArrayNode instances = fetchProcessInstanceHistory(processDefinitionId, tenant, token);
 
@@ -149,7 +149,7 @@ public class WorkflowEngineService {
 
     while (iter.hasNext()) {
       JsonNode instance = iter.next();
-      String processInstanceId = instance.get("id").asText();
+      String processInstanceId = instance.get("id").asString();
 
       ((ObjectNode) instance).withArray("incidents")
         .addAll(fetchIncidentsHistory(processInstanceId, tenant, token));

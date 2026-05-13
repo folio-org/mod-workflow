@@ -1,8 +1,8 @@
 package org.folio.rest.workflow.model.has.common;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import java.util.Map;
 import org.folio.rest.workflow.model.Setup;
+import tools.jackson.databind.JsonNode;
 
 /**
  * This interface provides common methods for {@link org.folio.rest.workflow.model.Workflow Workflow}.

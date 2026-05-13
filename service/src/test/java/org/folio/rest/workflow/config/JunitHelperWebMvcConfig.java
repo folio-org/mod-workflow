@@ -1,10 +1,11 @@
 package org.folio.rest.workflow.config;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.TestConfiguration;
 import org.springframework.test.context.ActiveProfiles;
+import tools.jackson.databind.DeserializationFeature;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 
 /**
  * Provide custom web MVC settings for use during unit tests.
@@ -15,9 +16,10 @@ public class JunitHelperWebMvcConfig {
 
   @Bean
   ObjectMapper objectMapper() {
-    final ObjectMapper mapper = new ObjectMapper();
-
-    mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+    final ObjectMapper mapper = JsonMapper
+      .builder()
+      .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+      .build();
 
     return mapper;
   }

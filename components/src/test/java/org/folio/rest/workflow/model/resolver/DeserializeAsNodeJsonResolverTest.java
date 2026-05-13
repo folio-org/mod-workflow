@@ -5,10 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.when;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
-import com.fasterxml.jackson.databind.DatabindContext;
-import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.stream.Stream;
 import java.util.stream.Stream.Builder;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,6 +18,11 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import tools.jackson.databind.DatabindContext;
+import tools.jackson.databind.JavaType;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 
 @ExtendWith(MockitoExtension.class)
 class DeserializeAsNodeJsonResolverTest {
@@ -36,19 +37,19 @@ class DeserializeAsNodeJsonResolverTest {
 
   @BeforeEach
   void beforeEach() {
-    mapper = new ObjectMapper();
+    mapper = JsonMapper.builder().build();
   }
 
   @Test
   void idFromValueWorksTest() {
-    String result = deserializeAsJsonResolver.idFromValue(new String());
+    String result = deserializeAsJsonResolver.idFromValue(null, new String());
 
     assertEquals(String.class.getSimpleName(), result);
   }
 
   @Test
   void idFromValueAndTypeWorksTest() {
-    String result = deserializeAsJsonResolver.idFromValueAndType(new String(), JsonNode.class);
+    String result = deserializeAsJsonResolver.idFromValueAndType(null, new String(), JsonNode.class);
 
     assertEquals(String.class.getSimpleName(), result);
   }

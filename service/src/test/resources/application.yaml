@@ -19,9 +19,6 @@ server:
   port: 9101
   servlet:
     context-path: /
-    encoding:
-      charset: UTF-8
-      enabled: true
 
 spring:
   application.name: mod-workflow
@@ -42,6 +39,11 @@ spring:
     allow-circular-references: false
     banner-mode: console
     log-startup-info: true
+
+  servlet:
+    encoding:
+      charset: UTF-8
+      enabled: true
 
   sql:
     init:
