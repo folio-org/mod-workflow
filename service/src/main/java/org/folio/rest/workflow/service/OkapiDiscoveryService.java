@@ -62,7 +62,7 @@ public class OkapiDiscoveryService {
     return actions;
   }
 
-  public List<Action> getActionsByTenantAndModuleId(String tenant, String id) throws IOException {
+  public List<Action> getActionsByTenantAndModuleId(String tenant, String id) {
     Map<String, List<Handler>> handlerMap = getHandlers(tenant, id);
     List<Action> actions = new ArrayList<>();
     for (Map.Entry<String, List<Handler>> entry : handlerMap.entrySet()) {
@@ -73,7 +73,7 @@ public class OkapiDiscoveryService {
     return actions;
   }
 
-  public Map<String, List<Handler>> getHandlers(String tenant, String id) throws IOException {
+  public Map<String, List<Handler>> getHandlers(String tenant, String id) {
     JsonNode moduleDescriptorNode = getModuleDescriptor(tenant, id);
 
     Map<String, List<Handler>> handlerMap = new HashMap<>();

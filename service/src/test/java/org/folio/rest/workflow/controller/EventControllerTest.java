@@ -121,7 +121,7 @@ class EventControllerTest {
         arguments("diku", "a", join(separator,"..", "..", "..", "..", "x.txt")));
   }
 
-  MockMultipartHttpServletRequestBuilder upload(String tenant, String dir, String file) throws Exception {
+  MockMultipartHttpServletRequestBuilder upload(String tenant, String dir, String file) {
     var sampleFile = new MockMultipartFile(
         "file",
         file,

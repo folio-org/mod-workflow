@@ -44,8 +44,6 @@ class WorkflowControllerAdviceTest {
 
   private static final WorkflowEngineServiceException WES_EXC = new WorkflowEngineServiceException(VALUE);
 
-  private static final WorkflowImportException WI_EXC = new WorkflowImportException(VALUE);
-
   private static final WorkflowImportAlreadyImported WIAI_EXC = new WorkflowImportAlreadyImported(VALUE);
 
   private static final WorkflowImportInvalidOrMissingProperty WIIOMP_EXC = new WorkflowImportInvalidOrMissingProperty(VALUE, VALUE);

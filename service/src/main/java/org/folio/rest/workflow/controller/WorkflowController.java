@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.compress.archivers.ArchiveException;
-import org.apache.commons.compress.compressors.CompressorException;
 import org.folio.rest.workflow.exception.WorkflowEngineServiceException;
 import org.folio.rest.workflow.exception.WorkflowImportException;
 import org.folio.rest.workflow.exception.WorkflowNotFoundException;
@@ -56,7 +54,7 @@ public class WorkflowController {
       @RequestPart(name = "file") MultipartFile fwz,
       @TenantHeader String tenant,
       @TokenHeader String token
-    ) throws URISyntaxException, IOException, CompressorException, ArchiveException, WorkflowImportException {
+    ) throws URISyntaxException, IOException, WorkflowImportException {
 
     log.debug("Importing FWZ");
 

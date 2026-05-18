@@ -16,11 +16,9 @@ public class JunitHelperWebMvcConfig {
 
   @Bean
   ObjectMapper objectMapper() {
-    final ObjectMapper mapper = JsonMapper
+    return JsonMapper
       .builder()
       .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
       .build();
-
-    return mapper;
   }
 }

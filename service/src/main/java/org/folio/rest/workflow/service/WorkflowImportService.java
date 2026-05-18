@@ -31,12 +31,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.compress.archivers.ArchiveException;
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarFile;
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipFile;
-import org.apache.commons.compress.compressors.CompressorException;
 import org.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream;
 import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream;
 import org.apache.commons.compress.utils.SeekableInMemoryByteChannel;
@@ -90,12 +88,10 @@ public class WorkflowImportService {
    *
    * @return The created Workflow.
    *
-   * @throws ArchiveException On archive error.
-   * @throws CompressorException On compressor error.
    * @throws IOException On error reading the file stream, extracting the JSON, or other such errors.
    * @throws WorkflowImportException On import failure.
    */
-  public Workflow importFile(Resource fwz) throws IOException, CompressorException, ArchiveException, WorkflowImportException {
+  public Workflow importFile(Resource fwz) throws IOException, WorkflowImportException {
     CompressFileFormat format = CompressFileMagic.detectFormat(fwz.getInputStream());
 
     if (format != null) {
@@ -210,10 +206,8 @@ public class WorkflowImportService {
    *
    * @param nodes The Nodes to iterate over.
    * @param expanded An array of IDs of nodes representing the top-down order of creation.
-   *
-   * @throws JsonProcessingException On JSON parse failure.
    */
-  private void createNodes(Map<String, JsonNode> nodes, List<String> expanded) throws JsonProcessingException {
+  private void createNodes(Map<String, JsonNode> nodes, List<String> expanded) {
     for (String uuid : expanded) {
       Node node = objectMapper.readValue(nodes.get(uuid).toString(), Node.class);
       nodeRepo.save(node);
@@ -224,10 +218,8 @@ public class WorkflowImportService {
    * Create the Triggers in the database.
    *
    * @param triggers The Triggers to iterate over.
-   *
-   * @throws JsonProcessingException On JSON parse failure.
    */
-  private void createTriggers(Map<String, JsonNode> triggers) throws JsonProcessingException {
+  private void createTriggers(Map<String, JsonNode> triggers) {
     for (JsonNode triggerNode : triggers.values()) {
       Trigger trigger = objectMapper.readValue(triggerNode.toString(), Trigger.class);
       triggerRepo.save(trigger);
@@ -240,10 +232,8 @@ public class WorkflowImportService {
    * @param workflowJson The Workflow JSON to save.
    *
    * @return The created Workflow.
-   *
-   * @throws JsonProcessingException On JSON parse failure.
    */
-  private Workflow createWorkflow(JsonNode workflowJson) throws JsonProcessingException {
+  private Workflow createWorkflow(JsonNode workflowJson) {
     Workflow workflow = objectMapper.readValue(workflowJson.toString(), Workflow.class);
     return workflowRepo.save(workflow);
   }
