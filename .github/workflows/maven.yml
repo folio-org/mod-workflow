@@ -17,6 +17,7 @@ jobs:
 
     # Set settings due to this maven project acting as a library or dependency to other FOLIO modules.
     with:
+      java-version: '25'
 
       # The spring-module-core dependency currently only has snapshot releases.
       allow-snapshots-release: true
