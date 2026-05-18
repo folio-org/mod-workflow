@@ -6,8 +6,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -21,15 +19,23 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.context.junit.jupiter.web.SpringJUnitWebConfig;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.ObjectMapper;
 
 /**
  * This runs the OkapiDiscoveryService tests for when there is no properly configuration application.yml.
  *
  * Do no add additional settings loading or alterations to this test (such as @TestPropertySource).
  */
-@ExtendWith(SpringExtension.class)
+@ActiveProfiles("test")
+@SpringJUnitWebConfig({
+  ObjectMapper.class,
+  OkapiDiscoveryService.class,
+  HttpService.class
+})
 @ExtendWith(MockitoExtension.class)
 class OkapiDiscoveryServiceWithDefaultPropertiesTest {
 
@@ -53,7 +59,7 @@ class OkapiDiscoveryServiceWithDefaultPropertiesTest {
   protected Iterator<JsonNode> mockProvidesIter;
 
   @Test
-  void getHandlersWorksWithNoProvidesTest() throws IOException {
+  void getHandlersWorksWithNoProvidesTest() {
     mockJsonResponseEntity(mockJsonNode, 200);
 
     when(mockJsonNode.get(PROVIDES)).thenReturn(mockInterfaceNode);
@@ -66,7 +72,7 @@ class OkapiDiscoveryServiceWithDefaultPropertiesTest {
   }
 
   @Test
-  void getHandlersWorksWithNullProvidesTest() throws IOException {
+  void getHandlersWorksWithNullProvidesTest() {
     mockJsonResponseEntity(mockJsonNode, 200);
     when(mockJsonNode.get(PROVIDES)).thenReturn(null);
 

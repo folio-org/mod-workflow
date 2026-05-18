@@ -21,11 +21,6 @@ import static org.folio.rest.workflow.model.ExtractedWorkflow.VERSION_PATTERN_1_
 import static org.folio.rest.workflow.model.ExtractedWorkflow.WORKFLOW_JSON;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.JsonNodeType;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.github.jknack.handlebars.internal.Files;
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -36,12 +31,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.compress.archivers.ArchiveException;
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarFile;
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipFile;
-import org.apache.commons.compress.compressors.CompressorException;
 import org.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream;
 import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream;
 import org.apache.commons.compress.utils.SeekableInMemoryByteChannel;
@@ -61,6 +54,11 @@ import org.folio.rest.workflow.model.repo.WorkflowRepo;
 import org.folio.rest.workflow.utility.CompressFileMagic;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.node.ArrayNode;
+import tools.jackson.databind.node.JsonNodeType;
+import tools.jackson.databind.node.ObjectNode;
 
 @Slf4j
 @Service
@@ -90,12 +88,10 @@ public class WorkflowImportService {
    *
    * @return The created Workflow.
    *
-   * @throws ArchiveException On archive error.
-   * @throws CompressorException On compressor error.
    * @throws IOException On error reading the file stream, extracting the JSON, or other such errors.
    * @throws WorkflowImportException On import failure.
    */
-  public Workflow importFile(Resource fwz) throws IOException, CompressorException, ArchiveException, WorkflowImportException {
+  public Workflow importFile(Resource fwz) throws IOException, WorkflowImportException {
     CompressFileFormat format = CompressFileMagic.detectFormat(fwz.getInputStream());
 
     if (format != null) {
@@ -150,8 +146,8 @@ public class WorkflowImportService {
         continue;
       }
 
-      String scriptFormat = entry.getValue().get(SCRIPT_FORMAT).asText();
-      String fileName = entry.getValue().get(CODE).asText();
+      String scriptFormat = entry.getValue().get(SCRIPT_FORMAT).asString();
+      String fileName = entry.getValue().get(CODE).asString();
       String extension = scriptFormat.toLowerCase().trim();
 
       switch (scriptFormat) {
@@ -189,7 +185,7 @@ public class WorkflowImportService {
    * @throws WorkflowImportInvalidOrMissingProperty If a property is missing.
    */
   private boolean collapseNodeScriptsContinue(Entry<String, JsonNode> entry) throws WorkflowImportInvalidOrMissingProperty {
-    String deserializeAs = entry.getValue().get(DESERIALIZE_AS).asText();
+    String deserializeAs = entry.getValue().get(DESERIALIZE_AS).asString();
     if (!SCRIPT_TASK.equalsIgnoreCase(deserializeAs)) {
       return true;
     }
@@ -210,10 +206,8 @@ public class WorkflowImportService {
    *
    * @param nodes The Nodes to iterate over.
    * @param expanded An array of IDs of nodes representing the top-down order of creation.
-   *
-   * @throws JsonProcessingException On JSON parse failure.
    */
-  private void createNodes(Map<String, JsonNode> nodes, List<String> expanded) throws JsonProcessingException {
+  private void createNodes(Map<String, JsonNode> nodes, List<String> expanded) {
     for (String uuid : expanded) {
       Node node = objectMapper.readValue(nodes.get(uuid).toString(), Node.class);
       nodeRepo.save(node);
@@ -224,10 +218,8 @@ public class WorkflowImportService {
    * Create the Triggers in the database.
    *
    * @param triggers The Triggers to iterate over.
-   *
-   * @throws JsonProcessingException On JSON parse failure.
    */
-  private void createTriggers(Map<String, JsonNode> triggers) throws JsonProcessingException {
+  private void createTriggers(Map<String, JsonNode> triggers) {
     for (JsonNode triggerNode : triggers.values()) {
       Trigger trigger = objectMapper.readValue(triggerNode.toString(), Trigger.class);
       triggerRepo.save(trigger);
@@ -240,10 +232,8 @@ public class WorkflowImportService {
    * @param workflowJson The Workflow JSON to save.
    *
    * @return The created Workflow.
-   *
-   * @throws JsonProcessingException On JSON parse failure.
    */
-  private Workflow createWorkflow(JsonNode workflowJson) throws JsonProcessingException {
+  private Workflow createWorkflow(JsonNode workflowJson) {
     Workflow workflow = objectMapper.readValue(workflowJson.toString(), Workflow.class);
     return workflowRepo.save(workflow);
   }
@@ -340,9 +330,9 @@ public class WorkflowImportService {
     }
 
     if (pathParts[0].equalsIgnoreCase(NODES)) {
-      extracted.getNodes().put(json.get(ID).asText(), json);
+      extracted.getNodes().put(json.get(ID).asString(), json);
     } else {
-      extracted.getTriggers().put(json.get(ID).asText(), json);
+      extracted.getTriggers().put(json.get(ID).asString(), json);
     }
   }
 
@@ -362,7 +352,7 @@ public class WorkflowImportService {
     }
 
     JsonNode workflowNode = extracted.getRequired().get(WORKFLOW_JSON);
-    String workflowId = workflowNode.get(ID).asText();
+    String workflowId = workflowNode.get(ID).asString();
 
     // The expandNode() method requires the Workflow to be on the getNodes(), so temporarily add it.
     extracted.getNodes().put(workflowId, extracted.getRequired().get(WORKFLOW_JSON));
@@ -386,7 +376,7 @@ public class WorkflowImportService {
    * @throws WorkflowImportInvalidOrMissingProperty On invalid property.
    */
   private void expandNode(Map<String, JsonNode> nodes, JsonNode node, List<String> expanded) throws JsonProcessingException, WorkflowImportInvalidOrMissingProperty {
-    String nodeId = node.get(ID).asText();
+    String nodeId = node.get(ID).asString();
     if (expanded.contains(nodeId)) {
       return;
     }
@@ -493,7 +483,7 @@ public class WorkflowImportService {
       throw new WorkflowImportInvalidOrMissingProperty(null, ID);
     }
 
-    String id = json.get(ID).asText();
+    String id = json.get(ID).asString();
 
     if (workflowRepo.existsById(id)) {
       throw new WorkflowImportAlreadyImported(id);
@@ -539,7 +529,7 @@ public class WorkflowImportService {
    */
   private void verifyVersion(JsonNode json) {
     if (json.has(VERSION)) {
-      String version = json.get(VERSION).asText();
+      String version = json.get(VERSION).asString();
 
       if (!VERSION_PATTERN_1_0.matcher(version).find()) {
         log.warn("Unknown version '{}', attempting import anyway.", version);

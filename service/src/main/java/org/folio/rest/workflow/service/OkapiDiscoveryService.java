@@ -2,9 +2,6 @@ package org.folio.rest.workflow.service;
 
 import static org.springframework.http.HttpMethod.GET;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -20,6 +17,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.ObjectMapper;
 
 @Service
 public class OkapiDiscoveryService {
@@ -52,17 +51,17 @@ public class OkapiDiscoveryService {
     this.objectMapper = objectMapper;
   }
 
-  public List<Action> getActionsByTenant(String tenant) throws IOException {
+  public List<Action> getActionsByTenant(String tenant) {
     List<Action> actions = new ArrayList<>();
     JsonNode modulesNode = getModules(tenant);
     for (JsonNode moduleNode : modulesNode) {
-      String id = moduleNode.get("id").asText();
+      String id = moduleNode.get("id").asString();
       actions.addAll(getActionsByTenantAndModuleId(tenant, id));
     }
     return actions;
   }
 
-  public List<Action> getActionsByTenantAndModuleId(String tenant, String id) throws IOException {
+  public List<Action> getActionsByTenantAndModuleId(String tenant, String id) {
     Map<String, List<Handler>> handlerMap = getHandlers(tenant, id);
     List<Action> actions = new ArrayList<>();
     for (Map.Entry<String, List<Handler>> entry : handlerMap.entrySet()) {
@@ -73,7 +72,7 @@ public class OkapiDiscoveryService {
     return actions;
   }
 
-  public Map<String, List<Handler>> getHandlers(String tenant, String id) throws IOException {
+  public Map<String, List<Handler>> getHandlers(String tenant, String id) {
     JsonNode moduleDescriptorNode = getModuleDescriptor(tenant, id);
 
     Map<String, List<Handler>> handlerMap = new HashMap<>();
@@ -81,7 +80,7 @@ public class OkapiDiscoveryService {
     if (moduleDescriptorNode.get(PROVIDES) != null) {
       for (JsonNode interfaceNode : moduleDescriptorNode.get(PROVIDES)) {
         List<Handler> handlers = new ArrayList<>();
-        String interfaceName = interfaceNode.get(ID).asText();
+        String interfaceName = interfaceNode.get(ID).asString();
         for (JsonNode handlersNode : interfaceNode.get(HANDLERS)) {
           handlers.add(objectMapper.readValue(handlersNode.toString(), Handler.class));
         }

@@ -1,7 +1,6 @@
 package org.folio.rest.workflow.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.databind.JsonNode;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
@@ -33,6 +32,7 @@ import org.folio.rest.workflow.model.has.common.HasWorkflowCommon;
 import org.folio.spring.domain.model.AbstractBaseEntity;
 import org.hibernate.annotations.ColumnDefault;
 import org.springframework.data.annotation.Version;
+import tools.jackson.databind.JsonNode;
 
 @Entity
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })

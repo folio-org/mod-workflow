@@ -3,9 +3,6 @@ package org.folio.rest.workflow.model.resolver;
 import static java.util.Map.entry;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
-import com.fasterxml.jackson.databind.DatabindContext;
-import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.jsontype.impl.TypeIdResolverBase;
 import java.util.Map;
 import org.folio.rest.workflow.model.CompressFileTask;
 import org.folio.rest.workflow.model.Condition;
@@ -34,11 +31,17 @@ import org.folio.rest.workflow.model.StartEvent;
 import org.folio.rest.workflow.model.Subprocess;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.DatabindContext;
+import tools.jackson.databind.JavaType;
+import tools.jackson.databind.jsontype.impl.TypeIdResolverBase;
 
 /**
  * Resolve the type from the `deserializeAs` field from a `Node`.
  */
 public class DeserializeAsNodeJsonResolver extends TypeIdResolverBase {
+
+  private static final long serialVersionUID = 30422936630293L;
 
   /**
    * A map of classes that are allowed to be deserialized.
@@ -73,13 +76,13 @@ public class DeserializeAsNodeJsonResolver extends TypeIdResolverBase {
   private static final Logger logger = LoggerFactory.getLogger(DeserializeAsNodeJsonResolver.class);
 
   @Override
-  public String idFromValue(Object value) {
+  public String idFromValue(DatabindContext ctxt, Object value) throws JacksonException {
     return value.getClass().getSimpleName();
   }
 
   @Override
-  public String idFromValueAndType(Object value, Class<?> suggestedType) {
-    return idFromValue(value);
+  public String idFromValueAndType(DatabindContext ctxt, Object value, Class<?> suggestedType) throws JacksonException {
+    return idFromValue(ctxt, value);
   }
 
   @Override

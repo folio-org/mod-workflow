@@ -1,6 +1,5 @@
 package org.folio.rest.workflow.controller.advice;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityNotFoundException;
 import org.folio.rest.workflow.exception.WorkflowAlreadyActiveException;
 import org.folio.rest.workflow.exception.WorkflowCreateAlreadyExistsException;
@@ -13,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 
 @RestControllerAdvice
 public class WorkflowControllerAdvice extends AbstractAdvice {
@@ -20,7 +21,7 @@ public class WorkflowControllerAdvice extends AbstractAdvice {
   ObjectMapper objectMapper;
 
   public WorkflowControllerAdvice() {
-    this.objectMapper = new ObjectMapper();
+    this.objectMapper = JsonMapper.builder().build();
   }
 
   @Override
@@ -48,7 +49,7 @@ public class WorkflowControllerAdvice extends AbstractAdvice {
 
   @ResponseStatus(HttpStatus.FORBIDDEN)
   @ExceptionHandler(WorkflowAlreadyActiveException.class)
-  public ResponseEntity<String> handleWorkflowAlreadyActivrException(WorkflowAlreadyActiveException exception) {
+  public ResponseEntity<String> handleWorkflowAlreadyActiveException(WorkflowAlreadyActiveException exception) {
     return buildError(exception, HttpStatus.FORBIDDEN);
   }
 
@@ -66,7 +67,7 @@ public class WorkflowControllerAdvice extends AbstractAdvice {
 
   @ResponseStatus(HttpStatus.BAD_REQUEST)
   @ExceptionHandler(WorkflowImportException.class)
-  public ResponseEntity<String> handleWorkflowImportExceptionException(WorkflowImportException exception) {
+  public ResponseEntity<String> handleWorkflowImportException(WorkflowImportException exception) {
     return buildError(exception, HttpStatus.BAD_REQUEST);
   }
 

@@ -24,21 +24,24 @@ import org.folio.rest.workflow.model.repo.TriggerRepo;
 import org.folio.spring.tenant.properties.TenantProperties;
 import org.folio.spring.tenant.resolver.TenantHeaderResolver;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 @WebMvcTest(EventController.class)
+@ExtendWith(MockitoExtension.class)
 class EventControllerTest {
 
   private MockMvc mockMvc;
@@ -118,7 +121,7 @@ class EventControllerTest {
         arguments("diku", "a", join(separator,"..", "..", "..", "..", "x.txt")));
   }
 
-  MockHttpServletRequestBuilder upload(String tenant, String dir, String file) throws Exception {
+  MockMultipartHttpServletRequestBuilder upload(String tenant, String dir, String file) {
     var sampleFile = new MockMultipartFile(
         "file",
         file,

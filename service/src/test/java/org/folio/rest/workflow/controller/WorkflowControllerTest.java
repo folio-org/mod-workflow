@@ -23,8 +23,11 @@ import static org.folio.spring.test.mock.MockMvcReflection.PATCH;
 import static org.folio.spring.test.mock.MockMvcReflection.POST;
 import static org.folio.spring.test.mock.MockMvcReflection.PUT;
 import static org.folio.spring.test.mock.MockMvcRequest.appendBody;
+import static org.folio.spring.test.mock.MockMvcRequest.appendBodyMultipart;
 import static org.folio.spring.test.mock.MockMvcRequest.appendHeaders;
+import static org.folio.spring.test.mock.MockMvcRequest.appendHeadersMultipart;
 import static org.folio.spring.test.mock.MockMvcRequest.appendParameters;
+import static org.folio.spring.test.mock.MockMvcRequest.appendParametersMultipart;
 import static org.folio.spring.test.mock.MockMvcRequest.buildArguments1;
 import static org.folio.spring.test.mock.MockMvcRequest.buildArguments2;
 import static org.folio.spring.test.mock.MockMvcRequest.invokeRequestBuilder;
@@ -43,8 +46,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.log;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
@@ -65,7 +66,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -74,9 +75,12 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.MultiValueMap;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.node.ObjectNode;
 
 @WebMvcTest(WorkflowController.class)
 @ExtendWith(MockitoExtension.class)
@@ -391,10 +395,10 @@ class WorkflowControllerTest {
 
     lenient().when(workflowImportService.importFile(any(Resource.class))).thenReturn(workflow);
 
-    MockHttpServletRequestBuilder request = appendHeaders(multipart(PATH_IMPORT).file(exampleFwz), headers, contentType, accept);
-    request = appendParameters(request, parameters);
+    MockMultipartHttpServletRequestBuilder request = appendHeadersMultipart(multipart(PATH_IMPORT).file(exampleFwz), headers, contentType, accept);
+    request = appendParametersMultipart(request, parameters);
 
-    MvcResult result = mvc.perform(appendBody(request, body))
+    MvcResult result = mvc.perform(appendBodyMultipart(request, body))
       .andDo(log()).andExpect(status().is(status)).andReturn();
 
     if (status == 200) {

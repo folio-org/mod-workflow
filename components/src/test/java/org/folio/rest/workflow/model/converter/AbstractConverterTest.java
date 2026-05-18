@@ -5,10 +5,10 @@ import static org.folio.spring.test.mock.MockMvcConstant.STRING_LIST_AS_JSON;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import tools.jackson.core.type.TypeReference;
 
 class AbstractConverterTest {
 

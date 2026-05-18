@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 public class FolioSpringLiquibaseConfig {
 
   @Bean
-  public FolioSpringLiquibase folioSpringLiquibase() {
+  FolioSpringLiquibase folioSpringLiquibase() {
     return new FolioSpringLiquibase();
   }
 

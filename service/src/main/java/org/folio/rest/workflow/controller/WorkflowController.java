@@ -1,12 +1,9 @@
 package org.folio.rest.workflow.controller;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.compress.archivers.ArchiveException;
-import org.apache.commons.compress.compressors.CompressorException;
 import org.folio.rest.workflow.exception.WorkflowEngineServiceException;
 import org.folio.rest.workflow.exception.WorkflowImportException;
 import org.folio.rest.workflow.exception.WorkflowNotFoundException;
@@ -30,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import tools.jackson.databind.JsonNode;
 
 @Slf4j
 @RestController
@@ -56,7 +54,7 @@ public class WorkflowController {
       @RequestPart(name = "file") MultipartFile fwz,
       @TenantHeader String tenant,
       @TokenHeader String token
-    ) throws URISyntaxException, IOException, CompressorException, ArchiveException, WorkflowImportException {
+    ) throws URISyntaxException, IOException, WorkflowImportException {
 
     log.debug("Importing FWZ");
 

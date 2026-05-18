@@ -1,12 +1,12 @@
 package org.folio.rest.workflow.model;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 import lombok.Getter;
+import tools.jackson.databind.JsonNode;
 
 /**
  * A collection of Workflow Nodes for use during import.

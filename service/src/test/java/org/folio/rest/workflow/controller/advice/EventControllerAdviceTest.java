@@ -1,98 +1,82 @@
 package org.folio.rest.workflow.controller.advice;
 
-import static org.folio.spring.test.mock.MockMvcConstant.APP_JSON;
-import static org.folio.spring.test.mock.MockMvcConstant.JSON_OBJECT;
-import static org.folio.spring.test.mock.MockMvcConstant.OKAPI_HEAD;
 import static org.folio.spring.test.mock.MockMvcConstant.VALUE;
-import static org.folio.spring.test.mock.MockMvcRequest.appendBody;
-import static org.folio.spring.test.mock.MockMvcRequest.appendHeaders;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.log;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.nio.file.FileSystemException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Stream;
-import org.folio.rest.workflow.controller.EventController;
 import org.folio.rest.workflow.exception.EventPublishException;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-@SpringBootTest(webEnvironment = WebEnvironment.MOCK)
-@AutoConfigureMockMvc
 @ExtendWith(MockitoExtension.class)
 @ActiveProfiles("test")
 class EventControllerAdviceTest {
 
-  private static final String PATH = "/events";
+  private static final Exception RUNTIME_EXC = new RuntimeException("Runtime failure.");
 
-  private static final String PATH_HANDLE = PATH + "/handle";
+  private static final EventPublishException EP_EXC = new EventPublishException(VALUE, RUNTIME_EXC);
 
-  @Autowired
-  private EventControllerAdvice eventControllerAdvice;
+  private static final FileSystemException FS_EXC = new FileSystemException(VALUE);
 
-  @Autowired
-  @Mock
-  private EventController eventController;
-
-  private MockMvc mvc;
+  private EventControllerAdvice advice;
 
   @BeforeEach
   void beforeEach() {
-    mvc = MockMvcBuilders.standaloneSetup(eventController)
-      .setControllerAdvice(eventControllerAdvice)
-      .build();
+    advice = new EventControllerAdvice();
   }
 
-  @ParameterizedTest
-  @MethodSource("provideExceptionsToMatchForActivateWorkflow")
-  void exceptionsThrownForActivateWorkflowTest(Exception exception, String simpleName, int status) throws Exception {
-    given(eventController.postHandleEvents(any(), any())).willAnswer(invocation -> { throw exception; });
+  @Test
+  void handleEventPublishExceptionTest() {
 
-    MockHttpServletRequestBuilder request = appendHeaders(post(PATH_HANDLE), OKAPI_HEAD, APP_JSON, APP_JSON);
+    final String simpleName = EventPublishException.class.getSimpleName();
+    final ResponseEntity<String> response = advice.handleEventPublishException(EP_EXC);
 
-    MvcResult result = mvc.perform(appendBody(request, JSON_OBJECT))
-      .andDo(log()).andExpect(status().is(status)).andReturn();
+    assertNotNull(response);
+    assertNotNull(response.getBody());
 
-    Pattern pattern = Pattern.compile("\"type\":\"" + simpleName + "\"");
-    Matcher matcher = pattern.matcher(result.getResponse().getContentAsString());
-    assertTrue(matcher.find());
+    assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+    assertEquals(MediaType.APPLICATION_JSON, response.getHeaders().getContentType());
+    assertTrue(matchBody(response, simpleName));
+  }
+
+  @Test
+  void handleFileSystemExceptionTest() {
+
+    final String simpleName = FileSystemException.class.getSimpleName();
+    final ResponseEntity<String> response = advice.handleFileSystemException(FS_EXC);
+
+    assertNotNull(response);
+    assertNotNull(response.getBody());
+
+    assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+    assertEquals(MediaType.APPLICATION_JSON, response.getHeaders().getContentType());
+    assertTrue(matchBody(response, simpleName));
   }
 
   /**
-   * Helper function for parameterized test providing the exceptions to be matched for activate workflow.
+   * Match the class simple name in the response.
    *
-   * @return
-   *   The arguments array stream with the stream columns as:
-   *     - Exception exception.
-   *     - String simpleName (exception name to match).
-   *     - int status (response HTTP status code for the exception).
+   * @param response The response to search.
+   * @param simpleName The class name to match.
+   *
+   * @return TRUE on match; FALSE otherwise.
    */
-  private static Stream<Arguments> provideExceptionsToMatchForActivateWorkflow() {
-    Exception runtime = new RuntimeException("Runtime failure.");
+  private boolean matchBody(ResponseEntity<String> response, String simpleName) {
 
-    return Stream.of(
-      Arguments.of(new EventPublishException(VALUE, runtime), EventPublishException.class.getSimpleName(), 500),
-      Arguments.of(new FileSystemException(VALUE), FileSystemException.class.getSimpleName(), 400)
-    );
+    final Pattern pattern = Pattern.compile("\"type\":\"" + simpleName + "\"");
+    final Matcher matcher = pattern.matcher(response.getBody());
+
+    return matcher.find();
   }
 
 }

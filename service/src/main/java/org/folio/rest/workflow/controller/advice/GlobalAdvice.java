@@ -1,11 +1,12 @@
 package org.folio.rest.workflow.controller.advice;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.TransactionSystemException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 
 @RestControllerAdvice
 public class GlobalAdvice extends AbstractAdvice {
@@ -13,7 +14,7 @@ public class GlobalAdvice extends AbstractAdvice {
   ObjectMapper objectMapper;
 
   public GlobalAdvice() {
-    this.objectMapper = new ObjectMapper();
+    this.objectMapper = JsonMapper.builder().build();
   }
 
   @Override
