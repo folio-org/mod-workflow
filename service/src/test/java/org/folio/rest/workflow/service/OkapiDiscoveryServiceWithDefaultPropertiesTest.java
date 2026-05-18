@@ -6,7 +6,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
-import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -60,7 +59,7 @@ class OkapiDiscoveryServiceWithDefaultPropertiesTest {
   protected Iterator<JsonNode> mockProvidesIter;
 
   @Test
-  void getHandlersWorksWithNoProvidesTest() throws IOException {
+  void getHandlersWorksWithNoProvidesTest() {
     mockJsonResponseEntity(mockJsonNode, 200);
 
     when(mockJsonNode.get(PROVIDES)).thenReturn(mockInterfaceNode);
@@ -73,7 +72,7 @@ class OkapiDiscoveryServiceWithDefaultPropertiesTest {
   }
 
   @Test
-  void getHandlersWorksWithNullProvidesTest() throws IOException {
+  void getHandlersWorksWithNullProvidesTest() {
     mockJsonResponseEntity(mockJsonNode, 200);
     when(mockJsonNode.get(PROVIDES)).thenReturn(null);
 

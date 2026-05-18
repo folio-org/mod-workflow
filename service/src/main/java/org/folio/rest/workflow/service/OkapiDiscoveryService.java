@@ -2,7 +2,6 @@ package org.folio.rest.workflow.service;
 
 import static org.springframework.http.HttpMethod.GET;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -52,7 +51,7 @@ public class OkapiDiscoveryService {
     this.objectMapper = objectMapper;
   }
 
-  public List<Action> getActionsByTenant(String tenant) throws IOException {
+  public List<Action> getActionsByTenant(String tenant) {
     List<Action> actions = new ArrayList<>();
     JsonNode modulesNode = getModules(tenant);
     for (JsonNode moduleNode : modulesNode) {
