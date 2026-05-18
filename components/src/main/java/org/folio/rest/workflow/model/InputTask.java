@@ -5,14 +5,11 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.PrePersist;
 import java.util.HashSet;
 import java.util.Set;
-import lombok.Getter;
-import lombok.Setter;
+import org.folio.rest.workflow.model.has.HasInputs;
 
 @Entity
-public class InputTask extends AbstractTask {
+public class InputTask extends AbstractTask implements HasInputs {
 
-  @Getter
-  @Setter
   @ElementCollection
   private Set<EmbeddedInput> inputs;
 
@@ -30,6 +27,16 @@ public class InputTask extends AbstractTask {
     if (inputs == null) {
       inputs = new HashSet<>();
     }
+  }
+
+  @Override
+  public Set<EmbeddedInput> getInputs() {
+    return inputs;
+  }
+
+  @Override
+  public void setInputs(Set<EmbeddedInput> inputs) {
+    this.inputs = inputs;
   }
 
 }

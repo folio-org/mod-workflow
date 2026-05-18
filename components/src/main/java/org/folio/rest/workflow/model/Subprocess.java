@@ -7,22 +7,17 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.PrePersist;
 import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
-import lombok.Setter;
 import org.folio.rest.workflow.enums.SubprocessType;
 import org.folio.rest.workflow.model.components.Branch;
 import org.folio.rest.workflow.model.components.MultiInstance;
+import org.folio.rest.workflow.model.has.HasSubProcessType;
 
 @Entity
-public class Subprocess extends AbstractProcess implements Branch, MultiInstance {
+public class Subprocess extends AbstractProcess implements Branch, HasSubProcessType, MultiInstance {
 
-  @Getter
-  @Setter
   @Embedded
   private EmbeddedLoopReference loopRef;
 
-  @Getter
-  @Setter
   @NotNull
   @Column(nullable = false)
   @Enumerated(EnumType.STRING)
@@ -42,6 +37,26 @@ public class Subprocess extends AbstractProcess implements Branch, MultiInstance
     if (type == null) {
       type = SubprocessType.EMBEDDED;
     }
+  }
+
+  @Override
+  public EmbeddedLoopReference getLoopRef() {
+    return loopRef;
+  }
+
+  @Override
+  public void setLoopRef(EmbeddedLoopReference loopRef) {
+    this.loopRef = loopRef;
+  }
+
+  @Override
+  public SubprocessType getType() {
+    return type;
+  }
+
+  @Override
+  public void setType(SubprocessType type) {
+    this.type = type;
   }
 
 }

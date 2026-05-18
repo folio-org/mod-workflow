@@ -4,15 +4,11 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.PrePersist;
 import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
-import lombok.Setter;
 import org.folio.rest.workflow.model.components.Navigation;
 
 @Entity
 public class ConnectTo extends Node implements Navigation {
 
-  @Getter
-  @Setter
   @NotNull
   @Column(nullable = false)
   private String nodeId;
@@ -31,6 +27,16 @@ public class ConnectTo extends Node implements Navigation {
     if (nodeId == null) {
       nodeId = "";
     }
+  }
+
+  @Override
+  public String getNodeId() {
+    return nodeId;
+  }
+
+  @Override
+  public void setNodeId(String nodeId) {
+    this.nodeId = nodeId;
   }
 
 }

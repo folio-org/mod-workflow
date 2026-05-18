@@ -9,8 +9,6 @@ import jakarta.persistence.OrderColumn;
 import jakarta.persistence.PrePersist;
 import java.util.ArrayList;
 import java.util.List;
-import lombok.Getter;
-import lombok.Setter;
 import org.folio.rest.workflow.enums.Direction;
 import org.folio.rest.workflow.model.components.Gateway;
 import org.folio.rest.workflow.model.has.HasNodes;
@@ -18,14 +16,10 @@ import org.folio.rest.workflow.model.has.HasNodes;
 @MappedSuperclass
 public abstract class AbstractGateway extends Node implements Gateway, HasNodes {
 
-  @Getter
-  @Setter
   @Column(nullable = false)
   @Enumerated(EnumType.STRING)
   private Direction direction;
 
-  @Getter
-  @Setter
   @OneToMany
   @OrderColumn
   private List<Node> nodes;
@@ -49,6 +43,26 @@ public abstract class AbstractGateway extends Node implements Gateway, HasNodes 
     if (nodes == null) {
       nodes = new ArrayList<>();
     }
+  }
+
+  @Override
+  public Direction getDirection() {
+    return direction;
+  }
+
+  @Override
+  public void setDirection(Direction direction) {
+    this.direction = direction;
+  }
+
+  @Override
+  public List<Node> getNodes() {
+    return nodes;
+  }
+
+  @Override
+  public void setNodes(List<Node> nodes) {
+    this.nodes = nodes;
   }
 
 }

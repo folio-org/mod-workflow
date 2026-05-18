@@ -6,8 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.util.ReflectionTestUtils.setField;
 
 import java.util.stream.Stream;
-import lombok.Getter;
-import lombok.Setter;
 import org.folio.rest.workflow.model.EmbeddedLoopReference;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -39,9 +37,17 @@ class MultiInstanceTest {
 
   private static class Impl implements MultiInstance {
 
-    @Getter
-    @Setter
     private EmbeddedLoopReference loopRef;
+
+    @Override
+    public EmbeddedLoopReference getLoopRef() {
+      return loopRef;
+    }
+
+    @Override
+    public void setLoopRef(EmbeddedLoopReference loopRef) {
+      this.loopRef = loopRef;
+    }
   };
 
   /**

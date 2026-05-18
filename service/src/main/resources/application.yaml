@@ -58,7 +58,7 @@ spring:
     #url: jdbc:h2:./target/mod-workflow;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;MODE=PostgreSQL;DATABASE_TO_LOWER=true;DEFAULT_NULL_ORDERING=HIGH
     #url: jdbc:h2:mem:AZ;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;MODE=PostgreSQL;DATABASE_TO_LOWER=true;DEFAULT_NULL_ORDERING=HIGH
     driverClassName: org.postgresql.Driver
-    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_DATABASE:mod_workflow}
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_DATABASE:mod_workflow}?currentSchema=${DB_SCHEMA:diku_mod_workflow},public
 
     username: ${DB_USERNAME:folio_admin}
     password: ${DB_PASSWORD:folio_admin}
@@ -78,7 +78,10 @@ spring:
     #database-platform: org.hibernate.dialect.H2Dialect
     database-platform: org.hibernate.dialect.PostgreSQLDialect
 
-    properties.hibernate.jdbc.lob.non_contextual_creation: true
+    properties.hibernate:
+      jdbc.lob.non_contextual_creation: true
+      default_schema: ${DB_SCHEMA:diku_mod_workflow}
+
     generate-ddl: false
     hibernate.ddl-auto: update
     #hibernate.hbm2ddl.auto: none

@@ -5,30 +5,22 @@ import jakarta.persistence.Embeddable;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
-import lombok.Setter;
-import org.folio.rest.workflow.has.common.HasActionCommon;
 import org.folio.rest.workflow.enums.HttpMethod;
+import org.folio.rest.workflow.has.common.HasActionCommon;
 import org.folio.rest.workflow.model.has.HasMethod;
 import org.folio.rest.workflow.model.has.HasPathPattern;
 
 @Embeddable
 public class Action implements HasActionCommon, HasMethod, HasPathPattern {
 
-  @Getter
-  @Setter
   @NotNull
   @Column(nullable = false)
   private String interfaceName;
 
-  @Getter
-  @Setter
   @NotNull
   @Column(nullable = false)
   private String pathPattern;
 
-  @Getter
-  @Setter
   @NotNull
   @Column(nullable = false)
   @Enumerated(EnumType.STRING)
@@ -44,6 +36,36 @@ public class Action implements HasActionCommon, HasMethod, HasPathPattern {
     this.interfaceName = interfaceName;
     this.pathPattern = pathPattern;
     this.method = method;
+  }
+
+  @Override
+  public String getPathPattern() {
+    return pathPattern;
+  }
+
+  @Override
+  public void setPathPattern(String pathPattern) {
+    this.pathPattern = pathPattern;
+  }
+
+  @Override
+  public HttpMethod getMethod() {
+    return method;
+  }
+
+  @Override
+  public void setMethod(HttpMethod method) {
+    this.method = method;
+  }
+
+  @Override
+  public String getInterfaceName() {
+    return interfaceName;
+  }
+
+  @Override
+  public void setInterfaceName(String interfaceName) {
+    this.interfaceName = interfaceName;
   }
 
 }

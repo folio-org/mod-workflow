@@ -10,10 +10,10 @@ public interface HasEmbeddedRequestCommon {
   public String getAccept();
   public String getBodyTemplate();
   public String getContentType();
+  public boolean getIterable();
   public String getIterableKey();
   public HttpMethod getMethod();
   public String getResponseKey() ;
-  public boolean isIterable();
 
   public void setAccept(String accept);
   public void setBodyTemplate(String bodyTemplate);

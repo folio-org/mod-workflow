@@ -19,8 +19,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import lombok.Getter;
-import lombok.Setter;
 import org.folio.rest.workflow.model.converter.JsonNodeConverter;
 import org.folio.rest.workflow.model.has.HasDeploymentId;
 import org.folio.rest.workflow.model.has.HasId;
@@ -38,31 +36,21 @@ import tools.jackson.databind.JsonNode;
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class Workflow extends AbstractBaseEntity implements HasDeploymentId, HasId, HasInformational, HasName, HasNodes, HasVersionTag, HasWorkflowCommon {
 
-  @Getter
-  @Setter
   @Column(nullable = true)
   @ColumnDefault("false")
   private Boolean active;
 
-  @Getter
-  @Setter
   @Column(unique = true)
   private String deploymentId;
 
-  @Getter
-  @Setter
   @Size(min = 0, max = 512)
   @Column(nullable = true)
   private String description;
 
-  @Getter
-  @Setter
   @Min(0)
   @Column(nullable = false)
   private Integer historyTimeToLive;
 
-  @Getter
-  @Setter
   @ElementCollection
   @CollectionTable(name = "workflow_initial_context", joinColumns = @JoinColumn(name = "workflow_id"))
   @MapKeyColumn(name = "context_key")
@@ -70,27 +58,19 @@ public class Workflow extends AbstractBaseEntity implements HasDeploymentId, Has
   @Convert(converter = JsonNodeConverter.class, attributeName = "value")
   private Map<String, JsonNode> initialContext;
 
-  @Getter
-  @Setter
   @NotNull
   @Size(min = 4, max = 64)
   @Column(nullable = false, unique = true)
   private String name;
 
-  @Getter
-  @Setter
   @OneToMany
   @OrderColumn
   private List<Node> nodes;
 
-  @Getter
-  @Setter
   @Embedded
   private Setup setup;
 
   @Version
-  @Getter
-  @Setter
   @NotNull
   @Size(min = 1, max = 64)
   @Column(nullable = false)
@@ -132,6 +112,96 @@ public class Workflow extends AbstractBaseEntity implements HasDeploymentId, Has
     if (versionTag == null) {
       versionTag = "1.0";
     }
+  }
+
+  @Override
+  public Boolean getActive() {
+    return active;
+  }
+
+  @Override
+  public Integer getHistoryTimeToLive() {
+    return historyTimeToLive;
+  }
+
+  @Override
+  public Map<String, JsonNode> getInitialContext() {
+    return initialContext;
+  }
+
+  @Override
+  public Setup getSetup() {
+    return setup;
+  }
+
+  @Override
+  public String getVersionTag() {
+    return versionTag;
+  }
+
+  @Override
+  public List<Node> getNodes() {
+    return nodes;
+  }
+
+  @Override
+  public String getName() {
+    return name;
+  }
+
+  @Override
+  public String getDescription() {
+    return description;
+  }
+
+  @Override
+  public String getDeploymentId() {
+    return deploymentId;
+  }
+
+  @Override
+  public void setActive(Boolean active) {
+    this.active = active;
+  }
+
+  @Override
+  public void setHistoryTimeToLive(Integer historyTimeToLive) {
+    this.historyTimeToLive = historyTimeToLive;
+  }
+
+  @Override
+  public void setInitialContext(Map<String, JsonNode> initialContext) {
+    this.initialContext = initialContext;
+  }
+
+  @Override
+  public void setSetup(Setup setup) {
+    this.setup = setup;
+  }
+
+  @Override
+  public void setVersionTag(String versionTag) {
+    this.versionTag = versionTag;
+  }
+
+  @Override
+  public void setNodes(List<Node> nodes) {
+    this.nodes = nodes;
+  }
+
+  @Override
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  @Override
+  public void setDescription(String description) {
+    this.description = description;
+  }
+
+  @Override
+  public void setDeploymentId(String deploymentId) {
+    this.deploymentId = deploymentId;
   }
 
 }

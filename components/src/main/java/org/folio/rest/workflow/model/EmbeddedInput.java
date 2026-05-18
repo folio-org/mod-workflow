@@ -8,8 +8,6 @@ import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
-import lombok.Getter;
-import lombok.Setter;
 import org.folio.rest.workflow.enums.InputAttribute;
 import org.folio.rest.workflow.enums.InputType;
 import org.folio.rest.workflow.model.converter.InputAttributeListConverter;
@@ -20,42 +18,28 @@ import org.hibernate.annotations.ColumnDefault;
 @Embeddable
 public class EmbeddedInput implements HasEmbeddedInputCommon {
 
-  @Getter
-  @Setter
   @Column(columnDefinition = "TEXT", nullable = false)
   @Convert(converter = InputAttributeListConverter.class)
   private List<InputAttribute> attributes;
 
-  @Getter
-  @Setter
   @Column(nullable = true)
   private String defaultValue;
 
-  @Getter
-  @Setter
   @Column(nullable = false)
   private String fieldId;
 
-  @Getter
-  @Setter
   @Column(nullable = false)
   private String fieldLabel;
 
-  @Getter
-  @Setter
   @NotNull
   @Column(nullable = false)
   @Enumerated(EnumType.STRING)
   private InputType inputType;
 
-  @Getter
-  @Setter
   @Column(columnDefinition = "TEXT", nullable = false)
   @Convert(converter = StringListConverter.class)
   private List<String> options;
 
-  @Getter
-  @Setter
   @Column(nullable = false)
   @ColumnDefault("false")
   private Boolean required;
@@ -95,6 +79,76 @@ public class EmbeddedInput implements HasEmbeddedInputCommon {
     if (required == null) {
       required = false;
     }
+  }
+
+  @Override
+  public List<InputAttribute> getAttributes() {
+    return attributes;
+  }
+
+  @Override
+  public String getDefaultValue() {
+    return defaultValue;
+  }
+
+  @Override
+  public String getFieldId() {
+    return fieldId;
+  }
+
+  @Override
+  public String getFieldLabel() {
+    return fieldLabel;
+  }
+
+  @Override
+  public InputType getInputType() {
+    return inputType;
+  }
+
+  @Override
+  public List<String> getOptions() {
+    return options;
+  }
+
+  @Override
+  public Boolean getRequired() {
+    return required;
+  }
+
+  @Override
+  public void setAttributes(List<InputAttribute> attributes) {
+    this.attributes = attributes;
+  }
+
+  @Override
+  public void setDefaultValue(String defaultValue) {
+    this.defaultValue = defaultValue;
+  }
+
+  @Override
+  public void setFieldId(String fieldId) {
+    this.fieldId = fieldId;
+  }
+
+  @Override
+  public void setFieldLabel(String fieldLabel) {
+    this.fieldLabel = fieldLabel;
+  }
+
+  @Override
+  public void setInputType(InputType inputType) {
+    this.inputType = inputType;
+  }
+
+  @Override
+  public void setOptions(List<String> options) {
+    this.options = options;
+  }
+
+  @Override
+  public void setRequired(Boolean required) {
+    this.required = required;
   }
 
 }

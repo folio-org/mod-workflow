@@ -3,7 +3,8 @@ package org.folio.rest.workflow.controller;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.folio.rest.workflow.exception.WorkflowEngineServiceException;
 import org.folio.rest.workflow.exception.WorkflowImportException;
 import org.folio.rest.workflow.exception.WorkflowNotFoundException;
@@ -29,10 +30,11 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import tools.jackson.databind.JsonNode;
 
-@Slf4j
 @RestController
 @RequestMapping("/workflows")
 public class WorkflowController {
+
+  private final static Log LOG = LogFactory.getLog(WorkflowController.class);
 
   private WorkflowEngineService workflowEngineService;
 
@@ -56,7 +58,7 @@ public class WorkflowController {
       @TokenHeader String token
     ) throws URISyntaxException, IOException, WorkflowImportException {
 
-    log.debug("Importing FWZ");
+    LOG.debug("Importing FWZ");
 
     Workflow workflow = workflowImportService.importFile(fwz.getResource());
     URI location = new URI(String.format("/workflows/%s", workflow.getId()));
@@ -71,7 +73,7 @@ public class WorkflowController {
     @RequestParam(defaultValue="20") Integer limit,
     @TenantHeader String tenant
   ) {
-    log.debug("Performing CQL search: {}, offset, limit", query, offset, limit);
+    LOG.debug(String.format("Performing CQL search: {}, offset, limit", query, offset, limit));
     return workflowCqlService.findByCql(query, offset, limit);
   }
 
@@ -90,7 +92,7 @@ public class WorkflowController {
     @TenantHeader String tenant,
     @TokenHeader String token
   ) throws WorkflowEngineServiceException, WorkflowNotFoundException {
-    log.info("Activating: {}", id);
+    LOG.info(String.format("Activating: {}", id));
 
     workflowEngineService.exists(id);
 
@@ -103,7 +105,7 @@ public class WorkflowController {
     @TenantHeader String tenant,
     @TokenHeader String token
   ) throws WorkflowEngineServiceException, WorkflowNotFoundException {
-    log.info("Deactivating: {}", id);
+    LOG.info(String.format("Deactivating: {}", id));
 
     workflowEngineService.exists(id);
 
@@ -116,7 +118,7 @@ public class WorkflowController {
     @TenantHeader String tenant,
     @TokenHeader String token
   ) throws WorkflowEngineServiceException, WorkflowNotFoundException {
-    log.info("Deleting: {}", id);
+    LOG.info(String.format("Deleting: {}", id));
 
     workflowEngineService.exists(id);
 
@@ -132,7 +134,7 @@ public class WorkflowController {
     @TenantHeader String tenant,
     @TokenHeader String token
   ) throws WorkflowEngineServiceException {
-    log.debug("Retrieving History: {}", id);
+    LOG.debug(String.format("Retrieving History: {}", id));
     return workflowEngineService.history(id, tenant, token);
   }
 
@@ -143,7 +145,7 @@ public class WorkflowController {
     @TokenHeader String token,
     @RequestBody JsonNode context
   ) throws WorkflowEngineServiceException {
-    log.info("Starting: {} with context {}", id, context);
+    LOG.info(String.format("Starting: {} with context {}", id, context));
     return workflowEngineService.start(id, tenant, token, context);
   }
 

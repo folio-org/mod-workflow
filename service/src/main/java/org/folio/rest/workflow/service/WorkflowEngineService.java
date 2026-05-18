@@ -1,7 +1,8 @@
 package org.folio.rest.workflow.service;
 
 import java.util.Iterator;
-import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.folio.rest.workflow.dto.WorkflowDto;
 import org.folio.rest.workflow.dto.WorkflowOperationalDto;
 import org.folio.rest.workflow.exception.WorkflowEngineServiceException;
@@ -23,9 +24,10 @@ import tools.jackson.databind.ObjectMapper;
 import tools.jackson.databind.node.ArrayNode;
 import tools.jackson.databind.node.ObjectNode;
 
-@Slf4j
 @Service
 public class WorkflowEngineService {
+
+  private final static Log LOG = LogFactory.getLog(WorkflowEngineService.class);
 
   private static final String WORKFLOW_ENGINE_ACTIVATE_URL_TEMPLATE = "%s%s/workflow-engine/workflows/activate";
   private static final String WORKFLOW_ENGINE_DEACTIVATE_URL_TEMPLATE = "%s%s/workflow-engine/workflows/deactivate";
@@ -214,7 +216,7 @@ public class WorkflowEngineService {
 
       ArrayNode incidents = response.getBody();
       if (response.getStatusCode() != HttpStatus.OK || incidents == null) {
-        log.debug("Unable to get workflow incidents history from workflow engine!");
+        LOG.debug(String.format("Unable to get workflow incidents history from workflow engine!"));
 
         incidents = mapper.createArrayNode();
       }
@@ -242,7 +244,7 @@ public class WorkflowEngineService {
 
     HttpEntity<WorkflowDto> entity = new HttpEntity<>(workflow, headers(tenant, token));
     String url = String.format(requestPath, okapiUrl, basePath);
-    log.debug("Send Okapi workflow engine request {} {}", HttpMethod.POST, url);
+    LOG.debug(String.format("Send Okapi workflow engine request {} {}", HttpMethod.POST, url));
 
     try {
       ResponseEntity<Workflow> response = exchange(url, HttpMethod.POST, entity, Workflow.class);
@@ -252,7 +254,7 @@ public class WorkflowEngineService {
 
         if (responseWorkflow != null) {
           String deploymentId = responseWorkflow.getDeploymentId();
-          log.info("Workflow is active = {}, deploymentID = {}", Boolean.TRUE.equals(responseWorkflow.getActive()), deploymentId);
+          LOG.info(String.format("Workflow is active = {}, deploymentID = {}", Boolean.TRUE.equals(responseWorkflow.getActive()), deploymentId));
           return workflowRepo.save(responseWorkflow);
         }
       }
@@ -265,7 +267,7 @@ public class WorkflowEngineService {
 
   private HttpHeaders headers(String tenant, String token) {
     HttpHeaders requestHeaders = new HttpHeaders();
-    log.debug("Request Headers: tenant '{}' and token '{}'.", tenant, token);
+    LOG.debug(String.format("Request Headers: tenant '{}' and token '{}'.", tenant, token));
 
     if (tenant != null) {
       requestHeaders.add(tenantHeaderName, tenant);
@@ -280,7 +282,7 @@ public class WorkflowEngineService {
   }
 
   private <T> ResponseEntity<T> exchange(String url, HttpMethod method, HttpEntity<?> request, Class<T> responseType) {
-    log.debug("Exchange for {} {} {}", responseType.getSimpleName(), method, url);
+    LOG.debug(String.format("Exchange for {} {} {}", responseType.getSimpleName(), method, url));
     return this.restTemplate.exchange(url, method, request, responseType, (Object[]) new String[0]);
   }
 

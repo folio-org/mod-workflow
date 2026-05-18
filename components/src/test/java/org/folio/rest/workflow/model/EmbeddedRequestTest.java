@@ -14,7 +14,6 @@ import static org.springframework.test.util.ReflectionTestUtils.setField;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
-
 import org.folio.rest.workflow.enums.HttpMethod;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -110,7 +109,7 @@ class EmbeddedRequestTest {
   void getIterableWorksTest() {
     setField(embeddedRequest, "iterable", true);
 
-    assertEquals(true, embeddedRequest.isIterable());
+    assertEquals(true, embeddedRequest.getIterable());
   }
 
   @Test

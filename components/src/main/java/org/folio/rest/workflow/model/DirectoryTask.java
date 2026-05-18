@@ -6,29 +6,22 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.PrePersist;
 import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
-import lombok.Setter;
 import org.folio.rest.workflow.enums.DirectoryAction;
 import org.folio.rest.workflow.model.components.DelegateTask;
+import org.folio.rest.workflow.model.has.HasPath;
 import org.folio.rest.workflow.model.has.common.HasDirectoryTaskCommon;
 
 @Entity
-public class DirectoryTask extends AbstractTask implements DelegateTask, HasDirectoryTaskCommon {
+public class DirectoryTask extends AbstractTask implements DelegateTask, HasDirectoryTaskCommon, HasPath {
 
-  @Getter
-  @Setter
   @NotNull
   @Column(nullable = false)
   private String path;
 
-  @Getter
-  @Setter
   @NotNull
   @Column(nullable = false)
   private String workflow;
 
-  @Getter
-  @Setter
   @NotNull
   @Column(nullable = false)
   @Enumerated(EnumType.STRING)
@@ -58,6 +51,36 @@ public class DirectoryTask extends AbstractTask implements DelegateTask, HasDire
     if (action == null) {
       action = DirectoryAction.LIST;
     }
+  }
+
+  @Override
+  public DirectoryAction getAction() {
+    return action;
+  }
+
+  @Override
+  public String getWorkflow() {
+    return workflow;
+  }
+
+  @Override
+  public void setAction(DirectoryAction action) {
+    this.action = action;
+  }
+
+  @Override
+  public void setWorkflow(String workflow) {
+    this.workflow = workflow;
+  }
+
+  @Override
+  public String getPath() {
+    return path;
+  }
+
+  @Override
+  public void setPath(String path) {
+    this.path = path;
   }
 
 }

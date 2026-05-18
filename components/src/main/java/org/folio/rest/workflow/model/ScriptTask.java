@@ -4,27 +4,19 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.PrePersist;
 import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
-import lombok.Setter;
 import org.folio.rest.workflow.model.has.HasCode;
 import org.folio.rest.workflow.model.has.common.HasScriptTaskCommon;
 
 @Entity
 public class ScriptTask extends AbstractTask implements HasCode, HasScriptTaskCommon {
 
-  @Getter
-  @Setter
   @NotNull
   @Column(columnDefinition = "TEXT", nullable = false)
   private String code;
 
-  @Getter
-  @Setter
   @Column(nullable = true)
   private String resultVariable;
 
-  @Getter
-  @Setter
   @Column(nullable = false)
   private String scriptFormat;
 
@@ -51,6 +43,36 @@ public class ScriptTask extends AbstractTask implements HasCode, HasScriptTaskCo
 
   public boolean hasResultVariable() {
     return resultVariable != null;
+  }
+
+  @Override
+  public String getResultVariable() {
+    return resultVariable;
+  }
+
+  @Override
+  public String getScriptFormat() {
+    return scriptFormat;
+  }
+
+  @Override
+  public void setResultVariable(String resultVariable) {
+    this.resultVariable = resultVariable;
+  }
+
+  @Override
+  public void setScriptFormat(String scriptFormat) {
+    this.scriptFormat = scriptFormat;
+  }
+
+  @Override
+  public String getCode() {
+    return code;
+  }
+
+  @Override
+  public void setCode(String code) {
+    this.code = code;
   }
 
 }

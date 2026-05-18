@@ -5,8 +5,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.PrePersist;
-import lombok.Getter;
-import lombok.Setter;
 import org.folio.rest.workflow.enums.CompressFileContainer;
 import org.folio.rest.workflow.enums.CompressFileFormat;
 import org.folio.rest.workflow.model.components.DelegateTask;
@@ -15,24 +13,16 @@ import org.folio.rest.workflow.model.has.common.HasCompressFileTaskCommon;
 @Entity
 public class CompressFileTask extends AbstractTask implements DelegateTask, HasCompressFileTaskCommon {
 
-  @Getter
-  @Setter
   @Column(nullable = false)
   private String source;
 
-  @Getter
-  @Setter
   @Column(nullable = false)
   private String destination;
 
-  @Getter
-  @Setter
   @Enumerated(EnumType.STRING)
   @Column(nullable = false)
   private CompressFileFormat format;
 
-  @Getter
-  @Setter
   @Enumerated(EnumType.STRING)
   @Column(nullable = false)
   private CompressFileContainer container;
@@ -66,6 +56,46 @@ public class CompressFileTask extends AbstractTask implements DelegateTask, HasC
     if (container == null) {
       container = CompressFileContainer.NONE;
     }
+  }
+
+  @Override
+  public CompressFileContainer getContainer() {
+    return container;
+  }
+
+  @Override
+  public String getDestination() {
+    return destination;
+  }
+
+  @Override
+  public CompressFileFormat getFormat() {
+    return format;
+  }
+
+  @Override
+  public String getSource() {
+    return source;
+  }
+
+  @Override
+  public void setContainer(CompressFileContainer container) {
+    this.container = container;
+  }
+
+  @Override
+  public void setDestination(String destination) {
+    this.destination = destination;
+  }
+
+  @Override
+  public void setFormat(CompressFileFormat format) {
+    this.format = format;
+  }
+
+  @Override
+  public void setSource(String source) {
+    this.source = source;
   }
 
 }

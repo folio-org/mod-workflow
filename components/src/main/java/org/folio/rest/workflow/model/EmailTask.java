@@ -4,8 +4,6 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.PrePersist;
 import jakarta.validation.constraints.Size;
-import lombok.Getter;
-import lombok.Setter;
 import org.folio.rest.workflow.model.components.DelegateTask;
 import org.folio.rest.workflow.model.has.common.HasEmailTaskCommon;
 import org.jspecify.annotations.NonNull;
@@ -13,54 +11,36 @@ import org.jspecify.annotations.NonNull;
 @Entity
 public class EmailTask extends AbstractTask implements DelegateTask, HasEmailTaskCommon {
 
-  @Getter
-  @Setter
   @Column(nullable = true)
   private String attachmentPath;
 
-  @Getter
-  @Setter
   @Column(nullable = true)
   private String includeAttachment;
 
-  @Getter
-  @Setter
   @Column(nullable = true)
   private String mailBcc;
 
-  @Getter
-  @Setter
   @Column(nullable = true)
   private String mailCc;
 
-  @Getter
-  @Setter
   @NonNull
   @Size(min = 3, max = 256)
   @Column(nullable = false)
   private String mailFrom;
 
-  @Getter
-  @Setter
   @NonNull
   @Size(min = 2)
   @Column(columnDefinition = "TEXT", nullable = false)
   private String mailText;
 
-  @Getter
-  @Setter
   @NonNull
   @Size(min = 3, max = 256)
   @Column(nullable = false)
   private String mailTo;
 
-  @Getter
-  @Setter
   @Column(columnDefinition = "TEXT", nullable = true)
   private String mailMarkup;
 
-  @Getter
-  @Setter
   @NonNull
   @Size(min = 2, max = 256)
   @Column(nullable = false)
@@ -95,6 +75,96 @@ public class EmailTask extends AbstractTask implements DelegateTask, HasEmailTas
     if (mailSubject == null) {
       mailSubject = "";
     }
+  }
+
+  @Override
+  public String getAttachmentPath() {
+    return attachmentPath;
+  }
+
+  @Override
+  public String getIncludeAttachment() {
+    return includeAttachment;
+  }
+
+  @Override
+  public String getMailBcc() {
+    return mailBcc;
+  }
+
+  @Override
+  public String getMailCc() {
+    return mailCc;
+  }
+
+  @Override
+  public String getMailFrom() {
+    return mailFrom;
+  }
+
+  @Override
+  public String getMailMarkup() {
+    return mailMarkup;
+  }
+
+  @Override
+  public String getMailSubject() {
+    return mailSubject;
+  }
+
+  @Override
+  public String getMailText() {
+    return mailText;
+  }
+
+  @Override
+  public String getMailTo() {
+    return mailTo;
+  }
+
+  @Override
+  public void setAttachmentPath(String attachmentPath) {
+    this.attachmentPath = attachmentPath;
+  }
+
+  @Override
+  public void setIncludeAttachment(String includeAttachment) {
+    this.includeAttachment = includeAttachment;
+  }
+
+  @Override
+  public void setMailBcc(String mailBcc) {
+    this.mailBcc = mailBcc;
+  }
+
+  @Override
+  public void setMailCc(String mailCc) {
+    this.mailCc = mailCc;
+  }
+
+  @Override
+  public void setMailFrom(String mailFrom) {
+    this.mailFrom = mailFrom;
+  }
+
+  @Override
+  public void setMailMarkup(String mailMarkup) {
+    this.mailMarkup = mailMarkup;
+  }
+
+  @Override
+  public void setMailSubject(String mailSubject) {
+    this.mailSubject = mailSubject;
+  }
+
+  @Override
+  public void setMailText(String mailText) {
+    this.mailText = mailText;
+  }
+
+  @Override
+  public void setMailTo(String mailTo) {
+    this.mailTo = mailTo;
   }
 
 }

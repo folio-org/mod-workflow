@@ -3,8 +3,6 @@ package org.folio.rest.workflow.model;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.PrePersist;
-import lombok.Getter;
-import lombok.Setter;
 import org.folio.rest.workflow.model.components.DelegateTask;
 import org.folio.rest.workflow.model.has.HasDesignation;
 import org.folio.rest.workflow.model.has.HasPassword;
@@ -14,23 +12,15 @@ import org.folio.rest.workflow.model.has.HasUsername;
 @Entity
 public class DatabaseConnectionTask extends AbstractTask implements DelegateTask, HasDesignation, HasPassword, HasUrl, HasUsername {
 
-  @Getter
-  @Setter
   @Column(nullable = false)
   private String designation;
 
-  @Getter
-  @Setter
   @Column(nullable = true)
   private String password;
 
-  @Getter
-  @Setter
   @Column(nullable = false)
   private String url;
 
-  @Getter
-  @Setter
   @Column(nullable = true)
   private String username;
 
@@ -53,6 +43,46 @@ public class DatabaseConnectionTask extends AbstractTask implements DelegateTask
     if (url == null) {
       url = "";
     }
+  }
+
+  @Override
+  public String getUsername() {
+    return username;
+  }
+
+  @Override
+  public void setUsername(String username) {
+    this.username = username;
+  }
+
+  @Override
+  public String getUrl() {
+    return url;
+  }
+
+  @Override
+  public void setUrl(String url) {
+    this.url = url;
+  }
+
+  @Override
+  public String getPassword() {
+    return password;
+  }
+
+  @Override
+  public void setPassword(String password) {
+    this.password = password;
+  }
+
+  @Override
+  public String getDesignation() {
+    return designation;
+  }
+
+  @Override
+  public void setDesignation(String designation) {
+    this.designation = designation;
   }
 
 }

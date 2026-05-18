@@ -5,21 +5,15 @@ import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import java.util.HashSet;
 import java.util.Set;
-import lombok.Getter;
-import lombok.Setter;
 import org.folio.rest.workflow.model.components.DelegateTask;
 import org.folio.rest.workflow.model.has.common.HasRequestTaskCommon;
 
 @Entity
 public class RequestTask extends AbstractTask implements DelegateTask, HasRequestTaskCommon {
 
-  @Getter
-  @Setter
   @ElementCollection
   private Set<EmbeddedVariable> headerOutputVariables;
 
-  @Getter
-  @Setter
   @Embedded
   private EmbeddedRequest request;
 
@@ -27,6 +21,26 @@ public class RequestTask extends AbstractTask implements DelegateTask, HasReques
     super();
 
     headerOutputVariables = new HashSet<>();
+  }
+
+  @Override
+  public Set<EmbeddedVariable> getHeaderOutputVariables() {
+    return headerOutputVariables;
+  }
+
+  @Override
+  public EmbeddedRequest getRequest() {
+    return request;
+  }
+
+  @Override
+  public void setHeaderOutputVariables(Set<EmbeddedVariable> headerOutputVariables) {
+    this.headerOutputVariables = headerOutputVariables;
+  }
+
+  @Override
+  public void setRequest(EmbeddedRequest request) {
+    this.request = request;
   }
 
 }

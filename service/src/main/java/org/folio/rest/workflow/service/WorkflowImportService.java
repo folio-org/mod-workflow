@@ -30,7 +30,6 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarFile;
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
@@ -38,6 +37,8 @@ import org.apache.commons.compress.archivers.zip.ZipFile;
 import org.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream;
 import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream;
 import org.apache.commons.compress.utils.SeekableInMemoryByteChannel;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.folio.rest.workflow.enums.CompressFileFormat;
 import org.folio.rest.workflow.exception.WorkflowImportAlreadyImported;
 import org.folio.rest.workflow.exception.WorkflowImportException;
@@ -60,9 +61,10 @@ import tools.jackson.databind.node.ArrayNode;
 import tools.jackson.databind.node.JsonNodeType;
 import tools.jackson.databind.node.ObjectNode;
 
-@Slf4j
 @Service
 public class WorkflowImportService {
+
+  private final static Log LOG = LogFactory.getLog(WorkflowImportService.class);
 
   private ObjectMapper objectMapper;
 
@@ -532,10 +534,10 @@ public class WorkflowImportService {
       String version = json.get(VERSION).asString();
 
       if (!VERSION_PATTERN_1_0.matcher(version).find()) {
-        log.warn("Unknown version '{}', attempting import anyway.", version);
+        LOG.warn(String.format("Unknown version '{}', attempting import anyway.", version));
       }
     } else {
-      log.warn("No version is specified, attempting import anyway.");
+      LOG.warn("No version is specified, attempting import anyway.");
     }
   }
 
@@ -545,7 +547,7 @@ public class WorkflowImportService {
    * @param name The name of the unknown file or directory.
    */
   private void warnOnUnknownFileOrDir(String name) {
-    log.warn("Ignoring unknown file or directory: '{}'.", name);
+    LOG.warn(String.format("Ignoring unknown file or directory: '{}'.", name));
   }
 
 }

@@ -7,5 +7,5 @@ public interface HasMessage {
 
   public String getMessage();
 
-  public void setMessage(String mesasge);
+  public void setMessage(String message);
 }
