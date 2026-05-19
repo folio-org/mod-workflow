@@ -27,7 +27,7 @@ import tools.jackson.databind.node.ObjectNode;
 @Service
 public class WorkflowEngineService {
 
-  private final static Log LOG = LogFactory.getLog(WorkflowEngineService.class);
+  private static final Log LOG = LogFactory.getLog(WorkflowEngineService.class);
 
   private static final String WORKFLOW_ENGINE_ACTIVATE_URL_TEMPLATE = "%s%s/workflow-engine/workflows/activate";
   private static final String WORKFLOW_ENGINE_DEACTIVATE_URL_TEMPLATE = "%s%s/workflow-engine/workflows/deactivate";

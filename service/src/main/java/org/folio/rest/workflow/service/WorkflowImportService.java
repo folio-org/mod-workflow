@@ -64,7 +64,7 @@ import tools.jackson.databind.node.ObjectNode;
 @Service
 public class WorkflowImportService {
 
-  private final static Log LOG = LogFactory.getLog(WorkflowImportService.class);
+  private static final Log LOG = LogFactory.getLog(WorkflowImportService.class);
 
   private ObjectMapper objectMapper;
 
