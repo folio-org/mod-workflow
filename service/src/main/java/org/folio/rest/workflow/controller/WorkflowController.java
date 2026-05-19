@@ -34,7 +34,7 @@ import tools.jackson.databind.JsonNode;
 @RequestMapping("/workflows")
 public class WorkflowController {
 
-  private final static Log LOG = LogFactory.getLog(WorkflowController.class);
+  private static final Log LOG = LogFactory.getLog(WorkflowController.class);
 
   private WorkflowEngineService workflowEngineService;
 
@@ -73,7 +73,7 @@ public class WorkflowController {
     @RequestParam(defaultValue="20") Integer limit,
     @TenantHeader String tenant
   ) {
-    LOG.debug(String.format("Performing CQL search: {}, offset, limit", query, offset, limit));
+    LOG.debug(String.format("Performing CQL search: %s, %s, %s", query, offset, limit));
     return workflowCqlService.findByCql(query, offset, limit);
   }
 
@@ -92,7 +92,7 @@ public class WorkflowController {
     @TenantHeader String tenant,
     @TokenHeader String token
   ) throws WorkflowEngineServiceException, WorkflowNotFoundException {
-    LOG.info(String.format("Activating: {}", id));
+    LOG.info(String.format("Activating: %s", id));
 
     workflowEngineService.exists(id);
 
@@ -105,7 +105,7 @@ public class WorkflowController {
     @TenantHeader String tenant,
     @TokenHeader String token
   ) throws WorkflowEngineServiceException, WorkflowNotFoundException {
-    LOG.info(String.format("Deactivating: {}", id));
+    LOG.info(String.format("Deactivating: %s", id));
 
     workflowEngineService.exists(id);
 
@@ -118,7 +118,7 @@ public class WorkflowController {
     @TenantHeader String tenant,
     @TokenHeader String token
   ) throws WorkflowEngineServiceException, WorkflowNotFoundException {
-    LOG.info(String.format("Deleting: {}", id));
+    LOG.info(String.format("Deleting: %s", id));
 
     workflowEngineService.exists(id);
 
@@ -134,7 +134,7 @@ public class WorkflowController {
     @TenantHeader String tenant,
     @TokenHeader String token
   ) throws WorkflowEngineServiceException {
-    LOG.debug(String.format("Retrieving History: {}", id));
+    LOG.debug(String.format("Retrieving History: %s", id));
     return workflowEngineService.history(id, tenant, token);
   }
 
@@ -145,7 +145,7 @@ public class WorkflowController {
     @TokenHeader String token,
     @RequestBody JsonNode context
   ) throws WorkflowEngineServiceException {
-    LOG.info(String.format("Starting: {} with context {}", id, context));
+    LOG.info(String.format("Starting: %s with context %s", id, context));
     return workflowEngineService.start(id, tenant, token, context);
   }
 

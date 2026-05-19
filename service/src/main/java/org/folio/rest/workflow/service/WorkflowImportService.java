@@ -534,7 +534,7 @@ public class WorkflowImportService {
       String version = json.get(VERSION).asString();
 
       if (!VERSION_PATTERN_1_0.matcher(version).find()) {
-        LOG.warn(String.format("Unknown version '{}', attempting import anyway.", version));
+        LOG.warn(String.format("Unknown version '%s', attempting import anyway.", version));
       }
     } else {
       LOG.warn("No version is specified, attempting import anyway.");
@@ -547,7 +547,7 @@ public class WorkflowImportService {
    * @param name The name of the unknown file or directory.
    */
   private void warnOnUnknownFileOrDir(String name) {
-    LOG.warn(String.format("Ignoring unknown file or directory: '{}'.", name));
+    LOG.warn(String.format("Ignoring unknown file or directory: '%s'.", name));
   }
 
 }

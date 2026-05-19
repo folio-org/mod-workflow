@@ -244,7 +244,7 @@ public class WorkflowEngineService {
 
     HttpEntity<WorkflowDto> entity = new HttpEntity<>(workflow, headers(tenant, token));
     String url = String.format(requestPath, okapiUrl, basePath);
-    LOG.debug(String.format("Send Okapi workflow engine request {} {}", HttpMethod.POST, url));
+    LOG.debug(String.format("Send Okapi workflow engine request %s %s", HttpMethod.POST, url));
 
     try {
       ResponseEntity<Workflow> response = exchange(url, HttpMethod.POST, entity, Workflow.class);
@@ -254,7 +254,7 @@ public class WorkflowEngineService {
 
         if (responseWorkflow != null) {
           String deploymentId = responseWorkflow.getDeploymentId();
-          LOG.info(String.format("Workflow is active = {}, deploymentID = {}", Boolean.TRUE.equals(responseWorkflow.getActive()), deploymentId));
+          LOG.info(String.format("Workflow is active = %s, deploymentID = %s", Boolean.TRUE.equals(responseWorkflow.getActive()), deploymentId));
           return workflowRepo.save(responseWorkflow);
         }
       }
@@ -267,7 +267,7 @@ public class WorkflowEngineService {
 
   private HttpHeaders headers(String tenant, String token) {
     HttpHeaders requestHeaders = new HttpHeaders();
-    LOG.debug(String.format("Request Headers: tenant '{}' and token '{}'.", tenant, token));
+    LOG.debug(String.format("Request Headers: tenant '%s' and token '%s'.", tenant, token));
 
     if (tenant != null) {
       requestHeaders.add(tenantHeaderName, tenant);
@@ -282,7 +282,7 @@ public class WorkflowEngineService {
   }
 
   private <T> ResponseEntity<T> exchange(String url, HttpMethod method, HttpEntity<?> request, Class<T> responseType) {
-    LOG.debug(String.format("Exchange for {} {} {}", responseType.getSimpleName(), method, url));
+    LOG.debug(String.format("Exchange for %s %s %s", responseType.getSimpleName(), method, url));
     return this.restTemplate.exchange(url, method, request, responseType, (Object[]) new String[0]);
   }
 
