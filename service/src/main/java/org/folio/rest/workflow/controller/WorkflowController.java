@@ -3,6 +3,8 @@ package org.folio.rest.workflow.controller;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.folio.rest.workflow.exception.WorkflowEngineServiceException;
@@ -36,8 +38,8 @@ public class WorkflowController {
 
   private static final Log LOG = LogFactory.getLog(WorkflowController.class);
 
-  private static final String REGX_NOT_GRAPH = "[^\\p{C}]";
-  private static final String REGX_EOL = "[\r\n]";
+  private static final Pattern REGX_NOT_GRAPH = Pattern.compile("[^\\p{C}]");
+  private static final Pattern REGX_EOL = Pattern.compile("[\r\n]");
 
   private WorkflowEngineService workflowEngineService;
 
@@ -164,9 +166,10 @@ public class WorkflowController {
   private String sanitize(String param) {
     if (param == null) return "";
 
-    return param
-      .replaceAll(REGX_NOT_GRAPH, "")
-      .replaceAll(REGX_EOL, " ");
+    final Matcher matchNotGraph = REGX_NOT_GRAPH.matcher(param);
+    final Matcher matchEol = REGX_EOL.matcher(matchNotGraph.replaceAll(""));
+
+    return matchEol.replaceAll(" ");
   }
 
   /**
