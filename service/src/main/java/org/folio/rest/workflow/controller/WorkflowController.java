@@ -36,6 +36,9 @@ public class WorkflowController {
 
   private static final Log LOG = LogFactory.getLog(WorkflowController.class);
 
+  private static final String REGX_NOT_GRAPH = "[^\\p{C}]";
+  private static final String REGX_EOL = "[\r\n]";
+
   private WorkflowEngineService workflowEngineService;
 
   private WorkflowCqlService workflowCqlService;
@@ -162,8 +165,8 @@ public class WorkflowController {
     if (param == null) return "";
 
     return param
-      .replaceAll("[^\\p{C}]", "")
-      .replaceAll("[\r\n]", " ");
+      .replaceAll(REGX_NOT_GRAPH, "")
+      .replaceAll(REGX_EOL, " ");
   }
 
   /**
