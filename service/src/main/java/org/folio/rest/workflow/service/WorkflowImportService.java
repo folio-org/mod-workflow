@@ -289,10 +289,8 @@ public class WorkflowImportService {
    * @param pathParts The array of path parts.
    * @param inputStream The input stream to use.
    * @param extracted The extracted data.
-   *
-   * @throws IOException On error reading the file stream, extracting the JSON, or other such errors.
    */
-  private void extractTopLevel(String name, InputStream inputStream, ExtractedWorkflow extracted) throws IOException {
+  private void extractTopLevel(String name, InputStream inputStream, ExtractedWorkflow extracted) {
     if (FWZ_JSON.equalsIgnoreCase(name)) {
       extracted.getRequired().put(FWZ_JSON, objectMapper.readTree(inputStream));
 
@@ -315,10 +313,9 @@ public class WorkflowImportService {
    * @param extracted The extracted data.
    * @param pathParts The broken up path parts.
    *
-   * @throws IOException On error reading the file stream, extracting the JSON, or other such errors.
    * @throws WorkflowImportInvalidOrMissingProperty  On import failure due to invalid or missing property.
    */
-  private void extractSubLevel(String name, InputStream inputStream, ExtractedWorkflow extracted, String[] pathParts) throws IOException, WorkflowImportInvalidOrMissingProperty {
+  private void extractSubLevel(String name, InputStream inputStream, ExtractedWorkflow extracted, String[] pathParts) throws WorkflowImportInvalidOrMissingProperty {
 
     JsonNode json = objectMapper.readTree(inputStream);
     if (!json.has(ID) || json.get(ID).getNodeType() != JsonNodeType.STRING) {

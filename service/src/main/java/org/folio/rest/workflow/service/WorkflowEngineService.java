@@ -216,7 +216,7 @@ public class WorkflowEngineService {
 
       ArrayNode incidents = response.getBody();
       if (response.getStatusCode() != HttpStatus.OK || incidents == null) {
-        LOG.debug(String.format("Unable to get workflow incidents history from workflow engine!"));
+        LOG.debug("Unable to get workflow incidents history from workflow engine!");
 
         incidents = mapper.createArrayNode();
       }

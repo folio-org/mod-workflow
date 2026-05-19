@@ -73,7 +73,7 @@ public class WorkflowController {
     @RequestParam(defaultValue="20") Integer limit,
     @TenantHeader String tenant
   ) {
-    LOG.debug(String.format("Performing CQL search: %s, %s, %s", query, offset, limit));
+    LOG.debug(String.format("Performing CQL search: %s, %s, %s", sanitize(query), offset, limit));
     return workflowCqlService.findByCql(query, offset, limit);
   }
 
@@ -92,7 +92,7 @@ public class WorkflowController {
     @TenantHeader String tenant,
     @TokenHeader String token
   ) throws WorkflowEngineServiceException, WorkflowNotFoundException {
-    LOG.info(String.format("Activating: %s", id));
+    LOG.info(String.format("Activating: %s", sanitize(id)));
 
     workflowEngineService.exists(id);
 
@@ -105,7 +105,7 @@ public class WorkflowController {
     @TenantHeader String tenant,
     @TokenHeader String token
   ) throws WorkflowEngineServiceException, WorkflowNotFoundException {
-    LOG.info(String.format("Deactivating: %s", id));
+    LOG.info(String.format("Deactivating: %s", sanitize(id)));
 
     workflowEngineService.exists(id);
 
@@ -118,7 +118,7 @@ public class WorkflowController {
     @TenantHeader String tenant,
     @TokenHeader String token
   ) throws WorkflowEngineServiceException, WorkflowNotFoundException {
-    LOG.info(String.format("Deleting: %s", id));
+    LOG.info(String.format("Deleting: %s", sanitize(id)));
 
     workflowEngineService.exists(id);
 
@@ -134,7 +134,7 @@ public class WorkflowController {
     @TenantHeader String tenant,
     @TokenHeader String token
   ) throws WorkflowEngineServiceException {
-    LOG.debug(String.format("Retrieving History: %s", id));
+    LOG.debug(String.format("Retrieving History: %s", sanitize(id)));
     return workflowEngineService.history(id, tenant, token);
   }
 
@@ -145,8 +145,43 @@ public class WorkflowController {
     @TokenHeader String token,
     @RequestBody JsonNode context
   ) throws WorkflowEngineServiceException {
-    LOG.info(String.format("Starting: %s with context %s", id, context));
+    LOG.info(String.format("Starting: %s with context %s", sanitize(id), sanitize(context)));
     return workflowEngineService.start(id, tenant, token, context);
+  }
+
+  /**
+   * Sanitize string parameter for logging purposes.
+   *
+   * Strip out all non-graph, non-whitespace, non-newline, non-carriage return characters.
+   *
+   * @param param The parameter to sanitize.
+   *
+   * @return A sanitized string.
+   */
+  private String sanitize(String param) {
+    if (param == null) return "";
+
+    return param
+      .replaceAll("[^\\p{C}]", "")
+      .replaceAll("[\r\n]", " ");
+  }
+
+  /**
+   * Sanitize JsonNode parameter for logging purposes.
+   *
+   * Strip out all non-graph, non-whitespace, non-newline, non-carriage return characters.
+   *
+   * @param param The parameter to sanitize.
+   *
+   * @return A sanitized string.
+   */
+  private String sanitize(JsonNode param) {
+    if (param == null) return "";
+
+    return param
+      .toPrettyString()
+      .replaceAll("[^\\p{C}]", "")
+      .replaceAll("[\r\n]", " ");
   }
 
 }
