@@ -178,10 +178,7 @@ public class WorkflowController {
   private String sanitize(JsonNode param) {
     if (param == null) return "";
 
-    return param
-      .toPrettyString()
-      .replaceAll("[^\\p{C}]", "")
-      .replaceAll("[\r\n]", " ");
+    return sanitize(param.toPrettyString());
   }
 
 }
