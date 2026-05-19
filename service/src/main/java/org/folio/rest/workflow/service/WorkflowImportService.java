@@ -20,7 +20,6 @@ import static org.folio.rest.workflow.model.ExtractedWorkflow.VERSION;
 import static org.folio.rest.workflow.model.ExtractedWorkflow.VERSION_PATTERN_1_0;
 import static org.folio.rest.workflow.model.ExtractedWorkflow.WORKFLOW_JSON;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.jknack.handlebars.internal.Files;
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -140,9 +139,8 @@ public class WorkflowImportService {
    *
    * @throws WorkflowImportInvalidOrMissingProperty If a property is missing.
    * @throws WorkflowImportRequiredFileMissing If the script file is not found.
-   * @throws JsonProcessingException On error processing the JSON.
    */
-  private void collapseNodeScripts(ExtractedWorkflow extracted) throws WorkflowImportInvalidOrMissingProperty, WorkflowImportRequiredFileMissing, JsonProcessingException {
+  private void collapseNodeScripts(ExtractedWorkflow extracted) throws WorkflowImportInvalidOrMissingProperty, WorkflowImportRequiredFileMissing {
     for (Entry<String, JsonNode> entry : extracted.getNodes().entrySet()) {
       if (collapseNodeScriptsContinue(entry)) {
         continue;
@@ -345,10 +343,9 @@ public class WorkflowImportService {
    *
    * @param extracted The extracted data.
    *
-   * @throws JsonProcessingException On JSON parse failure.
    * @throws WorkflowImportInvalidOrMissingProperty On invalid property.
    */
-  private void expandWorkflow(ExtractedWorkflow extracted) throws  JsonProcessingException, WorkflowImportInvalidOrMissingProperty {
+  private void expandWorkflow(ExtractedWorkflow extracted) throws WorkflowImportInvalidOrMissingProperty {
     for (JsonNode node : extracted.getNodes().values()) {
       expandNode(extracted.getNodes(), node, extracted.getExpanded());
     }
@@ -374,10 +371,9 @@ public class WorkflowImportService {
    * @param node The node to process.
    * @param expanded An array of IDs of nodes that have already been expanded.
    *
-   * @throws JsonProcessingException On JSON parse failure.
    * @throws WorkflowImportInvalidOrMissingProperty On invalid property.
    */
-  private void expandNode(Map<String, JsonNode> nodes, JsonNode node, List<String> expanded) throws JsonProcessingException, WorkflowImportInvalidOrMissingProperty {
+  private void expandNode(Map<String, JsonNode> nodes, JsonNode node, List<String> expanded) throws WorkflowImportInvalidOrMissingProperty {
     String nodeId = node.get(ID).asString();
     if (expanded.contains(nodeId)) {
       return;
