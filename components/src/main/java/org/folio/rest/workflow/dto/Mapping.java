@@ -1,11 +1,7 @@
 package org.folio.rest.workflow.dto;
 
 import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
-import lombok.Setter;
 
-@Getter
-@Setter
 public class Mapping {
 
   @NotNull
@@ -21,6 +17,48 @@ public class Mapping {
     super();
 
     multiple = false;
+  }
+
+  /**
+   * @return the toProperty
+   */
+  public String getToProperty() {
+    return toProperty;
+  }
+
+  /**
+   * @return the fromProperty
+   */
+  public String getFromProperty() {
+    return fromProperty;
+  }
+
+  /**
+   * @return the multiple
+   */
+  public boolean isMultiple() {
+    return multiple;
+  }
+
+  /**
+   * @param toProperty the toProperty to set
+   */
+  public void setToProperty(String toProperty) {
+    this.toProperty = toProperty;
+  }
+
+  /**
+   * @param fromProperty the fromProperty to set
+   */
+  public void setFromProperty(String fromProperty) {
+    this.fromProperty = fromProperty;
+  }
+
+  /**
+   * @param multiple the multiple to set
+   */
+  public void setMultiple(boolean multiple) {
+    this.multiple = multiple;
   }
 
 }

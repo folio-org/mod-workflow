@@ -4,36 +4,24 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.PrePersist;
 import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
-import lombok.Setter;
 import org.folio.rest.workflow.model.has.common.HasEmbeddedLoopReferenceCommon;
 import org.hibernate.annotations.ColumnDefault;
 
 @Embeddable
 public class EmbeddedLoopReference implements HasEmbeddedLoopReferenceCommon {
 
-  @Getter
-  @Setter
   @Column(nullable = true)
   private String cardinalityExpression;
 
-  @Getter
-  @Setter
   @Column(nullable = true)
   private String completeConditionExpression;
 
-  @Getter
-  @Setter
   @Column(nullable = true)
   private String dataInputRefExpression;
 
-  @Getter
-  @Setter
   @Column(nullable = true)
   private String inputDataName;
 
-  @Getter
-  @Setter
   @NotNull
   @Column(nullable = false)
   @ColumnDefault("false")
@@ -65,6 +53,56 @@ public class EmbeddedLoopReference implements HasEmbeddedLoopReferenceCommon {
   @Override
   public boolean hasDataInput() {
     return dataInputRefExpression != null && inputDataName != null;
+  }
+
+  @Override
+  public String getCardinalityExpression() {
+    return cardinalityExpression;
+  }
+
+  @Override
+  public String getCompleteConditionExpression() {
+    return completeConditionExpression;
+  }
+
+  @Override
+  public String getDataInputRefExpression() {
+    return dataInputRefExpression;
+  }
+
+  @Override
+  public String getInputDataName() {
+    return inputDataName;
+  }
+
+  @Override
+  public Boolean getParallel() {
+    return parallel;
+  }
+
+  @Override
+  public void setCardinalityExpression(String cardinalityExpression) {
+    this.cardinalityExpression = cardinalityExpression;
+  }
+
+  @Override
+  public void setCompleteConditionExpression(String completeConditionExpression) {
+    this.completeConditionExpression = completeConditionExpression;
+  }
+
+  @Override
+  public void setDataInputRefExpression(String dataInputRefExpression) {
+    this.dataInputRefExpression = dataInputRefExpression;
+  }
+
+  @Override
+  public void setInputDataName(String inputDataName) {
+    this.inputDataName = inputDataName;
+  }
+
+  @Override
+  public void setParallel(Boolean parallel) {
+    this.parallel = parallel;
   }
 
 }

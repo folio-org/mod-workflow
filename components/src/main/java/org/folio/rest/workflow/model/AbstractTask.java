@@ -7,8 +7,6 @@ import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.PrePersist;
 import java.util.HashSet;
 import java.util.Set;
-import lombok.Getter;
-import lombok.Setter;
 import org.folio.rest.workflow.model.components.Task;
 import org.folio.rest.workflow.model.converter.EmbeddedVariableConverter;
 import org.folio.rest.workflow.model.has.HasInputOutput;
@@ -22,25 +20,17 @@ import org.hibernate.annotations.ColumnDefault;
 @MappedSuperclass
 public abstract class AbstractTask extends Node implements HasInputOutput, Task {
 
-  @Getter
-  @Setter
   @Column(nullable = false)
   @ColumnDefault("false")
   private Boolean asyncAfter;
 
-  @Getter
-  @Setter
   @Column(nullable = false)
   @ColumnDefault("false")
   private Boolean asyncBefore;
 
-  @Getter
-  @Setter
   @ElementCollection
   private Set<EmbeddedVariable> inputVariables;
 
-  @Getter
-  @Setter
   @Column(columnDefinition = "TEXT", nullable = true)
   @Convert(converter = EmbeddedVariableConverter.class)
   private EmbeddedVariable outputVariable;
@@ -69,6 +59,46 @@ public abstract class AbstractTask extends Node implements HasInputOutput, Task 
     if (inputVariables == null) {
       inputVariables = new HashSet<>();
     }
+  }
+
+  @Override
+  public Boolean getAsyncAfter() {
+    return asyncAfter;
+  }
+
+  @Override
+  public Boolean getAsyncBefore() {
+    return asyncBefore;
+  }
+
+  @Override
+  public void setAsyncAfter(Boolean asyncAfter) {
+    this.asyncAfter = asyncAfter;
+  }
+
+  @Override
+  public void setAsyncBefore(Boolean asyncBefore) {
+    this.asyncBefore = asyncBefore;
+  }
+
+  @Override
+  public Set<EmbeddedVariable> getInputVariables() {
+    return inputVariables;
+  }
+
+  @Override
+  public EmbeddedVariable getOutputVariable() {
+    return outputVariable;
+  }
+
+  @Override
+  public void setInputVariables(Set<EmbeddedVariable> inputVariables) {
+    this.inputVariables = inputVariables;
+  }
+
+  @Override
+  public void setOutputVariable(EmbeddedVariable outputVariable) {
+    this.outputVariable = outputVariable;
   }
 
 }

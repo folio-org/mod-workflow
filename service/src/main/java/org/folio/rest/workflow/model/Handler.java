@@ -2,26 +2,16 @@ package org.folio.rest.workflow.model;
 
 import java.util.ArrayList;
 import java.util.List;
-import lombok.Getter;
-import lombok.Setter;
 import org.folio.rest.workflow.enums.HttpMethod;
 
 public class Handler {
 
-  @Getter
-  @Setter
   private List<String> methods;
 
-  @Getter
-  @Setter
   private String pathPattern;
 
-  @Getter
-  @Setter
   private List<String> permissionsRequired;
 
-  @Getter
-  @Setter
   private List<String> permissionsDesired;
 
   public Handler() {
@@ -32,6 +22,62 @@ public class Handler {
     List<Action> actions = new ArrayList<>();
     methods.forEach(method -> actions.add(new Action(interfaceName, pathPattern, HttpMethod.valueOf(method))));
     return actions;
+  }
+
+  /**
+   * @return the methods
+   */
+  public List<String> getMethods() {
+    return methods;
+  }
+
+  /**
+   * @return the pathPattern
+   */
+  public String getPathPattern() {
+    return pathPattern;
+  }
+
+  /**
+   * @return the permissionsRequired
+   */
+  public List<String> getPermissionsRequired() {
+    return permissionsRequired;
+  }
+
+  /**
+   * @return the permissionsDesired
+   */
+  public List<String> getPermissionsDesired() {
+    return permissionsDesired;
+  }
+
+  /**
+   * @param methods the methods to set
+   */
+  public void setMethods(List<String> methods) {
+    this.methods = methods;
+  }
+
+  /**
+   * @param pathPattern the pathPattern to set
+   */
+  public void setPathPattern(String pathPattern) {
+    this.pathPattern = pathPattern;
+  }
+
+  /**
+   * @param permissionsRequired the permissionsRequired to set
+   */
+  public void setPermissionsRequired(List<String> permissionsRequired) {
+    this.permissionsRequired = permissionsRequired;
+  }
+
+  /**
+   * @param permissionsDesired the permissionsDesired to set
+   */
+  public void setPermissionsDesired(List<String> permissionsDesired) {
+    this.permissionsDesired = permissionsDesired;
   }
 
 }

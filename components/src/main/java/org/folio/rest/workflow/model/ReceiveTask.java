@@ -5,15 +5,11 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.PrePersist;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.Getter;
-import lombok.Setter;
 import org.folio.rest.workflow.model.components.Wait;
 
 @Entity
 public class ReceiveTask extends AbstractTask implements Wait {
 
-  @Getter
-  @Setter
   @NotNull
   @Size(min = 4, max = 256)
   @Column(nullable = false)
@@ -33,6 +29,16 @@ public class ReceiveTask extends AbstractTask implements Wait {
     if (message == null) {
       message = "";
     }
+  }
+
+  @Override
+  public String getMessage() {
+    return message;
+  }
+
+  @Override
+  public void setMessage(String message) {
+    this.message = message;
   }
 
 }

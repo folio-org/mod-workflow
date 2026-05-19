@@ -5,12 +5,6 @@ package org.folio.rest.workflow.model.has;
  *
  * This should likely be changed in some way once the Camunda-specific functionality is refactored out.
  */
-public interface HasAsync {
-
-  public Boolean getAsyncAfter();
-  public Boolean getAsyncBefore();
-
-  public void setAsyncAfter(Boolean asyncAfter);
-  public void setAsyncBefore(Boolean asyncBefore);
+public interface HasAsync extends HasAsyncAfter, HasAsyncBefore {
 
 }

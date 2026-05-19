@@ -17,7 +17,7 @@ public interface HasEmbeddedInputCommon {
   public List<String> getOptions();
   public Boolean getRequired();
 
-  public void setAttributes(List<InputAttribute> attribues);
+  public void setAttributes(List<InputAttribute> attributes);
   public void setDefaultValue(String defaultValue);
   public void setFieldId(String fieldId);
   public void setFieldLabel(String fieldLabel);

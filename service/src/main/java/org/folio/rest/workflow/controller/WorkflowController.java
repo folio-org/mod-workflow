@@ -3,7 +3,10 @@ package org.folio.rest.workflow.controller;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import lombok.extern.slf4j.Slf4j;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.folio.rest.workflow.exception.WorkflowEngineServiceException;
 import org.folio.rest.workflow.exception.WorkflowImportException;
 import org.folio.rest.workflow.exception.WorkflowNotFoundException;
@@ -29,10 +32,14 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import tools.jackson.databind.JsonNode;
 
-@Slf4j
 @RestController
 @RequestMapping("/workflows")
 public class WorkflowController {
+
+  private static final Log LOG = LogFactory.getLog(WorkflowController.class);
+
+  private static final Pattern REGX_NOT_GRAPH = Pattern.compile("[^\\p{C}]");
+  private static final Pattern REGX_EOL = Pattern.compile("[\r\n]");
 
   private WorkflowEngineService workflowEngineService;
 
@@ -56,7 +63,7 @@ public class WorkflowController {
       @TokenHeader String token
     ) throws URISyntaxException, IOException, WorkflowImportException {
 
-    log.debug("Importing FWZ");
+    LOG.debug("Importing FWZ");
 
     Workflow workflow = workflowImportService.importFile(fwz.getResource());
     URI location = new URI(String.format("/workflows/%s", workflow.getId()));
@@ -71,7 +78,7 @@ public class WorkflowController {
     @RequestParam(defaultValue="20") Integer limit,
     @TenantHeader String tenant
   ) {
-    log.debug("Performing CQL search: {}, offset, limit", query, offset, limit);
+    LOG.debug(String.format("Performing CQL search: %s, %s, %s", sanitize(query), offset, limit));
     return workflowCqlService.findByCql(query, offset, limit);
   }
 
@@ -90,7 +97,7 @@ public class WorkflowController {
     @TenantHeader String tenant,
     @TokenHeader String token
   ) throws WorkflowEngineServiceException, WorkflowNotFoundException {
-    log.info("Activating: {}", id);
+    LOG.info(String.format("Activating: %s", sanitize(id)));
 
     workflowEngineService.exists(id);
 
@@ -103,7 +110,7 @@ public class WorkflowController {
     @TenantHeader String tenant,
     @TokenHeader String token
   ) throws WorkflowEngineServiceException, WorkflowNotFoundException {
-    log.info("Deactivating: {}", id);
+    LOG.info(String.format("Deactivating: %s", sanitize(id)));
 
     workflowEngineService.exists(id);
 
@@ -116,7 +123,7 @@ public class WorkflowController {
     @TenantHeader String tenant,
     @TokenHeader String token
   ) throws WorkflowEngineServiceException, WorkflowNotFoundException {
-    log.info("Deleting: {}", id);
+    LOG.info(String.format("Deleting: %s", sanitize(id)));
 
     workflowEngineService.exists(id);
 
@@ -132,7 +139,7 @@ public class WorkflowController {
     @TenantHeader String tenant,
     @TokenHeader String token
   ) throws WorkflowEngineServiceException {
-    log.debug("Retrieving History: {}", id);
+    LOG.debug(String.format("Retrieving History: %s", sanitize(id)));
     return workflowEngineService.history(id, tenant, token);
   }
 
@@ -143,8 +150,41 @@ public class WorkflowController {
     @TokenHeader String token,
     @RequestBody JsonNode context
   ) throws WorkflowEngineServiceException {
-    log.info("Starting: {} with context {}", id, context);
+    LOG.info(String.format("Starting: %s with context %s", sanitize(id), sanitize(context)));
     return workflowEngineService.start(id, tenant, token, context);
+  }
+
+  /**
+   * Sanitize string parameter for logging purposes.
+   *
+   * Strip out all non-graph, non-whitespace, non-newline, non-carriage return characters.
+   *
+   * @param param The parameter to sanitize.
+   *
+   * @return A sanitized string.
+   */
+  private String sanitize(String param) {
+    if (param == null) return "";
+
+    final Matcher matchNotGraph = REGX_NOT_GRAPH.matcher(param);
+    final Matcher matchEol = REGX_EOL.matcher(matchNotGraph.replaceAll(""));
+
+    return matchEol.replaceAll(" ");
+  }
+
+  /**
+   * Sanitize JsonNode parameter for logging purposes.
+   *
+   * Strip out all non-graph, non-whitespace, non-newline, non-carriage return characters.
+   *
+   * @param param The parameter to sanitize.
+   *
+   * @return A sanitized string.
+   */
+  private String sanitize(JsonNode param) {
+    if (param == null) return "";
+
+    return sanitize(param.toPrettyString());
   }
 
 }

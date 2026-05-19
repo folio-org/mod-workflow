@@ -20,7 +20,6 @@ import static org.folio.rest.workflow.model.ExtractedWorkflow.VERSION;
 import static org.folio.rest.workflow.model.ExtractedWorkflow.VERSION_PATTERN_1_0;
 import static org.folio.rest.workflow.model.ExtractedWorkflow.WORKFLOW_JSON;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.jknack.handlebars.internal.Files;
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -30,7 +29,6 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarFile;
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
@@ -38,6 +36,8 @@ import org.apache.commons.compress.archivers.zip.ZipFile;
 import org.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream;
 import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream;
 import org.apache.commons.compress.utils.SeekableInMemoryByteChannel;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.folio.rest.workflow.enums.CompressFileFormat;
 import org.folio.rest.workflow.exception.WorkflowImportAlreadyImported;
 import org.folio.rest.workflow.exception.WorkflowImportException;
@@ -60,9 +60,10 @@ import tools.jackson.databind.node.ArrayNode;
 import tools.jackson.databind.node.JsonNodeType;
 import tools.jackson.databind.node.ObjectNode;
 
-@Slf4j
 @Service
 public class WorkflowImportService {
+
+  private static final Log LOG = LogFactory.getLog(WorkflowImportService.class);
 
   private ObjectMapper objectMapper;
 
@@ -138,9 +139,8 @@ public class WorkflowImportService {
    *
    * @throws WorkflowImportInvalidOrMissingProperty If a property is missing.
    * @throws WorkflowImportRequiredFileMissing If the script file is not found.
-   * @throws JsonProcessingException On error processing the JSON.
    */
-  private void collapseNodeScripts(ExtractedWorkflow extracted) throws WorkflowImportInvalidOrMissingProperty, WorkflowImportRequiredFileMissing, JsonProcessingException {
+  private void collapseNodeScripts(ExtractedWorkflow extracted) throws WorkflowImportInvalidOrMissingProperty, WorkflowImportRequiredFileMissing {
     for (Entry<String, JsonNode> entry : extracted.getNodes().entrySet()) {
       if (collapseNodeScriptsContinue(entry)) {
         continue;
@@ -289,10 +289,8 @@ public class WorkflowImportService {
    * @param pathParts The array of path parts.
    * @param inputStream The input stream to use.
    * @param extracted The extracted data.
-   *
-   * @throws IOException On error reading the file stream, extracting the JSON, or other such errors.
    */
-  private void extractTopLevel(String name, InputStream inputStream, ExtractedWorkflow extracted) throws IOException {
+  private void extractTopLevel(String name, InputStream inputStream, ExtractedWorkflow extracted) {
     if (FWZ_JSON.equalsIgnoreCase(name)) {
       extracted.getRequired().put(FWZ_JSON, objectMapper.readTree(inputStream));
 
@@ -315,10 +313,9 @@ public class WorkflowImportService {
    * @param extracted The extracted data.
    * @param pathParts The broken up path parts.
    *
-   * @throws IOException On error reading the file stream, extracting the JSON, or other such errors.
    * @throws WorkflowImportInvalidOrMissingProperty  On import failure due to invalid or missing property.
    */
-  private void extractSubLevel(String name, InputStream inputStream, ExtractedWorkflow extracted, String[] pathParts) throws IOException, WorkflowImportInvalidOrMissingProperty {
+  private void extractSubLevel(String name, InputStream inputStream, ExtractedWorkflow extracted, String[] pathParts) throws WorkflowImportInvalidOrMissingProperty {
 
     JsonNode json = objectMapper.readTree(inputStream);
     if (!json.has(ID) || json.get(ID).getNodeType() != JsonNodeType.STRING) {
@@ -343,10 +340,9 @@ public class WorkflowImportService {
    *
    * @param extracted The extracted data.
    *
-   * @throws JsonProcessingException On JSON parse failure.
    * @throws WorkflowImportInvalidOrMissingProperty On invalid property.
    */
-  private void expandWorkflow(ExtractedWorkflow extracted) throws  JsonProcessingException, WorkflowImportInvalidOrMissingProperty {
+  private void expandWorkflow(ExtractedWorkflow extracted) throws WorkflowImportInvalidOrMissingProperty {
     for (JsonNode node : extracted.getNodes().values()) {
       expandNode(extracted.getNodes(), node, extracted.getExpanded());
     }
@@ -372,10 +368,9 @@ public class WorkflowImportService {
    * @param node The node to process.
    * @param expanded An array of IDs of nodes that have already been expanded.
    *
-   * @throws JsonProcessingException On JSON parse failure.
    * @throws WorkflowImportInvalidOrMissingProperty On invalid property.
    */
-  private void expandNode(Map<String, JsonNode> nodes, JsonNode node, List<String> expanded) throws JsonProcessingException, WorkflowImportInvalidOrMissingProperty {
+  private void expandNode(Map<String, JsonNode> nodes, JsonNode node, List<String> expanded) throws WorkflowImportInvalidOrMissingProperty {
     String nodeId = node.get(ID).asString();
     if (expanded.contains(nodeId)) {
       return;
@@ -532,10 +527,10 @@ public class WorkflowImportService {
       String version = json.get(VERSION).asString();
 
       if (!VERSION_PATTERN_1_0.matcher(version).find()) {
-        log.warn("Unknown version '{}', attempting import anyway.", version);
+        LOG.warn(String.format("Unknown version '%s', attempting import anyway.", version));
       }
     } else {
-      log.warn("No version is specified, attempting import anyway.");
+      LOG.warn("No version is specified, attempting import anyway.");
     }
   }
 
@@ -545,7 +540,7 @@ public class WorkflowImportService {
    * @param name The name of the unknown file or directory.
    */
   private void warnOnUnknownFileOrDir(String name) {
-    log.warn("Ignoring unknown file or directory: '{}'.", name);
+    LOG.warn(String.format("Ignoring unknown file or directory: '%s'.", name));
   }
 
 }

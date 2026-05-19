@@ -7,8 +7,6 @@ import jakarta.persistence.OrderColumn;
 import jakarta.persistence.PrePersist;
 import java.util.ArrayList;
 import java.util.List;
-import lombok.Getter;
-import lombok.Setter;
 import org.folio.rest.workflow.model.has.HasAsync;
 import org.folio.rest.workflow.model.has.HasNodes;
 import org.hibernate.annotations.ColumnDefault;
@@ -21,20 +19,14 @@ import org.hibernate.annotations.ColumnDefault;
 @MappedSuperclass
 public abstract class AbstractProcess extends Node implements HasAsync, HasNodes {
 
-  @Getter
-  @Setter
   @Column(nullable = false)
   @ColumnDefault("false")
   private Boolean asyncAfter;
 
-  @Getter
-  @Setter
   @Column(nullable = false)
   @ColumnDefault("false")
   private Boolean asyncBefore;
 
-  @Getter
-  @Setter
   @OneToMany
   @OrderColumn
   private List<Node> nodes;
@@ -63,6 +55,36 @@ public abstract class AbstractProcess extends Node implements HasAsync, HasNodes
     if (nodes == null) {
       nodes = new ArrayList<>();
     }
+  }
+
+  @Override
+  public List<Node> getNodes() {
+    return nodes;
+  }
+
+  @Override
+  public void setNodes(List<Node> nodes) {
+    this.nodes = nodes;
+  }
+
+  @Override
+  public Boolean getAsyncAfter() {
+    return asyncAfter;
+  }
+
+  @Override
+  public Boolean getAsyncBefore() {
+    return asyncBefore;
+  }
+
+  @Override
+  public void setAsyncAfter(Boolean asyncAfter) {
+    this.asyncAfter = asyncAfter;
+  }
+
+  @Override
+  public void setAsyncBefore(Boolean asyncBefore) {
+    this.asyncBefore = asyncBefore;
   }
 
 }

@@ -33,6 +33,13 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <spring-module-core.version>2.2.0-SNAPSHOT</spring-module-core.version>
     <maven.javadoc.skip>true</maven.javadoc.skip>
+
+    <!-- Remove SonarQube duplicate code coverage due to false positives. -->
+    <sonar.cpd.exclusions>
+      **/model/AbstractTask.java,
+      **/model/AbstractProcess.java,
+      **/model/Setup.java
+    </sonar.cpd.exclusions>
   </properties>
 
   <build>

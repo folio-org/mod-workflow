@@ -7,35 +7,29 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.PrePersist;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.Getter;
-import lombok.Setter;
 import org.folio.rest.workflow.enums.StartEventType;
 import org.folio.rest.workflow.model.components.Event;
+import org.folio.rest.workflow.model.has.HasAsyncBefore;
+import org.folio.rest.workflow.model.has.HasExpression;
+import org.folio.rest.workflow.model.has.HasInterrupting;
+import org.folio.rest.workflow.model.has.HasStartEventType;
 import org.hibernate.annotations.ColumnDefault;
 
 @Entity
-public class StartEvent extends Node implements Event {
+public class StartEvent extends Node implements Event, HasAsyncBefore, HasExpression, HasInterrupting, HasStartEventType {
 
-  @Getter
-  @Setter
   @Column(nullable = false)
   @ColumnDefault("false")
   private Boolean asyncBefore;
 
-  @Getter
-  @Setter
   @Size(min = 4, max = 256)
   @Column(nullable = true)
   private String expression;
 
-  @Getter
-  @Setter
   @Column(nullable = false)
   @ColumnDefault("false")
   private Boolean interrupting;
 
-  @Getter
-  @Setter
   @NotNull
   @Column(nullable = false)
   @Enumerated(EnumType.STRING)
@@ -65,6 +59,46 @@ public class StartEvent extends Node implements Event {
     if (type == null) {
       type = StartEventType.NONE;
     }
+  }
+
+  @Override
+  public String getExpression() {
+    return expression;
+  }
+
+  @Override
+  public void setExpression(String expression) {
+    this.expression = expression;
+  }
+
+  @Override
+  public Boolean getInterrupting() {
+    return interrupting;
+  }
+
+  @Override
+  public void setInterrupting(Boolean interrupting) {
+    this.interrupting = interrupting;
+  }
+
+  @Override
+  public StartEventType getType() {
+    return type;
+  }
+
+  @Override
+  public void setType(StartEventType type) {
+    this.type = type;
+  }
+
+  @Override
+  public Boolean getAsyncBefore() {
+    return asyncBefore;
+  }
+
+  @Override
+  public void setAsyncBefore(Boolean asyncBefore) {
+    this.asyncBefore = asyncBefore;
   }
 
 }

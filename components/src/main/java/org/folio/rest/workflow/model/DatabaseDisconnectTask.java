@@ -3,16 +3,12 @@ package org.folio.rest.workflow.model;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.PrePersist;
-import lombok.Getter;
-import lombok.Setter;
 import org.folio.rest.workflow.model.components.DelegateTask;
 import org.folio.rest.workflow.model.has.HasDesignation;
 
 @Entity
 public class DatabaseDisconnectTask extends AbstractTask implements DelegateTask, HasDesignation {
 
-  @Getter
-  @Setter
   @Column(nullable = false)
   private String designation;
 
@@ -30,6 +26,16 @@ public class DatabaseDisconnectTask extends AbstractTask implements DelegateTask
     if (designation == null) {
       designation = "";
     }
+  }
+
+  @Override
+  public String getDesignation() {
+    return designation;
+  }
+
+  @Override
+  public void setDesignation(String designation) {
+    this.designation = designation;
   }
 
 }

@@ -5,8 +5,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.PrePersist;
-import lombok.Getter;
-import lombok.Setter;
 import org.folio.rest.workflow.enums.DatabaseResultType;
 import org.folio.rest.workflow.model.components.DelegateTask;
 import org.folio.rest.workflow.model.has.HasDesignation;
@@ -16,29 +14,19 @@ import org.hibernate.annotations.ColumnDefault;
 @Entity
 public class DatabaseQueryTask extends AbstractTask implements DelegateTask, HasDatabaseQueryTaskCommon, HasDesignation {
 
-  @Getter
-  @Setter
   @Column(nullable = false)
   private String designation;
 
-  @Getter
-  @Setter
   @Column(nullable = true)
   private String outputPath;
 
-  @Getter
-  @Setter
   @Column(columnDefinition = "TEXT", nullable = false)
   private String query;
 
-  @Getter
-  @Setter
   @Enumerated(EnumType.STRING)
   @Column(nullable = true)
   private DatabaseResultType resultType;
 
-  @Getter
-  @Setter
   @Column(nullable = true)
   @ColumnDefault("false")
   private Boolean includeHeader;
@@ -67,6 +55,56 @@ public class DatabaseQueryTask extends AbstractTask implements DelegateTask, Has
     if (includeHeader == null) {
       includeHeader = false;
     }
+  }
+
+  @Override
+  public String getDesignation() {
+    return designation;
+  }
+
+  @Override
+  public void setDesignation(String designation) {
+    this.designation = designation;
+  }
+
+  @Override
+  public Boolean getIncludeHeader() {
+    return includeHeader;
+  }
+
+  @Override
+  public String getOutputPath() {
+    return outputPath;
+  }
+
+  @Override
+  public String getQuery() {
+    return query;
+  }
+
+  @Override
+  public DatabaseResultType getResultType() {
+    return resultType;
+  }
+
+  @Override
+  public void setIncludeHeader(Boolean includeHeader) {
+    this.includeHeader = includeHeader;
+  }
+
+  @Override
+  public void setOutputPath(String outputPath) {
+    this.outputPath = outputPath;
+  }
+
+  @Override
+  public void setQuery(String query) {
+    this.query = query;
+  }
+
+  @Override
+  public void setResultType(DatabaseResultType resultType) {
+    this.resultType = resultType;
   }
 
 }

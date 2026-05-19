@@ -3,22 +3,16 @@ package org.folio.rest.workflow.model;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.PrePersist;
-import lombok.Getter;
-import lombok.Setter;
 import org.folio.rest.workflow.model.has.HasAsync;
 import org.hibernate.annotations.ColumnDefault;
 
 @Embeddable
 public class Setup implements HasAsync {
 
-  @Getter
-  @Setter
   @Column(nullable = false)
   @ColumnDefault("false")
   private Boolean asyncAfter;
 
-  @Getter
-  @Setter
   @Column(nullable = false)
   @ColumnDefault("false")
   private Boolean asyncBefore;
@@ -39,6 +33,26 @@ public class Setup implements HasAsync {
     if (asyncBefore == null) {
       asyncBefore = false;
     }
+  }
+
+  @Override
+  public Boolean getAsyncAfter() {
+    return asyncAfter;
+  }
+
+  @Override
+  public Boolean getAsyncBefore() {
+    return asyncBefore;
+  }
+
+  @Override
+  public void setAsyncAfter(Boolean asyncAfter) {
+    this.asyncAfter = asyncAfter;
+  }
+
+  @Override
+  public void setAsyncBefore(Boolean asyncBefore) {
+    this.asyncBefore = asyncBefore;
   }
 
 }
