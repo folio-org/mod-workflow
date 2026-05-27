@@ -6,12 +6,12 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.stream.Stream;
 import org.folio.rest.workflow.model.Workflow;
 import org.folio.rest.workflow.model.repo.WorkflowRepo;
 import org.folio.spring.data.OffsetRequest;
+import org.folio.spring.test.helper.MapperHelper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -26,7 +26,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import tools.jackson.databind.ObjectMapper;
 import tools.jackson.databind.json.JsonMapper;
 import tools.jackson.databind.node.ObjectNode;
 
@@ -44,9 +43,9 @@ class WorkflowCqlServiceTest {
   @MockitoBean
   private WorkflowRepo repo;
 
-  // Work-around to get ObjectMapper to be loaded in AbstractCqlService.
+  // Work-around to get mapper to be loaded in AbstractCqlService.
   @MockitoSpyBean
-  protected ObjectMapper mapper;
+  protected JsonMapper mapper;
 
   @Mock
   private Page<Workflow> page;
@@ -56,13 +55,13 @@ class WorkflowCqlServiceTest {
   static class Config {
 
     @Bean
-    ObjectMapper objectMapper() {
-      return JsonMapper.builder().build();
+    JsonMapper objectMapper() {
+      return MapperHelper.build();
     }
   }
 
   @Test
-  void getTypeNameWorksTest() throws IOException {
+  void getTypeNameWorksTest() {
     final String name = workflowCqlService.getTypeName();
 
     assertEquals(Workflow.class.getSimpleName().toLowerCase() + "s", name);
@@ -70,7 +69,7 @@ class WorkflowCqlServiceTest {
 
   @ParameterizedTest
   @MethodSource("provideFindByCql")
-  void findByCqlWorksTest(String query, Long offset, Integer limit, String expect) throws IOException {
+  void findByCqlWorksTest(String query, Long offset, Integer limit, String expect) {
     when(repo.findAll(any(OffsetRequest.class))).thenReturn(page);
     when(repo.findByCql(anyString(), any(OffsetRequest.class))).thenReturn(page);
     when(page.toList()).thenReturn(new ArrayList<Workflow>());

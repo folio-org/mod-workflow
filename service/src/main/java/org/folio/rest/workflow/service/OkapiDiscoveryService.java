@@ -18,7 +18,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import tools.jackson.databind.JsonNode;
-import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 
 @Service
 public class OkapiDiscoveryService {
@@ -44,11 +44,11 @@ public class OkapiDiscoveryService {
 
   private HttpService httpService;
 
-  private ObjectMapper objectMapper;
+  private JsonMapper mapper;
 
-  public OkapiDiscoveryService(HttpService httpService, ObjectMapper objectMapper) {
+  public OkapiDiscoveryService(HttpService httpService, JsonMapper mapper) {
     this.httpService = httpService;
-    this.objectMapper = objectMapper;
+    this.mapper = mapper;
   }
 
   public List<Action> getActionsByTenant(String tenant) {
@@ -82,7 +82,7 @@ public class OkapiDiscoveryService {
         List<Handler> handlers = new ArrayList<>();
         String interfaceName = interfaceNode.get(ID).asString();
         for (JsonNode handlersNode : interfaceNode.get(HANDLERS)) {
-          handlers.add(objectMapper.readValue(handlersNode.toString(), Handler.class));
+          handlers.add(mapper.readValue(handlersNode.toString(), Handler.class));
         }
         handlerMap.put(interfaceName, handlers);
       }

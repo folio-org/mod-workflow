@@ -55,7 +55,7 @@ import org.folio.rest.workflow.utility.CompressFileMagic;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import tools.jackson.databind.JsonNode;
-import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 import tools.jackson.databind.node.ArrayNode;
 import tools.jackson.databind.node.JsonNodeType;
 import tools.jackson.databind.node.ObjectNode;
@@ -65,7 +65,7 @@ public class WorkflowImportService {
 
   private static final Log LOG = LogFactory.getLog(WorkflowImportService.class);
 
-  private ObjectMapper objectMapper;
+  private JsonMapper mapper;
 
   private NodeRepo nodeRepo;
 
@@ -73,8 +73,8 @@ public class WorkflowImportService {
 
   private WorkflowRepo workflowRepo;
 
-  public WorkflowImportService(ObjectMapper objectMapper, NodeRepo nodeRepo, TriggerRepo triggerRepo, WorkflowRepo workflowRepo) {
-    this.objectMapper = objectMapper;
+  public WorkflowImportService(JsonMapper mapper, NodeRepo nodeRepo, TriggerRepo triggerRepo, WorkflowRepo workflowRepo) {
+    this.mapper = mapper;
     this.nodeRepo = nodeRepo;
     this.triggerRepo = triggerRepo;
     this.workflowRepo = workflowRepo;
@@ -169,7 +169,7 @@ public class WorkflowImportService {
         throw new WorkflowImportRequiredFileMissing(scriptPath);
       }
 
-      String stringified = objectMapper.writeValueAsString(extracted.getScripts().get(scriptPath));
+      String stringified = mapper.writeValueAsString(extracted.getScripts().get(scriptPath));
 
       ((ObjectNode) entry.getValue()).put(CODE, stringified);
     }
@@ -209,7 +209,7 @@ public class WorkflowImportService {
    */
   private void createNodes(Map<String, JsonNode> nodes, List<String> expanded) {
     for (String uuid : expanded) {
-      Node node = objectMapper.readValue(nodes.get(uuid).toString(), Node.class);
+      Node node = mapper.readValue(nodes.get(uuid).toString(), Node.class);
       nodeRepo.save(node);
     }
   }
@@ -221,7 +221,7 @@ public class WorkflowImportService {
    */
   private void createTriggers(Map<String, JsonNode> triggers) {
     for (JsonNode triggerNode : triggers.values()) {
-      Trigger trigger = objectMapper.readValue(triggerNode.toString(), Trigger.class);
+      Trigger trigger = mapper.readValue(triggerNode.toString(), Trigger.class);
       triggerRepo.save(trigger);
     }
   }
@@ -234,7 +234,7 @@ public class WorkflowImportService {
    * @return The created Workflow.
    */
   private Workflow createWorkflow(JsonNode workflowJson) {
-    Workflow workflow = objectMapper.readValue(workflowJson.toString(), Workflow.class);
+    Workflow workflow = mapper.readValue(workflowJson.toString(), Workflow.class);
     return workflowRepo.save(workflow);
   }
 
@@ -292,13 +292,13 @@ public class WorkflowImportService {
    */
   private void extractTopLevel(String name, InputStream inputStream, ExtractedWorkflow extracted) {
     if (FWZ_JSON.equalsIgnoreCase(name)) {
-      extracted.getRequired().put(FWZ_JSON, objectMapper.readTree(inputStream));
+      extracted.getRequired().put(FWZ_JSON, mapper.readTree(inputStream));
 
       verifyVersion(extracted.getRequired().get(FWZ_JSON));
     } else if (WORKFLOW_JSON.equalsIgnoreCase(name)) {
-      extracted.getRequired().put(WORKFLOW_JSON, objectMapper.readTree(inputStream));
+      extracted.getRequired().put(WORKFLOW_JSON, mapper.readTree(inputStream));
     } else if (SETUP_JSON.equalsIgnoreCase(name)) {
-      extracted.getRequired().put(SETUP_JSON, objectMapper.readTree(inputStream));
+      extracted.getRequired().put(SETUP_JSON, mapper.readTree(inputStream));
     } else {
       warnOnUnknownFileOrDir(name);
     }
@@ -317,7 +317,7 @@ public class WorkflowImportService {
    */
   private void extractSubLevel(String name, InputStream inputStream, ExtractedWorkflow extracted, String[] pathParts) throws WorkflowImportInvalidOrMissingProperty {
 
-    JsonNode json = objectMapper.readTree(inputStream);
+    JsonNode json = mapper.readTree(inputStream);
     if (!json.has(ID) || json.get(ID).getNodeType() != JsonNodeType.STRING) {
       throw new WorkflowImportInvalidOrMissingProperty(name, ID);
     }
@@ -381,8 +381,8 @@ public class WorkflowImportService {
         throw new WorkflowImportInvalidOrMissingProperty(nodeId, NODES);
       }
 
-      ArrayNode expandedNodes = objectMapper.createArrayNode();
-      String[] values = objectMapper.readValue(node.get(NODES).toString(), String[].class);
+      ArrayNode expandedNodes = mapper.createArrayNode();
+      String[] values = mapper.readValue(node.get(NODES).toString(), String[].class);
 
       for (String value : values) {
         String[] parts = value.split("/");

@@ -20,7 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import tools.jackson.databind.JsonNode;
-import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 import tools.jackson.databind.node.ArrayNode;
 import tools.jackson.databind.node.ObjectNode;
 
@@ -57,7 +57,7 @@ public class WorkflowEngineService {
   private WorkflowRepo workflowRepo;
 
   @Autowired
-  private ObjectMapper mapper;
+  private JsonMapper mapper;
 
   private RestTemplate restTemplate;
 

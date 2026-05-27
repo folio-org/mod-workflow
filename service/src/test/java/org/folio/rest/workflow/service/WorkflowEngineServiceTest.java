@@ -23,6 +23,7 @@ import org.folio.rest.workflow.exception.WorkflowEngineServiceException;
 import org.folio.rest.workflow.exception.WorkflowNotFoundException;
 import org.folio.rest.workflow.model.Workflow;
 import org.folio.rest.workflow.model.repo.WorkflowRepo;
+import org.folio.spring.test.helper.MapperHelper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -37,7 +38,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.client.RestTemplate;
 import tools.jackson.databind.JsonNode;
-import tools.jackson.databind.ObjectMapper;
 import tools.jackson.databind.json.JsonMapper;
 import tools.jackson.databind.node.ArrayNode;
 import tools.jackson.databind.node.ObjectNode;
@@ -58,12 +58,12 @@ class WorkflowEngineServiceTest {
 
   private WorkflowEngineService workflowEngineService;
 
-  private ObjectMapper mapper;
+  private JsonMapper mapper;
 
   @BeforeEach
   void beforeEach() {
     workflowEngineService = new WorkflowEngineService(new RestTemplateBuilder());
-    mapper = JsonMapper.builder().build();
+    mapper = MapperHelper.build();
 
     workflow = new WorkflowAsDto();
     workflow.setId(UUID);

@@ -79,7 +79,7 @@ import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequ
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.MultiValueMap;
-import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 import tools.jackson.databind.node.ObjectNode;
 
 @WebMvcTest(WorkflowController.class)
@@ -160,7 +160,7 @@ class WorkflowControllerTest {
   private MockMvc mvc;
 
   @Autowired
-  protected ObjectMapper mapper;
+  protected JsonMapper mapper;
 
   @Autowired
   private WorkflowController workflowController;

@@ -33,7 +33,7 @@ public abstract class Node extends AbstractBaseEntity implements HasId, HasInfor
   @Convert(converter = JsonNodeConverter.class, attributeName = "deserializeAs")
   private String deserializeAs = this.getClass().getSimpleName();
 
-  public Node() {
+  protected Node() {
     super();
 
     name = "";
