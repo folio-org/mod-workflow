@@ -33,7 +33,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.HandlerMapping;
 import tools.jackson.databind.JsonNode;
-import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 import tools.jackson.databind.node.ObjectNode;
 
 @RestController
@@ -55,13 +55,13 @@ public class EventController {
 
   private PathMatcher pathMatcher;
 
-  private ObjectMapper objectMapper;
+  private JsonMapper mapper;
 
-  public EventController(EventProducer eventProducer, TriggerRepo triggerRepo, PathMatcher pathMatcher, ObjectMapper objectMapper) {
+  public EventController(EventProducer eventProducer, TriggerRepo triggerRepo, PathMatcher pathMatcher, JsonMapper mapper) {
     this.eventProducer = eventProducer;
     this.triggerRepo = triggerRepo;
     this.pathMatcher = pathMatcher;
-    this.objectMapper = objectMapper;
+    this.mapper = mapper;
   }
 
   @PostMapping(value = "/**", consumes = "application/json", produces = { MediaType.APPLICATION_JSON_VALUE })
@@ -84,7 +84,7 @@ public class EventController {
       throw new FileSystemException("Invalid tenant directory name");
     }
 
-    ObjectNode body = objectMapper.createObjectNode();
+    ObjectNode body = mapper.createObjectNode();
 
     Path tenantPath = Path.of(eventUploadsDirectory)
       .resolve(tenant)

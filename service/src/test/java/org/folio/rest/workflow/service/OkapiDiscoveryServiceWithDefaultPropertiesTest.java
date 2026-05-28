@@ -23,7 +23,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.junit.jupiter.web.SpringJUnitWebConfig;
 import tools.jackson.databind.JsonNode;
-import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 
 /**
  * This runs the OkapiDiscoveryService tests for when there is no properly configuration application.yml.
@@ -32,7 +32,7 @@ import tools.jackson.databind.ObjectMapper;
  */
 @ActiveProfiles("test")
 @SpringJUnitWebConfig({
-  ObjectMapper.class,
+  JsonMapper.class,
   OkapiDiscoveryService.class,
   HttpService.class
 })

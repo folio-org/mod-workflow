@@ -7,6 +7,7 @@ import static org.mockito.Mockito.when;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 import java.util.stream.Stream;
 import java.util.stream.Stream.Builder;
+import org.folio.spring.test.helper.MapperHelper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,13 +22,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import tools.jackson.databind.DatabindContext;
 import tools.jackson.databind.JavaType;
 import tools.jackson.databind.JsonNode;
-import tools.jackson.databind.ObjectMapper;
 import tools.jackson.databind.json.JsonMapper;
 
 @ExtendWith(MockitoExtension.class)
 class DeserializeAsNodeJsonResolverTest {
 
-  private ObjectMapper mapper;
+  private JsonMapper mapper;
 
   @Mock
   private DatabindContext databindContext;
@@ -37,7 +37,7 @@ class DeserializeAsNodeJsonResolverTest {
 
   @BeforeEach
   void beforeEach() {
-    mapper = JsonMapper.builder().build();
+    mapper = MapperHelper.build();
   }
 
   @Test

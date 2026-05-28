@@ -56,7 +56,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.util.MultiValueMap;
-import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 
 @WebMvcTest(ActionController.class)
 @ExtendWith(MockitoExtension.class)
@@ -67,7 +67,7 @@ class ActionControllerTest {
   private MockMvc mvc;
 
   @Autowired
-  protected ObjectMapper mapper;
+  protected JsonMapper mapper;
 
   @Autowired
   private ActionController actionController;

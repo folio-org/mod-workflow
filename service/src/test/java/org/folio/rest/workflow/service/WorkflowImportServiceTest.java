@@ -31,7 +31,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.junit.jupiter.web.SpringJUnitWebConfig;
-import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 
 @ActiveProfiles("test")
 @SpringJUnitWebConfig({
@@ -57,7 +57,7 @@ class WorkflowImportServiceTest {
   private WorkflowRepo workflowRepo;
 
   @MockitoSpyBean
-  private ObjectMapper objectMapper;
+  private JsonMapper mapper;
 
   @Mock
   private Page<Workflow> page;

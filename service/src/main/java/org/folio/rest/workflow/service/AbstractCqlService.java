@@ -1,7 +1,7 @@
 package org.folio.rest.workflow.service;
 
 import java.util.List;
-import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 import tools.jackson.databind.node.ArrayNode;
 import tools.jackson.databind.node.ObjectNode;
 
@@ -18,9 +18,9 @@ public abstract class AbstractCqlService<T> {
   public static final String TOTAL_RECORDS = "totalRecords";
 
   /**
-   * The object mapper, which must be initialized in the extending class' constructor.
+   * The mapper, which must be initialized in the extending class' constructor.
    */
-  protected ObjectMapper mapper;
+  protected JsonMapper mapper;
 
   /**
    * Use CQL to find a list of Workflows.

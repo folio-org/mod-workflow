@@ -6,7 +6,7 @@ import org.folio.rest.workflow.model.repo.WorkflowRepo;
 import org.folio.spring.data.OffsetRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
-import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 import tools.jackson.databind.node.ObjectNode;
 
 @Service
@@ -14,7 +14,7 @@ public class WorkflowCqlService extends AbstractCqlService<Workflow> {
 
   private WorkflowRepo repo;
 
-  public WorkflowCqlService(ObjectMapper mapper, WorkflowRepo repo) {
+  public WorkflowCqlService(JsonMapper mapper, WorkflowRepo repo) {
     this.mapper = mapper;
     this.repo = repo;
   }
