@@ -117,6 +117,7 @@ event:
     path: events
 
 folio:
+  sql.schema: ${DB_SCHEMA:diku_mod_workflow}
   tenant.validation: false
 
 tenant:
