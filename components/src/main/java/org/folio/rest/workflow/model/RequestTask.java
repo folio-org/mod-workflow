@@ -3,6 +3,7 @@ package org.folio.rest.workflow.model;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import jakarta.persistence.PrePersist;
 import java.util.HashSet;
 import java.util.Set;
 import org.folio.rest.workflow.model.components.DelegateTask;
@@ -21,6 +22,19 @@ public class RequestTask extends AbstractTask implements DelegateTask, HasReques
     super();
 
     headerOutputVariables = new HashSet<>();
+  }
+
+  @Override
+  @PrePersist
+  public void prePersist() {
+    super.prePersist();
+
+    // @Embeddable with @PrePersist do not consistently call PrePersist and so this must be manually triggered.
+    if (headerOutputVariables != null) {
+      headerOutputVariables.forEach((EmbeddedVariable ev) -> {
+        if (ev != null) ev.prePersist();
+      });
+    }
   }
 
   @Override

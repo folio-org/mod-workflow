@@ -62,8 +62,8 @@ class WorkflowEngineServiceTest {
 
   @BeforeEach
   void beforeEach() {
-    workflowEngineService = new WorkflowEngineService(new RestTemplateBuilder());
     mapper = MapperHelper.build();
+    workflowEngineService = new WorkflowEngineService(workflowRepo, mapper, new RestTemplateBuilder());
 
     workflow = new WorkflowAsDto();
     workflow.setId(UUID);
@@ -430,7 +430,7 @@ class WorkflowEngineServiceTest {
   void historyWorksThrowsExceptionForNotOkHttpOnIncidentsHistoryTest() {
     WorkflowOperationalDto workflowOperationalDto = (WorkflowOperationalDto) workflowOperational;
     ResponseEntity<ArrayNode> responseEntity = new ResponseEntity<>(HttpStatus.OK);
-    ResponseEntity<ArrayNode> historyResponseEntity = new ResponseEntity<>(HttpStatus.OK);
+    ResponseEntity<ArrayNode> historyResponseEntity = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     ResponseEntity<ArrayNode> thirdResponseEntity = new ResponseEntity<>(HttpStatus.RESET_CONTENT);
     ObjectNode objectNode = mapper.createObjectNode();
     objectNode.put("id", UUID);
@@ -480,9 +480,7 @@ class WorkflowEngineServiceTest {
     arrayNode.add(objectNode);
     setField(responseEntity, "body", arrayNode);
 
-    ArrayNode historyArrayNode = mapper.createArrayNode();
-    historyArrayNode.add(historyNode);
-    setField(historyResponseEntity, "body", historyArrayNode);
+    setField(historyResponseEntity, "body", null);
 
     when(workflowRepo.getViewById(anyString(), ArgumentMatchers.<Class<WorkflowOperationalDto>>any())).thenReturn(workflowOperationalDto);
 

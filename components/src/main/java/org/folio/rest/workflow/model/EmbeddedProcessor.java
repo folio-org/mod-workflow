@@ -4,7 +4,6 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.PrePersist;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import org.folio.rest.workflow.enums.ScriptType;
@@ -13,23 +12,28 @@ import org.folio.rest.workflow.model.has.common.HasEmbeddedProcessorCommon;
 @Embeddable
 public class EmbeddedProcessor implements HasEmbeddedProcessorCommon {
 
-  @Column(nullable = false)
+  // Must be designated as nullable even if this is not supposed to be NULL.
+  @Column(nullable = true)
   private Integer buffer;
 
+  // Must be designated as nullable even if this is not supposed to be NULL.
   @NotNull
-  @Column(columnDefinition = "TEXT", nullable = false)
+  @Column(columnDefinition = "TEXT", nullable = true)
   private String code;
 
-  @Column(nullable = false)
+  // Must be designated as nullable even if this is not supposed to be NULL.
+  @Column(nullable = true)
   private Integer delay;
 
+  // Must be designated as nullable even if this is not supposed to be NULL.
   @NotNull
   @Size(min = 4, max = 128)
-  @Column(nullable = false)
+  @Column(nullable = true)
   private String functionName;
 
+  // Must be designated as nullable even if this is not supposed to be NULL.
   @NotNull
-  @Column(nullable = false)
+  @Column(nullable = true)
   @Enumerated(EnumType.STRING)
   private ScriptType scriptType;
 
@@ -40,9 +44,15 @@ public class EmbeddedProcessor implements HasEmbeddedProcessorCommon {
     code = "";
     delay = 0;
     functionName = "";
+    scriptType = ScriptType.JS;
   }
 
-  @PrePersist
+  /**
+   * Perform pre-persist setup to ensure good state.
+   *
+   * Embeddables do not utilize @PrePersist annotation due to it not working well in certain circumstances.
+   * Therefore, this must be manually called by the class utilizing this class.
+   */
   public void prePersist() {
     if (buffer == null) {
       buffer = 0;
@@ -58,6 +68,10 @@ public class EmbeddedProcessor implements HasEmbeddedProcessorCommon {
 
     if (functionName == null) {
       functionName = "";
+    }
+
+    if (scriptType == null) {
+      scriptType = ScriptType.JS;
     }
   }
 

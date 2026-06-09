@@ -1,21 +1,19 @@
 package org.folio.rest.workflow.model;
 
 import jakarta.persistence.Column;
-import jakarta.persistence.Convert;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.PrePersist;
 import java.util.HashSet;
 import java.util.Set;
 import org.folio.rest.workflow.model.components.Task;
-import org.folio.rest.workflow.model.converter.EmbeddedVariableConverter;
 import org.folio.rest.workflow.model.has.HasInputOutput;
 import org.hibernate.annotations.ColumnDefault;
 
 /**
  * Provides a superclass for any Node implementing a DelegateTask.
  *
- * This is intended to reduce repitition of getters and setters needed by the Task.
+ * This is intended to reduce repetition of getters and setters needed by the Task.
  */
 @MappedSuperclass
 public abstract class AbstractTask extends Node implements HasInputOutput, Task {
@@ -32,7 +30,6 @@ public abstract class AbstractTask extends Node implements HasInputOutput, Task 
   private Set<EmbeddedVariable> inputVariables;
 
   @Column(columnDefinition = "TEXT", nullable = true)
-  @Convert(converter = EmbeddedVariableConverter.class)
   private EmbeddedVariable outputVariable;
 
   AbstractTask() {
@@ -58,6 +55,11 @@ public abstract class AbstractTask extends Node implements HasInputOutput, Task 
 
     if (inputVariables == null) {
       inputVariables = new HashSet<>();
+    }
+
+    // @Embeddable with @PrePersist do not consistently call PrePersist and so this must be manually triggered.
+    if (outputVariable != null) {
+      outputVariable.prePersist();
     }
   }
 

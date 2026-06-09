@@ -2,6 +2,7 @@ package org.folio.rest.workflow.model;
 
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import jakarta.persistence.PrePersist;
 import org.folio.rest.workflow.model.components.DelegateTask;
 import org.folio.rest.workflow.model.has.common.HasProcessorTaskCommon;
 
@@ -13,6 +14,17 @@ public class ProcessorTask extends AbstractTask implements DelegateTask, HasProc
 
   public ProcessorTask() {
     super();
+  }
+
+  @Override
+  @PrePersist
+  public void prePersist() {
+    super.prePersist();
+
+    // @Embeddable with @PrePersist do not consistently call PrePersist and so this must be manually triggered.
+    if (processor != null) {
+      processor.prePersist();
+    }
   }
 
   @Override

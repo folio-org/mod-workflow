@@ -9,7 +9,6 @@ import org.folio.rest.workflow.exception.WorkflowEngineServiceException;
 import org.folio.rest.workflow.exception.WorkflowNotFoundException;
 import org.folio.rest.workflow.model.Workflow;
 import org.folio.rest.workflow.model.repo.WorkflowRepo;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.restclient.RestTemplateBuilder;
 import org.springframework.http.HttpEntity;
@@ -53,15 +52,15 @@ public class WorkflowEngineService {
   @Value("${okapi.camunda.rest-path:/camunda}")
   private String restPath;
 
-  @Autowired
   private WorkflowRepo workflowRepo;
 
-  @Autowired
   private JsonMapper mapper;
 
   private RestTemplate restTemplate;
 
-  public WorkflowEngineService(RestTemplateBuilder restTemplateBuilder) {
+  public WorkflowEngineService(WorkflowRepo workflowRepo, JsonMapper mapper, RestTemplateBuilder restTemplateBuilder) {
+    this.workflowRepo = workflowRepo;
+    this.mapper = mapper;
     this.restTemplate = restTemplateBuilder.build();
   }
 

@@ -2,7 +2,6 @@ package org.folio.rest.workflow.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
-import jakarta.persistence.PrePersist;
 import jakarta.validation.constraints.NotNull;
 import org.folio.rest.workflow.model.has.common.HasEmbeddedLoopReferenceCommon;
 import org.hibernate.annotations.ColumnDefault;
@@ -22,8 +21,9 @@ public class EmbeddedLoopReference implements HasEmbeddedLoopReferenceCommon {
   @Column(nullable = true)
   private String inputDataName;
 
+  // Must be designated as nullable even if this is not supposed to be NULL.
   @NotNull
-  @Column(nullable = false)
+  @Column(nullable = true)
   @ColumnDefault("false")
   private Boolean parallel;
 
@@ -33,7 +33,12 @@ public class EmbeddedLoopReference implements HasEmbeddedLoopReferenceCommon {
     parallel = false;
   }
 
-  @PrePersist
+  /**
+   * Perform pre-persist setup to ensure good state.
+   *
+   * Embeddables do not utilize @PrePersist annotation due to it not working well in certain circumstances.
+   * Therefore, this must be manually called by the class utilizing this class.
+   */
   public void prePersist() {
     if (parallel == null) {
       parallel = false;

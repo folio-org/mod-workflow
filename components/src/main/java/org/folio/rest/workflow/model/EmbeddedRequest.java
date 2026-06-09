@@ -14,30 +14,35 @@ import org.springframework.http.MediaType;
 @Embeddable
 public class EmbeddedRequest implements HasEmbeddedRequestCommon, HasUrl {
 
+  // Must be designated as nullable even if this is not supposed to be NULL.
   @NotNull
-  @Column(nullable = false)
+  @Column(nullable = true)
   private String accept;
 
-  @Column(columnDefinition = "TEXT", nullable = false)
+  // Must be designated as nullable even if this is not supposed to be NULL.
+  @Column(columnDefinition = "TEXT", nullable = true)
   private String bodyTemplate;
 
+  // Must be designated as nullable even if this is not supposed to be NULL.
   @NotNull
-  @Column(nullable = false)
+  @Column(nullable = true)
   private String contentType;
 
   private boolean iterable;
 
   private String iterableKey;
 
+  // Must be designated as nullable even if this is not supposed to be NULL.
   @NotNull
-  @Column(nullable = false)
+  @Column(nullable = true)
   @Enumerated(EnumType.STRING)
   private HttpMethod method;
 
   private String responseKey;
 
+  // Must be designated as nullable even if this is not supposed to be NULL.
   @NotNull
-  @Column(nullable = false)
+  @Column(nullable = true)
   private String url;
 
   public EmbeddedRequest() {

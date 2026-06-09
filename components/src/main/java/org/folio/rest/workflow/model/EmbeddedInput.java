@@ -18,29 +18,35 @@ import org.hibernate.annotations.ColumnDefault;
 @Embeddable
 public class EmbeddedInput implements HasEmbeddedInputCommon {
 
-  @Column(columnDefinition = "TEXT", nullable = false)
+  // Must be designated as nullable even if this is not supposed to be NULL.
+  @Column(columnDefinition = "TEXT", nullable = true)
   @Convert(converter = InputAttributeListConverter.class)
   private List<InputAttribute> attributes;
 
   @Column(nullable = true)
   private String defaultValue;
 
-  @Column(nullable = false)
+  // Must be designated as nullable even if this is not supposed to be NULL.
+  @Column(nullable = true)
   private String fieldId;
 
-  @Column(nullable = false)
+  // Must be designated as nullable even if this is not supposed to be NULL.
+  @Column(nullable = true)
   private String fieldLabel;
 
+  // Must be designated as nullable even if this is not supposed to be NULL.
   @NotNull
-  @Column(nullable = false)
+  @Column(nullable = true)
   @Enumerated(EnumType.STRING)
   private InputType inputType;
 
-  @Column(columnDefinition = "TEXT", nullable = false)
+  // Must be designated as nullable even if this is not supposed to be NULL.
+  @Column(columnDefinition = "TEXT", nullable = true)
   @Convert(converter = StringListConverter.class)
   private List<String> options;
 
-  @Column(nullable = false)
+  // Must be designated as nullable even if this is not supposed to be NULL.
+  @Column(nullable = true)
   @ColumnDefault("false")
   private Boolean required;
 
@@ -55,6 +61,12 @@ public class EmbeddedInput implements HasEmbeddedInputCommon {
     required = false;
   }
 
+  /**
+   * Perform pre-persist setup to ensure good state.
+   *
+   * Embeddables do not utilize @PrePersist annotation due to it not working well in certain circumstances.
+   * Therefore, this must be manually called by the class utilizing this class.
+   */
   public void prePersist() {
     if (attributes == null) {
       attributes = new ArrayList<>();
