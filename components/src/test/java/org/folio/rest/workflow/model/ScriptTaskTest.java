@@ -3,6 +3,8 @@ package org.folio.rest.workflow.model;
 import static org.folio.spring.test.mock.MockMvcConstant.NULL_STR;
 import static org.folio.spring.test.mock.MockMvcConstant.VALUE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.util.ReflectionTestUtils.getField;
 import static org.springframework.test.util.ReflectionTestUtils.setField;
 
@@ -10,7 +12,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Stream;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -180,6 +181,20 @@ class ScriptTaskTest {
 
     scriptTask.setCode(VALUE);
     assertEquals(VALUE, getField(scriptTask, "code"));
+  }
+
+  @Test
+  void hasResultVariableReturnsTrueTest() {
+    setField(scriptTask, "resultVariable", VALUE);
+
+    assertTrue(scriptTask.hasResultVariable());
+  }
+
+  @Test
+  void hasResultVariableReturnsFalseTest() {
+    setField(scriptTask, "resultVariable", null);
+
+    assertFalse(scriptTask.hasResultVariable());
   }
 
   @Test

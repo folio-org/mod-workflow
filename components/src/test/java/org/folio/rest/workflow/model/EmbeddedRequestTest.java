@@ -121,6 +121,21 @@ class EmbeddedRequestTest {
   }
 
   @Test
+  void getIterableKeyWorksTest() {
+    setField(embeddedRequest, "iterableKey", VALUE);
+
+    assertEquals(VALUE, embeddedRequest.getIterableKey());
+  }
+
+  @Test
+  void setIterableKeyWorksTest() {
+    setField(embeddedRequest, "iterableKey", null);
+
+    embeddedRequest.setIterableKey(VALUE);
+    assertEquals(VALUE, getField(embeddedRequest, "iterableKey"));
+  }
+
+  @Test
   void getResponseKeyWorksTest() {
     setField(embeddedRequest, "responseKey", VALUE);
 
