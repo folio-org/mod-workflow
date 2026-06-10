@@ -7,6 +7,7 @@ import static org.springframework.test.util.ReflectionTestUtils.getField;
 import static org.springframework.test.util.ReflectionTestUtils.setField;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.BeforeEach;
@@ -148,7 +149,7 @@ class EmbeddedLoopReferenceTest {
    */
   private static Stream<Arguments> providePrePersistFor() {
 
-    return Stream.of(
+    return List.of(
       Arguments.of(
         helperFieldMap(null),
         helperFieldMap(false)
@@ -157,7 +158,7 @@ class EmbeddedLoopReferenceTest {
         helperFieldMap(true),
         helperFieldMap(true)
       )
-    );
+    ).stream();
   }
 
   /**
@@ -170,10 +171,10 @@ class EmbeddedLoopReferenceTest {
    */
   private static Stream<Arguments> provideSimpleHasAndHasNotFor() {
 
-    return Stream.of(
+    return List.of(
       Arguments.of(NULL_STR, false),
       Arguments.of(VALUE,    true)
-    );
+    ).stream();
   }
 
   /**
@@ -186,16 +187,16 @@ class EmbeddedLoopReferenceTest {
    */
   private static Stream<Arguments> provideHasDataInputFor() {
 
-    return Stream.of(
+    return List.of(
       Arguments.of(NULL_STR, NULL_STR, false),
       Arguments.of(VALUE,    NULL_STR, false),
       Arguments.of(NULL_STR, VALUE,    false),
       Arguments.of(VALUE,    VALUE,    true)
-    );
+    ).stream();
   }
 
   /**
-   * Helper for reducing inline code repititon for assignments.
+   * Helper for reducing in line code repetition for assignments.
    *
    * @param parallel The parallel value.
    *

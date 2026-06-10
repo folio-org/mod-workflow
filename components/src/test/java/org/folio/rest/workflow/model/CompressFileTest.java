@@ -12,6 +12,7 @@ import static org.springframework.test.util.ReflectionTestUtils.setField;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Stream;
@@ -247,7 +248,7 @@ class CompressFileTest {
    */
   private static Stream<Arguments> providePrePersistFor() {
 
-    return Stream.of(
+    return List.of(
       Arguments.of(
         helperFieldMap(null,  null,  null, null),
         helperFieldMap("",    "",    ZIP,  NONE)
@@ -268,11 +269,11 @@ class CompressFileTest {
         helperFieldMap(null,  null,  null, TAR),
         helperFieldMap("",    "",    ZIP,  TAR)
       )
-    );
+    ).stream();
   }
 
   /**
-   * Helper for reducing inline code repititon for assignments.
+   * Helper for reducing in line code repetition for assignments.
    *
    * @param source The asyncBefore value.
    * @param destination The asyncAfter value.

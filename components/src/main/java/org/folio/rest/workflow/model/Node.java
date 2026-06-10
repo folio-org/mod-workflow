@@ -47,10 +47,11 @@ public abstract class Node extends AbstractBaseEntity implements HasId, HasInfor
   }
 
   public String getIdentifier() {
-    String regex = "([a-z])([A-Z]+)";
-    String replacement = "$1_$2";
-    String name = getClass().getSimpleName();
-    return String.format("%s_%s", name.replaceAll(regex, replacement).toLowerCase(), getId().replace("-", "_"));
+    final String regex = "([a-z])([A-Z]+)";
+    final String replacement = "$1_$2";
+    final String simpleName = getClass().getSimpleName();
+
+    return String.format("%s_%s", simpleName.replaceAll(regex, replacement).toLowerCase(), getId().replace("-", "_"));
   }
 
   @Override

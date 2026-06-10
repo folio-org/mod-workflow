@@ -12,6 +12,7 @@ import static org.springframework.test.util.ReflectionTestUtils.getField;
 import static org.springframework.test.util.ReflectionTestUtils.setField;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 import org.folio.rest.workflow.enums.HttpMethod;
@@ -121,6 +122,21 @@ class EmbeddedRequestTest {
   }
 
   @Test
+  void getIterableKeyWorksTest() {
+    setField(embeddedRequest, "iterableKey", VALUE);
+
+    assertEquals(VALUE, embeddedRequest.getIterableKey());
+  }
+
+  @Test
+  void setIterableKeyWorksTest() {
+    setField(embeddedRequest, "iterableKey", null);
+
+    embeddedRequest.setIterableKey(VALUE);
+    assertEquals(VALUE, getField(embeddedRequest, "iterableKey"));
+  }
+
+  @Test
   void getResponseKeyWorksTest() {
     setField(embeddedRequest, "responseKey", VALUE);
 
@@ -159,7 +175,7 @@ class EmbeddedRequestTest {
    */
   private static Stream<Arguments> providePrePersistFor() {
 
-    return Stream.of(
+    return List.of(
       Arguments.of(
         helperFieldMap(NULL_STR, NULL_STR,    NULL_STR, null, NULL_STR),
         helperFieldMap(APP_JSON, JSON_OBJECT, APP_JSON, GET,  "")
@@ -184,11 +200,11 @@ class EmbeddedRequestTest {
         helperFieldMap(NULL_STR, NULL_STR,    NULL_STR, null, VALUE),
         helperFieldMap(APP_JSON, JSON_OBJECT, APP_JSON, GET,  VALUE)
       )
-    );
+    ).stream();
   }
 
   /**
-   * Helper for reducing inline code repititon for assignments.
+   * Helper for reducing in line code repetition for assignments.
    *
    * @param accept The accept value.
    * @param bodyTemplate The bodyTemplate value.

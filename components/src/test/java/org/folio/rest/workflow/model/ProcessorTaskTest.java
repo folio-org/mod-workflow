@@ -2,15 +2,25 @@ package org.folio.rest.workflow.model;
 
 import static org.folio.spring.test.mock.MockMvcConstant.VALUE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.util.ReflectionTestUtils.getField;
 import static org.springframework.test.util.ReflectionTestUtils.setField;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.stream.Stream;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
@@ -166,6 +176,90 @@ class ProcessorTaskTest {
 
     processorTask.setProcessor(embeddedProcessor);
     assertEquals(embeddedProcessor, getField(processorTask, "processor"));
+  }
+
+  @ParameterizedTest
+  @MethodSource("providePrePersistFor")
+  void prePersistWorksTest(Map<String, Object> initial, Map<String, Object> expected, Map<String, Boolean> persist) {
+
+    initial.forEach((String attribute, Object value) -> {
+      setField(processorTask, attribute, value);
+    });
+
+    processorTask.prePersist();
+
+    expected.forEach((String attribute, Object value) -> {
+      if (Boolean.TRUE.equals(persist.get(attribute))) {
+        if (attribute == "processor") {
+          verify((EmbeddedProcessor) value).prePersist();
+        }
+      } else if (Boolean.FALSE.equals(persist.get(attribute))) {
+        if (attribute == "processor") {
+          verify((EmbeddedProcessor) value, never()).prePersist();
+        }
+      } else {
+        assertEquals(value, getField(processorTask, attribute));
+      }
+    });
+  }
+
+  /**
+   * Helper function for parameterized tests for the prePersist function.
+   *
+   * @return
+   *   The arguments array stream with the stream columns as:
+   *     - Arguments initial The initial values.
+   *     - Arguments expect  The expected values.
+   *     - Arguments persist Boolean representing whether or not this will call prePersist() on the object and if so, then true/false depending on verify.
+   */
+  private static Stream<Arguments> providePrePersistFor() {
+
+    final EmbeddedProcessor processor = Mockito.spy(new EmbeddedProcessor());
+
+    return List.of(
+      Arguments.of(
+        helperFieldMap(null),
+        helperFieldMap(processor),
+        helperPersistMap(false)
+      ),
+      Arguments.of(
+        helperFieldMap(processor),
+        helperFieldMap(processor),
+        helperPersistMap(true)
+      )
+    ).stream();
+  }
+
+  /**
+   * Helper for reducing in line code repetition for assignments.
+   *
+   * @param processor The processor value.
+   *
+   * @return The built arguments map.
+   */
+  private static Map<String, Object> helperFieldMap(EmbeddedProcessor processor) {
+
+    final Map<String, Object> map = new HashMap<>();
+
+    map.put("processor", processor);
+
+    return map;
+  }
+
+  /**
+   * Helper for reducing in line code repetition for assignments for persist setting.
+   *
+   * @param processor The processor persist value.
+   *
+   * @return The built persist map.
+   */
+  private static Map<String, Object> helperPersistMap(Boolean processor) {
+
+    final Map<String, Object> map = new HashMap<>();
+
+    map.put("processor", processor);
+
+    return map;
   }
 
 }

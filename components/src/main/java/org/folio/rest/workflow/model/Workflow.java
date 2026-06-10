@@ -112,6 +112,11 @@ public class Workflow extends AbstractBaseEntity implements HasDeploymentId, Has
     if (versionTag == null) {
       versionTag = "1.0";
     }
+
+    // @Embeddable with @PrePersist do not consistently call PrePersist and so this must be manually triggered.
+    if (setup != null) {
+      setup.prePersist();
+    }
   }
 
   @Override

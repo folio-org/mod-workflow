@@ -2,14 +2,16 @@ package org.folio.rest.workflow.model;
 
 import static org.folio.spring.test.mock.MockMvcConstant.NULL_STR;
 import static org.folio.spring.test.mock.MockMvcConstant.VALUE;
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.util.ReflectionTestUtils.getField;
 import static org.springframework.test.util.ReflectionTestUtils.setField;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -23,6 +25,19 @@ class NodeTest {
   @BeforeEach
   void beforeEach() {
     node = new Impl();
+  }
+
+  @Test
+  void getIdentifierWorksTest() {
+    final String className = node.getClass().getSimpleName().toLowerCase();
+    final String expect = "my_identifier";
+
+    setField(node, "id", "my-identifier");
+
+    final String identifier = node.getIdentifier();
+
+    assertThat(identifier, containsString(expect));
+    assertThat(identifier, containsString(className));
   }
 
   @Test
@@ -109,7 +124,7 @@ class NodeTest {
    */
   private static Stream<Arguments> providePrePersistFor() {
 
-    return Stream.of(
+    return List.of(
       Arguments.of(
         helperFieldMap(NULL_STR),
         helperFieldMap("")
@@ -118,17 +133,18 @@ class NodeTest {
         helperFieldMap(VALUE),
         helperFieldMap(VALUE)
       )
-    );
+    ).stream();
   }
 
   /**
-   * Helper for reducing inline code repititon for assignments.
+   * Helper for reducing in line code repetition for assignments.
    *
    * @param name The name value.
    *
    * @return The built arguments map.
    */
   private static Map<String, Object> helperFieldMap(String name) {
+
     final Map<String, Object> map = new HashMap<>();
 
     map.put("name", name);

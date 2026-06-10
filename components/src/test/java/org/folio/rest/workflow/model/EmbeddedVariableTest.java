@@ -8,6 +8,7 @@ import static org.springframework.test.util.ReflectionTestUtils.getField;
 import static org.springframework.test.util.ReflectionTestUtils.setField;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 import org.folio.rest.workflow.enums.VariableType;
@@ -140,7 +141,7 @@ class EmbeddedVariableTest {
    */
   private static Stream<Arguments> providePrePersistFor() {
 
-    return Stream.of(
+    return List.of(
       Arguments.of(
         helperFieldMap(null, null,  null,  null,  null),
         helperFieldMap(false, false, false, false, PROCESS)
@@ -165,11 +166,11 @@ class EmbeddedVariableTest {
         helperFieldMap(null, null,  null,  null,  LOCAL),
         helperFieldMap(false, false, false, false, LOCAL)
       )
-    );
+    ).stream();
   }
 
   /**
-   * Helper for reducing inline code repititon for assignments.
+   * Helper for reducing in line code repetition for assignments.
    *
    * @param asArray The asArray value.
    * @param asJson The asJson value.

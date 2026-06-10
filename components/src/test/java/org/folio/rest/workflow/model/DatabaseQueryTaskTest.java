@@ -8,10 +8,10 @@ import static org.springframework.test.util.ReflectionTestUtils.setField;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Stream;
-
 import org.folio.rest.workflow.enums.DatabaseResultType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -258,7 +258,7 @@ class DatabaseQueryTaskTest {
    */
   private static Stream<Arguments> providePrePersistFor() {
 
-    return Stream.of(
+    return List.of(
       Arguments.of(
         helperFieldMap(NULL_STR, NULL_STR, null),
         helperFieldMap("",       "",       false)
@@ -275,11 +275,11 @@ class DatabaseQueryTaskTest {
         helperFieldMap(NULL_STR, NULL_STR, true),
         helperFieldMap("",       "",       true)
       )
-    );
+    ).stream();
   }
 
   /**
-   * Helper for reducing inline code repititon for assignments.
+   * Helper for reducing in line code repetition for assignments.
    *
    * @param designation The designation value.
    * @param query The query value.

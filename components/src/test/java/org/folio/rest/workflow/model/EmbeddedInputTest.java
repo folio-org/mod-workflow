@@ -178,7 +178,7 @@ class EmbeddedInputTest {
 
     final ArrayList<InputAttribute> emptyAttrList = new ArrayList<>();
 
-    return Stream.of(
+    return List.of(
       Arguments.of(
         helperFieldMap(null,          NULL_STR, NULL_STR, null, null,      null),
         helperFieldMap(emptyAttrList, "",       "",       TEXT, emptyList, false)
@@ -207,11 +207,11 @@ class EmbeddedInputTest {
         helperFieldMap(null,          NULL_STR, NULL_STR, null, null,      true),
         helperFieldMap(emptyAttrList, "",       "",       TEXT, emptyList, true)
       )
-    );
+    ).stream();
   }
 
   /**
-   * Helper for reducing inline code repititon for assignments.
+   * Helper for reducing in line code repetition for assignments.
    *
    * @param attributes The attributes value.
    * @param fieldId The fieldId value.

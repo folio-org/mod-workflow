@@ -5,6 +5,7 @@ import static org.folio.spring.test.mock.MockMvcConstant.VALUE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.util.ReflectionTestUtils.setField;
 
+import java.util.List;
 import java.util.stream.Stream;
 import org.folio.rest.workflow.model.EmbeddedLoopReference;
 import org.junit.jupiter.api.BeforeEach;
@@ -65,7 +66,7 @@ class MultiInstanceTest {
     EmbeddedLoopReference embeddedLoopReference = new EmbeddedLoopReference();
     EmbeddedLoopReference nullEmbedded = null;
 
-    return Stream.of(
+    return List.of(
       Arguments.of(nullEmbedded,          NULL_STR, NULL_STR, NULL_STR, false),
       Arguments.of(nullEmbedded,          VALUE,    NULL_STR, NULL_STR, false),
       Arguments.of(nullEmbedded,          NULL_STR, VALUE,    NULL_STR, false),
@@ -82,7 +83,7 @@ class MultiInstanceTest {
       Arguments.of(embeddedLoopReference, VALUE,    NULL_STR, VALUE,    true),
       Arguments.of(embeddedLoopReference, NULL_STR, VALUE,    VALUE,    true),
       Arguments.of(embeddedLoopReference, VALUE,    VALUE,    VALUE,    true)
-    );
+    ).stream();
   }
 
 }

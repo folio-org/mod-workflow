@@ -169,7 +169,7 @@ class AbstractProcessTest {
 
     final List<Node> emptyList = new ArrayList<>();
 
-    return Stream.of(
+    return List.of(
       Arguments.of(
         helperFieldMap(null,  null,  null),
         helperFieldMap(false, false, emptyList)
@@ -186,11 +186,11 @@ class AbstractProcessTest {
         helperFieldMap(null,  null,  nodeList),
         helperFieldMap(false, false, nodeList)
       )
-    );
+    ).stream();
   }
 
   /**
-   * Helper for reducing inline code repititon for assignments.
+   * Helper for reducing in line code repetition for assignments.
    *
    * @param asyncBefore The asyncBefore value.
    * @param asyncAfter The asyncAfter value.

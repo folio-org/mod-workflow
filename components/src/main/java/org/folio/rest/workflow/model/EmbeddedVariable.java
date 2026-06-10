@@ -4,7 +4,6 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.PrePersist;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import org.folio.rest.workflow.enums.VariableType;
@@ -19,23 +18,28 @@ public class EmbeddedVariable implements HasEmbeddedVariableCommon {
   @Column(name = "vkey", nullable = true)
   private String key;
 
-  @Column(nullable = false)
+  // Must be designated as nullable even if this is not supposed to be NULL.
+  @Column(nullable = true)
   @Enumerated(EnumType.STRING)
   private VariableType type;
 
-  @Column(nullable = false)
+  // Must be designated as nullable even if this is not supposed to be NULL.
+  @Column(nullable = true)
   @ColumnDefault("false")
   private Boolean spin;
 
-  @Column(nullable = false)
+  // Must be designated as nullable even if this is not supposed to be NULL.
+  @Column(nullable = true)
   @ColumnDefault("false")
   private Boolean asArray;
 
-  @Column(nullable = false)
+  // Must be designated as nullable even if this is not supposed to be NULL.
+  @Column(nullable = true)
   @ColumnDefault("false")
   private Boolean asJson;
 
-  @Column(nullable = false)
+  // Must be designated as nullable even if this is not supposed to be NULL.
+  @Column(nullable = true)
   @ColumnDefault("false")
   private Boolean asTransient;
 
@@ -49,7 +53,12 @@ public class EmbeddedVariable implements HasEmbeddedVariableCommon {
     type = VariableType.PROCESS;
   }
 
-  @PrePersist
+  /**
+   * Perform pre-persist setup to ensure good state.
+   *
+   * Embeddables do not utilize @PrePersist annotation due to it not working well in certain circumstances.
+   * Therefore, this must be manually called by the class utilizing this class.
+   */
   public void prePersist() {
     if (asArray == null) {
       asArray = false;
