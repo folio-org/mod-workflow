@@ -8,9 +8,9 @@ import static org.springframework.test.util.ReflectionTestUtils.getField;
 import static org.springframework.test.util.ReflectionTestUtils.setField;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
-
 import org.folio.rest.workflow.enums.ScriptType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -126,47 +126,55 @@ class EmbeddedProcessorTest {
    */
   private static Stream<Arguments> providePrePersistFor() {
 
-    return Stream.of(
+    final ScriptType nullScriptType = null;
+
+    return List.of(
       Arguments.of(
-        helperFieldMap(null,      NULL_STR, null,      NULL_STR),
-        helperFieldMap(0,         "",       0,         "")
+        helperFieldMap(null,      NULL_STR, null,      NULL_STR, nullScriptType),
+        helperFieldMap(0,         "",       0,         "",       ScriptType.JS)
       ),
       Arguments.of(
-        helperFieldMap(INT_VALUE, NULL_STR, null,      NULL_STR),
-        helperFieldMap(INT_VALUE, "",       0,         "")
+        helperFieldMap(INT_VALUE, NULL_STR, null,      NULL_STR, nullScriptType),
+        helperFieldMap(INT_VALUE, "",       0,         "",       ScriptType.JS)
       ),
       Arguments.of(
-        helperFieldMap(null,      VALUE,    null,      NULL_STR),
-        helperFieldMap(0,         VALUE,    0,         "")
+        helperFieldMap(null,      VALUE,    null,      NULL_STR, nullScriptType),
+        helperFieldMap(0,         VALUE,    0,         "",       ScriptType.JS)
       ),
       Arguments.of(
-        helperFieldMap(null,      NULL_STR, INT_VALUE, NULL_STR),
-        helperFieldMap(0,         "",       INT_VALUE, "")
+        helperFieldMap(null,      NULL_STR, INT_VALUE, NULL_STR, nullScriptType),
+        helperFieldMap(0,         "",       INT_VALUE, "",       ScriptType.JS)
       ),
       Arguments.of(
-        helperFieldMap(null,      NULL_STR, null,      VALUE),
-        helperFieldMap(0,         "",       0,         VALUE)
+        helperFieldMap(null,      NULL_STR, null,      VALUE,    nullScriptType),
+        helperFieldMap(0,         "",       0,         VALUE,    ScriptType.JS)
+      ),
+      Arguments.of(
+        helperFieldMap(null,      NULL_STR, null,      VALUE,    ScriptType.GROOVY),
+        helperFieldMap(0,         "",       0,         VALUE,    ScriptType.GROOVY)
       )
-    );
+    ).stream();
   }
 
   /**
-   * Helper for reducing inline code repititon for assignments.
+   * Helper for reducing in line code repetition for assignments.
    *
-   * @param mailFrom The mailFrom value.
-   * @param mailText The mailText value.
-   * @param mailTo The mailTo value.
-   * @param mailSubject The mailSubject value.
+   * @param buffer The buffer value.
+   * @param code The code value.
+   * @param delay The delay value.
+   * @param functionName The functionName value.
+   * @param scriptType The scriptType value.
    *
    * @return The built arguments map.
    */
-  private static Map<String, Object> helperFieldMap(Integer buffer, String code, Integer delay, String functionName) {
+  private static Map<String, Object> helperFieldMap(Integer buffer, String code, Integer delay, String functionName, ScriptType scriptType) {
     final Map<String, Object> map = new HashMap<>();
 
     map.put("buffer", buffer);
     map.put("code", code);
     map.put("delay", delay);
     map.put("functionName", functionName);
+    map.put("scriptType", scriptType);
 
     return map;
   }

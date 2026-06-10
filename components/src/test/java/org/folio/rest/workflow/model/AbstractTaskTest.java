@@ -2,6 +2,9 @@ package org.folio.rest.workflow.model;
 
 import static org.folio.spring.test.mock.MockMvcConstant.VALUE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.util.ReflectionTestUtils.getField;
 import static org.springframework.test.util.ReflectionTestUtils.setField;
 
@@ -19,6 +22,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
@@ -163,9 +167,11 @@ class AbstractTaskTest {
     assertEquals(true, getField(abstractTask, "asyncAfter"));
   }
 
+  @SuppressWarnings("unchecked")
   @ParameterizedTest
   @MethodSource("providePrePersistFor")
-  void prePersistWorksTest(Map<String, Object> initial, Map<String, Object> expected) {
+  void prePersistWorksTest(Map<String, Object> initial, Map<String, Object> expected, Map<String, Boolean> persist) {
+
     initial.forEach((String attribute, Object value) -> {
       setField(abstractTask, attribute, value);
     });
@@ -173,7 +179,30 @@ class AbstractTaskTest {
     abstractTask.prePersist();
 
     expected.forEach((String attribute, Object value) -> {
-      assertEquals(value, getField(abstractTask, attribute));
+      if (attribute == "inputVariables") {
+        final Set<EmbeddedVariable> eps = (Set<EmbeddedVariable>) value;
+
+        assertNotNull(getField(abstractTask, attribute));
+        assertEquals(eps.size(), ((Set<EmbeddedVariable>) getField(abstractTask, attribute)).size());
+
+        eps.forEach(ep -> {
+          if (ep != null) {
+            if (Boolean.TRUE.equals(persist.get(attribute))) {
+              verify(ep).prePersist();
+            } else if (Boolean.FALSE.equals(persist.get(attribute))) {
+              verify(ep, never()).prePersist();
+            }
+          }
+        });
+      } else if (attribute == "outputVariable") {
+        if (Boolean.TRUE.equals(persist.get(attribute))) {
+          verify((EmbeddedVariable) value).prePersist();
+        } else if (Boolean.FALSE.equals(persist.get(attribute))) {
+          verify((EmbeddedVariable) value, never()).prePersist();
+        }
+      } else {
+        assertEquals(value, getField(abstractTask, attribute));
+      }
     });
   }
 
@@ -183,49 +212,89 @@ class AbstractTaskTest {
    * @return
    *   The arguments array stream with the stream columns as:
    *     - Arguments initial The initial values.
-   *     - Arguments expect The expected values.
+   *     - Arguments expect  The expected values.
+   *     - Arguments persist Boolean representing whether or not this will call prePersist() on the object and if so, then true/false depending on verify.
    */
   private static Stream<Arguments> providePrePersistFor() {
-    final Set<EmbeddedVariable> evList = new HashSet<>();
-    evList.add(new EmbeddedVariable());
 
-    final Set<EmbeddedVariable> emptyList = new HashSet<>();
+    final EmbeddedVariable iv = Mockito.spy(new EmbeddedVariable());
+    final EmbeddedVariable ov = Mockito.spy(new EmbeddedVariable());
+    final EmbeddedVariable nullValue = null;
+    final Set<EmbeddedVariable> evs = Set.of(iv);
+    final Set<EmbeddedVariable> evsEmpty = Set.of();
+    final Set<EmbeddedVariable> evsNull = new HashSet<>();
 
-    return Stream.of(
+    evsNull.add(nullValue);
+
+    return List.of(
       Arguments.of(
-        helperFieldMap(null,  null,  null),
-        helperFieldMap(false, false, emptyList)
+        helperFieldMap(null,  null,  null,     nullValue),
+        helperFieldMap(false, false, evsEmpty, nullValue),
+        helperPersistMap(            false,    null)
       ),
       Arguments.of(
-        helperFieldMap(true,  null,  null),
-        helperFieldMap(true,  false, emptyList)
+        helperFieldMap(true,  null,  null,     nullValue),
+        helperFieldMap(true,  false, evsEmpty, nullValue),
+        helperPersistMap(            false,    null)
       ),
       Arguments.of(
-        helperFieldMap(null,  true,  null),
-        helperFieldMap(false, true,  emptyList)
+        helperFieldMap(null,  true,  null,     nullValue),
+        helperFieldMap(false, true,  evsEmpty, nullValue),
+        helperPersistMap(            false,    null)
       ),
       Arguments.of(
-        helperFieldMap(null,  null,  evList),
-        helperFieldMap(false, false, evList)
+        helperFieldMap(null,  null,  evsNull,  nullValue),
+        helperFieldMap(false, false, evsNull,  nullValue),
+        helperPersistMap(            false,    null)
+      ),
+      Arguments.of(
+        helperFieldMap(null,  null,  evs,      nullValue),
+        helperFieldMap(false, false, evs,      nullValue),
+        helperPersistMap(            true,     null)
+      ),
+      Arguments.of(
+        helperFieldMap(null,  true,  null,     ov),
+        helperFieldMap(false, true,  evsEmpty, ov),
+        helperPersistMap(            false,    true)
       )
-    );
+    ).stream();
   }
 
   /**
-   * Helper for reducing inline code repititon for assignments.
+   * Helper for reducing in line code repetition for assignments.
    *
-   * @param asyncBefore The asyncBefore value.
-   * @param asyncAfter The asyncAfter value.
+   * @param asyncBefore    The asyncBefore value.
+   * @param asyncAfter     The asyncAfter value.
    * @param inputVariables The inputVariables value.
+   * @param outputVariable The outputVariable value.
    *
    * @return The built arguments map.
    */
-  private static Map<String, Object> helperFieldMap(Boolean asyncBefore, Boolean asyncAfter, Set<EmbeddedVariable> inputVariables) {
+  private static Map<String, Object> helperFieldMap(Boolean asyncBefore, Boolean asyncAfter, Set<EmbeddedVariable> inputVariables, EmbeddedVariable outputVariable) {
     final Map<String, Object> map = new HashMap<>();
 
     map.put("asyncBefore", asyncBefore);
     map.put("asyncAfter", asyncAfter);
     map.put("inputVariables", inputVariables);
+    map.put("outputVariable", outputVariable);
+
+    return map;
+  }
+
+  /**
+   * Helper for reducing in line code repetition for assignments for persist setting.
+   *
+   * @param inputVariables The inputVariables persist value.
+   * @param outputVariable The outputVariable persist value.
+   *
+   * @return The built persist map.
+   */
+  private static Map<String, Object> helperPersistMap(Boolean inputVariables, Boolean outputVariable) {
+
+    final Map<String, Object> map = new HashMap<>();
+
+    map.put("inputVariables", inputVariables);
+    map.put("outputVariable", outputVariable);
 
     return map;
   }

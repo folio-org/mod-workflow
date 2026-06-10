@@ -189,7 +189,6 @@ class ProcessorTaskTest {
     processorTask.prePersist();
 
     expected.forEach((String attribute, Object value) -> {
-
       if (Boolean.TRUE.equals(persist.get(attribute))) {
         if (attribute == "processor") {
           verify((EmbeddedProcessor) value).prePersist();
@@ -216,7 +215,7 @@ class ProcessorTaskTest {
   private static Stream<Arguments> providePrePersistFor() {
 
     final EmbeddedProcessor processor = Mockito.spy(new EmbeddedProcessor());
-    
+
     return List.of(
       Arguments.of(
         helperFieldMap(null),

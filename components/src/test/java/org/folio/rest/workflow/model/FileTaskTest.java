@@ -3,7 +3,6 @@ package org.folio.rest.workflow.model;
 import static org.folio.rest.workflow.enums.FileOp.DELETE;
 import static org.folio.rest.workflow.enums.FileOp.READ;
 import static org.folio.rest.workflow.enums.FileOp.WRITE;
-
 import static org.folio.spring.test.mock.MockMvcConstant.NULL_STR;
 import static org.folio.spring.test.mock.MockMvcConstant.VALUE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -12,10 +11,10 @@ import static org.springframework.test.util.ReflectionTestUtils.setField;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Stream;
-
 import org.folio.rest.workflow.enums.FileOp;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -247,7 +246,7 @@ class FileTaskTest {
    */
   private static Stream<Arguments> providePrePersistFor() {
 
-    return Stream.of(
+    return List.of(
       Arguments.of(
         helperFieldMap(null,  NULL_STR),
         helperFieldMap(READ,  "")
@@ -260,11 +259,11 @@ class FileTaskTest {
         helperFieldMap(null,  VALUE),
         helperFieldMap(READ,  VALUE)
       )
-    );
+    ).stream();
   }
 
   /**
-   * Helper for reducing inline code repititon for assignments.
+   * Helper for reducing in line code repetition for assignments.
    *
    * @param op The op value.
    * @param path The path value.

@@ -11,10 +11,10 @@ import static org.springframework.test.util.ReflectionTestUtils.setField;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Stream;
-
 import org.folio.rest.workflow.enums.SftpOp;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -317,9 +317,10 @@ class FtpTaskTest {
    *     - Arguments expect The expected values.
    */
   private static Stream<Arguments> providePrePersistFor() {
+
     final Integer defaultPort = 80;
 
-    return Stream.of(
+    return List.of(
       Arguments.of(
         helperFieldMap(NULL_STR, NULL_STR, null, NULL_STR, null,        NULL_STR),
         helperFieldMap("",       "",       GET,  "",       defaultPort, "")
@@ -352,11 +353,11 @@ class FtpTaskTest {
         helperFieldMap(VALUE,    VALUE,    PUT,  VALUE,    INT_VALUE,   VALUE),
         helperFieldMap(VALUE,    VALUE,    PUT,  VALUE,    INT_VALUE,   VALUE)
       )
-    );
+    ).stream();
   }
 
   /**
-   * Helper for reducing inline code repititon for assignments.
+   * Helper for reducing in line code repetition for assignments.
    *
    * @param destinationPath The destinationPath value.
    * @param host The host value.

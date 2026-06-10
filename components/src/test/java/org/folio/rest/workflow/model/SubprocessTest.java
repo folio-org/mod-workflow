@@ -4,17 +4,16 @@ import static org.folio.rest.workflow.enums.SubprocessType.EMBEDDED;
 import static org.folio.rest.workflow.enums.SubprocessType.TRANSACTION;
 import static org.folio.spring.test.mock.MockMvcConstant.VALUE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.util.ReflectionTestUtils.getField;
 import static org.springframework.test.util.ReflectionTestUtils.setField;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Stream;
-
 import org.folio.rest.workflow.enums.SubprocessType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,6 +22,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
@@ -182,7 +182,8 @@ class SubprocessTest {
 
   @ParameterizedTest
   @MethodSource("providePrePersistFor")
-  void prePersistWorksTest(Map<String, Object> initial, Map<String, Object> expected) {
+  void prePersistWorksTest(Map<String, Object> initial, Map<String, Object> expected, Map<String, Boolean> persist) {
+
     initial.forEach((String attribute, Object value) -> {
       setField(subprocess, attribute, value);
     });
@@ -190,7 +191,17 @@ class SubprocessTest {
     subprocess.prePersist();
 
     expected.forEach((String attribute, Object value) -> {
-      assertEquals(value, getField(subprocess, attribute));
+      if (Boolean.TRUE.equals(persist.get(attribute))) {
+        if (attribute == "loopRef") {
+          verify((EmbeddedLoopReference) value).prePersist();
+        }
+      } else if (Boolean.FALSE.equals(persist.get(attribute))) {
+        if (attribute == "loopRef") {
+          verify((EmbeddedLoopReference) value, never()).prePersist();
+        }
+      } else {
+        assertEquals(value, getField(subprocess, attribute));
+      }
     });
   }
 
@@ -200,38 +211,65 @@ class SubprocessTest {
    * @return
    *   The arguments array stream with the stream columns as:
    *     - Arguments initial The initial values.
-   *     - Arguments expect The expected values.
+   *     - Arguments expect  The expected values.
+   *     - Arguments persist Boolean representing whether or not this will call prePersist() on the object and if so, then true/false depending on verify.
    */
   private static Stream<Arguments> providePrePersistFor() {
-    final Set<EmbeddedVariable> ivList = new HashSet<>();
-    ivList.add(new EmbeddedVariable());
 
-    return Stream.of(
+    final EmbeddedLoopReference loopRef = Mockito.spy(new EmbeddedLoopReference());
+    final EmbeddedLoopReference loopRefNull = null;
+
+    return List.of(
       Arguments.of(
-        helperFieldMap(null),
-        helperFieldMap(EMBEDDED)
+        helperFieldMap(null,        loopRefNull),
+        helperFieldMap(EMBEDDED,    loopRefNull),
+        helperPersistMap(           null)
       ),
       Arguments.of(
-        helperFieldMap(TRANSACTION),
-        helperFieldMap(TRANSACTION)
+        helperFieldMap(TRANSACTION, loopRefNull),
+        helperFieldMap(TRANSACTION, loopRefNull),
+        helperPersistMap(           null)
+      ),
+      Arguments.of(
+        helperFieldMap(null,        loopRef),
+        helperFieldMap(EMBEDDED,    loopRef),
+        helperPersistMap(           true)
       )
-    );
+    ).stream();
   }
 
   /**
-   * Helper for reducing inline code repititon for assignments.
+   * Helper for reducing in line code repetition for assignments.
    *
-   * @param type The type value.
+   * @param type    The type value.
+   * @param loopRef The loopRef value.
    *
    * @return The built arguments map.
    */
-  private static Map<String, Object> helperFieldMap(SubprocessType type) {
+  private static Map<String, Object> helperFieldMap(SubprocessType type, EmbeddedLoopReference loopRef) {
+
     final Map<String, Object> map = new HashMap<>();
 
     map.put("type", type);
+    map.put("loopRef", loopRef);
 
     return map;
   }
 
+  /**
+   * Helper for reducing in line code repetition for assignments for persist setting.
+   *
+   * @param loopRef The loopRef persist value.
+   *
+   * @return The built persist map.
+   */
+  private static Map<String, Object> helperPersistMap(Boolean loopRef) {
+
+    final Map<String, Object> map = new HashMap<>();
+
+    map.put("loopRef", loopRef);
+
+    return map;
+  }
 
 }

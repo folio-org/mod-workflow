@@ -11,7 +11,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -156,7 +155,7 @@ class MoveToNodeTest {
     final List<Node> nodeList = new ArrayList<>();
     nodeList.add(new NodeImpl());
 
-    return Stream.of(
+    return List.of(
       Arguments.of(
         helperFieldMap(NULL_STR, null),
         helperFieldMap("",       emptyNodeList)
@@ -169,11 +168,11 @@ class MoveToNodeTest {
         helperFieldMap(NULL_STR, nodeList),
         helperFieldMap("",       nodeList)
       )
-    );
+    ).stream();
   }
 
   /**
-   * Helper for reducing inline code repititon for assignments.
+   * Helper for reducing in line code repetition for assignments.
    *
    * @param gatewayId The gatewayId value.
    * @param nodes The nodes value.

@@ -10,6 +10,7 @@ import static org.springframework.test.util.ReflectionTestUtils.setField;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Stream;
@@ -228,7 +229,8 @@ class DirectoryTaskTest {
    *     - Arguments expect The expected values.
    */
   private static Stream<Arguments> providePrePersistFor() {
-    return Stream.of(
+
+    return List.of(
       Arguments.of(
         helperFieldMap(NULL_STR, NULL_STR, null), 
         helperFieldMap("",       "",       LIST)
@@ -245,11 +247,11 @@ class DirectoryTaskTest {
         helperFieldMap(NULL_STR, NULL_STR, WRITE),
         helperFieldMap("",       "",       WRITE)
       )
-    );
+    ).stream();
   }
 
   /**
-   * Helper method for reducing inline code repetition.
+   * Helper method for reducing in line code repetition.
    *
    * @param path      Initial value for 'path' field
    * @param workflow  Initial value for 'workflow' field

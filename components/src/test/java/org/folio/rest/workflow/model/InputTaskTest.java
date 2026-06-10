@@ -2,15 +2,18 @@ package org.folio.rest.workflow.model;
 
 import static org.folio.spring.test.mock.MockMvcConstant.VALUE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.util.ReflectionTestUtils.getField;
 import static org.springframework.test.util.ReflectionTestUtils.setField;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Stream;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,6 +21,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
@@ -181,9 +185,11 @@ class InputTaskTest {
     assertEquals(inputs, getField(inputTask, "inputs"));
   }
 
+  @SuppressWarnings("unchecked")
   @ParameterizedTest
   @MethodSource("providePrePersistFor")
-  void prePersistWorksTest(Map<String, Object> initial, Map<String, Object> expected) {
+  void prePersistWorksTest(Map<String, Object> initial, Map<String, Object> expected, Map<String, Boolean> persist) {
+
     initial.forEach((String attribute, Object value) -> {
       setField(inputTask, attribute, value);
     });
@@ -191,7 +197,24 @@ class InputTaskTest {
     inputTask.prePersist();
 
     expected.forEach((String attribute, Object value) -> {
-      assertEquals(value, getField(inputTask, attribute));
+      if (attribute == "inputs") {
+        final Set<EmbeddedInput> eps = (Set<EmbeddedInput>) value;
+
+        assertNotNull(getField(inputTask, attribute));
+        assertEquals(eps.size(), ((Set<EmbeddedInput>) getField(inputTask, attribute)).size());
+
+        eps.forEach(ep -> {
+          if (ep != null) {
+            if (Boolean.TRUE.equals(persist.get(attribute))) {
+              verify(ep).prePersist();
+            } else if (Boolean.FALSE.equals(persist.get(attribute))) {
+              verify(ep, never()).prePersist();
+            }
+          }
+        });
+      } else {
+        assertEquals(value, getField(inputTask, attribute));
+      }
     });
   }
 
@@ -201,34 +224,68 @@ class InputTaskTest {
    * @return
    *   The arguments array stream with the stream columns as:
    *     - Arguments initial The initial values.
-   *     - Arguments expect The expected values.
+   *     - Arguments expect  The expected values.
+   *     - Arguments persist Boolean representing whether or not this will call prePersist() on the object and if so, then true/false depending on verify.
    */
   private static Stream<Arguments> providePrePersistFor() {
-    final Set<EmbeddedInput> emptyInput = new HashSet<>();
 
-    final Set<EmbeddedInput> inputs = new HashSet<>();
-    inputs.add(new EmbeddedInput());
+    final EmbeddedInput variable = Mockito.spy(new EmbeddedInput());
+    final EmbeddedInput nullValue = null;
+    final Set<EmbeddedInput> inputs = Set.of(variable);
+    final Set<EmbeddedInput> inputsEmpty = Set.of();
+    final Set<EmbeddedInput> inputsNull = new HashSet<>();
 
-    return Stream.of(
+    inputsNull.add(nullValue);
+
+    return List.of(
       Arguments.of(
         helperFieldMap(null),
-        helperFieldMap(emptyInput)
+        helperFieldMap(inputsEmpty),
+        helperPersistMap(false)
+      ),
+      Arguments.of(
+        helperFieldMap(inputsEmpty),
+        helperFieldMap(inputsEmpty),
+        helperPersistMap(false)
+      ),
+      Arguments.of(
+        helperFieldMap(inputsNull),
+        helperFieldMap(inputsNull),
+        helperPersistMap(false)
       ),
       Arguments.of(
         helperFieldMap(inputs),
-        helperFieldMap(inputs)
+        helperFieldMap(inputs),
+        helperPersistMap(true)
       )
-    );
+    ).stream();
   }
 
   /**
-   * Helper for reducing inline code repititon for assignments.
+   * Helper for reducing in line code repetition for assignments.
    *
    * @param inputs The inputs value.
    *
    * @return The built arguments map.
    */
   private static Map<String, Object> helperFieldMap(Set<EmbeddedInput> inputs) {
+
+    final Map<String, Object> map = new HashMap<>();
+
+    map.put("inputs", inputs);
+
+    return map;
+  }
+
+  /**
+   * Helper for reducing in line code repetition for assignments for persist setting.
+   *
+   * @param inputs The headerOutputVariables persist value.
+   *
+   * @return The built persist map.
+   */
+  private static Map<String, Object> helperPersistMap(Boolean inputs) {
+
     final Map<String, Object> map = new HashMap<>();
 
     map.put("inputs", inputs);

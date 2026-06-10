@@ -29,8 +29,10 @@ public class RequestTask extends AbstractTask implements DelegateTask, HasReques
   public void prePersist() {
     super.prePersist();
 
-    // @Embeddable with @PrePersist do not consistently call PrePersist and so this must be manually triggered.
-    if (headerOutputVariables != null) {
+    if (headerOutputVariables == null) {
+      headerOutputVariables = new HashSet<>();
+    } else {
+      // @Embeddable with @PrePersist do not consistently call PrePersist and so this must be manually triggered.
       headerOutputVariables.forEach((EmbeddedVariable ev) -> {
         if (ev != null) ev.prePersist();
       });

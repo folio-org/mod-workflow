@@ -7,9 +7,9 @@ import static org.springframework.test.util.ReflectionTestUtils.getField;
 import static org.springframework.test.util.ReflectionTestUtils.setField;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -139,7 +139,7 @@ class ConditionTest {
    */
   private static Stream<Arguments> providePrePersistFor() {
 
-    return Stream.of(
+    return List.of(
       Arguments.of(
         helperFieldMap(NULL_STR, NULL_STR),
         helperFieldMap("",       "")
@@ -152,11 +152,11 @@ class ConditionTest {
         helperFieldMap(NULL_STR, VALUE),
         helperFieldMap("",       VALUE)
       )
-    );
+    ).stream();
   }
 
   /**
-   * Helper for reducing inline code repititon for assignments.
+   * Helper for reducing in line code repetition for assignments.
    *
    * @param answer The answer value.
    * @param expression The expression value.

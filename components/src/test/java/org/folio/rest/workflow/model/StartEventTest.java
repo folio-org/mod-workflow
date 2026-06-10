@@ -9,9 +9,9 @@ import static org.springframework.test.util.ReflectionTestUtils.getField;
 import static org.springframework.test.util.ReflectionTestUtils.setField;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
-
 import org.folio.rest.workflow.enums.StartEventType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -172,7 +172,7 @@ class StartEventTest {
    */
   private static Stream<Arguments> providePrePersistFor() {
 
-    return Stream.of(
+    return List.of(
       Arguments.of(
         helperFieldMap(null,  null,  null),
         helperFieldMap(false, false, NONE)
@@ -189,11 +189,11 @@ class StartEventTest {
         helperFieldMap(null,  null,  SCHEDULED),
         helperFieldMap(false, false, SCHEDULED)
       )
-    );
+    ).stream();
   }
 
   /**
-   * Helper for reducing inline code repititon for assignments.
+   * Helper for reducing in line code repetition for assignments.
    *
    * @param asyncBefore The asyncBefore value.
    * @param interrupting The interrupting value.

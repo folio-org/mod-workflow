@@ -12,7 +12,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
-
 import org.folio.rest.workflow.enums.Direction;
 import org.folio.rest.workflow.enums.InputAttribute;
 import org.junit.jupiter.api.BeforeEach;
@@ -162,7 +161,7 @@ class AbstractGatewayTest {
     final ArrayList<InputAttribute> attrList = new ArrayList<>();
     attrList.add(InputAttribute.MAX);
 
-    return Stream.of(
+    return List.of(
       Arguments.of(
         helperFieldMap(null,        null),
         helperFieldMap(UNSPECIFIED, emptyList)
@@ -175,11 +174,11 @@ class AbstractGatewayTest {
         helperFieldMap(null,        nodeList),
         helperFieldMap(UNSPECIFIED, nodeList)
       )
-    );
+    ).stream();
   }
 
   /**
-   * Helper for reducing inline code repititon for assignments.
+   * Helper for reducing in line code repetition for assignments.
    *
    * @param direction The direction value.
    * @param nodes The nodes value.
