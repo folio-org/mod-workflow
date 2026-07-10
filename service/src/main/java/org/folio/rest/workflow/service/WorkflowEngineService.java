@@ -1,5 +1,6 @@
 package org.folio.rest.workflow.service;
 
+import java.time.Instant;
 import java.util.Iterator;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -253,6 +254,8 @@ public class WorkflowEngineService {
 
         if (responseWorkflow != null) {
           String deploymentId = responseWorkflow.getDeploymentId();
+
+          responseWorkflow.setUpdatedOn(Instant.now());
           LOG.info(String.format("Workflow is active = %s, deploymentID = %s", Boolean.TRUE.equals(responseWorkflow.getActive()), deploymentId));
           return workflowRepo.save(responseWorkflow);
         }
