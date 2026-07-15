@@ -1,6 +1,7 @@
 package org.folio.rest.workflow.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
@@ -15,16 +16,20 @@ import jakarta.persistence.PrePersist;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.folio.rest.workflow.model.converter.JsonNodeConverter;
+import org.folio.rest.workflow.model.has.HasChecksum;
+import org.folio.rest.workflow.model.has.HasCreatedOn;
 import org.folio.rest.workflow.model.has.HasDeploymentId;
 import org.folio.rest.workflow.model.has.HasId;
 import org.folio.rest.workflow.model.has.HasInformational;
 import org.folio.rest.workflow.model.has.HasName;
 import org.folio.rest.workflow.model.has.HasNodes;
+import org.folio.rest.workflow.model.has.HasUpdatedOn;
 import org.folio.rest.workflow.model.has.HasVersionTag;
 import org.folio.rest.workflow.model.has.common.HasWorkflowCommon;
 import org.folio.spring.domain.model.AbstractBaseEntity;
@@ -34,11 +39,19 @@ import tools.jackson.databind.JsonNode;
 
 @Entity
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
-public class Workflow extends AbstractBaseEntity implements HasDeploymentId, HasId, HasInformational, HasName, HasNodes, HasVersionTag, HasWorkflowCommon {
+public class Workflow extends AbstractBaseEntity implements HasChecksum, HasCreatedOn, HasDeploymentId, HasId, HasInformational, HasName, HasNodes, HasUpdatedOn, HasVersionTag, HasWorkflowCommon {
 
   @Column(nullable = true)
   @ColumnDefault("false")
   private Boolean active;
+
+  @Nullable
+  @Column
+  private String checksum;
+
+  @NotNull
+  @Column(columnDefinition="TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW()")
+  private Instant createdOn;
 
   @Column(unique = true)
   private String deploymentId;
@@ -70,6 +83,10 @@ public class Workflow extends AbstractBaseEntity implements HasDeploymentId, Has
   @Embedded
   private Setup setup;
 
+  @NotNull
+  @Column(columnDefinition="TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW()")
+  private Instant updatedOn;
+
   @Version
   @NotNull
   @Size(min = 1, max = 64)
@@ -80,10 +97,13 @@ public class Workflow extends AbstractBaseEntity implements HasDeploymentId, Has
     super();
 
     active = false;
+    checksum = null;
+    createdOn = now();
     name = "";
     historyTimeToLive = 0;
     initialContext = new HashMap<>();
     nodes = new ArrayList<>();
+    updatedOn = now();
     versionTag = "1.0";
   }
 
@@ -91,6 +111,10 @@ public class Workflow extends AbstractBaseEntity implements HasDeploymentId, Has
   public void prePersist() {
     if (active == null) {
       active = false;
+    }
+
+    if (createdOn == null) {
+      createdOn = now();
     }
 
     if (historyTimeToLive == null) {
@@ -109,6 +133,10 @@ public class Workflow extends AbstractBaseEntity implements HasDeploymentId, Has
       nodes = new ArrayList<>();
     }
 
+    if (updatedOn == null) {
+      updatedOn = now();
+    }
+
     if (versionTag == null) {
       versionTag = "1.0";
     }
@@ -125,6 +153,16 @@ public class Workflow extends AbstractBaseEntity implements HasDeploymentId, Has
   }
 
   @Override
+  public String getChecksum() {
+    return checksum;
+  }
+
+  @Override
+  public Instant getCreatedOn() {
+    return createdOn;
+  }
+
+  @Override
   public Integer getHistoryTimeToLive() {
     return historyTimeToLive;
   }
@@ -137,6 +175,11 @@ public class Workflow extends AbstractBaseEntity implements HasDeploymentId, Has
   @Override
   public Setup getSetup() {
     return setup;
+  }
+
+  @Override
+  public Instant getUpdatedOn() {
+    return updatedOn;
   }
 
   @Override
@@ -170,6 +213,16 @@ public class Workflow extends AbstractBaseEntity implements HasDeploymentId, Has
   }
 
   @Override
+  public void setChecksum(String checksum) {
+    this.checksum = checksum;
+  }
+
+  @Override
+  public void setCreatedOn(Instant createdOn) {
+    this.createdOn = createdOn;
+  }
+
+  @Override
   public void setHistoryTimeToLive(Integer historyTimeToLive) {
     this.historyTimeToLive = historyTimeToLive;
   }
@@ -182,6 +235,11 @@ public class Workflow extends AbstractBaseEntity implements HasDeploymentId, Has
   @Override
   public void setSetup(Setup setup) {
     this.setup = setup;
+  }
+
+  @Override
+  public void setUpdatedOn(Instant updatedOn) {
+    this.updatedOn = updatedOn;
   }
 
   @Override
@@ -207,6 +265,18 @@ public class Workflow extends AbstractBaseEntity implements HasDeploymentId, Has
   @Override
   public void setDeploymentId(String deploymentId) {
     this.deploymentId = deploymentId;
+  }
+
+  /**
+   * Get the current time.
+   *
+   * This is used to allow for easier unit testing where the unit tests need only override this method through mocks or similar.
+   *
+   * @return The current instant.
+   */
+  Instant now() {
+
+    return Instant.now();
   }
 
 }

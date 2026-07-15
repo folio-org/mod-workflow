@@ -203,7 +203,10 @@ class WorkflowControllerTest {
       String workflowJson = mapper.writeValueAsString(workflow);
 
       assertTrue(mediaType.isCompatibleWith(responseType));
-      assertEquals(workflowJson, result.getResponse().getContentAsString());
+
+      Workflow responseWorkflow = mapper.readValue(result.getResponse().getContentAsString(), Workflow.class);
+
+      assertEquals(workflowJson, mapper.writeValueAsString(responseWorkflow));
     }
   }
 
@@ -232,7 +235,10 @@ class WorkflowControllerTest {
       String workflowJson = mapper.writeValueAsString(workflow);
 
       assertTrue(mediaType.isCompatibleWith(responseType));
-      assertEquals(workflowJson, result.getResponse().getContentAsString());
+
+      Workflow responseWorkflow = mapper.readValue(result.getResponse().getContentAsString(), Workflow.class);
+
+      assertEquals(workflowJson, mapper.writeValueAsString(responseWorkflow));
     }
   }
 
@@ -406,7 +412,10 @@ class WorkflowControllerTest {
       String workflowJson = mapper.writeValueAsString(workflow);
 
       assertTrue(mediaType.isCompatibleWith(responseType));
-      assertEquals(workflowJson, result.getResponse().getContentAsString());
+
+      Workflow responseWorkflow = mapper.readValue(result.getResponse().getContentAsString(), Workflow.class);
+
+      assertEquals(workflowJson, mapper.writeValueAsString(responseWorkflow));
     }
   }
 

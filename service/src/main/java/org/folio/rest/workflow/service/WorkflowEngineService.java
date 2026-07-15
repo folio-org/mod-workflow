@@ -1,5 +1,6 @@
 package org.folio.rest.workflow.service;
 
+import java.time.Instant;
 import java.util.Iterator;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -253,7 +254,13 @@ public class WorkflowEngineService {
 
         if (responseWorkflow != null) {
           String deploymentId = responseWorkflow.getDeploymentId();
-          LOG.info(String.format("Workflow is active = %s, deploymentID = %s", Boolean.TRUE.equals(responseWorkflow.getActive()), deploymentId));
+          Boolean active = responseWorkflow.getActive();
+
+          responseWorkflow.setChecksum(workflow.getChecksum());
+          responseWorkflow.setCreatedOn(workflow.getCreatedOn());
+          responseWorkflow.setUpdatedOn(Instant.now());
+
+          LOG.info(String.format("Workflow is active = %s, deploymentID = %s", Boolean.TRUE.equals(active), deploymentId));
           return workflowRepo.save(responseWorkflow);
         }
       }
