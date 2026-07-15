@@ -23,7 +23,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import tools.jackson.databind.JsonNode;
 
@@ -312,7 +311,7 @@ class WorkflowTest {
 
     final List<Node> emptyList = new ArrayList<>();
 
-    final Setup setup = Mockito.spy(new Setup());
+    final Setup setup = spy(new Setup());
     final Setup setupNull = null;
 
     return List.of(
