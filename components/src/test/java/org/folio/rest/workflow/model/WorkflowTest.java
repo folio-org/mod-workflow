@@ -3,7 +3,9 @@ package org.folio.rest.workflow.model;
 import static org.folio.spring.test.mock.MockMvcConstant.INT_VALUE;
 import static org.folio.spring.test.mock.MockMvcConstant.VALUE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.util.ReflectionTestUtils.getField;
 import static org.springframework.test.util.ReflectionTestUtils.setField;
@@ -62,12 +64,12 @@ class WorkflowTest {
 
   @BeforeEach
   void beforeEach() {
-    workflow = Mockito.spy(Workflow.class);
+    workflow = spy(Workflow.class);
     nodes = new ArrayList<>();
     nodes.add(node);
     initialContext = new HashMap<>();
 
-    Mockito.lenient().doReturn(NOW).when(workflow).now();
+    lenient().doReturn(NOW).when(workflow).now();
   }
 
   @Test
