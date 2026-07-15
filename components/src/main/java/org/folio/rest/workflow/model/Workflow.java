@@ -98,12 +98,12 @@ public class Workflow extends AbstractBaseEntity implements HasChecksum, HasCrea
 
     active = false;
     checksum = null;
-    createdOn = Instant.now();
+    createdOn = now();
     name = "";
     historyTimeToLive = 0;
     initialContext = new HashMap<>();
     nodes = new ArrayList<>();
-    updatedOn = Instant.now();
+    updatedOn = now();
     versionTag = "1.0";
   }
 
@@ -114,7 +114,7 @@ public class Workflow extends AbstractBaseEntity implements HasChecksum, HasCrea
     }
 
     if (createdOn == null) {
-      createdOn = Instant.now();
+      createdOn = now();
     }
 
     if (historyTimeToLive == null) {
@@ -134,7 +134,7 @@ public class Workflow extends AbstractBaseEntity implements HasChecksum, HasCrea
     }
 
     if (updatedOn == null) {
-      updatedOn = Instant.now();
+      updatedOn = now();
     }
 
     if (versionTag == null) {
@@ -265,6 +265,18 @@ public class Workflow extends AbstractBaseEntity implements HasChecksum, HasCrea
   @Override
   public void setDeploymentId(String deploymentId) {
     this.deploymentId = deploymentId;
+  }
+
+  /**
+   * Get the current time.
+   *
+   * This is used to allow for easier unit testing where the unit tests need only override this method through mocks or similar.
+   *
+   * @return The current instant.
+   */
+  Instant now() {
+
+    return Instant.now();
   }
 
 }

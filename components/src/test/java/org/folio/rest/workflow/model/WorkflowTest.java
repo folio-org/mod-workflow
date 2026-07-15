@@ -8,6 +8,7 @@ import static org.mockito.Mockito.verify;
 import static org.springframework.test.util.ReflectionTestUtils.getField;
 import static org.springframework.test.util.ReflectionTestUtils.setField;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -32,6 +33,21 @@ class WorkflowTest {
    */
   public static final String VERSION = "1.0";
 
+  /**
+   * An arbitrary hash.
+   */
+  public static final String HASH = "aee6d39cd3f123452aed7ada75440d7a";
+
+  /**
+   * An arbitrary date.
+   */
+  public static final Instant NOW = Instant.now();
+
+  /**
+   * An arbitrary date that occurs some time after the arbitrary now date.
+   */
+  public static final Instant LATER = Instant.from(NOW).plusSeconds(1000);
+
   @Mock
   private Setup setup;
 
@@ -46,10 +62,12 @@ class WorkflowTest {
 
   @BeforeEach
   void beforeEach() {
-    workflow = new Workflow();
+    workflow = Mockito.spy(Workflow.class);
     nodes = new ArrayList<>();
     nodes.add(node);
     initialContext = new HashMap<>();
+
+    Mockito.lenient().doReturn(NOW).when(workflow).now();
   }
 
   @Test
@@ -158,6 +176,36 @@ class WorkflowTest {
   }
 
   @Test
+  void getChecksumWorksTest() {
+    setField(workflow, "checksum", HASH);
+
+    assertEquals(HASH, workflow.getChecksum());
+  }
+
+  @Test
+  void setChecksumWorksTest() {
+    setField(workflow, "checksum", null);
+
+    workflow.setChecksum(HASH);
+    assertEquals(HASH, getField(workflow, "checksum"));
+  }
+
+  @Test
+  void getCreatedOnWorksTest() {
+    setField(workflow, "createdOn", NOW);
+
+    assertEquals(NOW, workflow.getCreatedOn());
+  }
+
+  @Test
+  void setCreatedOnWorksTest() {
+    setField(workflow, "createdOn", null);
+
+    workflow.setCreatedOn(NOW);
+    assertEquals(NOW, getField(workflow, "createdOn"));
+  }
+
+  @Test
   void getDeploymentIdWorksTest() {
     setField(workflow, "deploymentId", VALUE);
 
@@ -202,6 +250,21 @@ class WorkflowTest {
     assertEquals(initialContext, getField(workflow, "initialContext"));
   }
 
+  @Test
+  void getUpdatedOnWorksTest() {
+    setField(workflow, "updatedOn", NOW);
+
+    assertEquals(NOW, workflow.getUpdatedOn());
+  }
+
+  @Test
+  void setUpdatedOnWorksTest() {
+    setField(workflow, "updatedOn", null);
+
+    workflow.setUpdatedOn(NOW);
+    assertEquals(NOW, getField(workflow, "updatedOn"));
+  }
+
   @ParameterizedTest
   @MethodSource("providePrePersistFor")
   void prePersistWorksTest(Map<String, Object> initial, Map<String, Object> expected, Map<String, Boolean> persist) {
@@ -232,8 +295,9 @@ class WorkflowTest {
    *
    * @return
    *   The arguments array stream with the stream columns as:
-   *     - Arguments initial The initial values.
-   *     - Arguments expect The expected values.
+   *     - Arguments initial The initial values to be stored on the object.
+   *     - Arguments expect The expected values to be after the pre-presistence call.
+   *     - The parent field setup structure for nested pre-persistence.
    */
   private static Stream<Arguments> providePrePersistFor() {
     final Map<String, JsonNode> ic = new HashMap<>();
@@ -251,44 +315,59 @@ class WorkflowTest {
 
     return List.of(
       Arguments.of(
-        helperFieldMap(null,  null,      null,  null,    null,      null,    setupNull),
-        helperFieldMap(false, 0,         "",    icEmpty, emptyList, VERSION, setupNull),
-        helperPersistMap(                                                    null)
+        helperFieldMap(null,  null, null,  null,      null,  null,    null,      null,  null,    setupNull),
+        helperFieldMap(false, null, NOW,   0,         "",    icEmpty, emptyList, NOW,   VERSION, setupNull),
+        helperPersistMap(                                                                        null)
       ),
       Arguments.of(
-        helperFieldMap(true,  null,      null,  null,    null,      null,    setupNull),
-        helperFieldMap(true,  0,         "",    icEmpty, emptyList, VERSION, setupNull),
-        helperPersistMap(                                                    null)
+        helperFieldMap(null,  HASH, null,  null,      null,  null,    null,      null,  null,    setupNull),
+        helperFieldMap(false, HASH, NOW,   0,         "",    icEmpty, emptyList, NOW,   VERSION, setupNull),
+        helperPersistMap(                                                                        null)
       ),
       Arguments.of(
-        helperFieldMap(null,  INT_VALUE, null,  null,    null,      null,    setupNull),
-        helperFieldMap(false, INT_VALUE, "",    icEmpty, emptyList, VERSION, setupNull),
-        helperPersistMap(                                                    null)
+        helperFieldMap(null,  null, LATER, null,      null,  null,    null,      null,  null,    setupNull),
+        helperFieldMap(false, null, LATER, 0,         "",    icEmpty, emptyList, NOW,   VERSION, setupNull),
+        helperPersistMap(                                                                        null)
       ),
       Arguments.of(
-        helperFieldMap(null,  null,      VALUE, null,    null,      null,    setupNull),
-        helperFieldMap(false, 0,         VALUE, icEmpty, emptyList, VERSION, setupNull),
-        helperPersistMap(                                                    null)
+        helperFieldMap(true,  null, null,  null,      null,  null,    null,      null,  null,    setupNull),
+        helperFieldMap(true,  null, NOW,   0,         "",    icEmpty, emptyList, NOW,   VERSION, setupNull),
+        helperPersistMap(                                                                        null)
       ),
       Arguments.of(
-        helperFieldMap(true,  null,      null,  ic,      null,      null,    setupNull),
-        helperFieldMap(true,  0,         "",    ic,      emptyList, VERSION, setupNull),
-        helperPersistMap(                                                    null)
+        helperFieldMap(null,  null, null,  INT_VALUE, null,  null,    null,      null,  null,    setupNull),
+        helperFieldMap(false, null, NOW,   INT_VALUE, "",    icEmpty, emptyList, NOW,   VERSION, setupNull),
+        helperPersistMap(                                                                        null)
       ),
       Arguments.of(
-        helperFieldMap(null,  null,      null,  null,    nodeList,  null,    setupNull),
-        helperFieldMap(false, 0,         "",    icEmpty, nodeList,  VERSION, setupNull),
-        helperPersistMap(                                                    null)
+        helperFieldMap(null,  null, null, null,       VALUE, null,    null,      null,  null,    setupNull),
+        helperFieldMap(false, null, NOW,  0,          VALUE, icEmpty, emptyList, NOW,   VERSION, setupNull),
+        helperPersistMap(                                                                           null)
       ),
       Arguments.of(
-        helperFieldMap(null,  null,      null,  null,    null,      VALUE,   setupNull),
-        helperFieldMap(false, 0,         "",    icEmpty, emptyList, VALUE,   setupNull),
-        helperPersistMap(                                                    null)
+        helperFieldMap(null,  null, null,  null,      null,  ic,      null,      null,  null,    setupNull),
+        helperFieldMap(false, null, NOW,   0,         "",    ic,      emptyList, NOW,   VERSION, setupNull),
+        helperPersistMap(                                                                        null)
       ),
       Arguments.of(
-        helperFieldMap(null,  null,      null,  null,    null,      VALUE,   setup),
-        helperFieldMap(false, 0,         "",    icEmpty, emptyList, VALUE,   setup),
-        helperPersistMap(                                                    true)
+        helperFieldMap(null,  null, null,  null,      null,  null,    nodeList,  null,  null,    setupNull),
+        helperFieldMap(false, null, NOW,   0,         "",    icEmpty, nodeList,  NOW,   VERSION, setupNull),
+        helperPersistMap(                                                                        null)
+      ),
+      Arguments.of(
+        helperFieldMap(null,  null, null,  null,      null,  null,    null,      LATER, null,    setupNull),
+        helperFieldMap(false, null, NOW,   0,         "",    icEmpty, emptyList, LATER, VERSION, setupNull),
+        helperPersistMap(                                                                        null)
+      ),
+      Arguments.of(
+        helperFieldMap(null,  null, null,  null,      null,  null,    null,      null,  VALUE,   setupNull),
+        helperFieldMap(false, null, NOW,   0,         "",    icEmpty, emptyList, NOW,   VALUE,   setupNull),
+        helperPersistMap(                                                                        null)
+      ),
+      Arguments.of(
+        helperFieldMap(null,  null, null,  null,      null,  null,    null,      null,  null,    setup),
+        helperFieldMap(false, null, NOW,   0,         "",    icEmpty, emptyList, NOW,   VERSION, setup),
+        helperPersistMap(                                                                        true)
       )
     ).stream();
   }
@@ -297,24 +376,30 @@ class WorkflowTest {
    * Helper for reducing in line code repetition for assignments.
    *
    * @param active            The active value.
+   * @param checksum          The checksum value.
+   * @param createdOn         The createdOn value.
    * @param historyTimeToLive The historyTimeToLive value.
    * @param name              The name value.
    * @param initialContext    The initialContext value.
    * @param nodes             The nodes value.
+   * @param updatedOn         The updatedOn value.
    * @param versionTag        The versionTag value.
    * @param setup             The setup value.
    *
    * @return The built arguments map.
    */
-  private static Map<String, Object> helperFieldMap(Boolean active, Integer historyTimeToLive, String name, Map<String, JsonNode> initialContext, List<Node> nodes, String versionTag, Setup setup) {
+  private static Map<String, Object> helperFieldMap(Boolean active, String checksum, Instant createdOn, Integer historyTimeToLive, String name, Map<String, JsonNode> initialContext, List<Node> nodes, Instant updatedOn, String versionTag, Setup setup) {
 
     final Map<String, Object> map = new HashMap<>();
 
     map.put("active", active);
+    map.put("checksum", checksum);
+    map.put("createdOn", createdOn);
     map.put("historyTimeToLive", historyTimeToLive);
     map.put("name", name);
     map.put("initialContext", initialContext);
     map.put("nodes", nodes);
+    map.put("updatedOn", updatedOn);
     map.put("versionTag", versionTag);
     map.put("setup", setup);
 
