@@ -24,6 +24,19 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class DatabaseConnectionTaskTest {
 
+  private static final String ASYNCAFTER     = "asyncAfter";
+  private static final String ASYNCBEFORE    = "asyncBefore";
+  private static final String DESCRIPTION    = "description";
+  private static final String DESERIALIZEAS  = "deserializeAs";
+  private static final String DESIGNATION    = "designation";
+  private static final String ID             = "id";
+  private static final String INPUTVARIABLES = "inputVariables";
+  private static final String NAME           = "name";
+  private static final String OUTPUTVARIABLE = "outputVariable";
+  private static final String PASSWORD       = "password";
+  private static final String URL            = "url";
+  private static final String USERNAME       = "username";
+
   @Mock
   private EmbeddedVariable embeddedVariable;
 
@@ -40,182 +53,182 @@ class DatabaseConnectionTaskTest {
 
   @Test
   void getIdWorksTest() {
-    setField(databaseConnectionTask, "id", VALUE);
+    setField(databaseConnectionTask, ID, VALUE);
 
     assertEquals(VALUE, databaseConnectionTask.getId());
   }
 
   @Test
   void setIdWorksTest() {
-    setField(databaseConnectionTask, "id", null);
+    setField(databaseConnectionTask, ID, null);
 
     databaseConnectionTask.setId(VALUE);
-    assertEquals(VALUE, getField(databaseConnectionTask, "id"));
+    assertEquals(VALUE, getField(databaseConnectionTask, ID));
   }
 
   @Test
   void getNameWorksTest() {
-    setField(databaseConnectionTask, "name", VALUE);
+    setField(databaseConnectionTask, NAME, VALUE);
 
     assertEquals(VALUE, databaseConnectionTask.getName());
   }
 
   @Test
   void setNameWorksTest() {
-    setField(databaseConnectionTask, "name", null);
+    setField(databaseConnectionTask, NAME, null);
 
     databaseConnectionTask.setName(VALUE);
-    assertEquals(VALUE, getField(databaseConnectionTask, "name"));
+    assertEquals(VALUE, getField(databaseConnectionTask, NAME));
   }
 
   @Test
   void getDescriptionWorksTest() {
-    setField(databaseConnectionTask, "description", VALUE);
+    setField(databaseConnectionTask, DESCRIPTION, VALUE);
 
     assertEquals(VALUE, databaseConnectionTask.getDescription());
   }
 
   @Test
   void setDescriptionWorksTest() {
-    setField(databaseConnectionTask, "description", null);
+    setField(databaseConnectionTask, DESCRIPTION, null);
 
     databaseConnectionTask.setDescription(VALUE);
-    assertEquals(VALUE, getField(databaseConnectionTask, "description"));
+    assertEquals(VALUE, getField(databaseConnectionTask, DESCRIPTION));
   }
 
   @Test
   void getDeserializeAsWorksTest() {
-    setField(databaseConnectionTask, "deserializeAs", VALUE);
+    setField(databaseConnectionTask, DESERIALIZEAS, VALUE);
 
     assertEquals(VALUE, databaseConnectionTask.getDeserializeAs());
   }
 
   @Test
   void setDeserializeAsWorksTest() {
-    setField(databaseConnectionTask, "deserializeAs", null);
+    setField(databaseConnectionTask, DESERIALIZEAS, null);
 
     databaseConnectionTask.setDeserializeAs(VALUE);
-    assertEquals(VALUE, getField(databaseConnectionTask, "deserializeAs"));
+    assertEquals(VALUE, getField(databaseConnectionTask, DESERIALIZEAS));
   }
 
   @Test
   void getInputVariablesWorksTest() {
-    setField(databaseConnectionTask, "inputVariables", inputVariables);
+    setField(databaseConnectionTask, INPUTVARIABLES, inputVariables);
 
     assertEquals(inputVariables, databaseConnectionTask.getInputVariables());
   }
 
   @Test
   void setInputVariablesWorksTest() {
-    setField(databaseConnectionTask, "inputVariables", null);
+    setField(databaseConnectionTask, INPUTVARIABLES, null);
 
     databaseConnectionTask.setInputVariables(inputVariables);
-    assertEquals(inputVariables, getField(databaseConnectionTask, "inputVariables"));
+    assertEquals(inputVariables, getField(databaseConnectionTask, INPUTVARIABLES));
   }
 
   @Test
   void getOutputVariableWorksTest() {
-    setField(databaseConnectionTask, "outputVariable", embeddedVariable);
+    setField(databaseConnectionTask, OUTPUTVARIABLE, embeddedVariable);
 
     assertEquals(embeddedVariable, databaseConnectionTask.getOutputVariable());
   }
 
   @Test
   void setOutputVariableWorksTest() {
-    setField(databaseConnectionTask, "outputVariable", null);
+    setField(databaseConnectionTask, OUTPUTVARIABLE, null);
 
     databaseConnectionTask.setOutputVariable(embeddedVariable);
-    assertEquals(embeddedVariable, getField(databaseConnectionTask, "outputVariable"));
+    assertEquals(embeddedVariable, getField(databaseConnectionTask, OUTPUTVARIABLE));
   }
 
   @Test
   void getAsyncBeforeWorksTest() {
-    setField(databaseConnectionTask, "asyncBefore", true);
+    setField(databaseConnectionTask, ASYNCBEFORE, true);
 
     assertEquals(true, databaseConnectionTask.getAsyncBefore());
   }
 
   @Test
   void setAsyncBeforeWorksTest() {
-    setField(databaseConnectionTask, "asyncBefore", false);
+    setField(databaseConnectionTask, ASYNCBEFORE, false);
 
     databaseConnectionTask.setAsyncBefore(true);
-    assertEquals(true, getField(databaseConnectionTask, "asyncBefore"));
+    assertEquals(true, getField(databaseConnectionTask, ASYNCBEFORE));
   }
 
   @Test
   void getAsyncAfterWorksTest() {
-    setField(databaseConnectionTask, "asyncAfter", true);
+    setField(databaseConnectionTask, ASYNCAFTER, true);
 
     assertEquals(true, databaseConnectionTask.getAsyncAfter());
   }
 
   @Test
   void setAsyncAfterWorksTest() {
-    setField(databaseConnectionTask, "asyncAfter", false);
+    setField(databaseConnectionTask, ASYNCAFTER, false);
 
     databaseConnectionTask.setAsyncAfter(true);
-    assertEquals(true, getField(databaseConnectionTask, "asyncAfter"));
+    assertEquals(true, getField(databaseConnectionTask, ASYNCAFTER));
   }
 
   @Test
   void getDesignationWorksTest() {
-    setField(databaseConnectionTask, "designation", VALUE);
+    setField(databaseConnectionTask, DESIGNATION, VALUE);
 
     assertEquals(VALUE, databaseConnectionTask.getDesignation());
   }
 
   @Test
   void setDesignationWorksTest() {
-    setField(databaseConnectionTask, "designation", null);
+    setField(databaseConnectionTask, DESIGNATION, null);
 
     databaseConnectionTask.setDesignation(VALUE);
-    assertEquals(VALUE, getField(databaseConnectionTask, "designation"));
+    assertEquals(VALUE, getField(databaseConnectionTask, DESIGNATION));
   }
 
   @Test
   void getUrlWorksTest() {
-    setField(databaseConnectionTask, "url", VALUE);
+    setField(databaseConnectionTask, URL, VALUE);
 
     assertEquals(VALUE, databaseConnectionTask.getUrl());
   }
 
   @Test
   void setUrlWorksTest() {
-    setField(databaseConnectionTask, "url", null);
+    setField(databaseConnectionTask, URL, null);
 
     databaseConnectionTask.setUrl(VALUE);
-    assertEquals(VALUE, getField(databaseConnectionTask, "url"));
+    assertEquals(VALUE, getField(databaseConnectionTask, URL));
   }
 
   @Test
   void getUsernameWorksTest() {
-    setField(databaseConnectionTask, "username", VALUE);
+    setField(databaseConnectionTask, USERNAME, VALUE);
 
     assertEquals(VALUE, databaseConnectionTask.getUsername());
   }
 
   @Test
   void setUsernameWorksTest() {
-    setField(databaseConnectionTask, "username", null);
+    setField(databaseConnectionTask, USERNAME, null);
 
     databaseConnectionTask.setUsername(VALUE);
-    assertEquals(VALUE, getField(databaseConnectionTask, "username"));
+    assertEquals(VALUE, getField(databaseConnectionTask, USERNAME));
   }
 
   @Test
   void getPasswordWorksTest() {
-    setField(databaseConnectionTask, "password", VALUE);
+    setField(databaseConnectionTask, PASSWORD, VALUE);
 
     assertEquals(VALUE, databaseConnectionTask.getPassword());
   }
 
   @Test
   void setPasswordWorksTest() {
-    setField(databaseConnectionTask, "password", null);
+    setField(databaseConnectionTask, PASSWORD, null);
 
     databaseConnectionTask.setPassword(VALUE);
-    assertEquals(VALUE, getField(databaseConnectionTask, "password"));
+    assertEquals(VALUE, getField(databaseConnectionTask, PASSWORD));
   }
 
 
@@ -270,8 +283,8 @@ class DatabaseConnectionTaskTest {
   private static Map<String, Object> helperFieldMap(String designation, String url ) {
     final Map<String, Object> map = new HashMap<>();
 
-    map.put("designation", designation);
-    map.put("url", url);
+    map.put(DESIGNATION, designation);
+    map.put(URL, url);
 
     return map;
   }

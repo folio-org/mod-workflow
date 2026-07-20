@@ -30,7 +30,7 @@ public class AbstractGatewayTest {
 
     @Test
     void testNodesGetterSetter() {
-        Node node = new Node(); 
+        Node node = new Node();
         abstractGateway.getNodes().add(node);
         assertEquals(1, abstractGateway.getNodes().size());
     }

@@ -29,6 +29,20 @@ import tools.jackson.databind.JsonNode;
 @ExtendWith(MockitoExtension.class)
 class WorkflowTest {
 
+  private static final String ACTIVE            = "active";
+  private static final String CHECKSUM          = "checksum";
+  private static final String CREATEDON         = "createdOn";
+  private static final String DESCRIPTION       = "description";
+  private static final String DEPLOYMENTID      = "deploymentId";
+  private static final String HISTORYTIMETOLIVE = "historyTimeToLive";
+  private static final String ID                = "id";
+  private static final String INITIALCONTEXT    = "initialContext";
+  private static final String NAME              = "name";
+  private static final String NODES             = "nodes";
+  private static final String SETUP             = "setup";
+  private static final String UPDATEDON         = "updatedOn";
+  private static final String VERSIONTAG        = "versionTag";
+
   /**
    * Provide a version string for the default version.
    */
@@ -73,197 +87,197 @@ class WorkflowTest {
 
   @Test
   void getIdWorksTest() {
-    setField(workflow, "id", VALUE);
+    setField(workflow, ID, VALUE);
 
     assertEquals(VALUE, workflow.getId());
   }
 
   @Test
   void setIdWorksTest() {
-    setField(workflow, "id", null);
+    setField(workflow, ID, null);
 
     workflow.setId(VALUE);
-    assertEquals(VALUE, getField(workflow, "id"));
+    assertEquals(VALUE, getField(workflow, ID));
   }
 
   @Test
   void getNameWorksTest() {
-    setField(workflow, "name", VALUE);
+    setField(workflow, NAME, VALUE);
 
     assertEquals(VALUE, workflow.getName());
   }
 
   @Test
   void setNameWorksTest() {
-    setField(workflow, "name", null);
+    setField(workflow, NAME, null);
 
     workflow.setName(VALUE);
-    assertEquals(VALUE, getField(workflow, "name"));
+    assertEquals(VALUE, getField(workflow, NAME));
   }
 
   @Test
   void getDescriptionWorksTest() {
-    setField(workflow, "description", VALUE);
+    setField(workflow, DESCRIPTION, VALUE);
 
     assertEquals(VALUE, workflow.getDescription());
   }
 
   @Test
   void setDescriptionWorksTest() {
-    setField(workflow, "description", null);
+    setField(workflow, DESCRIPTION, null);
 
     workflow.setDescription(VALUE);
-    assertEquals(VALUE, getField(workflow, "description"));
+    assertEquals(VALUE, getField(workflow, DESCRIPTION));
   }
 
   @Test
   void getNodesWorksTest() {
-    setField(workflow, "nodes", nodes);
+    setField(workflow, NODES, nodes);
 
     assertEquals(nodes, workflow.getNodes());
   }
 
   @Test
   void setNodesWorksTest() {
-    setField(workflow, "nodes", null);
+    setField(workflow, NODES, null);
 
     workflow.setNodes(nodes);
-    assertEquals(nodes, getField(workflow, "nodes"));
+    assertEquals(nodes, getField(workflow, NODES));
   }
 
   @Test
   void getVersionTagWorksTest() {
-    setField(workflow, "versionTag", VALUE);
+    setField(workflow, VERSIONTAG, VALUE);
 
     assertEquals(VALUE, workflow.getVersionTag());
   }
 
   @Test
   void setVersionTagWorksTest() {
-    setField(workflow, "versionTag", null);
+    setField(workflow, VERSIONTAG, null);
 
     workflow.setVersionTag(VALUE);
-    assertEquals(VALUE, getField(workflow, "versionTag"));
+    assertEquals(VALUE, getField(workflow, VERSIONTAG));
   }
 
   @Test
   void getHistoryTimeToLiveWorksTest() {
-    setField(workflow, "historyTimeToLive", 1);
+    setField(workflow, HISTORYTIMETOLIVE, 1);
 
     assertEquals(1, workflow.getHistoryTimeToLive());
   }
 
   @Test
   void setHistoryTimeToLiveWorksTest() {
-    setField(workflow, "historyTimeToLive", null);
+    setField(workflow, HISTORYTIMETOLIVE, null);
 
     workflow.setHistoryTimeToLive(1);
-    assertEquals(1, getField(workflow, "historyTimeToLive"));
+    assertEquals(1, getField(workflow, HISTORYTIMETOLIVE));
   }
 
   @Test
   void getActiveWorksTest() {
-    setField(workflow, "active", true);
+    setField(workflow, ACTIVE, true);
 
     assertEquals(true, workflow.getActive());
   }
 
   @Test
   void setActiveWorksTest() {
-    setField(workflow, "active", false);
+    setField(workflow, ACTIVE, false);
 
     workflow.setActive(true);
-    assertEquals(true, getField(workflow, "active"));
+    assertEquals(true, getField(workflow, ACTIVE));
   }
 
   @Test
   void getChecksumWorksTest() {
-    setField(workflow, "checksum", HASH);
+    setField(workflow, CHECKSUM, HASH);
 
     assertEquals(HASH, workflow.getChecksum());
   }
 
   @Test
   void setChecksumWorksTest() {
-    setField(workflow, "checksum", null);
+    setField(workflow, CHECKSUM, null);
 
     workflow.setChecksum(HASH);
-    assertEquals(HASH, getField(workflow, "checksum"));
+    assertEquals(HASH, getField(workflow, CHECKSUM));
   }
 
   @Test
   void getCreatedOnWorksTest() {
-    setField(workflow, "createdOn", NOW);
+    setField(workflow, CREATEDON, NOW);
 
     assertEquals(NOW, workflow.getCreatedOn());
   }
 
   @Test
   void setCreatedOnWorksTest() {
-    setField(workflow, "createdOn", null);
+    setField(workflow, CREATEDON, null);
 
     workflow.setCreatedOn(NOW);
-    assertEquals(NOW, getField(workflow, "createdOn"));
+    assertEquals(NOW, getField(workflow, CREATEDON));
   }
 
   @Test
   void getDeploymentIdWorksTest() {
-    setField(workflow, "deploymentId", VALUE);
+    setField(workflow, DEPLOYMENTID, VALUE);
 
     assertEquals(VALUE, workflow.getDeploymentId());
   }
 
   @Test
   void setDeploymentIdWorksTest() {
-    setField(workflow, "deploymentId", null);
+    setField(workflow, DEPLOYMENTID, null);
 
     workflow.setDeploymentId(VALUE);
-    assertEquals(VALUE, getField(workflow, "deploymentId"));
+    assertEquals(VALUE, getField(workflow, DEPLOYMENTID));
   }
 
   @Test
   void getSetupWorksTest() {
-    setField(workflow, "setup", setup);
+    setField(workflow, SETUP, setup);
 
     assertEquals(setup, workflow.getSetup());
   }
 
   @Test
   void setSetupWorksTest() {
-    setField(workflow, "setup", null);
+    setField(workflow, SETUP, null);
 
     workflow.setSetup(setup);
-    assertEquals(setup, getField(workflow, "setup"));
+    assertEquals(setup, getField(workflow, SETUP));
   }
 
   @Test
   void getInitialContextWorksTest() {
-    setField(workflow, "initialContext", initialContext);
+    setField(workflow, INITIALCONTEXT, initialContext);
 
     assertEquals(initialContext, workflow.getInitialContext());
   }
 
   @Test
   void setInitialContextWorksTest() {
-    setField(workflow, "initialContext", null);
+    setField(workflow, INITIALCONTEXT, null);
 
     workflow.setInitialContext(initialContext);
-    assertEquals(initialContext, getField(workflow, "initialContext"));
+    assertEquals(initialContext, getField(workflow, INITIALCONTEXT));
   }
 
   @Test
   void getUpdatedOnWorksTest() {
-    setField(workflow, "updatedOn", NOW);
+    setField(workflow, UPDATEDON, NOW);
 
     assertEquals(NOW, workflow.getUpdatedOn());
   }
 
   @Test
   void setUpdatedOnWorksTest() {
-    setField(workflow, "updatedOn", null);
+    setField(workflow, UPDATEDON, null);
 
     workflow.setUpdatedOn(NOW);
-    assertEquals(NOW, getField(workflow, "updatedOn"));
+    assertEquals(NOW, getField(workflow, UPDATEDON));
   }
 
   @ParameterizedTest
@@ -278,11 +292,11 @@ class WorkflowTest {
 
     expected.forEach((String attribute, Object value) -> {
       if (Boolean.TRUE.equals(persist.get(attribute))) {
-        if (attribute == "setup") {
+        if (attribute == SETUP) {
           verify((Setup) value).prePersist();
         }
       } else if (Boolean.FALSE.equals(persist.get(attribute))) {
-        if (attribute == "setup") {
+        if (attribute == SETUP) {
           verify((Setup) value, never()).prePersist();
         }
       } else {
@@ -393,16 +407,16 @@ class WorkflowTest {
 
     final Map<String, Object> map = new HashMap<>();
 
-    map.put("active", active);
-    map.put("checksum", checksum);
-    map.put("createdOn", createdOn);
-    map.put("historyTimeToLive", historyTimeToLive);
-    map.put("name", name);
-    map.put("initialContext", initialContext);
-    map.put("nodes", nodes);
-    map.put("updatedOn", updatedOn);
-    map.put("versionTag", versionTag);
-    map.put("setup", setup);
+    map.put(ACTIVE, active);
+    map.put(CHECKSUM, checksum);
+    map.put(CREATEDON, createdOn);
+    map.put(HISTORYTIMETOLIVE, historyTimeToLive);
+    map.put(INITIALCONTEXT, initialContext);
+    map.put(NAME, name);
+    map.put(NODES, nodes);
+    map.put(SETUP, setup);
+    map.put(UPDATEDON, updatedOn);
+    map.put(VERSIONTAG, versionTag);
 
     return map;
   }
@@ -418,7 +432,7 @@ class WorkflowTest {
 
     final Map<String, Object> map = new HashMap<>();
 
-    map.put("setup", setup);
+    map.put(SETUP, setup);
 
     return map;
   }

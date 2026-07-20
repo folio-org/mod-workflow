@@ -20,6 +20,12 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 class EmbeddedVariableTest {
 
+  private static final String ASARRAY     = "asArray";
+  private static final String ASJSON      = "asJson";
+  private static final String ASTRANSIENT = "asTransient";
+  private static final String SPIN        = "spin";
+  private static final String TYPE        = "type";
+
   private EmbeddedVariable embeddedVariable;
 
   @BeforeEach
@@ -44,77 +50,77 @@ class EmbeddedVariableTest {
 
   @Test
   void getTypeWorksTest() {
-    setField(embeddedVariable, "type", PROCESS);
+    setField(embeddedVariable, TYPE, PROCESS);
 
     assertEquals(PROCESS, embeddedVariable.getType());
   }
 
   @Test
   void setTypeWorksTest() {
-    setField(embeddedVariable, "type", null);
+    setField(embeddedVariable, TYPE, null);
 
     embeddedVariable.setType(PROCESS);
-    assertEquals(PROCESS, getField(embeddedVariable, "type"));
+    assertEquals(PROCESS, getField(embeddedVariable, TYPE));
   }
 
   @Test
   void getSpinWorksTest() {
-    setField(embeddedVariable, "spin", true);
+    setField(embeddedVariable, SPIN, true);
 
     assertEquals(true, embeddedVariable.getSpin());
   }
 
   @Test
   void setSpinWorksTest() {
-    setField(embeddedVariable, "spin", false);
+    setField(embeddedVariable, SPIN, false);
 
     embeddedVariable.setSpin(true);
-    assertEquals(true, getField(embeddedVariable, "spin"));
+    assertEquals(true, getField(embeddedVariable, SPIN));
   }
 
   @Test
   void getAsArrayWorksTest() {
-    setField(embeddedVariable, "asArray", true);
+    setField(embeddedVariable, ASARRAY, true);
 
     assertEquals(true, embeddedVariable.getAsArray());
   }
 
   @Test
   void setAsArrayWorksTest() {
-    setField(embeddedVariable, "asArray", false);
+    setField(embeddedVariable, ASARRAY, false);
 
     embeddedVariable.setAsArray(true);
-    assertEquals(true, getField(embeddedVariable, "asArray"));
+    assertEquals(true, getField(embeddedVariable, ASARRAY));
   }
 
   @Test
   void getAsJsonWorksTest() {
-    setField(embeddedVariable, "asJson", true);
+    setField(embeddedVariable, ASJSON, true);
 
     assertEquals(true, embeddedVariable.getAsJson());
   }
 
   @Test
   void setAsJsonWorksTest() {
-    setField(embeddedVariable, "asJson", false);
+    setField(embeddedVariable, ASJSON, false);
 
     embeddedVariable.setAsJson(true);
-    assertEquals(true, getField(embeddedVariable, "asJson"));
+    assertEquals(true, getField(embeddedVariable, ASJSON));
   }
 
   @Test
   void getAsTransientWorksTest() {
-    setField(embeddedVariable, "asTransient", true);
+    setField(embeddedVariable, ASTRANSIENT, true);
 
     assertEquals(true, embeddedVariable.getAsTransient());
   }
 
   @Test
   void setAsTransientWorksTest() {
-    setField(embeddedVariable, "asTransient", false);
+    setField(embeddedVariable, ASTRANSIENT, false);
 
     embeddedVariable.setAsTransient(true);
-    assertEquals(true, getField(embeddedVariable, "asTransient"));
+    assertEquals(true, getField(embeddedVariable, ASTRANSIENT));
   }
 
   @ParameterizedTest
@@ -183,11 +189,11 @@ class EmbeddedVariableTest {
   private static Map<String, Object> helperFieldMap(Boolean asArray, Boolean asJson, Boolean asTransient, Boolean spin, VariableType type) {
     final Map<String, Object> map = new HashMap<>();
 
-    map.put("asArray", asArray);
-    map.put("asJson", asJson);
-    map.put("asTransient", asTransient);
-    map.put("spin", spin);
-    map.put("type", type);
+    map.put(ASARRAY, asArray);
+    map.put(ASJSON, asJson);
+    map.put(ASTRANSIENT, asTransient);
+    map.put(SPIN, spin);
+    map.put(TYPE, type);
 
     return map;
   }

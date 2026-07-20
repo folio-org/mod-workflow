@@ -17,6 +17,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class MoveToLastGatewayTest {
 
+  private static final String DESCRIPTION   = "description";
+  private static final String DESERIALIZEAS = "deserializeAs";
+  private static final String ID            = "id";
+  private static final String NAME          = "name";
+  private static final String NODES         = "nodes";
+
   @Mock
   private Node node;
 
@@ -33,62 +39,62 @@ class MoveToLastGatewayTest {
 
   @Test
   void getIdWorksTest() {
-    setField(moveToLastGateway, "id", VALUE);
+    setField(moveToLastGateway, ID, VALUE);
 
     assertEquals(VALUE, moveToLastGateway.getId());
   }
 
   @Test
   void setIdWorksTest() {
-    setField(moveToLastGateway, "id", null);
+    setField(moveToLastGateway, ID, null);
 
     moveToLastGateway.setId(VALUE);
-    assertEquals(VALUE, getField(moveToLastGateway, "id"));
+    assertEquals(VALUE, getField(moveToLastGateway, ID));
   }
 
   @Test
   void getNameWorksTest() {
-    setField(moveToLastGateway, "name", VALUE);
+    setField(moveToLastGateway, NAME, VALUE);
 
     assertEquals(VALUE, moveToLastGateway.getName());
   }
 
   @Test
   void setNameWorksTest() {
-    setField(moveToLastGateway, "name", null);
+    setField(moveToLastGateway, NAME, null);
 
     moveToLastGateway.setName(VALUE);
-    assertEquals(VALUE, getField(moveToLastGateway, "name"));
+    assertEquals(VALUE, getField(moveToLastGateway, NAME));
   }
 
   @Test
   void getDescriptionWorksTest() {
-    setField(moveToLastGateway, "description", VALUE);
+    setField(moveToLastGateway, DESCRIPTION, VALUE);
 
     assertEquals(VALUE, moveToLastGateway.getDescription());
   }
 
   @Test
   void setDescriptionWorksTest() {
-    setField(moveToLastGateway, "description", null);
+    setField(moveToLastGateway, DESCRIPTION, null);
 
     moveToLastGateway.setDescription(VALUE);
-    assertEquals(VALUE, getField(moveToLastGateway, "description"));
+    assertEquals(VALUE, getField(moveToLastGateway, DESCRIPTION));
   }
 
   @Test
   void getDeserializeAsWorksTest() {
-    setField(moveToLastGateway, "deserializeAs", VALUE);
+    setField(moveToLastGateway, DESERIALIZEAS, VALUE);
 
     assertEquals(VALUE, moveToLastGateway.getDeserializeAs());
   }
 
   @Test
   void setDeserializeAsWorksTest() {
-    setField(moveToLastGateway, "deserializeAs", null);
+    setField(moveToLastGateway, DESERIALIZEAS, null);
 
     moveToLastGateway.setDeserializeAs(VALUE);
-    assertEquals(VALUE, getField(moveToLastGateway, "deserializeAs"));
+    assertEquals(VALUE, getField(moveToLastGateway, DESERIALIZEAS));
   }
 
   @Test
@@ -108,17 +114,17 @@ class MoveToLastGatewayTest {
 
   @Test
   void getNodesWorksTest() {
-    setField(moveToLastGateway, "nodes", nodes);
+    setField(moveToLastGateway, NODES, nodes);
 
     assertEquals(nodes, moveToLastGateway.getNodes());
   }
 
   @Test
   void setNodesWorksTest() {
-    setField(moveToLastGateway, "nodes", null);
+    setField(moveToLastGateway, NODES, null);
 
     moveToLastGateway.setNodes(nodes);
-    assertEquals(nodes, getField(moveToLastGateway, "nodes"));
+    assertEquals(nodes, getField(moveToLastGateway, NODES));
   }
 
 }

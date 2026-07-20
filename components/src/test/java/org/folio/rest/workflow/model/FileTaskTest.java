@@ -28,6 +28,16 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class FileTaskTest {
 
+  private static final String ASYNCAFTER     = "asyncAfter";
+  private static final String ASYNCBEFORE    = "asyncBefore";
+  private static final String DESCRIPTION    = "description";
+  private static final String DESERIALIZEAS  = "deserializeAs";
+  private static final String ID             = "id";
+  private static final String INPUTVARIABLES = "inputVariables";
+  private static final String NAME           = "name";
+  private static final String OUTPUTVARIABLE = "outputVariable";
+  private static final String OP             = "op";
+
   @Mock
   private EmbeddedVariable embeddedVariable;
 
@@ -44,137 +54,137 @@ class FileTaskTest {
 
   @Test
   void getIdWorksTest() {
-    setField(fileTask, "id", VALUE);
+    setField(fileTask, ID, VALUE);
 
     assertEquals(VALUE, fileTask.getId());
   }
 
   @Test
   void setIdWorksTest() {
-    setField(fileTask, "id", null);
+    setField(fileTask, ID, null);
 
     fileTask.setId(VALUE);
-    assertEquals(VALUE, getField(fileTask, "id"));
+    assertEquals(VALUE, getField(fileTask, ID));
   }
 
   @Test
   void getNameWorksTest() {
-    setField(fileTask, "name", VALUE);
+    setField(fileTask, NAME, VALUE);
 
     assertEquals(VALUE, fileTask.getName());
   }
 
   @Test
   void setNameWorksTest() {
-    setField(fileTask, "name", null);
+    setField(fileTask, NAME, null);
 
     fileTask.setName(VALUE);
-    assertEquals(VALUE, getField(fileTask, "name"));
+    assertEquals(VALUE, getField(fileTask, NAME));
   }
 
   @Test
   void getDescriptionWorksTest() {
-    setField(fileTask, "description", VALUE);
+    setField(fileTask, DESCRIPTION, VALUE);
 
     assertEquals(VALUE, fileTask.getDescription());
   }
 
   @Test
   void setDescriptionWorksTest() {
-    setField(fileTask, "description", null);
+    setField(fileTask, DESCRIPTION, null);
 
     fileTask.setDescription(VALUE);
-    assertEquals(VALUE, getField(fileTask, "description"));
+    assertEquals(VALUE, getField(fileTask, DESCRIPTION));
   }
 
   @Test
   void getDeserializeAsWorksTest() {
-    setField(fileTask, "deserializeAs", VALUE);
+    setField(fileTask, DESERIALIZEAS, VALUE);
 
     assertEquals(VALUE, fileTask.getDeserializeAs());
   }
 
   @Test
   void setDeserializeAsWorksTest() {
-    setField(fileTask, "deserializeAs", null);
+    setField(fileTask, DESERIALIZEAS, null);
 
     fileTask.setDeserializeAs(VALUE);
-    assertEquals(VALUE, getField(fileTask, "deserializeAs"));
+    assertEquals(VALUE, getField(fileTask, DESERIALIZEAS));
   }
 
   @Test
   void getInputVariablesWorksTest() {
-    setField(fileTask, "inputVariables", inputVariables);
+    setField(fileTask, INPUTVARIABLES, inputVariables);
 
     assertEquals(inputVariables, fileTask.getInputVariables());
   }
 
   @Test
   void setInputVariablesWorksTest() {
-    setField(fileTask, "inputVariables", null);
+    setField(fileTask, INPUTVARIABLES, null);
 
     fileTask.setInputVariables(inputVariables);
-    assertEquals(inputVariables, getField(fileTask, "inputVariables"));
+    assertEquals(inputVariables, getField(fileTask, INPUTVARIABLES));
   }
 
   @Test
   void getOutputVariableWorksTest() {
-    setField(fileTask, "outputVariable", embeddedVariable);
+    setField(fileTask, OUTPUTVARIABLE, embeddedVariable);
 
     assertEquals(embeddedVariable, fileTask.getOutputVariable());
   }
 
   @Test
   void setOutputVariableWorksTest() {
-    setField(fileTask, "outputVariable", null);
+    setField(fileTask, OUTPUTVARIABLE, null);
 
     fileTask.setOutputVariable(embeddedVariable);
-    assertEquals(embeddedVariable, getField(fileTask, "outputVariable"));
+    assertEquals(embeddedVariable, getField(fileTask, OUTPUTVARIABLE));
   }
 
   @Test
   void getAsyncBeforeWorksTest() {
-    setField(fileTask, "asyncBefore", true);
+    setField(fileTask, ASYNCBEFORE, true);
 
     assertEquals(true, fileTask.getAsyncBefore());
   }
 
   @Test
   void setAsyncBeforeWorksTest() {
-    setField(fileTask, "asyncBefore", false);
+    setField(fileTask, ASYNCBEFORE, false);
 
     fileTask.setAsyncBefore(true);
-    assertEquals(true, getField(fileTask, "asyncBefore"));
+    assertEquals(true, getField(fileTask, ASYNCBEFORE));
   }
 
   @Test
   void getAsyncAfterWorksTest() {
-    setField(fileTask, "asyncAfter", true);
+    setField(fileTask, ASYNCAFTER, true);
 
     assertEquals(true, fileTask.getAsyncAfter());
   }
 
   @Test
   void setAsyncAfterWorksTest() {
-    setField(fileTask, "asyncAfter", false);
+    setField(fileTask, ASYNCAFTER, false);
 
     fileTask.setAsyncAfter(true);
-    assertEquals(true, getField(fileTask, "asyncAfter"));
+    assertEquals(true, getField(fileTask, ASYNCAFTER));
   }
 
   @Test
   void getOpWorksTest() {
-    setField(fileTask, "op", DELETE);
+    setField(fileTask, OP, DELETE);
 
     assertEquals(DELETE, fileTask.getOp());
   }
 
   @Test
   void setOpWorksTest() {
-    setField(fileTask, "op", null);
+    setField(fileTask, OP, null);
 
     fileTask.setOp(DELETE);
-    assertEquals(DELETE, getField(fileTask, "op"));
+    assertEquals(DELETE, getField(fileTask, OP));
   }
 
   @Test
@@ -273,7 +283,7 @@ class FileTaskTest {
   private static Map<String, Object> helperFieldMap(FileOp op, String path ) {
     final Map<String, Object> map = new HashMap<>();
 
-    map.put("op", op);
+    map.put(OP, op);
     map.put("path", path);
 
     return map;

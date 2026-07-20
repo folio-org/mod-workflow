@@ -28,6 +28,15 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class AbstractTaskTest {
 
+  private static final String ASYNCAFTER     = "asyncAfter";
+  private static final String ASYNCBEFORE    = "asyncBefore";
+  private static final String DESCRIPTION    = "description";
+  private static final String DESERIALIZEAS  = "deserializeAs";
+  private static final String ID             = "id";
+  private static final String INPUTVARIABLES = "inputVariables";
+  private static final String NAME           = "name";
+  private static final String OUTPUTVARIABLE = "outputVariable";
+
   @Mock
   private EmbeddedVariable embeddedVariable;
 
@@ -49,122 +58,122 @@ class AbstractTaskTest {
 
   @Test
   void getIdWorksTest() {
-    setField(abstractTask, "id", VALUE);
+    setField(abstractTask, ID, VALUE);
 
     assertEquals(VALUE, abstractTask.getId());
   }
 
   @Test
   void setIdWorksTest() {
-    setField(abstractTask, "id", null);
+    setField(abstractTask, ID, null);
 
     abstractTask.setId(VALUE);
-    assertEquals(VALUE, getField(abstractTask, "id"));
+    assertEquals(VALUE, getField(abstractTask, ID));
   }
 
   @Test
   void getNameWorksTest() {
-    setField(abstractTask, "name", VALUE);
+    setField(abstractTask, NAME, VALUE);
 
     assertEquals(VALUE, abstractTask.getName());
   }
 
   @Test
   void setNameWorksTest() {
-    setField(abstractTask, "name", null);
+    setField(abstractTask, NAME, null);
 
     abstractTask.setName(VALUE);
-    assertEquals(VALUE, getField(abstractTask, "name"));
+    assertEquals(VALUE, getField(abstractTask, NAME));
   }
 
   @Test
   void getDescriptionWorksTest() {
-    setField(abstractTask, "description", VALUE);
+    setField(abstractTask, DESCRIPTION, VALUE);
 
     assertEquals(VALUE, abstractTask.getDescription());
   }
 
   @Test
   void setDescriptionWorksTest() {
-    setField(abstractTask, "description", null);
+    setField(abstractTask, DESCRIPTION, null);
 
     abstractTask.setDescription(VALUE);
-    assertEquals(VALUE, getField(abstractTask, "description"));
+    assertEquals(VALUE, getField(abstractTask, DESCRIPTION));
   }
 
   @Test
   void getDeserializeAsWorksTest() {
-    setField(abstractTask, "deserializeAs", VALUE);
+    setField(abstractTask, DESERIALIZEAS, VALUE);
 
     assertEquals(VALUE, abstractTask.getDeserializeAs());
   }
 
   @Test
   void setDeserializeAsWorksTest() {
-    setField(abstractTask, "deserializeAs", null);
+    setField(abstractTask, DESERIALIZEAS, null);
 
     abstractTask.setDeserializeAs(VALUE);
-    assertEquals(VALUE, getField(abstractTask, "deserializeAs"));
+    assertEquals(VALUE, getField(abstractTask, DESERIALIZEAS));
   }
 
   @Test
   void getInputVariablesWorksTest() {
-    setField(abstractTask, "inputVariables", inputVariables);
+    setField(abstractTask, INPUTVARIABLES, inputVariables);
 
     assertEquals(inputVariables, abstractTask.getInputVariables());
   }
 
   @Test
   void setInputVariablesWorksTest() {
-    setField(abstractTask, "inputVariables", null);
+    setField(abstractTask, INPUTVARIABLES, null);
 
     abstractTask.setInputVariables(inputVariables);
-    assertEquals(inputVariables, getField(abstractTask, "inputVariables"));
+    assertEquals(inputVariables, getField(abstractTask, INPUTVARIABLES));
   }
 
   @Test
   void getOutputVariableWorksTest() {
-    setField(abstractTask, "outputVariable", embeddedVariable);
+    setField(abstractTask, OUTPUTVARIABLE, embeddedVariable);
 
     assertEquals(embeddedVariable, abstractTask.getOutputVariable());
   }
 
   @Test
   void setOutputVariableWorksTest() {
-    setField(abstractTask, "outputVariable", null);
+    setField(abstractTask, OUTPUTVARIABLE, null);
 
     abstractTask.setOutputVariable(embeddedVariable);
-    assertEquals(embeddedVariable, getField(abstractTask, "outputVariable"));
+    assertEquals(embeddedVariable, getField(abstractTask, OUTPUTVARIABLE));
   }
 
   @Test
   void getAsyncBeforeWorksTest() {
-    setField(abstractTask, "asyncBefore", true);
+    setField(abstractTask, ASYNCBEFORE, true);
 
     assertEquals(true, abstractTask.getAsyncBefore());
   }
 
   @Test
   void setAsyncBeforeWorksTest() {
-    setField(abstractTask, "asyncBefore", false);
+    setField(abstractTask, ASYNCBEFORE, false);
 
     abstractTask.setAsyncBefore(true);
-    assertEquals(true, getField(abstractTask, "asyncBefore"));
+    assertEquals(true, getField(abstractTask, ASYNCBEFORE));
   }
 
   @Test
   void getAsyncAfterWorksTest() {
-    setField(abstractTask, "asyncAfter", true);
+    setField(abstractTask, ASYNCAFTER, true);
 
     assertEquals(true, abstractTask.getAsyncAfter());
   }
 
   @Test
   void setAsyncAfterWorksTest() {
-    setField(abstractTask, "asyncAfter", false);
+    setField(abstractTask, ASYNCAFTER, false);
 
     abstractTask.setAsyncAfter(true);
-    assertEquals(true, getField(abstractTask, "asyncAfter"));
+    assertEquals(true, getField(abstractTask, ASYNCAFTER));
   }
 
   @SuppressWarnings("unchecked")
@@ -179,7 +188,7 @@ class AbstractTaskTest {
     abstractTask.prePersist();
 
     expected.forEach((String attribute, Object value) -> {
-      if (attribute == "inputVariables") {
+      if (attribute == INPUTVARIABLES) {
         final Set<EmbeddedVariable> eps = (Set<EmbeddedVariable>) value;
 
         assertNotNull(getField(abstractTask, attribute));
@@ -194,7 +203,7 @@ class AbstractTaskTest {
             }
           }
         });
-      } else if (attribute == "outputVariable") {
+      } else if (attribute == OUTPUTVARIABLE) {
         if (Boolean.TRUE.equals(persist.get(attribute))) {
           verify((EmbeddedVariable) value).prePersist();
         } else if (Boolean.FALSE.equals(persist.get(attribute))) {
@@ -273,10 +282,10 @@ class AbstractTaskTest {
   private static Map<String, Object> helperFieldMap(Boolean asyncBefore, Boolean asyncAfter, Set<EmbeddedVariable> inputVariables, EmbeddedVariable outputVariable) {
     final Map<String, Object> map = new HashMap<>();
 
-    map.put("asyncBefore", asyncBefore);
-    map.put("asyncAfter", asyncAfter);
-    map.put("inputVariables", inputVariables);
-    map.put("outputVariable", outputVariable);
+    map.put(ASYNCBEFORE, asyncBefore);
+    map.put(ASYNCAFTER, asyncAfter);
+    map.put(INPUTVARIABLES, inputVariables);
+    map.put(OUTPUTVARIABLE, outputVariable);
 
     return map;
   }
@@ -293,8 +302,8 @@ class AbstractTaskTest {
 
     final Map<String, Object> map = new HashMap<>();
 
-    map.put("inputVariables", inputVariables);
-    map.put("outputVariable", outputVariable);
+    map.put(INPUTVARIABLES, inputVariables);
+    map.put(OUTPUTVARIABLE, outputVariable);
 
     return map;
   }

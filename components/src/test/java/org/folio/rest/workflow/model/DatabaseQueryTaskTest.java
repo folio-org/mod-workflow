@@ -25,6 +25,20 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class DatabaseQueryTaskTest {
 
+  private static final String ASYNCAFTER     = "asyncAfter";
+  private static final String ASYNCBEFORE    = "asyncBefore";
+  private static final String DESCRIPTION    = "description";
+  private static final String DESERIALIZEAS  = "deserializeAs";
+  private static final String DESIGNATION    = "designation";
+  private static final String ID             = "id";
+  private static final String INCLUDEHEADER  = "includeHeader";
+  private static final String INPUTVARIABLES = "inputVariables";
+  private static final String NAME           = "name";
+  private static final String OUTPUTPATH     = "outputPath";
+  private static final String OUTPUTVARIABLE = "outputVariable";
+  private static final String QUERY          = "query";
+  private static final String RESULTTYPE     = "resultType";
+
   @Mock
   private EmbeddedVariable embeddedVariable;
 
@@ -41,197 +55,197 @@ class DatabaseQueryTaskTest {
 
   @Test
   void getIdWorksTest() {
-    setField(databaseQueryTask, "id", VALUE);
+    setField(databaseQueryTask, ID, VALUE);
 
     assertEquals(VALUE, databaseQueryTask.getId());
   }
 
   @Test
   void setIdWorksTest() {
-    setField(databaseQueryTask, "id", null);
+    setField(databaseQueryTask, ID, null);
 
     databaseQueryTask.setId(VALUE);
-    assertEquals(VALUE, getField(databaseQueryTask, "id"));
+    assertEquals(VALUE, getField(databaseQueryTask, ID));
   }
 
   @Test
   void getNameWorksTest() {
-    setField(databaseQueryTask, "name", VALUE);
+    setField(databaseQueryTask, NAME, VALUE);
 
     assertEquals(VALUE, databaseQueryTask.getName());
   }
 
   @Test
   void setNameWorksTest() {
-    setField(databaseQueryTask, "name", null);
+    setField(databaseQueryTask, NAME, null);
 
     databaseQueryTask.setName(VALUE);
-    assertEquals(VALUE, getField(databaseQueryTask, "name"));
+    assertEquals(VALUE, getField(databaseQueryTask, NAME));
   }
 
   @Test
   void getDescriptionWorksTest() {
-    setField(databaseQueryTask, "description", VALUE);
+    setField(databaseQueryTask, DESCRIPTION, VALUE);
 
     assertEquals(VALUE, databaseQueryTask.getDescription());
   }
 
   @Test
   void setDescriptionWorksTest() {
-    setField(databaseQueryTask, "description", null);
+    setField(databaseQueryTask, DESCRIPTION, null);
 
     databaseQueryTask.setDescription(VALUE);
-    assertEquals(VALUE, getField(databaseQueryTask, "description"));
+    assertEquals(VALUE, getField(databaseQueryTask, DESCRIPTION));
   }
 
   @Test
   void getDeserializeAsWorksTest() {
-    setField(databaseQueryTask, "deserializeAs", VALUE);
+    setField(databaseQueryTask, DESERIALIZEAS, VALUE);
 
     assertEquals(VALUE, databaseQueryTask.getDeserializeAs());
   }
 
   @Test
   void setDeserializeAsWorksTest() {
-    setField(databaseQueryTask, "deserializeAs", null);
+    setField(databaseQueryTask, DESERIALIZEAS, null);
 
     databaseQueryTask.setDeserializeAs(VALUE);
-    assertEquals(VALUE, getField(databaseQueryTask, "deserializeAs"));
+    assertEquals(VALUE, getField(databaseQueryTask, DESERIALIZEAS));
   }
 
   @Test
   void getInputVariablesWorksTest() {
-    setField(databaseQueryTask, "inputVariables", inputVariables);
+    setField(databaseQueryTask, INPUTVARIABLES, inputVariables);
 
     assertEquals(inputVariables, databaseQueryTask.getInputVariables());
   }
 
   @Test
   void setInputVariablesWorksTest() {
-    setField(databaseQueryTask, "inputVariables", null);
+    setField(databaseQueryTask, INPUTVARIABLES, null);
 
     databaseQueryTask.setInputVariables(inputVariables);
-    assertEquals(inputVariables, getField(databaseQueryTask, "inputVariables"));
+    assertEquals(inputVariables, getField(databaseQueryTask, INPUTVARIABLES));
   }
 
   @Test
   void getOutputVariableWorksTest() {
-    setField(databaseQueryTask, "outputVariable", embeddedVariable);
+    setField(databaseQueryTask, OUTPUTVARIABLE, embeddedVariable);
 
     assertEquals(embeddedVariable, databaseQueryTask.getOutputVariable());
   }
 
   @Test
   void setOutputVariableWorksTest() {
-    setField(databaseQueryTask, "outputVariable", null);
+    setField(databaseQueryTask, OUTPUTVARIABLE, null);
 
     databaseQueryTask.setOutputVariable(embeddedVariable);
-    assertEquals(embeddedVariable, getField(databaseQueryTask, "outputVariable"));
+    assertEquals(embeddedVariable, getField(databaseQueryTask, OUTPUTVARIABLE));
   }
 
   @Test
   void getAsyncBeforeWorksTest() {
-    setField(databaseQueryTask, "asyncBefore", true);
+    setField(databaseQueryTask, ASYNCBEFORE, true);
 
     assertEquals(true, databaseQueryTask.getAsyncBefore());
   }
 
   @Test
   void setAsyncBeforeWorksTest() {
-    setField(databaseQueryTask, "asyncBefore", false);
+    setField(databaseQueryTask, ASYNCBEFORE, false);
 
     databaseQueryTask.setAsyncBefore(true);
-    assertEquals(true, getField(databaseQueryTask, "asyncBefore"));
+    assertEquals(true, getField(databaseQueryTask, ASYNCBEFORE));
   }
 
   @Test
   void getAsyncAfterWorksTest() {
-    setField(databaseQueryTask, "asyncAfter", true);
+    setField(databaseQueryTask, ASYNCAFTER, true);
 
     assertEquals(true, databaseQueryTask.getAsyncAfter());
   }
 
   @Test
   void setAsyncAfterWorksTest() {
-    setField(databaseQueryTask, "asyncAfter", false);
+    setField(databaseQueryTask, ASYNCAFTER, false);
 
     databaseQueryTask.setAsyncAfter(true);
-    assertEquals(true, getField(databaseQueryTask, "asyncAfter"));
+    assertEquals(true, getField(databaseQueryTask, ASYNCAFTER));
   }
 
   @Test
   void getDesignationWorksTest() {
-    setField(databaseQueryTask, "designation", VALUE);
+    setField(databaseQueryTask, DESIGNATION, VALUE);
 
     assertEquals(VALUE, databaseQueryTask.getDesignation());
   }
 
   @Test
   void setDesignationWorksTest() {
-    setField(databaseQueryTask, "designation", null);
+    setField(databaseQueryTask, DESIGNATION, null);
 
     databaseQueryTask.setDesignation(VALUE);
-    assertEquals(VALUE, getField(databaseQueryTask, "designation"));
+    assertEquals(VALUE, getField(databaseQueryTask, DESIGNATION));
   }
 
   @Test
   void getOutputPathWorksTest() {
-    setField(databaseQueryTask, "outputPath", VALUE);
+    setField(databaseQueryTask, OUTPUTPATH, VALUE);
 
     assertEquals(VALUE, databaseQueryTask.getOutputPath());
   }
 
   @Test
   void setOutputPathWorksTest() {
-    setField(databaseQueryTask, "outputPath", null);
+    setField(databaseQueryTask, OUTPUTPATH, null);
 
     databaseQueryTask.setOutputPath(VALUE);
-    assertEquals(VALUE, getField(databaseQueryTask, "outputPath"));
+    assertEquals(VALUE, getField(databaseQueryTask, OUTPUTPATH));
   }
 
   @Test
   void getQueryWorksTest() {
-    setField(databaseQueryTask, "query", VALUE);
+    setField(databaseQueryTask, QUERY, VALUE);
 
     assertEquals(VALUE, databaseQueryTask.getQuery());
   }
 
   @Test
   void setQueryWorksTest() {
-    setField(databaseQueryTask, "query", null);
+    setField(databaseQueryTask, QUERY, null);
 
     databaseQueryTask.setQuery(VALUE);
-    assertEquals(VALUE, getField(databaseQueryTask, "query"));
+    assertEquals(VALUE, getField(databaseQueryTask, QUERY));
   }
 
   @Test
   void getResultTypeWorksTest() {
-    setField(databaseQueryTask, "resultType", DatabaseResultType.CSV);
+    setField(databaseQueryTask, RESULTTYPE, DatabaseResultType.CSV);
 
     assertEquals(DatabaseResultType.CSV, databaseQueryTask.getResultType());
   }
 
   @Test
   void setResultTypeWorksTest() {
-    setField(databaseQueryTask, "resultType", null);
+    setField(databaseQueryTask, RESULTTYPE, null);
 
     databaseQueryTask.setResultType(DatabaseResultType.CSV);
-    assertEquals(DatabaseResultType.CSV, getField(databaseQueryTask, "resultType"));
+    assertEquals(DatabaseResultType.CSV, getField(databaseQueryTask, RESULTTYPE));
   }
 
   @Test
   void getIncludeHeaderWorksTest() {
-    setField(databaseQueryTask, "includeHeader", true);
+    setField(databaseQueryTask, INCLUDEHEADER, true);
 
     assertEquals(true, databaseQueryTask.getIncludeHeader());
   }
 
   @Test
   void setIncludeHeaderWorksTest() {
-    setField(databaseQueryTask, "includeHeader", false);
+    setField(databaseQueryTask, INCLUDEHEADER, false);
 
     databaseQueryTask.setIncludeHeader(true);
-    assertEquals(true, getField(databaseQueryTask, "includeHeader"));
+    assertEquals(true, getField(databaseQueryTask, INCLUDEHEADER));
   }
 
   @ParameterizedTest
@@ -290,9 +304,9 @@ class DatabaseQueryTaskTest {
   private static Map<String, Object> helperFieldMap(String designation, String query, Boolean includeHeader) {
     final Map<String, Object> map = new HashMap<>();
 
-    map.put("designation", designation);
-    map.put("query", query);
-    map.put("includeHeader", includeHeader);
+    map.put(DESIGNATION, designation);
+    map.put(QUERY, query);
+    map.put(INCLUDEHEADER, includeHeader);
 
     return map;
   }

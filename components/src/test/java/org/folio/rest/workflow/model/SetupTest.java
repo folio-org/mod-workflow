@@ -16,6 +16,9 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 class SetupTest {
 
+  private static final String ASYNCAFTER  = "asyncAfter";
+  private static final String ASYNCBEFORE = "asyncBefore";
+
   private Setup setup;
 
   @BeforeEach
@@ -25,32 +28,32 @@ class SetupTest {
 
   @Test
   void getAsyncBeforeWorksTest() {
-    setField(setup, "asyncBefore", true);
+    setField(setup, ASYNCBEFORE, true);
 
     assertEquals(true, setup.getAsyncBefore());
   }
 
   @Test
   void setAsyncBeforeWorksTest() {
-    setField(setup, "asyncBefore", false);
+    setField(setup, ASYNCBEFORE, false);
 
     setup.setAsyncBefore(true);
-    assertEquals(true, getField(setup, "asyncBefore"));
+    assertEquals(true, getField(setup, ASYNCBEFORE));
   }
 
   @Test
   void getAsyncAfterWorksTest() {
-    setField(setup, "asyncAfter", true);
+    setField(setup, ASYNCAFTER, true);
 
     assertEquals(true, setup.getAsyncAfter());
   }
 
   @Test
   void setAsyncAfterWorksTest() {
-    setField(setup, "asyncAfter", false);
+    setField(setup, ASYNCAFTER, false);
 
     setup.setAsyncAfter(true);
-    assertEquals(true, getField(setup, "asyncAfter"));
+    assertEquals(true, getField(setup, ASYNCAFTER));
   }
 
   @ParameterizedTest
@@ -104,8 +107,8 @@ class SetupTest {
   private static Map<String, Object> helperFieldMap(Boolean asyncAfter, Boolean asyncBefore) {
     final Map<String, Object> map = new HashMap<>();
 
-    map.put("asyncAfter", asyncAfter);
-    map.put("asyncBefore", asyncBefore);
+    map.put(ASYNCAFTER, asyncAfter);
+    map.put(ASYNCBEFORE, asyncBefore);
 
     return map;
   }

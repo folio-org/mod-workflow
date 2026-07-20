@@ -17,6 +17,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class ParallelGatewayTest {
 
+  private static final String DESCRIPTION   = "description";
+  private static final String DESERIALIZEAS = "deserializeAs";
+  private static final String DIRECTION     = "direction";
+  private static final String ID            = "id";
+  private static final String NAME          = "name";
+  private static final String NODES         = "nodes";
+
   @Mock
   private Node node;
 
@@ -33,92 +40,92 @@ class ParallelGatewayTest {
 
   @Test
   void getIdWorksTest() {
-    setField(parallelGateway, "id", VALUE);
+    setField(parallelGateway, ID, VALUE);
 
     assertEquals(VALUE, parallelGateway.getId());
   }
 
   @Test
   void setIdWorksTest() {
-    setField(parallelGateway, "id", null);
+    setField(parallelGateway, ID, null);
 
     parallelGateway.setId(VALUE);
-    assertEquals(VALUE, getField(parallelGateway, "id"));
+    assertEquals(VALUE, getField(parallelGateway, ID));
   }
 
   @Test
   void getNameWorksTest() {
-    setField(parallelGateway, "name", VALUE);
+    setField(parallelGateway, NAME, VALUE);
 
     assertEquals(VALUE, parallelGateway.getName());
   }
 
   @Test
   void setNameWorksTest() {
-    setField(parallelGateway, "name", null);
+    setField(parallelGateway, NAME, null);
 
     parallelGateway.setName(VALUE);
-    assertEquals(VALUE, getField(parallelGateway, "name"));
+    assertEquals(VALUE, getField(parallelGateway, NAME));
   }
 
   @Test
   void getDescriptionWorksTest() {
-    setField(parallelGateway, "description", VALUE);
+    setField(parallelGateway, DESCRIPTION, VALUE);
 
     assertEquals(VALUE, parallelGateway.getDescription());
   }
 
   @Test
   void setDescriptionWorksTest() {
-    setField(parallelGateway, "description", null);
+    setField(parallelGateway, DESCRIPTION, null);
 
     parallelGateway.setDescription(VALUE);
-    assertEquals(VALUE, getField(parallelGateway, "description"));
+    assertEquals(VALUE, getField(parallelGateway, DESCRIPTION));
   }
 
   @Test
   void getDeserializeAsWorksTest() {
-    setField(parallelGateway, "deserializeAs", VALUE);
+    setField(parallelGateway, DESERIALIZEAS, VALUE);
 
     assertEquals(VALUE, parallelGateway.getDeserializeAs());
   }
 
   @Test
   void setDeserializeAsWorksTest() {
-    setField(parallelGateway, "deserializeAs", null);
+    setField(parallelGateway, DESERIALIZEAS, null);
 
     parallelGateway.setDeserializeAs(VALUE);
-    assertEquals(VALUE, getField(parallelGateway, "deserializeAs"));
+    assertEquals(VALUE, getField(parallelGateway, DESERIALIZEAS));
   }
 
   @Test
   void getDirectionWorksTest() {
-    setField(parallelGateway, "direction", Direction.CONVERGING);
+    setField(parallelGateway, DIRECTION, Direction.CONVERGING);
 
     assertEquals(Direction.CONVERGING, parallelGateway.getDirection());
   }
 
   @Test
   void setDirectionWorksTest() {
-    setField(parallelGateway, "direction", null);
+    setField(parallelGateway, DIRECTION, null);
 
     parallelGateway.setDirection(Direction.CONVERGING);
-    assertEquals(Direction.CONVERGING, getField(parallelGateway, "direction"));
+    assertEquals(Direction.CONVERGING, getField(parallelGateway, DIRECTION));
   }
 
   @Test
   void getNodesWorksTest() {
-    setField(parallelGateway, "nodes", nodes);
+    setField(parallelGateway, NODES, nodes);
 
     assertEquals(nodes, parallelGateway.getNodes());
   }
 
   @Test
   void setNodesWorksTest() {
-    setField(parallelGateway, "nodes", null);
+    setField(parallelGateway, NODES, null);
 
     parallelGateway.setNodes(nodes);
-    assertEquals(nodes, getField(parallelGateway, "nodes"));
+    assertEquals(nodes, getField(parallelGateway, NODES));
   }
 
 }

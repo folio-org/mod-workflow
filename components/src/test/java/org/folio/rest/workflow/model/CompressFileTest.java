@@ -30,6 +30,19 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class CompressFileTest {
 
+  private static final String ASYNCAFTER     = "asyncAfter";
+  private static final String ASYNCBEFORE    = "asyncBefore";
+  private static final String CONTAINER      = "container";
+  private static final String DESCRIPTION    = "description";
+  private static final String DESERIALIZEAS  = "deserializeAs";
+  private static final String DESTINATION    = "destination";
+  private static final String FORMAT         = "format";
+  private static final String ID             = "id";
+  private static final String INPUTVARIABLES = "inputVariables";
+  private static final String NAME           = "name";
+  private static final String OUTPUTVARIABLE = "outputVariable";
+  private static final String SOURCE         = "source";
+
   @Mock
   private EmbeddedVariable embeddedVariable;
 
@@ -46,182 +59,182 @@ class CompressFileTest {
 
   @Test
   void getIdWorksTest() {
-    setField(compressFileTask, "id", VALUE);
+    setField(compressFileTask, ID, VALUE);
 
     assertEquals(VALUE, compressFileTask.getId());
   }
 
   @Test
   void setIdWorksTest() {
-    setField(compressFileTask, "id", null);
+    setField(compressFileTask, ID, null);
 
     compressFileTask.setId(VALUE);
-    assertEquals(VALUE, getField(compressFileTask, "id"));
+    assertEquals(VALUE, getField(compressFileTask, ID));
   }
 
   @Test
   void getNameWorksTest() {
-    setField(compressFileTask, "name", VALUE);
+    setField(compressFileTask, NAME, VALUE);
 
     assertEquals(VALUE, compressFileTask.getName());
   }
 
   @Test
   void setNameWorksTest() {
-    setField(compressFileTask, "name", null);
+    setField(compressFileTask, NAME, null);
 
     compressFileTask.setName(VALUE);
-    assertEquals(VALUE, getField(compressFileTask, "name"));
+    assertEquals(VALUE, getField(compressFileTask, NAME));
   }
 
   @Test
   void getDescriptionWorksTest() {
-    setField(compressFileTask, "description", VALUE);
+    setField(compressFileTask, DESCRIPTION, VALUE);
 
     assertEquals(VALUE, compressFileTask.getDescription());
   }
 
   @Test
   void setDescriptionWorksTest() {
-    setField(compressFileTask, "description", null);
+    setField(compressFileTask, DESCRIPTION, null);
 
     compressFileTask.setDescription(VALUE);
-    assertEquals(VALUE, getField(compressFileTask, "description"));
+    assertEquals(VALUE, getField(compressFileTask, DESCRIPTION));
   }
 
   @Test
   void getDeserializeAsWorksTest() {
-    setField(compressFileTask, "deserializeAs", VALUE);
+    setField(compressFileTask, DESERIALIZEAS, VALUE);
 
     assertEquals(VALUE, compressFileTask.getDeserializeAs());
   }
 
   @Test
   void setDeserializeAsWorksTest() {
-    setField(compressFileTask, "deserializeAs", null);
+    setField(compressFileTask, DESERIALIZEAS, null);
 
     compressFileTask.setDeserializeAs(VALUE);
-    assertEquals(VALUE, getField(compressFileTask, "deserializeAs"));
+    assertEquals(VALUE, getField(compressFileTask, DESERIALIZEAS));
   }
 
   @Test
   void getInputVariablesWorksTest() {
-    setField(compressFileTask, "inputVariables", inputVariables);
+    setField(compressFileTask, INPUTVARIABLES, inputVariables);
 
     assertEquals(inputVariables, compressFileTask.getInputVariables());
   }
 
   @Test
   void setInputVariablesWorksTest() {
-    setField(compressFileTask, "inputVariables", null);
+    setField(compressFileTask, INPUTVARIABLES, null);
 
     compressFileTask.setInputVariables(inputVariables);
-    assertEquals(inputVariables, getField(compressFileTask, "inputVariables"));
+    assertEquals(inputVariables, getField(compressFileTask, INPUTVARIABLES));
   }
 
   @Test
   void getOutputVariableWorksTest() {
-    setField(compressFileTask, "outputVariable", embeddedVariable);
+    setField(compressFileTask, OUTPUTVARIABLE, embeddedVariable);
 
     assertEquals(embeddedVariable, compressFileTask.getOutputVariable());
   }
 
   @Test
   void setOutputVariableWorksTest() {
-    setField(compressFileTask, "outputVariable", null);
+    setField(compressFileTask, OUTPUTVARIABLE, null);
 
     compressFileTask.setOutputVariable(embeddedVariable);
-    assertEquals(embeddedVariable, getField(compressFileTask, "outputVariable"));
+    assertEquals(embeddedVariable, getField(compressFileTask, OUTPUTVARIABLE));
   }
 
   @Test
   void getAsyncBeforeWorksTest() {
-    setField(compressFileTask, "asyncBefore", true);
+    setField(compressFileTask, ASYNCBEFORE, true);
 
     assertEquals(true, compressFileTask.getAsyncBefore());
   }
 
   @Test
   void setAsyncBeforeWorksTest() {
-    setField(compressFileTask, "asyncBefore", false);
+    setField(compressFileTask, ASYNCBEFORE, false);
 
     compressFileTask.setAsyncBefore(true);
-    assertEquals(true, getField(compressFileTask, "asyncBefore"));
+    assertEquals(true, getField(compressFileTask, ASYNCBEFORE));
   }
 
   @Test
   void getAsyncAfterWorksTest() {
-    setField(compressFileTask, "asyncAfter", true);
+    setField(compressFileTask, ASYNCAFTER, true);
 
     assertEquals(true, compressFileTask.getAsyncAfter());
   }
 
   @Test
   void setAsyncAfterWorksTest() {
-    setField(compressFileTask, "asyncAfter", false);
+    setField(compressFileTask, ASYNCAFTER, false);
 
     compressFileTask.setAsyncAfter(true);
-    assertEquals(true, getField(compressFileTask, "asyncAfter"));
+    assertEquals(true, getField(compressFileTask, ASYNCAFTER));
   }
 
   @Test
   void getSourceWorksTest() {
-    setField(compressFileTask, "source", VALUE);
+    setField(compressFileTask, SOURCE, VALUE);
 
     assertEquals(VALUE, compressFileTask.getSource());
   }
 
   @Test
   void setSourceWorksTest() {
-    setField(compressFileTask, "source", null);
+    setField(compressFileTask, SOURCE, null);
 
     compressFileTask.setSource(VALUE);
-    assertEquals(VALUE, getField(compressFileTask, "source"));
+    assertEquals(VALUE, getField(compressFileTask, SOURCE));
   }
 
   @Test
   void getDestinationWorksTest() {
-    setField(compressFileTask, "destination", VALUE);
+    setField(compressFileTask, DESTINATION, VALUE);
 
     assertEquals(VALUE, compressFileTask.getDestination());
   }
 
   @Test
   void setDestinationWorksTest() {
-    setField(compressFileTask, "destination", null);
+    setField(compressFileTask, DESTINATION, null);
 
     compressFileTask.setDestination(VALUE);
-    assertEquals(VALUE, getField(compressFileTask, "destination"));
+    assertEquals(VALUE, getField(compressFileTask, DESTINATION));
   }
 
   @Test
   void getFormatWorksTest() {
-    setField(compressFileTask, "format", BZIP2);
+    setField(compressFileTask, FORMAT, BZIP2);
 
     assertEquals(BZIP2, compressFileTask.getFormat());
   }
 
   @Test
   void setFormatWorksTest() {
-    setField(compressFileTask, "format", null);
+    setField(compressFileTask, FORMAT, null);
 
     compressFileTask.setFormat(BZIP2);
-    assertEquals(BZIP2, getField(compressFileTask, "format"));
+    assertEquals(BZIP2, getField(compressFileTask, FORMAT));
   }
 
   @Test
   void getContainerWorksTest() {
-    setField(compressFileTask, "container", TAR);
+    setField(compressFileTask, CONTAINER, TAR);
 
     assertEquals(TAR, compressFileTask.getContainer());
   }
 
   @Test
   void setContainerWorksTest() {
-    setField(compressFileTask, "container", null);
+    setField(compressFileTask, CONTAINER, null);
 
     compressFileTask.setContainer(TAR);
-    assertEquals(TAR, getField(compressFileTask, "container"));
+    assertEquals(TAR, getField(compressFileTask, CONTAINER));
   }
 
   @ParameterizedTest
@@ -285,10 +298,10 @@ class CompressFileTest {
   private static Map<String, Object> helperFieldMap(String source, String destination, CompressFileFormat format, CompressFileContainer container) {
     final Map<String, Object> map = new HashMap<>();
 
-    map.put("source", source);
-    map.put("destination", destination);
-    map.put("format", format);
-    map.put("container", container);
+    map.put(CONTAINER, container);
+    map.put(DESTINATION, destination);
+    map.put(FORMAT, format);
+    map.put(SOURCE, source);
 
     return map;
   }

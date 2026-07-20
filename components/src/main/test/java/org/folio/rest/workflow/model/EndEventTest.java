@@ -7,9 +7,9 @@ public class EndEventTest {
     void testEndEventInheritance() {
         EndEvent endEvent = new EndEvent();
 
-        assertTrue(endEvent.getId() == null); 
-        assertTrue(endEvent.getName() == null); 
+        assertTrue(endEvent.getId() == null);
+        assertTrue(endEvent.getName() == null);
 
-        assertTrue(endEvent.isEndEvent()); 
+        assertTrue(endEvent.isEndEvent());
     }
 }

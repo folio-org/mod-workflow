@@ -27,6 +27,17 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class RequestTaskTest {
 
+  private static final String ASYNCAFTER            = "asyncAfter";
+  private static final String ASYNCBEFORE           = "asyncBefore";
+  private static final String DESCRIPTION           = "description";
+  private static final String DESERIALIZEAS         = "deserializeAs";
+  private static final String HEADEROUTPUTVARIABLES = "headerOutputVariables";
+  private static final String ID                    = "id";
+  private static final String INPUTVARIABLES        = "inputVariables";
+  private static final String NAME                  = "name";
+  private static final String OUTPUTVARIABLE        = "outputVariable";
+  private static final String REQUEST               = "request";
+
   @Mock
   private EmbeddedVariable embeddedVariable;
 
@@ -46,152 +57,152 @@ class RequestTaskTest {
 
   @Test
   void getIdWorksTest() {
-    setField(requestTask, "id", VALUE);
+    setField(requestTask, ID, VALUE);
 
     assertEquals(VALUE, requestTask.getId());
   }
 
   @Test
   void setIdWorksTest() {
-    setField(requestTask, "id", null);
+    setField(requestTask, ID, null);
 
     requestTask.setId(VALUE);
-    assertEquals(VALUE, getField(requestTask, "id"));
+    assertEquals(VALUE, getField(requestTask, ID));
   }
 
   @Test
   void getNameWorksTest() {
-    setField(requestTask, "name", VALUE);
+    setField(requestTask, NAME, VALUE);
 
     assertEquals(VALUE, requestTask.getName());
   }
 
   @Test
   void setNameWorksTest() {
-    setField(requestTask, "name", null);
+    setField(requestTask, NAME, null);
 
     requestTask.setName(VALUE);
-    assertEquals(VALUE, getField(requestTask, "name"));
+    assertEquals(VALUE, getField(requestTask, NAME));
   }
 
   @Test
   void getDescriptionWorksTest() {
-    setField(requestTask, "description", VALUE);
+    setField(requestTask, DESCRIPTION, VALUE);
 
     assertEquals(VALUE, requestTask.getDescription());
   }
 
   @Test
   void setDescriptionWorksTest() {
-    setField(requestTask, "description", null);
+    setField(requestTask, DESCRIPTION, null);
 
     requestTask.setDescription(VALUE);
-    assertEquals(VALUE, getField(requestTask, "description"));
+    assertEquals(VALUE, getField(requestTask, DESCRIPTION));
   }
 
   @Test
   void getDeserializeAsWorksTest() {
-    setField(requestTask, "deserializeAs", VALUE);
+    setField(requestTask, DESERIALIZEAS, VALUE);
 
     assertEquals(VALUE, requestTask.getDeserializeAs());
   }
 
   @Test
   void setDeserializeAsWorksTest() {
-    setField(requestTask, "deserializeAs", null);
+    setField(requestTask, DESERIALIZEAS, null);
 
     requestTask.setDeserializeAs(VALUE);
-    assertEquals(VALUE, getField(requestTask, "deserializeAs"));
+    assertEquals(VALUE, getField(requestTask, DESERIALIZEAS));
   }
 
   @Test
   void getInputVariablesWorksTest() {
-    setField(requestTask, "inputVariables", inputVariables);
+    setField(requestTask, INPUTVARIABLES, inputVariables);
 
     assertEquals(inputVariables, requestTask.getInputVariables());
   }
 
   @Test
   void setInputVariablesWorksTest() {
-    setField(requestTask, "inputVariables", null);
+    setField(requestTask, INPUTVARIABLES, null);
 
     requestTask.setInputVariables(inputVariables);
-    assertEquals(inputVariables, getField(requestTask, "inputVariables"));
+    assertEquals(inputVariables, getField(requestTask, INPUTVARIABLES));
   }
 
   @Test
   void getOutputVariableWorksTest() {
-    setField(requestTask, "outputVariable", embeddedVariable);
+    setField(requestTask, OUTPUTVARIABLE, embeddedVariable);
 
     assertEquals(embeddedVariable, requestTask.getOutputVariable());
   }
 
   @Test
   void setOutputVariableWorksTest() {
-    setField(requestTask, "outputVariable", null);
+    setField(requestTask, OUTPUTVARIABLE, null);
 
     requestTask.setOutputVariable(embeddedVariable);
-    assertEquals(embeddedVariable, getField(requestTask, "outputVariable"));
+    assertEquals(embeddedVariable, getField(requestTask, OUTPUTVARIABLE));
   }
 
   @Test
   void getAsyncBeforeWorksTest() {
-    setField(requestTask, "asyncBefore", true);
+    setField(requestTask, ASYNCBEFORE, true);
 
     assertEquals(true, requestTask.getAsyncBefore());
   }
 
   @Test
   void setAsyncBeforeWorksTest() {
-    setField(requestTask, "asyncBefore", false);
+    setField(requestTask, ASYNCBEFORE, false);
 
     requestTask.setAsyncBefore(true);
-    assertEquals(true, getField(requestTask, "asyncBefore"));
+    assertEquals(true, getField(requestTask, ASYNCBEFORE));
   }
 
   @Test
   void getAsyncAfterWorksTest() {
-    setField(requestTask, "asyncAfter", true);
+    setField(requestTask, ASYNCAFTER, true);
 
     assertEquals(true, requestTask.getAsyncAfter());
   }
 
   @Test
   void setAsyncAfterWorksTest() {
-    setField(requestTask, "asyncAfter", false);
+    setField(requestTask, ASYNCAFTER, false);
 
     requestTask.setAsyncAfter(true);
-    assertEquals(true, getField(requestTask, "asyncAfter"));
+    assertEquals(true, getField(requestTask, ASYNCAFTER));
   }
 
   @Test
   void getHeaderOutputVariablesWorksTest() {
-    setField(requestTask, "headerOutputVariables", inputVariables);
+    setField(requestTask, HEADEROUTPUTVARIABLES, inputVariables);
 
     assertEquals(inputVariables, requestTask.getHeaderOutputVariables());
   }
 
   @Test
   void setHeaderOutputVariablesWorksTest() {
-    setField(requestTask, "headerOutputVariables", null);
+    setField(requestTask, HEADEROUTPUTVARIABLES, null);
 
     requestTask.setHeaderOutputVariables(inputVariables);
-    assertEquals(inputVariables, getField(requestTask, "headerOutputVariables"));
+    assertEquals(inputVariables, getField(requestTask, HEADEROUTPUTVARIABLES));
   }
 
   @Test
   void getRequestWorksTest() {
-    setField(requestTask, "request", embeddedRequest);
+    setField(requestTask, REQUEST, embeddedRequest);
 
     assertEquals(embeddedRequest, requestTask.getRequest());
   }
 
   @Test
   void setRequestWorksTest() {
-    setField(requestTask, "request", null);
+    setField(requestTask, REQUEST, null);
 
     requestTask.setRequest(embeddedRequest);
-    assertEquals(embeddedRequest, getField(requestTask, "request"));
+    assertEquals(embeddedRequest, getField(requestTask, REQUEST));
   }
 
   @SuppressWarnings("unchecked")
@@ -206,7 +217,7 @@ class RequestTaskTest {
     requestTask.prePersist();
 
     expected.forEach((String attribute, Object value) -> {
-      if (attribute == "headerOutputVariables") {
+      if (attribute == HEADEROUTPUTVARIABLES) {
         final Set<EmbeddedVariable> eps = (Set<EmbeddedVariable>) value;
 
         assertNotNull(getField(requestTask, attribute));
@@ -281,7 +292,7 @@ class RequestTaskTest {
 
     final Map<String, Object> map = new HashMap<>();
 
-    map.put("headerOutputVariables", headerOutputVariables);
+    map.put(HEADEROUTPUTVARIABLES, headerOutputVariables);
 
     return map;
   }
@@ -297,7 +308,7 @@ class RequestTaskTest {
 
     final Map<String, Object> map = new HashMap<>();
 
-    map.put("headerOutputVariables", headerOutputVariables);
+    map.put(HEADEROUTPUTVARIABLES, headerOutputVariables);
 
     return map;
   }

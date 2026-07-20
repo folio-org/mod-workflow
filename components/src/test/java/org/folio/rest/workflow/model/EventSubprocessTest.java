@@ -16,6 +16,14 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class EventSubprocessTest {
 
+  private static final String ASYNCAFTER    = "asyncAfter";
+  private static final String ASYNCBEFORE   = "asyncBefore";
+  private static final String DESCRIPTION   = "description";
+  private static final String DESERIALIZEAS = "deserializeAs";
+  private static final String ID            = "id";
+  private static final String NAME          = "name";
+  private static final String NODES         = "nodes";
+
   @Mock
   private Node node;
 
@@ -32,107 +40,107 @@ class EventSubprocessTest {
 
   @Test
   void getIdWorksTest() {
-    setField(eventSubprocess, "id", VALUE);
+    setField(eventSubprocess, ID, VALUE);
 
     assertEquals(VALUE, eventSubprocess.getId());
   }
 
   @Test
   void setIdWorksTest() {
-    setField(eventSubprocess, "id", null);
+    setField(eventSubprocess, ID, null);
 
     eventSubprocess.setId(VALUE);
-    assertEquals(VALUE, getField(eventSubprocess, "id"));
+    assertEquals(VALUE, getField(eventSubprocess, ID));
   }
 
   @Test
   void getNameWorksTest() {
-    setField(eventSubprocess, "name", VALUE);
+    setField(eventSubprocess, NAME, VALUE);
 
     assertEquals(VALUE, eventSubprocess.getName());
   }
 
   @Test
   void setNameWorksTest() {
-    setField(eventSubprocess, "name", null);
+    setField(eventSubprocess, NAME, null);
 
     eventSubprocess.setName(VALUE);
-    assertEquals(VALUE, getField(eventSubprocess, "name"));
+    assertEquals(VALUE, getField(eventSubprocess, NAME));
   }
 
   @Test
   void getDescriptionWorksTest() {
-    setField(eventSubprocess, "description", VALUE);
+    setField(eventSubprocess, DESCRIPTION, VALUE);
 
     assertEquals(VALUE, eventSubprocess.getDescription());
   }
 
   @Test
   void setDescriptionWorksTest() {
-    setField(eventSubprocess, "description", null);
+    setField(eventSubprocess, DESCRIPTION, null);
 
     eventSubprocess.setDescription(VALUE);
-    assertEquals(VALUE, getField(eventSubprocess, "description"));
+    assertEquals(VALUE, getField(eventSubprocess, DESCRIPTION));
   }
 
   @Test
   void getDeserializeAsWorksTest() {
-    setField(eventSubprocess, "deserializeAs", VALUE);
+    setField(eventSubprocess, DESERIALIZEAS, VALUE);
 
     assertEquals(VALUE, eventSubprocess.getDeserializeAs());
   }
 
   @Test
   void setDeserializeAsWorksTest() {
-    setField(eventSubprocess, "deserializeAs", null);
+    setField(eventSubprocess, DESERIALIZEAS, null);
 
     eventSubprocess.setDeserializeAs(VALUE);
-    assertEquals(VALUE, getField(eventSubprocess, "deserializeAs"));
+    assertEquals(VALUE, getField(eventSubprocess, DESERIALIZEAS));
   }
 
   @Test
   void getAsyncBeforeWorksTest() {
-    setField(eventSubprocess, "asyncBefore", true);
+    setField(eventSubprocess, ASYNCBEFORE, true);
 
     assertEquals(true, eventSubprocess.getAsyncBefore());
   }
 
   @Test
   void setAsyncBeforeWorksTest() {
-    setField(eventSubprocess, "asyncBefore", false);
+    setField(eventSubprocess, ASYNCBEFORE, false);
 
     eventSubprocess.setAsyncBefore(true);
-    assertEquals(true, getField(eventSubprocess, "asyncBefore"));
+    assertEquals(true, getField(eventSubprocess, ASYNCBEFORE));
   }
 
   @Test
   void getAsyncAfterWorksTest() {
-    setField(eventSubprocess, "asyncAfter", true);
+    setField(eventSubprocess, ASYNCAFTER, true);
 
     assertEquals(true, eventSubprocess.getAsyncAfter());
   }
 
   @Test
   void setAsyncAfterWorksTest() {
-    setField(eventSubprocess, "asyncAfter", false);
+    setField(eventSubprocess, ASYNCAFTER, false);
 
     eventSubprocess.setAsyncAfter(true);
-    assertEquals(true, getField(eventSubprocess, "asyncAfter"));
+    assertEquals(true, getField(eventSubprocess, ASYNCAFTER));
   }
 
   @Test
   void getNodesWorksTest() {
-    setField(eventSubprocess, "nodes", nodes);
+    setField(eventSubprocess, NODES, nodes);
 
     assertEquals(nodes, eventSubprocess.getNodes());
   }
 
   @Test
   void setNodesWorksTest() {
-    setField(eventSubprocess, "nodes", null);
+    setField(eventSubprocess, NODES, null);
 
     eventSubprocess.setNodes(nodes);
-    assertEquals(nodes, getField(eventSubprocess, "nodes"));
+    assertEquals(nodes, getField(eventSubprocess, NODES));
   }
 
 }

@@ -18,6 +18,12 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 class ConnectToTest {
 
+  private static final String DESCRIPTION   = "description";
+  private static final String DESERIALIZEAS = "deserializeAs";
+  private static final String ID            = "id";
+  private static final String NAME          = "name";
+  private static final String NODEID        = "nodeId";
+
   private ConnectTo connectTo;
 
   @BeforeEach
@@ -27,77 +33,77 @@ class ConnectToTest {
 
   @Test
   void getIdWorksTest() {
-    setField(connectTo, "id", VALUE);
+    setField(connectTo, ID, VALUE);
 
     assertEquals(VALUE, connectTo.getId());
   }
 
   @Test
   void setIdWorksTest() {
-    setField(connectTo, "id", null);
+    setField(connectTo, ID, null);
 
     connectTo.setId(VALUE);
-    assertEquals(VALUE, getField(connectTo, "id"));
+    assertEquals(VALUE, getField(connectTo, ID));
   }
 
   @Test
   void getNameWorksTest() {
-    setField(connectTo, "name", VALUE);
+    setField(connectTo, NAME, VALUE);
 
     assertEquals(VALUE, connectTo.getName());
   }
 
   @Test
   void setNameWorksTest() {
-    setField(connectTo, "name", null);
+    setField(connectTo, NAME, null);
 
     connectTo.setName(VALUE);
-    assertEquals(VALUE, getField(connectTo, "name"));
+    assertEquals(VALUE, getField(connectTo, NAME));
   }
 
   @Test
   void getDescriptionWorksTest() {
-    setField(connectTo, "description", VALUE);
+    setField(connectTo, DESCRIPTION, VALUE);
 
     assertEquals(VALUE, connectTo.getDescription());
   }
 
   @Test
   void setDescriptionWorksTest() {
-    setField(connectTo, "description", null);
+    setField(connectTo, DESCRIPTION, null);
 
     connectTo.setDescription(VALUE);
-    assertEquals(VALUE, getField(connectTo, "description"));
+    assertEquals(VALUE, getField(connectTo, DESCRIPTION));
   }
 
   @Test
   void getDeserializeAsWorksTest() {
-    setField(connectTo, "deserializeAs", VALUE);
+    setField(connectTo, DESERIALIZEAS, VALUE);
 
     assertEquals(VALUE, connectTo.getDeserializeAs());
   }
 
   @Test
   void setDeserializeAsWorksTest() {
-    setField(connectTo, "deserializeAs", null);
+    setField(connectTo, DESERIALIZEAS, null);
 
     connectTo.setDeserializeAs(VALUE);
-    assertEquals(VALUE, getField(connectTo, "deserializeAs"));
+    assertEquals(VALUE, getField(connectTo, DESERIALIZEAS));
   }
 
   @Test
   void getNodeIdWorksTest() {
-    setField(connectTo, "nodeId", VALUE);
+    setField(connectTo, NODEID, VALUE);
 
     assertEquals(VALUE, connectTo.getNodeId());
   }
 
   @Test
   void setNodeIdWorksTest() {
-    setField(connectTo, "nodeId", null);
+    setField(connectTo, NODEID, null);
 
     connectTo.setNodeId(VALUE);
-    assertEquals(VALUE, getField(connectTo, "nodeId"));
+    assertEquals(VALUE, getField(connectTo, NODEID));
   }
 
   @ParameterizedTest
@@ -146,7 +152,7 @@ class ConnectToTest {
   private static Map<String, Object> helperFieldMap(String nodeId) {
     final Map<String, Object> map = new HashMap<>();
 
-    map.put("nodeId", nodeId);
+    map.put(NODEID, nodeId);
 
     return map;
   }

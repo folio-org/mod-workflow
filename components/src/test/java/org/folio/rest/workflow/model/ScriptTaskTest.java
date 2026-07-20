@@ -22,6 +22,18 @@ import org.mockito.Mock;
 
 class ScriptTaskTest {
 
+  private static final String ASYNCAFTER     = "asyncAfter";
+  private static final String ASYNCBEFORE    = "asyncBefore";
+  private static final String CODE           = "code";
+  private static final String DESCRIPTION    = "description";
+  private static final String DESERIALIZEAS  = "deserializeAs";
+  private static final String ID             = "id";
+  private static final String INPUTVARIABLES = "inputVariables";
+  private static final String NAME           = "name";
+  private static final String OUTPUTVARIABLE = "outputVariable";
+  private static final String RESULTVARIABLE = "resultVariable";
+  private static final String SCRIPTFORMAT   = "scriptFormat";
+
   @Mock
   private EmbeddedVariable embeddedVariable;
 
@@ -36,181 +48,181 @@ class ScriptTaskTest {
 
   @Test
   void getIdWorksTest() {
-    setField(scriptTask, "id", VALUE);
+    setField(scriptTask, ID, VALUE);
 
     assertEquals(VALUE, scriptTask.getId());
   }
 
   @Test
   void setIdWorksTest() {
-    setField(scriptTask, "id", null);
+    setField(scriptTask, ID, null);
 
     scriptTask.setId(VALUE);
-    assertEquals(VALUE, getField(scriptTask, "id"));
+    assertEquals(VALUE, getField(scriptTask, ID));
   }
 
   @Test
   void getNameWorksTest() {
-    setField(scriptTask, "name", VALUE);
+    setField(scriptTask, NAME, VALUE);
 
     assertEquals(VALUE, scriptTask.getName());
   }
 
   @Test
   void setNameWorksTest() {
-    setField(scriptTask, "name", null);
+    setField(scriptTask, NAME, null);
 
     scriptTask.setName(VALUE);
-    assertEquals(VALUE, getField(scriptTask, "name"));
+    assertEquals(VALUE, getField(scriptTask, NAME));
   }
 
   @Test
   void getDescriptionWorksTest() {
-    setField(scriptTask, "description", VALUE);
+    setField(scriptTask, DESCRIPTION, VALUE);
 
     assertEquals(VALUE, scriptTask.getDescription());
   }
 
   @Test
   void setDescriptionWorksTest() {
-    setField(scriptTask, "description", null);
+    setField(scriptTask, DESCRIPTION, null);
 
     scriptTask.setDescription(VALUE);
-    assertEquals(VALUE, getField(scriptTask, "description"));
+    assertEquals(VALUE, getField(scriptTask, DESCRIPTION));
   }
 
   @Test
   void getDeserializeAsWorksTest() {
-    setField(scriptTask, "deserializeAs", VALUE);
+    setField(scriptTask, DESERIALIZEAS, VALUE);
 
     assertEquals(VALUE, scriptTask.getDeserializeAs());
   }
 
   @Test
   void setDeserializeAsWorksTest() {
-    setField(scriptTask, "deserializeAs", null);
+    setField(scriptTask, DESERIALIZEAS, null);
 
     scriptTask.setDeserializeAs(VALUE);
-    assertEquals(VALUE, getField(scriptTask, "deserializeAs"));
+    assertEquals(VALUE, getField(scriptTask, DESERIALIZEAS));
   }
 
   @Test
   void getInputVariablesWorksTest() {
-    setField(scriptTask, "inputVariables", inputVariables);
+    setField(scriptTask, INPUTVARIABLES, inputVariables);
 
     assertEquals(inputVariables, scriptTask.getInputVariables());
   }
 
   @Test
   void setInputVariablesWorksTest() {
-    setField(scriptTask, "inputVariables", null);
+    setField(scriptTask, INPUTVARIABLES, null);
 
     scriptTask.setInputVariables(inputVariables);
-    assertEquals(inputVariables, getField(scriptTask, "inputVariables"));
+    assertEquals(inputVariables, getField(scriptTask, INPUTVARIABLES));
   }
 
   @Test
   void getOutputVariableWorksTest() {
-    setField(scriptTask, "outputVariable", embeddedVariable);
+    setField(scriptTask, OUTPUTVARIABLE, embeddedVariable);
 
     assertEquals(embeddedVariable, scriptTask.getOutputVariable());
   }
 
   @Test
   void setOutputVariableWorksTest() {
-    setField(scriptTask, "outputVariable", null);
+    setField(scriptTask, OUTPUTVARIABLE, null);
 
     scriptTask.setOutputVariable(embeddedVariable);
-    assertEquals(embeddedVariable, getField(scriptTask, "outputVariable"));
+    assertEquals(embeddedVariable, getField(scriptTask, OUTPUTVARIABLE));
   }
 
   @Test
   void getAsyncBeforeWorksTest() {
-    setField(scriptTask, "asyncBefore", true);
+    setField(scriptTask, ASYNCBEFORE, true);
 
     assertEquals(true, scriptTask.getAsyncBefore());
   }
 
   @Test
   void setAsyncBeforeWorksTest() {
-    setField(scriptTask, "asyncBefore", false);
+    setField(scriptTask, ASYNCBEFORE, false);
 
     scriptTask.setAsyncBefore(true);
-    assertEquals(true, getField(scriptTask, "asyncBefore"));
+    assertEquals(true, getField(scriptTask, ASYNCBEFORE));
   }
 
   @Test
   void getAsyncAfterWorksTest() {
-    setField(scriptTask, "asyncAfter", true);
+    setField(scriptTask, ASYNCAFTER, true);
 
     assertEquals(true, scriptTask.getAsyncAfter());
   }
 
   @Test
   void setAsyncAfterWorksTest() {
-    setField(scriptTask, "asyncAfter", false);
+    setField(scriptTask, ASYNCAFTER, false);
 
     scriptTask.setAsyncAfter(true);
-    assertEquals(true, getField(scriptTask, "asyncAfter"));
+    assertEquals(true, getField(scriptTask, ASYNCAFTER));
   }
 
   @Test
   void getScriptFormatWorksTest() {
-    setField(scriptTask, "scriptFormat", VALUE);
+    setField(scriptTask, SCRIPTFORMAT, VALUE);
 
     assertEquals(VALUE, scriptTask.getScriptFormat());
   }
 
   @Test
   void setScriptFormatWorksTest() {
-    setField(scriptTask, "scriptFormat", null);
+    setField(scriptTask, SCRIPTFORMAT, null);
 
     scriptTask.setScriptFormat(VALUE);
-    assertEquals(VALUE, getField(scriptTask, "scriptFormat"));
+    assertEquals(VALUE, getField(scriptTask, SCRIPTFORMAT));
   }
 
   @Test
   void getCodeWorksTest() {
-    setField(scriptTask, "code", VALUE);
+    setField(scriptTask, CODE, VALUE);
 
     assertEquals(VALUE, scriptTask.getCode());
   }
 
   @Test
   void setCodeWorksTest() {
-    setField(scriptTask, "code", null);
+    setField(scriptTask, CODE, null);
 
     scriptTask.setCode(VALUE);
-    assertEquals(VALUE, getField(scriptTask, "code"));
+    assertEquals(VALUE, getField(scriptTask, CODE));
   }
 
   @Test
   void hasResultVariableReturnsTrueTest() {
-    setField(scriptTask, "resultVariable", VALUE);
+    setField(scriptTask, RESULTVARIABLE, VALUE);
 
     assertTrue(scriptTask.hasResultVariable());
   }
 
   @Test
   void hasResultVariableReturnsFalseTest() {
-    setField(scriptTask, "resultVariable", null);
+    setField(scriptTask, RESULTVARIABLE, null);
 
     assertFalse(scriptTask.hasResultVariable());
   }
 
   @Test
   void getResultVariableWorksTest() {
-    setField(scriptTask, "resultVariable", VALUE);
+    setField(scriptTask, RESULTVARIABLE, VALUE);
 
     assertEquals(VALUE, scriptTask.getResultVariable());
   }
 
   @Test
   void setResultVariableWorksTest() {
-    setField(scriptTask, "resultVariable", null);
+    setField(scriptTask, RESULTVARIABLE, null);
 
     scriptTask.setResultVariable(VALUE);
-    assertEquals(VALUE, getField(scriptTask, "resultVariable"));
+    assertEquals(VALUE, getField(scriptTask, RESULTVARIABLE));
   }
 
   @ParameterizedTest
@@ -265,8 +277,8 @@ class ScriptTaskTest {
   private static Map<String, Object> helperFieldMap(String code, String scriptFormat) {
     final Map<String, Object> map = new HashMap<>();
 
-    map.put("code", code);
-    map.put("scriptFormat", scriptFormat);
+    map.put(CODE, code);
+    map.put(SCRIPTFORMAT, scriptFormat);
 
     return map;
   }
