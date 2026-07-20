@@ -24,6 +24,16 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class DatabaseDisconnectTaskTest {
 
+  private static final String ASYNCAFTER     = "asyncAfter";
+  private static final String ASYNCBEFORE    = "asyncBefore";
+  private static final String DESCRIPTION    = "description";
+  private static final String DESERIALIZEAS  = "deserializeAs";
+  private static final String DESIGNATION    = "designation";
+  private static final String ID             = "id";
+  private static final String INPUTVARIABLES = "inputVariables";
+  private static final String NAME           = "name";
+  private static final String OUTPUTVARIABLE = "outputVariable";
+
   @Mock
   private EmbeddedVariable embeddedVariable;
 
@@ -40,137 +50,137 @@ class DatabaseDisconnectTaskTest {
 
   @Test
   void getIdWorksTest() {
-    setField(databaseDisconnectTask, "id", VALUE);
+    setField(databaseDisconnectTask, ID, VALUE);
 
     assertEquals(VALUE, databaseDisconnectTask.getId());
   }
 
   @Test
   void setIdWorksTest() {
-    setField(databaseDisconnectTask, "id", null);
+    setField(databaseDisconnectTask, ID, null);
 
     databaseDisconnectTask.setId(VALUE);
-    assertEquals(VALUE, getField(databaseDisconnectTask, "id"));
+    assertEquals(VALUE, getField(databaseDisconnectTask, ID));
   }
 
   @Test
   void getNameWorksTest() {
-    setField(databaseDisconnectTask, "name", VALUE);
+    setField(databaseDisconnectTask, NAME, VALUE);
 
     assertEquals(VALUE, databaseDisconnectTask.getName());
   }
 
   @Test
   void setNameWorksTest() {
-    setField(databaseDisconnectTask, "name", null);
+    setField(databaseDisconnectTask, NAME, null);
 
     databaseDisconnectTask.setName(VALUE);
-    assertEquals(VALUE, getField(databaseDisconnectTask, "name"));
+    assertEquals(VALUE, getField(databaseDisconnectTask, NAME));
   }
 
   @Test
   void getDescriptionWorksTest() {
-    setField(databaseDisconnectTask, "description", VALUE);
+    setField(databaseDisconnectTask, DESCRIPTION, VALUE);
 
     assertEquals(VALUE, databaseDisconnectTask.getDescription());
   }
 
   @Test
   void setDescriptionWorksTest() {
-    setField(databaseDisconnectTask, "description", null);
+    setField(databaseDisconnectTask, DESCRIPTION, null);
 
     databaseDisconnectTask.setDescription(VALUE);
-    assertEquals(VALUE, getField(databaseDisconnectTask, "description"));
+    assertEquals(VALUE, getField(databaseDisconnectTask, DESCRIPTION));
   }
 
   @Test
   void getDeserializeAsWorksTest() {
-    setField(databaseDisconnectTask, "deserializeAs", VALUE);
+    setField(databaseDisconnectTask, DESERIALIZEAS, VALUE);
 
     assertEquals(VALUE, databaseDisconnectTask.getDeserializeAs());
   }
 
   @Test
   void setDeserializeAsWorksTest() {
-    setField(databaseDisconnectTask, "deserializeAs", null);
+    setField(databaseDisconnectTask, DESERIALIZEAS, null);
 
     databaseDisconnectTask.setDeserializeAs(VALUE);
-    assertEquals(VALUE, getField(databaseDisconnectTask, "deserializeAs"));
+    assertEquals(VALUE, getField(databaseDisconnectTask, DESERIALIZEAS));
   }
 
   @Test
   void getInputVariablesWorksTest() {
-    setField(databaseDisconnectTask, "inputVariables", inputVariables);
+    setField(databaseDisconnectTask, INPUTVARIABLES, inputVariables);
 
     assertEquals(inputVariables, databaseDisconnectTask.getInputVariables());
   }
 
   @Test
   void setInputVariablesWorksTest() {
-    setField(databaseDisconnectTask, "inputVariables", null);
+    setField(databaseDisconnectTask, INPUTVARIABLES, null);
 
     databaseDisconnectTask.setInputVariables(inputVariables);
-    assertEquals(inputVariables, getField(databaseDisconnectTask, "inputVariables"));
+    assertEquals(inputVariables, getField(databaseDisconnectTask, INPUTVARIABLES));
   }
 
   @Test
   void getOutputVariableWorksTest() {
-    setField(databaseDisconnectTask, "outputVariable", embeddedVariable);
+    setField(databaseDisconnectTask, OUTPUTVARIABLE, embeddedVariable);
 
     assertEquals(embeddedVariable, databaseDisconnectTask.getOutputVariable());
   }
 
   @Test
   void setOutputVariableWorksTest() {
-    setField(databaseDisconnectTask, "outputVariable", null);
+    setField(databaseDisconnectTask, OUTPUTVARIABLE, null);
 
     databaseDisconnectTask.setOutputVariable(embeddedVariable);
-    assertEquals(embeddedVariable, getField(databaseDisconnectTask, "outputVariable"));
+    assertEquals(embeddedVariable, getField(databaseDisconnectTask, OUTPUTVARIABLE));
   }
 
   @Test
   void getAsyncBeforeWorksTest() {
-    setField(databaseDisconnectTask, "asyncBefore", true);
+    setField(databaseDisconnectTask, ASYNCBEFORE, true);
 
     assertEquals(true, databaseDisconnectTask.getAsyncBefore());
   }
 
   @Test
   void setAsyncBeforeWorksTest() {
-    setField(databaseDisconnectTask, "asyncBefore", false);
+    setField(databaseDisconnectTask, ASYNCBEFORE, false);
 
     databaseDisconnectTask.setAsyncBefore(true);
-    assertEquals(true, getField(databaseDisconnectTask, "asyncBefore"));
+    assertEquals(true, getField(databaseDisconnectTask, ASYNCBEFORE));
   }
 
   @Test
   void getAsyncAfterWorksTest() {
-    setField(databaseDisconnectTask, "asyncAfter", true);
+    setField(databaseDisconnectTask, ASYNCAFTER, true);
 
     assertEquals(true, databaseDisconnectTask.getAsyncAfter());
   }
 
   @Test
   void setAsyncAfterWorksTest() {
-    setField(databaseDisconnectTask, "asyncAfter", false);
+    setField(databaseDisconnectTask, ASYNCAFTER, false);
 
     databaseDisconnectTask.setAsyncAfter(true);
-    assertEquals(true, getField(databaseDisconnectTask, "asyncAfter"));
+    assertEquals(true, getField(databaseDisconnectTask, ASYNCAFTER));
   }
 
   @Test
   void getDesignationWorksTest() {
-    setField(databaseDisconnectTask, "designation", VALUE);
+    setField(databaseDisconnectTask, DESIGNATION, VALUE);
 
     assertEquals(VALUE, databaseDisconnectTask.getDesignation());
   }
 
   @Test
   void setDesignationWorksTest() {
-    setField(databaseDisconnectTask, "designation", null);
+    setField(databaseDisconnectTask, DESIGNATION, null);
 
     databaseDisconnectTask.setDesignation(VALUE);
-    assertEquals(VALUE, getField(databaseDisconnectTask, "designation"));
+    assertEquals(VALUE, getField(databaseDisconnectTask, DESIGNATION));
   }
 
   @ParameterizedTest
@@ -219,7 +229,7 @@ class DatabaseDisconnectTaskTest {
   private static Map<String, Object> helperFieldMap(String designation) {
     final Map<String, Object> map = new HashMap<>();
 
-    map.put("designation", designation);
+    map.put(DESIGNATION, designation);
 
     return map;
   }

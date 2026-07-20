@@ -18,6 +18,13 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 class ConditionTest {
 
+  private static final String ANSWER        = "answer";
+  private static final String DESCRIPTION   = "description";
+  private static final String DESERIALIZEAS = "deserializeAs";
+  private static final String EXPRESSION    = "expression";
+  private static final String ID            = "id";
+  private static final String NAME          = "name";
+
   private Condition condition;
 
   @BeforeEach
@@ -27,92 +34,92 @@ class ConditionTest {
 
   @Test
   void getIdWorksTest() {
-    setField(condition, "id", VALUE);
+    setField(condition, ID, VALUE);
 
     assertEquals(VALUE, condition.getId());
   }
 
   @Test
   void setIdWorksTest() {
-    setField(condition, "id", null);
+    setField(condition, ID, null);
 
     condition.setId(VALUE);
-    assertEquals(VALUE, getField(condition, "id"));
+    assertEquals(VALUE, getField(condition, ID));
   }
 
   @Test
   void getNameWorksTest() {
-    setField(condition, "name", VALUE);
+    setField(condition, NAME, VALUE);
 
     assertEquals(VALUE, condition.getName());
   }
 
   @Test
   void setNameWorksTest() {
-    setField(condition, "name", null);
+    setField(condition, NAME, null);
 
     condition.setName(VALUE);
-    assertEquals(VALUE, getField(condition, "name"));
+    assertEquals(VALUE, getField(condition, NAME));
   }
 
   @Test
   void getDescriptionWorksTest() {
-    setField(condition, "description", VALUE);
+    setField(condition, DESCRIPTION, VALUE);
 
     assertEquals(VALUE, condition.getDescription());
   }
 
   @Test
   void setDescriptionWorksTest() {
-    setField(condition, "description", null);
+    setField(condition, DESCRIPTION, null);
 
     condition.setDescription(VALUE);
-    assertEquals(VALUE, getField(condition, "description"));
+    assertEquals(VALUE, getField(condition, DESCRIPTION));
   }
 
   @Test
   void getDeserializeAsWorksTest() {
-    setField(condition, "deserializeAs", VALUE);
+    setField(condition, DESERIALIZEAS, VALUE);
 
     assertEquals(VALUE, condition.getDeserializeAs());
   }
 
   @Test
   void setDeserializeAsWorksTest() {
-    setField(condition, "deserializeAs", null);
+    setField(condition, DESERIALIZEAS, null);
 
     condition.setDeserializeAs(VALUE);
-    assertEquals(VALUE, getField(condition, "deserializeAs"));
+    assertEquals(VALUE, getField(condition, DESERIALIZEAS));
   }
 
   @Test
   void getExpressionWorksTest() {
-    setField(condition, "expression", VALUE);
+    setField(condition, EXPRESSION, VALUE);
 
     assertEquals(VALUE, condition.getExpression());
   }
 
   @Test
   void setExpressionWorksTest() {
-    setField(condition, "expression", null);
+    setField(condition, EXPRESSION, null);
 
     condition.setExpression(VALUE);
-    assertEquals(VALUE, getField(condition, "expression"));
+    assertEquals(VALUE, getField(condition, EXPRESSION));
   }
 
   @Test
   void getAnswerWorksTest() {
-    setField(condition, "answer", VALUE);
+    setField(condition, ANSWER, VALUE);
 
     assertEquals(VALUE, condition.getAnswer());
   }
 
   @Test
   void setAnswerWorksTest() {
-    setField(condition, "answer", null);
+    setField(condition, ANSWER, null);
 
     condition.setAnswer(VALUE);
-    assertEquals(VALUE, getField(condition, "answer"));
+    assertEquals(VALUE, getField(condition, ANSWER));
   }
 
   @ParameterizedTest
@@ -166,8 +173,8 @@ class ConditionTest {
   private static Map<String, Object> helperFieldMap(String answer, String expression) {
     final Map<String, Object> map = new HashMap<>();
 
-    map.put("answer", answer);
-    map.put("expression", expression);
+    map.put(ANSWER, answer);
+    map.put(EXPRESSION, expression);
 
     return map;
   }

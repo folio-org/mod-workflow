@@ -17,6 +17,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class InclusiveGatewayTest {
 
+  private static final String DESCRIPTION   = "description";
+  private static final String DESERIALIZEAS = "deserializeAs";
+  private static final String DIRECTION     = "direction";
+  private static final String ID            = "id";
+  private static final String NAME          = "name";
+  private static final String NODES         = "nodes";
+
   @Mock
   private Node node;
 
@@ -33,92 +40,92 @@ class InclusiveGatewayTest {
 
   @Test
   void getIdWorksTest() {
-    setField(abstractGateway, "id", VALUE);
+    setField(abstractGateway, ID, VALUE);
 
     assertEquals(VALUE, abstractGateway.getId());
   }
 
   @Test
   void setIdWorksTest() {
-    setField(abstractGateway, "id", null);
+    setField(abstractGateway, ID, null);
 
     abstractGateway.setId(VALUE);
-    assertEquals(VALUE, getField(abstractGateway, "id"));
+    assertEquals(VALUE, getField(abstractGateway, ID));
   }
 
   @Test
   void getNameWorksTest() {
-    setField(abstractGateway, "name", VALUE);
+    setField(abstractGateway, NAME, VALUE);
 
     assertEquals(VALUE, abstractGateway.getName());
   }
 
   @Test
   void setNameWorksTest() {
-    setField(abstractGateway, "name", null);
+    setField(abstractGateway, NAME, null);
 
     abstractGateway.setName(VALUE);
-    assertEquals(VALUE, getField(abstractGateway, "name"));
+    assertEquals(VALUE, getField(abstractGateway, NAME));
   }
 
   @Test
   void getDescriptionWorksTest() {
-    setField(abstractGateway, "description", VALUE);
+    setField(abstractGateway, DESCRIPTION, VALUE);
 
     assertEquals(VALUE, abstractGateway.getDescription());
   }
 
   @Test
   void setDescriptionWorksTest() {
-    setField(abstractGateway, "description", null);
+    setField(abstractGateway, DESCRIPTION, null);
 
     abstractGateway.setDescription(VALUE);
-    assertEquals(VALUE, getField(abstractGateway, "description"));
+    assertEquals(VALUE, getField(abstractGateway, DESCRIPTION));
   }
 
   @Test
   void getDeserializeAsWorksTest() {
-    setField(abstractGateway, "deserializeAs", VALUE);
+    setField(abstractGateway, DESERIALIZEAS, VALUE);
 
     assertEquals(VALUE, abstractGateway.getDeserializeAs());
   }
 
   @Test
   void setDeserializeAsWorksTest() {
-    setField(abstractGateway, "deserializeAs", null);
+    setField(abstractGateway, DESERIALIZEAS, null);
 
     abstractGateway.setDeserializeAs(VALUE);
-    assertEquals(VALUE, getField(abstractGateway, "deserializeAs"));
+    assertEquals(VALUE, getField(abstractGateway, DESERIALIZEAS));
   }
 
   @Test
   void getDirectionWorksTest() {
-    setField(abstractGateway, "direction", Direction.CONVERGING);
+    setField(abstractGateway, DIRECTION, Direction.CONVERGING);
 
     assertEquals(Direction.CONVERGING, abstractGateway.getDirection());
   }
 
   @Test
   void setDirectionWorksTest() {
-    setField(abstractGateway, "direction", null);
+    setField(abstractGateway, DIRECTION, null);
 
     abstractGateway.setDirection(Direction.CONVERGING);
-    assertEquals(Direction.CONVERGING, getField(abstractGateway, "direction"));
+    assertEquals(Direction.CONVERGING, getField(abstractGateway, DIRECTION));
   }
 
   @Test
   void getNodesWorksTest() {
-    setField(abstractGateway, "nodes", nodes);
+    setField(abstractGateway, NODES, nodes);
 
     assertEquals(nodes, abstractGateway.getNodes());
   }
 
   @Test
   void setNodesWorksTest() {
-    setField(abstractGateway, "nodes", null);
+    setField(abstractGateway, NODES, null);
 
     abstractGateway.setNodes(nodes);
-    assertEquals(nodes, getField(abstractGateway, "nodes"));
+    assertEquals(nodes, getField(abstractGateway, NODES));
   }
 
 }

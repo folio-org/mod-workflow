@@ -20,6 +20,11 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 class NodeTest {
 
+  private static final String DESCRIPTION   = "description";
+  private static final String DESERIALIZEAS = "deserializeAs";
+  private static final String ID            = "id";
+  private static final String NAME          = "name";
+
   private Node node;
 
   @BeforeEach
@@ -32,7 +37,7 @@ class NodeTest {
     final String className = node.getClass().getSimpleName().toLowerCase();
     final String expect = "my_identifier";
 
-    setField(node, "id", "my-identifier");
+    setField(node, ID, "my-identifier");
 
     final String identifier = node.getIdentifier();
 
@@ -42,62 +47,62 @@ class NodeTest {
 
   @Test
   void getIdWorksTest() {
-    setField(node, "id", VALUE);
+    setField(node, ID, VALUE);
 
     assertEquals(VALUE, node.getId());
   }
 
   @Test
   void setIdWorksTest() {
-    setField(node, "id", null);
+    setField(node, ID, null);
 
     node.setId(VALUE);
-    assertEquals(VALUE, getField(node, "id"));
+    assertEquals(VALUE, getField(node, ID));
   }
 
   @Test
   void getNameWorksTest() {
-    setField(node, "name", VALUE);
+    setField(node, NAME, VALUE);
 
     assertEquals(VALUE, node.getName());
   }
 
   @Test
   void setNameWorksTest() {
-    setField(node, "name", null);
+    setField(node, NAME, null);
 
     node.setName(VALUE);
-    assertEquals(VALUE, getField(node, "name"));
+    assertEquals(VALUE, getField(node, NAME));
   }
 
   @Test
   void getDescriptionWorksTest() {
-    setField(node, "description", VALUE);
+    setField(node, DESCRIPTION, VALUE);
 
     assertEquals(VALUE, node.getDescription());
   }
 
   @Test
   void setDescriptionWorksTest() {
-    setField(node, "description", null);
+    setField(node, DESCRIPTION, null);
 
     node.setDescription(VALUE);
-    assertEquals(VALUE, getField(node, "description"));
+    assertEquals(VALUE, getField(node, DESCRIPTION));
   }
 
   @Test
   void getDeserializeAsWorksTest() {
-    setField(node, "deserializeAs", VALUE);
+    setField(node, DESERIALIZEAS, VALUE);
 
     assertEquals(VALUE, node.getDeserializeAs());
   }
 
   @Test
   void setDeserializeAsWorksTest() {
-    setField(node, "deserializeAs", null);
+    setField(node, DESERIALIZEAS, null);
 
     node.setDeserializeAs(VALUE);
-    assertEquals(VALUE, getField(node, "deserializeAs"));
+    assertEquals(VALUE, getField(node, DESERIALIZEAS));
   }
 
   @ParameterizedTest
@@ -147,7 +152,7 @@ class NodeTest {
 
     final Map<String, Object> map = new HashMap<>();
 
-    map.put("name", name);
+    map.put(NAME, name);
 
     return map;
   }

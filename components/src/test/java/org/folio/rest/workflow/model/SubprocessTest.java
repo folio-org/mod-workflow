@@ -28,6 +28,16 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class SubprocessTest {
 
+  private static final String ASYNCAFTER    = "asyncAfter";
+  private static final String ASYNCBEFORE   = "asyncBefore";
+  private static final String DESCRIPTION   = "description";
+  private static final String DESERIALIZEAS = "deserializeAs";
+  private static final String ID            = "id";
+  private static final String LOOPREF       = "loopRef";
+  private static final String NAME          = "name";
+  private static final String NODES         = "nodes";
+  private static final String TYPE          = "type";
+
   @Mock
   private EmbeddedLoopReference embeddedLoopReference;
 
@@ -47,137 +57,137 @@ class SubprocessTest {
 
   @Test
   void getIdWorksTest() {
-    setField(subprocess, "id", VALUE);
+    setField(subprocess, ID, VALUE);
 
     assertEquals(VALUE, subprocess.getId());
   }
 
   @Test
   void setIdWorksTest() {
-    setField(subprocess, "id", null);
+    setField(subprocess, ID, null);
 
     subprocess.setId(VALUE);
-    assertEquals(VALUE, getField(subprocess, "id"));
+    assertEquals(VALUE, getField(subprocess, ID));
   }
 
   @Test
   void getNameWorksTest() {
-    setField(subprocess, "name", VALUE);
+    setField(subprocess, NAME, VALUE);
 
     assertEquals(VALUE, subprocess.getName());
   }
 
   @Test
   void setNameWorksTest() {
-    setField(subprocess, "name", null);
+    setField(subprocess, NAME, null);
 
     subprocess.setName(VALUE);
-    assertEquals(VALUE, getField(subprocess, "name"));
+    assertEquals(VALUE, getField(subprocess, NAME));
   }
 
   @Test
   void getDescriptionWorksTest() {
-    setField(subprocess, "description", VALUE);
+    setField(subprocess, DESCRIPTION, VALUE);
 
     assertEquals(VALUE, subprocess.getDescription());
   }
 
   @Test
   void setDescriptionWorksTest() {
-    setField(subprocess, "description", null);
+    setField(subprocess, DESCRIPTION, null);
 
     subprocess.setDescription(VALUE);
-    assertEquals(VALUE, getField(subprocess, "description"));
+    assertEquals(VALUE, getField(subprocess, DESCRIPTION));
   }
 
   @Test
   void getDeserializeAsWorksTest() {
-    setField(subprocess, "deserializeAs", VALUE);
+    setField(subprocess, DESERIALIZEAS, VALUE);
 
     assertEquals(VALUE, subprocess.getDeserializeAs());
   }
 
   @Test
   void setDeserializeAsWorksTest() {
-    setField(subprocess, "deserializeAs", null);
+    setField(subprocess, DESERIALIZEAS, null);
 
     subprocess.setDeserializeAs(VALUE);
-    assertEquals(VALUE, getField(subprocess, "deserializeAs"));
+    assertEquals(VALUE, getField(subprocess, DESERIALIZEAS));
   }
 
   @Test
   void getAsyncBeforeWorksTest() {
-    setField(subprocess, "asyncBefore", true);
+    setField(subprocess, ASYNCBEFORE, true);
 
     assertEquals(true, subprocess.getAsyncBefore());
   }
 
   @Test
   void setAsyncBeforeWorksTest() {
-    setField(subprocess, "asyncBefore", false);
+    setField(subprocess, ASYNCBEFORE, false);
 
     subprocess.setAsyncBefore(true);
-    assertEquals(true, getField(subprocess, "asyncBefore"));
+    assertEquals(true, getField(subprocess, ASYNCBEFORE));
   }
 
   @Test
   void getAsyncAfterWorksTest() {
-    setField(subprocess, "asyncAfter", true);
+    setField(subprocess, ASYNCAFTER, true);
 
     assertEquals(true, subprocess.getAsyncAfter());
   }
 
   @Test
   void setAsyncAfterWorksTest() {
-    setField(subprocess, "asyncAfter", false);
+    setField(subprocess, ASYNCAFTER, false);
 
     subprocess.setAsyncAfter(true);
-    assertEquals(true, getField(subprocess, "asyncAfter"));
+    assertEquals(true, getField(subprocess, ASYNCAFTER));
   }
 
   @Test
   void getNodesWorksTest() {
-    setField(subprocess, "nodes", nodes);
+    setField(subprocess, NODES, nodes);
 
     assertEquals(nodes, subprocess.getNodes());
   }
 
   @Test
   void setNodesWorksTest() {
-    setField(subprocess, "nodes", null);
+    setField(subprocess, NODES, null);
 
     subprocess.setNodes(nodes);
-    assertEquals(nodes, getField(subprocess, "nodes"));
+    assertEquals(nodes, getField(subprocess, NODES));
   }
 
   @Test
   void getTypeWorksTest() {
-    setField(subprocess, "type", EMBEDDED);
+    setField(subprocess, TYPE, EMBEDDED);
 
     assertEquals(EMBEDDED, subprocess.getType());
   }
 
   @Test
   void setTypeWorksTest() {
-    setField(subprocess, "type", null);
+    setField(subprocess, TYPE, null);
 
     subprocess.setType(EMBEDDED);
-    assertEquals(EMBEDDED, getField(subprocess, "type"));
+    assertEquals(EMBEDDED, getField(subprocess, TYPE));
   }
 
   @Test
   void getLoopRefWorksTest() {
-    setField(subprocess, "loopRef", embeddedLoopReference);
+    setField(subprocess, LOOPREF, embeddedLoopReference);
 
     assertEquals(embeddedLoopReference, subprocess.getLoopRef());
   }
 
   @Test
   void setLoopRefWorksTest() {
-    setField(subprocess, "loopRef", null);
+    setField(subprocess, LOOPREF, null);
 
     subprocess.setLoopRef(embeddedLoopReference);
-    assertEquals(embeddedLoopReference, getField(subprocess, "loopRef"));
+    assertEquals(embeddedLoopReference, getField(subprocess, LOOPREF));
   }
 
   @ParameterizedTest
@@ -192,11 +202,11 @@ class SubprocessTest {
 
     expected.forEach((String attribute, Object value) -> {
       if (Boolean.TRUE.equals(persist.get(attribute))) {
-        if (attribute == "loopRef") {
+        if (attribute == LOOPREF) {
           verify((EmbeddedLoopReference) value).prePersist();
         }
       } else if (Boolean.FALSE.equals(persist.get(attribute))) {
-        if (attribute == "loopRef") {
+        if (attribute == LOOPREF) {
           verify((EmbeddedLoopReference) value, never()).prePersist();
         }
       } else {
@@ -250,8 +260,8 @@ class SubprocessTest {
 
     final Map<String, Object> map = new HashMap<>();
 
-    map.put("type", type);
-    map.put("loopRef", loopRef);
+    map.put(TYPE, type);
+    map.put(LOOPREF, loopRef);
 
     return map;
   }
@@ -267,7 +277,7 @@ class SubprocessTest {
 
     final Map<String, Object> map = new HashMap<>();
 
-    map.put("loopRef", loopRef);
+    map.put(LOOPREF, loopRef);
 
     return map;
   }

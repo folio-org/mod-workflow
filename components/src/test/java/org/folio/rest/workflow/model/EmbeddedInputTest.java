@@ -26,6 +26,15 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 class EmbeddedInputTest {
 
+  private static final String ATTRIBUTES   = "attributes";
+  private static final String DEFAULTVALUE = "defaultValue";
+  private static final String FIELDID      = "fieldId";
+  private static final String FIELDLABEL   = "fieldLabel";
+  private static final String INPUTTYPE    = "inputType";
+  private static final String OPTIONS      = "options";
+  private static final String REQUIRED     = "required";
+
+
   private List<InputAttribute> attributes;
 
   private List<String> options;
@@ -42,107 +51,107 @@ class EmbeddedInputTest {
 
   @Test
   void getAttributesWorksTest() {
-    setField(embeddedInput, "attributes", attributes);
+    setField(embeddedInput, ATTRIBUTES, attributes);
 
     assertEquals(attributes, embeddedInput.getAttributes());
   }
 
   @Test
   void setAttributesWorksTest() {
-    setField(embeddedInput, "attributes", null);
+    setField(embeddedInput, ATTRIBUTES, null);
 
     embeddedInput.setAttributes(attributes);
-    assertEquals(attributes, getField(embeddedInput, "attributes"));
+    assertEquals(attributes, getField(embeddedInput, ATTRIBUTES));
   }
 
   @Test
   void getDefaultValueWorksTest() {
-    setField(embeddedInput, "defaultValue", VALUE);
+    setField(embeddedInput, DEFAULTVALUE, VALUE);
 
     assertEquals(VALUE, embeddedInput.getDefaultValue());
   }
 
   @Test
   void setDefaultValueWorksTest() {
-    setField(embeddedInput, "defaultValue", null);
+    setField(embeddedInput, DEFAULTVALUE, null);
 
     embeddedInput.setDefaultValue(VALUE);
-    assertEquals(VALUE, getField(embeddedInput, "defaultValue"));
+    assertEquals(VALUE, getField(embeddedInput, DEFAULTVALUE));
   }
 
   @Test
   void getFieldIdWorksTest() {
-    setField(embeddedInput, "fieldId", VALUE);
+    setField(embeddedInput, FIELDID, VALUE);
 
     assertEquals(VALUE, embeddedInput.getFieldId());
   }
 
   @Test
   void setFieldIdWorksTest() {
-    setField(embeddedInput, "fieldId", null);
+    setField(embeddedInput, FIELDID, null);
 
     embeddedInput.setFieldId(VALUE);
-    assertEquals(VALUE, getField(embeddedInput, "fieldId"));
+    assertEquals(VALUE, getField(embeddedInput, FIELDID));
   }
 
   @Test
   void getFieldLabelWorksTest() {
-    setField(embeddedInput, "fieldLabel", VALUE);
+    setField(embeddedInput, FIELDLABEL, VALUE);
 
     assertEquals(VALUE, embeddedInput.getFieldLabel());
   }
 
   @Test
   void setFieldLabelWorksTest() {
-    setField(embeddedInput, "fieldLabel", null);
+    setField(embeddedInput, FIELDLABEL, null);
 
     embeddedInput.setFieldLabel(VALUE);
-    assertEquals(VALUE, getField(embeddedInput, "fieldLabel"));
+    assertEquals(VALUE, getField(embeddedInput, FIELDLABEL));
   }
 
   @Test
   void getInputTypeWorksTest() {
-    setField(embeddedInput, "inputType", EMAIL);
+    setField(embeddedInput, INPUTTYPE, EMAIL);
 
     assertEquals(EMAIL, embeddedInput.getInputType());
   }
 
   @Test
   void setInputTypeWorksTest() {
-    setField(embeddedInput, "inputType", null);
+    setField(embeddedInput, INPUTTYPE, null);
 
     embeddedInput.setInputType(CHECKBOX);
-    assertEquals(CHECKBOX, getField(embeddedInput, "inputType"));
+    assertEquals(CHECKBOX, getField(embeddedInput, INPUTTYPE));
   }
 
   @Test
   void getOptionsWorksTest() {
-    setField(embeddedInput, "options", options);
+    setField(embeddedInput, OPTIONS, options);
 
     assertEquals(options, embeddedInput.getOptions());
   }
 
   @Test
   void setOptionsWorksTest() {
-    setField(embeddedInput, "options", null);
+    setField(embeddedInput, OPTIONS, null);
 
     embeddedInput.setOptions(options);
-    assertEquals(options, getField(embeddedInput, "options"));
+    assertEquals(options, getField(embeddedInput, OPTIONS));
   }
 
   @Test
   void getRequiredWorksTest() {
-    setField(embeddedInput, "required", true);
+    setField(embeddedInput, REQUIRED, true);
 
     assertEquals(true, embeddedInput.getRequired());
   }
 
   @Test
   void setRequiredWorksTest() {
-    setField(embeddedInput, "required", false);
+    setField(embeddedInput, REQUIRED, false);
 
     embeddedInput.setRequired(true);
-    assertEquals(true, getField(embeddedInput, "required"));
+    assertEquals(true, getField(embeddedInput, REQUIRED));
   }
 
   @ParameterizedTest
@@ -225,12 +234,12 @@ class EmbeddedInputTest {
   private static Map<String, Object> helperFieldMap(List<InputAttribute> attributes, String fieldId, String fieldLabel, InputType inputType, List<String> options, Boolean required) {
     final Map<String, Object> map = new HashMap<>();
 
-    map.put("attributes", attributes);
-    map.put("fieldId", fieldId);
-    map.put("fieldLabel", fieldLabel);
-    map.put("inputType", inputType);
-    map.put("options", options);
-    map.put("required", required);
+    map.put(ATTRIBUTES, attributes);
+    map.put(FIELDID, fieldId);
+    map.put(FIELDLABEL, fieldLabel);
+    map.put(INPUTTYPE, inputType);
+    map.put(OPTIONS, options);
+    map.put(REQUIRED, required);
 
     return map;
   }

@@ -27,6 +27,18 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class DirectoryTaskTest {
 
+  private static final String ACTION         = "action";
+  private static final String ASYNCAFTER     = "asyncAfter";
+  private static final String ASYNCBEFORE    = "asyncBefore";
+  private static final String DESCRIPTION    = "description";
+  private static final String DESERIALIZEAS  = "deserializeAs";
+  private static final String ID             = "id";
+  private static final String INPUTVARIABLES = "inputVariables";
+  private static final String NAME           = "name";
+  private static final String OUTPUTVARIABLE = "outputVariable";
+  private static final String PATH           = "path";
+  private static final String WORKFLOW       = "workflow";
+
   @Mock
   private EmbeddedVariable embeddedVariable;
 
@@ -43,142 +55,142 @@ class DirectoryTaskTest {
 
   @Test
   void getIdWorksTest() {
-    setField(directoryTask, "id", VALUE);
+    setField(directoryTask, ID, VALUE);
 
     assertEquals(VALUE, directoryTask.getId());
   }
 
   @Test
   void setIdWorksTest() {
-    setField(directoryTask, "id", null);
+    setField(directoryTask, ID, null);
 
     directoryTask.setId(VALUE);
-    assertEquals(VALUE, getField(directoryTask, "id"));
+    assertEquals(VALUE, getField(directoryTask, ID));
   }
 
   @Test
   void getNameWorksTest() {
-    setField(directoryTask, "name", VALUE);
+    setField(directoryTask, NAME, VALUE);
 
     assertEquals(VALUE, directoryTask.getName());
   }
 
   @Test
   void setNameWorksTest() {
-    setField(directoryTask, "name", null);
+    setField(directoryTask, NAME, null);
 
     directoryTask.setName(VALUE);
-    assertEquals(VALUE, getField(directoryTask, "name"));
+    assertEquals(VALUE, getField(directoryTask, NAME));
   }
 
   @Test
   void getDescriptionWorksTest() {
-    setField(directoryTask, "description", VALUE);
+    setField(directoryTask, DESCRIPTION, VALUE);
 
     assertEquals(VALUE, directoryTask.getDescription());
   }
 
   @Test
   void setDescriptionWorksTest() {
-    setField(directoryTask, "description", null);
+    setField(directoryTask, DESCRIPTION, null);
 
     directoryTask.setDescription(VALUE);
-    assertEquals(VALUE, getField(directoryTask, "description"));
+    assertEquals(VALUE, getField(directoryTask, DESCRIPTION));
   }
 
   @Test
   void getDeserializeAsWorksTest() {
-    setField(directoryTask, "deserializeAs", VALUE);
+    setField(directoryTask, DESERIALIZEAS, VALUE);
 
     assertEquals(VALUE, directoryTask.getDeserializeAs());
   }
 
   @Test
   void setDeserializeAsWorksTest() {
-    setField(directoryTask, "deserializeAs", null);
+    setField(directoryTask, DESERIALIZEAS, null);
 
     directoryTask.setDeserializeAs(VALUE);
-    assertEquals(VALUE, getField(directoryTask, "deserializeAs"));
+    assertEquals(VALUE, getField(directoryTask, DESERIALIZEAS));
   }
 
   @Test
   void getInputVariablesWorksTest() {
-    setField(directoryTask, "inputVariables", inputVariables);
+    setField(directoryTask, INPUTVARIABLES, inputVariables);
 
     assertEquals(inputVariables, directoryTask.getInputVariables());
   }
 
   @Test
   void setInputVariablesWorksTest() {
-    setField(directoryTask, "inputVariables", null);
+    setField(directoryTask, INPUTVARIABLES, null);
 
     directoryTask.setInputVariables(inputVariables);
-    assertEquals(inputVariables, getField(directoryTask, "inputVariables"));
+    assertEquals(inputVariables, getField(directoryTask, INPUTVARIABLES));
   }
 
   @Test
   void getOutputVariableWorksTest() {
-    setField(directoryTask, "outputVariable", embeddedVariable);
+    setField(directoryTask, OUTPUTVARIABLE, embeddedVariable);
 
     assertEquals(embeddedVariable, directoryTask.getOutputVariable());
   }
 
   @Test
   void setOutputVariableWorksTest() {
-    setField(directoryTask, "outputVariable", null);
+    setField(directoryTask, OUTPUTVARIABLE, null);
 
     directoryTask.setOutputVariable(embeddedVariable);
-    assertEquals(embeddedVariable, getField(directoryTask, "outputVariable"));
+    assertEquals(embeddedVariable, getField(directoryTask, OUTPUTVARIABLE));
   }
 
   @Test
   void getAsyncBeforeWorksTest() {
-    setField(directoryTask, "asyncBefore", true);
+    setField(directoryTask, ASYNCBEFORE, true);
 
     assertEquals(true, directoryTask.getAsyncBefore());
   }
 
   @Test
   void setAsyncBeforeWorksTest() {
-    setField(directoryTask, "asyncBefore", false);
+    setField(directoryTask, ASYNCBEFORE, false);
 
     directoryTask.setAsyncBefore(true);
-    assertEquals(true, getField(directoryTask, "asyncBefore"));
+    assertEquals(true, getField(directoryTask, ASYNCBEFORE));
   }
 
   @Test
   void getAsyncAfterWorksTest() {
-    setField(directoryTask, "asyncAfter", true);
+    setField(directoryTask, ASYNCAFTER, true);
 
     assertEquals(true, directoryTask.getAsyncAfter());
   }
 
   @Test
   void setAsyncAfterWorksTest() {
-    setField(directoryTask, "asyncAfter", false);
+    setField(directoryTask, ASYNCAFTER, false);
 
     directoryTask.setAsyncAfter(true);
-    assertEquals(true, getField(directoryTask, "asyncAfter"));
+    assertEquals(true, getField(directoryTask, ASYNCAFTER));
   }
 
   @Test
   void getPathWorksTest() {
-    setField(directoryTask, "path", VALUE);
+    setField(directoryTask, PATH, VALUE);
 
     assertEquals(VALUE, directoryTask.getPath());
   }
 
   @Test
   void setPathWorksTest() {
-    setField(directoryTask, "path", null);
+    setField(directoryTask, PATH, null);
 
     directoryTask.setPath(VALUE);
-    assertEquals(VALUE, getField(directoryTask, "path"));
+    assertEquals(VALUE, getField(directoryTask, PATH));
   }
 
   @Test
   void setActionWorksTest() {
-    setField(directoryTask, "action", LIST);
+    setField(directoryTask, ACTION, LIST);
 
     directoryTask.setAction(LIST);
     assertEquals(LIST, directoryTask.getAction());
@@ -186,24 +198,24 @@ class DirectoryTaskTest {
 
   @Test
   void getActionWorksTest() {
-    setField(directoryTask, "action", LIST);
+    setField(directoryTask, ACTION, LIST);
 
     assertEquals(LIST, directoryTask.getAction());
   }
 
   @Test
   void getWorkflowWorksTest() {
-    setField(directoryTask, "workflow", VALUE);
+    setField(directoryTask, WORKFLOW, VALUE);
 
     assertEquals(VALUE, directoryTask.getWorkflow());
   }
 
   @Test
   void setWorkflowWorksTest() {
-    setField(directoryTask, "workflow", null);
+    setField(directoryTask, WORKFLOW, null);
 
     directoryTask.setWorkflow(VALUE);
-    assertEquals(VALUE, getField(directoryTask, "workflow"));
+    assertEquals(VALUE, getField(directoryTask, WORKFLOW));
   }
 
   @ParameterizedTest
@@ -261,9 +273,9 @@ class DirectoryTaskTest {
   private static Map<String, Object> helperFieldMap(String path, String workflow, DirectoryAction action) {
     Map<String, Object> map = new HashMap<>();
 
-    map.put("path", path);
-    map.put("workflow", workflow);
-    map.put("action", action);
+    map.put(PATH, path);
+    map.put(WORKFLOW, workflow);
+    map.put(ACTION, action);
 
     return map;
   }

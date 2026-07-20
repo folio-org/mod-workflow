@@ -17,6 +17,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class ExclusiveGatewayTest {
 
+  private static final String DESCRIPTION   = "description";
+  private static final String DESERIALIZEAS = "deserializeAs";
+  private static final String DIRECTION     = "direction";
+  private static final String ID            = "id";
+  private static final String NAME          = "name";
+  private static final String NODES         = "nodes";
+
   @Mock
   private Node node;
 
@@ -33,92 +40,92 @@ class ExclusiveGatewayTest {
 
   @Test
   void getIdWorksTest() {
-    setField(exclusiveGateway, "id", VALUE);
+    setField(exclusiveGateway, ID, VALUE);
 
     assertEquals(VALUE, exclusiveGateway.getId());
   }
 
   @Test
   void setIdWorksTest() {
-    setField(exclusiveGateway, "id", null);
+    setField(exclusiveGateway, ID, null);
 
     exclusiveGateway.setId(VALUE);
-    assertEquals(VALUE, getField(exclusiveGateway, "id"));
+    assertEquals(VALUE, getField(exclusiveGateway, ID));
   }
 
   @Test
   void getNameWorksTest() {
-    setField(exclusiveGateway, "name", VALUE);
+    setField(exclusiveGateway, NAME, VALUE);
 
     assertEquals(VALUE, exclusiveGateway.getName());
   }
 
   @Test
   void setNameWorksTest() {
-    setField(exclusiveGateway, "name", null);
+    setField(exclusiveGateway, NAME, null);
 
     exclusiveGateway.setName(VALUE);
-    assertEquals(VALUE, getField(exclusiveGateway, "name"));
+    assertEquals(VALUE, getField(exclusiveGateway, NAME));
   }
 
   @Test
   void getDescriptionWorksTest() {
-    setField(exclusiveGateway, "description", VALUE);
+    setField(exclusiveGateway, DESCRIPTION, VALUE);
 
     assertEquals(VALUE, exclusiveGateway.getDescription());
   }
 
   @Test
   void setDescriptionWorksTest() {
-    setField(exclusiveGateway, "description", null);
+    setField(exclusiveGateway, DESCRIPTION, null);
 
     exclusiveGateway.setDescription(VALUE);
-    assertEquals(VALUE, getField(exclusiveGateway, "description"));
+    assertEquals(VALUE, getField(exclusiveGateway, DESCRIPTION));
   }
 
   @Test
   void getDeserializeAsWorksTest() {
-    setField(exclusiveGateway, "deserializeAs", VALUE);
+    setField(exclusiveGateway, DESERIALIZEAS, VALUE);
 
     assertEquals(VALUE, exclusiveGateway.getDeserializeAs());
   }
 
   @Test
   void setDeserializeAsWorksTest() {
-    setField(exclusiveGateway, "deserializeAs", null);
+    setField(exclusiveGateway, DESERIALIZEAS, null);
 
     exclusiveGateway.setDeserializeAs(VALUE);
-    assertEquals(VALUE, getField(exclusiveGateway, "deserializeAs"));
+    assertEquals(VALUE, getField(exclusiveGateway, DESERIALIZEAS));
   }
 
   @Test
   void getDirectionWorksTest() {
-    setField(exclusiveGateway, "direction", Direction.CONVERGING);
+    setField(exclusiveGateway, DIRECTION, Direction.CONVERGING);
 
     assertEquals(Direction.CONVERGING, exclusiveGateway.getDirection());
   }
 
   @Test
   void setDirectionWorksTest() {
-    setField(exclusiveGateway, "direction", null);
+    setField(exclusiveGateway, DIRECTION, null);
 
     exclusiveGateway.setDirection(Direction.CONVERGING);
-    assertEquals(Direction.CONVERGING, getField(exclusiveGateway, "direction"));
+    assertEquals(Direction.CONVERGING, getField(exclusiveGateway, DIRECTION));
   }
 
   @Test
   void getNodesWorksTest() {
-    setField(exclusiveGateway, "nodes", nodes);
+    setField(exclusiveGateway, NODES, nodes);
 
     assertEquals(nodes, exclusiveGateway.getNodes());
   }
 
   @Test
   void setNodesWorksTest() {
-    setField(exclusiveGateway, "nodes", null);
+    setField(exclusiveGateway, NODES, null);
 
     exclusiveGateway.setNodes(nodes);
-    assertEquals(nodes, getField(exclusiveGateway, "nodes"));
+    assertEquals(nodes, getField(exclusiveGateway, NODES));
   }
 
 }

@@ -20,6 +20,12 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 class EmbeddedProcessorTest {
 
+  private static final String BUFFER       = "buffer";
+  private static final String CODE         = "code";
+  private static final String DELAY        = "delay";
+  private static final String FUNCTIONNAME = "functionName";
+  private static final String SCRIPTTYPE   = "scriptType";
+
   private EmbeddedProcessor embeddedProcessor;
 
   @BeforeEach
@@ -29,77 +35,77 @@ class EmbeddedProcessorTest {
 
   @Test
   void getScriptTypeWorksTest() {
-    setField(embeddedProcessor, "scriptType", ScriptType.GROOVY);
+    setField(embeddedProcessor, SCRIPTTYPE, ScriptType.GROOVY);
 
     assertEquals(ScriptType.GROOVY, embeddedProcessor.getScriptType());
   }
 
   @Test
   void setScriptTypeWorksTest() {
-    setField(embeddedProcessor, "scriptType", null);
+    setField(embeddedProcessor, SCRIPTTYPE, null);
 
     embeddedProcessor.setScriptType(ScriptType.GROOVY);
-    assertEquals(ScriptType.GROOVY, getField(embeddedProcessor, "scriptType"));
+    assertEquals(ScriptType.GROOVY, getField(embeddedProcessor, SCRIPTTYPE));
   }
 
   @Test
   void getFunctionNameWorksTest() {
-    setField(embeddedProcessor, "functionName", VALUE);
+    setField(embeddedProcessor, FUNCTIONNAME, VALUE);
 
     assertEquals(VALUE, embeddedProcessor.getFunctionName());
   }
 
   @Test
   void setFunctionNameWorksTest() {
-    setField(embeddedProcessor, "functionName", null);
+    setField(embeddedProcessor, FUNCTIONNAME, null);
 
     embeddedProcessor.setFunctionName(VALUE);
-    assertEquals(VALUE, getField(embeddedProcessor, "functionName"));
+    assertEquals(VALUE, getField(embeddedProcessor, FUNCTIONNAME));
   }
 
   @Test
   void getCodeWorksTest() {
-    setField(embeddedProcessor, "code", VALUE);
+    setField(embeddedProcessor, CODE, VALUE);
 
     assertEquals(VALUE, embeddedProcessor.getCode());
   }
 
   @Test
   void setCodeWorksTest() {
-    setField(embeddedProcessor, "code", null);
+    setField(embeddedProcessor, CODE, null);
 
     embeddedProcessor.setCode(VALUE);
-    assertEquals(VALUE, getField(embeddedProcessor, "code"));
+    assertEquals(VALUE, getField(embeddedProcessor, CODE));
   }
 
   @Test
   void getBufferWorksTest() {
-    setField(embeddedProcessor, "buffer", 1);
+    setField(embeddedProcessor, BUFFER, 1);
 
     assertEquals(1, embeddedProcessor.getBuffer());
   }
 
   @Test
   void setBufferWorksTest() {
-    setField(embeddedProcessor, "buffer", 0);
+    setField(embeddedProcessor, BUFFER, 0);
 
     embeddedProcessor.setBuffer(1);
-    assertEquals(1, getField(embeddedProcessor, "buffer"));
+    assertEquals(1, getField(embeddedProcessor, BUFFER));
   }
 
   @Test
   void getDelayWorksTest() {
-    setField(embeddedProcessor, "delay", 1);
+    setField(embeddedProcessor, DELAY, 1);
 
     assertEquals(1, embeddedProcessor.getDelay());
   }
 
   @Test
   void setDelayWorksTest() {
-    setField(embeddedProcessor, "delay", 0);
+    setField(embeddedProcessor, DELAY, 0);
 
     embeddedProcessor.setDelay(1);
-    assertEquals(1, getField(embeddedProcessor, "delay"));
+    assertEquals(1, getField(embeddedProcessor, DELAY));
   }
 
   @ParameterizedTest
@@ -170,11 +176,11 @@ class EmbeddedProcessorTest {
   private static Map<String, Object> helperFieldMap(Integer buffer, String code, Integer delay, String functionName, ScriptType scriptType) {
     final Map<String, Object> map = new HashMap<>();
 
-    map.put("buffer", buffer);
-    map.put("code", code);
-    map.put("delay", delay);
-    map.put("functionName", functionName);
-    map.put("scriptType", scriptType);
+    map.put(BUFFER, buffer);
+    map.put(CODE, code);
+    map.put(DELAY, delay);
+    map.put(FUNCTIONNAME, functionName);
+    map.put(SCRIPTTYPE, scriptType);
 
     return map;
   }

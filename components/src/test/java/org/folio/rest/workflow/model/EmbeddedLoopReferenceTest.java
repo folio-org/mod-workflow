@@ -18,6 +18,12 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 class EmbeddedLoopReferenceTest {
 
+  private static final String CARDINALITYEXPRESSION       = "cardinalityExpression";
+  private static final String DATAINPUTREFEXPRESSION      = "dataInputRefExpression";
+  private static final String INPUTDATANAME               = "inputDataName";
+  private static final String COMPLETECONDITIONEXPRESSION = "completeConditionExpression";
+  private static final String PARALLEL                    = "parallel";
+
   private EmbeddedLoopReference embeddedLoopReference;
 
   @BeforeEach
@@ -27,77 +33,77 @@ class EmbeddedLoopReferenceTest {
 
   @Test
   void getCardinalityExpressionWorksTest() {
-    setField(embeddedLoopReference, "cardinalityExpression", VALUE);
+    setField(embeddedLoopReference, CARDINALITYEXPRESSION, VALUE);
 
     assertEquals(VALUE, embeddedLoopReference.getCardinalityExpression());
   }
 
   @Test
   void setCardinalityExpressionWorksTest() {
-    setField(embeddedLoopReference, "cardinalityExpression", null);
+    setField(embeddedLoopReference, CARDINALITYEXPRESSION, null);
 
     embeddedLoopReference.setCardinalityExpression(VALUE);
-    assertEquals(VALUE, getField(embeddedLoopReference, "cardinalityExpression"));
+    assertEquals(VALUE, getField(embeddedLoopReference, CARDINALITYEXPRESSION));
   }
 
   @Test
   void getDataInputRefExpressionWorksTest() {
-    setField(embeddedLoopReference, "dataInputRefExpression", VALUE);
+    setField(embeddedLoopReference, DATAINPUTREFEXPRESSION, VALUE);
 
     assertEquals(VALUE, embeddedLoopReference.getDataInputRefExpression());
   }
 
   @Test
   void setDataInputRefExpressionWorksTest() {
-    setField(embeddedLoopReference, "dataInputRefExpression", null);
+    setField(embeddedLoopReference, DATAINPUTREFEXPRESSION, null);
 
     embeddedLoopReference.setDataInputRefExpression(VALUE);
-    assertEquals(VALUE, getField(embeddedLoopReference, "dataInputRefExpression"));
+    assertEquals(VALUE, getField(embeddedLoopReference, DATAINPUTREFEXPRESSION));
   }
 
   @Test
   void getInputDataNameWorksTest() {
-    setField(embeddedLoopReference, "inputDataName", VALUE);
+    setField(embeddedLoopReference, INPUTDATANAME, VALUE);
 
     assertEquals(VALUE, embeddedLoopReference.getInputDataName());
   }
 
   @Test
   void setInputDataNameWorksTest() {
-    setField(embeddedLoopReference, "inputDataName", null);
+    setField(embeddedLoopReference, INPUTDATANAME, null);
 
     embeddedLoopReference.setInputDataName(VALUE);
-    assertEquals(VALUE, getField(embeddedLoopReference, "inputDataName"));
+    assertEquals(VALUE, getField(embeddedLoopReference, INPUTDATANAME));
   }
 
   @Test
   void getCompleteConditionExpressionWorksTest() {
-    setField(embeddedLoopReference, "completeConditionExpression", VALUE);
+    setField(embeddedLoopReference, COMPLETECONDITIONEXPRESSION, VALUE);
 
     assertEquals(VALUE, embeddedLoopReference.getCompleteConditionExpression());
   }
 
   @Test
   void setCompleteConditionExpressionWorksTest() {
-    setField(embeddedLoopReference, "completeConditionExpression", null);
+    setField(embeddedLoopReference, COMPLETECONDITIONEXPRESSION, null);
 
     embeddedLoopReference.setCompleteConditionExpression(VALUE);
-    assertEquals(VALUE, getField(embeddedLoopReference, "completeConditionExpression"));
+    assertEquals(VALUE, getField(embeddedLoopReference, COMPLETECONDITIONEXPRESSION));
   }
 
   @Test
   void getParallelWorksTest() {
-    setField(embeddedLoopReference, "parallel", true);
+    setField(embeddedLoopReference, PARALLEL, true);
 
     assertEquals(true, embeddedLoopReference.getParallel());
   }
 
   @Test
   void setParallelWorksTest() {
-    setField(embeddedLoopReference, "parallel", false);
+    setField(embeddedLoopReference, PARALLEL, false);
 
     embeddedLoopReference.setParallel(true);
-    assertEquals(true, getField(embeddedLoopReference, "parallel"));
+    assertEquals(true, getField(embeddedLoopReference, PARALLEL));
   }
 
   @ParameterizedTest
@@ -117,7 +123,7 @@ class EmbeddedLoopReferenceTest {
   @ParameterizedTest
   @MethodSource("provideSimpleHasAndHasNotFor")
   void hasCardinalityExpressionWorksTest(String value, boolean expect) {
-    setField(embeddedLoopReference, "cardinalityExpression", value);
+    setField(embeddedLoopReference, CARDINALITYEXPRESSION, value);
 
     assertEquals(expect, embeddedLoopReference.hasCardinalityExpression());
   }
@@ -125,7 +131,7 @@ class EmbeddedLoopReferenceTest {
   @ParameterizedTest
   @MethodSource("provideSimpleHasAndHasNotFor")
   void hasCompleteConditionExpressionWorksTest(String value, boolean expect) {
-    setField(embeddedLoopReference, "completeConditionExpression", value);
+    setField(embeddedLoopReference, COMPLETECONDITIONEXPRESSION, value);
 
     assertEquals(expect, embeddedLoopReference.hasCompleteConditionExpression());
   }
@@ -133,8 +139,8 @@ class EmbeddedLoopReferenceTest {
   @ParameterizedTest
   @MethodSource("provideHasDataInputFor")
   void hasDataInput(String expression, String name, boolean expect) {
-    setField(embeddedLoopReference, "dataInputRefExpression", expression);
-    setField(embeddedLoopReference, "inputDataName", name);
+    setField(embeddedLoopReference, DATAINPUTREFEXPRESSION, expression);
+    setField(embeddedLoopReference, INPUTDATANAME, name);
 
     assertEquals(expect, embeddedLoopReference.hasDataInput());
   }
@@ -205,7 +211,7 @@ class EmbeddedLoopReferenceTest {
   private static Map<String, Object> helperFieldMap(Boolean parallel) {
     final Map<String, Object> map = new HashMap<>();
 
-    map.put("parallel", parallel);
+    map.put(PARALLEL, parallel);
 
     return map;
   }

@@ -26,6 +26,16 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class ProcessorTaskTest {
 
+  private static final String ASYNCAFTER     = "asyncAfter";
+  private static final String ASYNCBEFORE    = "asyncBefore";
+  private static final String DESCRIPTION    = "description";
+  private static final String DESERIALIZEAS  = "deserializeAs";
+  private static final String ID             = "id";
+  private static final String INPUTVARIABLES = "inputVariables";
+  private static final String NAME           = "name";
+  private static final String OUTPUTVARIABLE = "outputVariable";
+  private static final String PROCESSOR      = "processor";
+
   @Mock
   private EmbeddedVariable embeddedVariable;
 
@@ -45,137 +55,137 @@ class ProcessorTaskTest {
 
   @Test
   void getIdWorksTest() {
-    setField(processorTask, "id", VALUE);
+    setField(processorTask, ID, VALUE);
 
     assertEquals(VALUE, processorTask.getId());
   }
 
   @Test
   void setIdWorksTest() {
-    setField(processorTask, "id", null);
+    setField(processorTask, ID, null);
 
     processorTask.setId(VALUE);
-    assertEquals(VALUE, getField(processorTask, "id"));
+    assertEquals(VALUE, getField(processorTask, ID));
   }
 
   @Test
   void getNameWorksTest() {
-    setField(processorTask, "name", VALUE);
+    setField(processorTask, NAME, VALUE);
 
     assertEquals(VALUE, processorTask.getName());
   }
 
   @Test
   void setNameWorksTest() {
-    setField(processorTask, "name", null);
+    setField(processorTask, NAME, null);
 
     processorTask.setName(VALUE);
-    assertEquals(VALUE, getField(processorTask, "name"));
+    assertEquals(VALUE, getField(processorTask, NAME));
   }
 
   @Test
   void getDescriptionWorksTest() {
-    setField(processorTask, "description", VALUE);
+    setField(processorTask, DESCRIPTION, VALUE);
 
     assertEquals(VALUE, processorTask.getDescription());
   }
 
   @Test
   void setDescriptionWorksTest() {
-    setField(processorTask, "description", null);
+    setField(processorTask, DESCRIPTION, null);
 
     processorTask.setDescription(VALUE);
-    assertEquals(VALUE, getField(processorTask, "description"));
+    assertEquals(VALUE, getField(processorTask, DESCRIPTION));
   }
 
   @Test
   void getDeserializeAsWorksTest() {
-    setField(processorTask, "deserializeAs", VALUE);
+    setField(processorTask, DESERIALIZEAS, VALUE);
 
     assertEquals(VALUE, processorTask.getDeserializeAs());
   }
 
   @Test
   void setDeserializeAsWorksTest() {
-    setField(processorTask, "deserializeAs", null);
+    setField(processorTask, DESERIALIZEAS, null);
 
     processorTask.setDeserializeAs(VALUE);
-    assertEquals(VALUE, getField(processorTask, "deserializeAs"));
+    assertEquals(VALUE, getField(processorTask, DESERIALIZEAS));
   }
 
   @Test
   void getInputVariablesWorksTest() {
-    setField(processorTask, "inputVariables", inputVariables);
+    setField(processorTask, INPUTVARIABLES, inputVariables);
 
     assertEquals(inputVariables, processorTask.getInputVariables());
   }
 
   @Test
   void setInputVariablesWorksTest() {
-    setField(processorTask, "inputVariables", null);
+    setField(processorTask, INPUTVARIABLES, null);
 
     processorTask.setInputVariables(inputVariables);
-    assertEquals(inputVariables, getField(processorTask, "inputVariables"));
+    assertEquals(inputVariables, getField(processorTask, INPUTVARIABLES));
   }
 
   @Test
   void getOutputVariableWorksTest() {
-    setField(processorTask, "outputVariable", embeddedVariable);
+    setField(processorTask, OUTPUTVARIABLE, embeddedVariable);
 
     assertEquals(embeddedVariable, processorTask.getOutputVariable());
   }
 
   @Test
   void setOutputVariableWorksTest() {
-    setField(processorTask, "outputVariable", null);
+    setField(processorTask, OUTPUTVARIABLE, null);
 
     processorTask.setOutputVariable(embeddedVariable);
-    assertEquals(embeddedVariable, getField(processorTask, "outputVariable"));
+    assertEquals(embeddedVariable, getField(processorTask, OUTPUTVARIABLE));
   }
 
   @Test
   void getAsyncBeforeWorksTest() {
-    setField(processorTask, "asyncBefore", true);
+    setField(processorTask, ASYNCBEFORE, true);
 
     assertEquals(true, processorTask.getAsyncBefore());
   }
 
   @Test
   void setAsyncBeforeWorksTest() {
-    setField(processorTask, "asyncBefore", false);
+    setField(processorTask, ASYNCBEFORE, false);
 
     processorTask.setAsyncBefore(true);
-    assertEquals(true, getField(processorTask, "asyncBefore"));
+    assertEquals(true, getField(processorTask, ASYNCBEFORE));
   }
 
   @Test
   void getAsyncAfterWorksTest() {
-    setField(processorTask, "asyncAfter", true);
+    setField(processorTask, ASYNCAFTER, true);
 
     assertEquals(true, processorTask.getAsyncAfter());
   }
 
   @Test
   void setAsyncAfterWorksTest() {
-    setField(processorTask, "asyncAfter", false);
+    setField(processorTask, ASYNCAFTER, false);
 
     processorTask.setAsyncAfter(true);
-    assertEquals(true, getField(processorTask, "asyncAfter"));
+    assertEquals(true, getField(processorTask, ASYNCAFTER));
   }
 
   @Test
   void getProcessorWorksTest() {
-    setField(processorTask, "processor", embeddedProcessor);
+    setField(processorTask, PROCESSOR, embeddedProcessor);
 
     assertEquals(embeddedProcessor, processorTask.getProcessor());
   }
 
   @Test
   void setProcessorWorksTest() {
-    setField(processorTask, "processor", null);
+    setField(processorTask, PROCESSOR, null);
 
     processorTask.setProcessor(embeddedProcessor);
-    assertEquals(embeddedProcessor, getField(processorTask, "processor"));
+    assertEquals(embeddedProcessor, getField(processorTask, PROCESSOR));
   }
 
   @ParameterizedTest
@@ -190,11 +200,11 @@ class ProcessorTaskTest {
 
     expected.forEach((String attribute, Object value) -> {
       if (Boolean.TRUE.equals(persist.get(attribute))) {
-        if (attribute == "processor") {
+        if (attribute == PROCESSOR) {
           verify((EmbeddedProcessor) value).prePersist();
         }
       } else if (Boolean.FALSE.equals(persist.get(attribute))) {
-        if (attribute == "processor") {
+        if (attribute == PROCESSOR) {
           verify((EmbeddedProcessor) value, never()).prePersist();
         }
       } else {
@@ -241,7 +251,7 @@ class ProcessorTaskTest {
 
     final Map<String, Object> map = new HashMap<>();
 
-    map.put("processor", processor);
+    map.put(PROCESSOR, processor);
 
     return map;
   }
@@ -257,7 +267,7 @@ class ProcessorTaskTest {
 
     final Map<String, Object> map = new HashMap<>();
 
-    map.put("processor", processor);
+    map.put(PROCESSOR, processor);
 
     return map;
   }

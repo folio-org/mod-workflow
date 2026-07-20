@@ -28,6 +28,23 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class FtpTaskTest {
 
+  private static final String ASYNCAFTER      = "asyncAfter";
+  private static final String ASYNCBEFORE     = "asyncBefore";
+  private static final String DESCRIPTION     = "description";
+  private static final String DESERIALIZEAS   = "deserializeAs";
+  private static final String DESTINATIONPATH = "destinationPath";
+  private static final String HOST            = "host";
+  private static final String ID              = "id";
+  private static final String INPUTVARIABLES  = "inputVariables";
+  private static final String NAME            = "name";
+  private static final String ORIGINPATH      = "originPath";
+  private static final String OP              = "op";
+  private static final String OUTPUTVARIABLE  = "outputVariable";
+  private static final String PASSWORD        = "password";
+  private static final String PORT            = "port";
+  private static final String SCHEME          = "scheme";
+  private static final String USERNAME        = "username";
+
   @Mock
   private EmbeddedVariable embeddedVariable;
 
@@ -44,242 +61,242 @@ class FtpTaskTest {
 
   @Test
   void getIdWorksTest() {
-    setField(ftpTask, "id", VALUE);
+    setField(ftpTask, ID, VALUE);
 
     assertEquals(VALUE, ftpTask.getId());
   }
 
   @Test
   void setIdWorksTest() {
-    setField(ftpTask, "id", null);
+    setField(ftpTask, ID, null);
 
     ftpTask.setId(VALUE);
-    assertEquals(VALUE, getField(ftpTask, "id"));
+    assertEquals(VALUE, getField(ftpTask, ID));
   }
 
   @Test
   void getNameWorksTest() {
-    setField(ftpTask, "name", VALUE);
+    setField(ftpTask, NAME, VALUE);
 
     assertEquals(VALUE, ftpTask.getName());
   }
 
   @Test
   void setNameWorksTest() {
-    setField(ftpTask, "name", null);
+    setField(ftpTask, NAME, null);
 
     ftpTask.setName(VALUE);
-    assertEquals(VALUE, getField(ftpTask, "name"));
+    assertEquals(VALUE, getField(ftpTask, NAME));
   }
 
   @Test
   void getDescriptionWorksTest() {
-    setField(ftpTask, "description", VALUE);
+    setField(ftpTask, DESCRIPTION, VALUE);
 
     assertEquals(VALUE, ftpTask.getDescription());
   }
 
   @Test
   void setDescriptionWorksTest() {
-    setField(ftpTask, "description", null);
+    setField(ftpTask, DESCRIPTION, null);
 
     ftpTask.setDescription(VALUE);
-    assertEquals(VALUE, getField(ftpTask, "description"));
+    assertEquals(VALUE, getField(ftpTask, DESCRIPTION));
   }
 
   @Test
   void getDeserializeAsWorksTest() {
-    setField(ftpTask, "deserializeAs", VALUE);
+    setField(ftpTask, DESERIALIZEAS, VALUE);
 
     assertEquals(VALUE, ftpTask.getDeserializeAs());
   }
 
   @Test
   void setDeserializeAsWorksTest() {
-    setField(ftpTask, "deserializeAs", null);
+    setField(ftpTask, DESERIALIZEAS, null);
 
     ftpTask.setDeserializeAs(VALUE);
-    assertEquals(VALUE, getField(ftpTask, "deserializeAs"));
+    assertEquals(VALUE, getField(ftpTask, DESERIALIZEAS));
   }
 
   @Test
   void getInputVariablesWorksTest() {
-    setField(ftpTask, "inputVariables", inputVariables);
+    setField(ftpTask, INPUTVARIABLES, inputVariables);
 
     assertEquals(inputVariables, ftpTask.getInputVariables());
   }
 
   @Test
   void setInputVariablesWorksTest() {
-    setField(ftpTask, "inputVariables", null);
+    setField(ftpTask, INPUTVARIABLES, null);
 
     ftpTask.setInputVariables(inputVariables);
-    assertEquals(inputVariables, getField(ftpTask, "inputVariables"));
+    assertEquals(inputVariables, getField(ftpTask, INPUTVARIABLES));
   }
 
   @Test
   void getOutputVariableWorksTest() {
-    setField(ftpTask, "outputVariable", embeddedVariable);
+    setField(ftpTask, OUTPUTVARIABLE, embeddedVariable);
 
     assertEquals(embeddedVariable, ftpTask.getOutputVariable());
   }
 
   @Test
   void setOutputVariableWorksTest() {
-    setField(ftpTask, "outputVariable", null);
+    setField(ftpTask, OUTPUTVARIABLE, null);
 
     ftpTask.setOutputVariable(embeddedVariable);
-    assertEquals(embeddedVariable, getField(ftpTask, "outputVariable"));
+    assertEquals(embeddedVariable, getField(ftpTask, OUTPUTVARIABLE));
   }
 
   @Test
   void getAsyncBeforeWorksTest() {
-    setField(ftpTask, "asyncBefore", true);
+    setField(ftpTask, ASYNCBEFORE, true);
 
     assertEquals(true, ftpTask.getAsyncBefore());
   }
 
   @Test
   void setAsyncBeforeWorksTest() {
-    setField(ftpTask, "asyncBefore", false);
+    setField(ftpTask, ASYNCBEFORE, false);
 
     ftpTask.setAsyncBefore(true);
-    assertEquals(true, getField(ftpTask, "asyncBefore"));
+    assertEquals(true, getField(ftpTask, ASYNCBEFORE));
   }
 
   @Test
   void getAsyncAfterWorksTest() {
-    setField(ftpTask, "asyncAfter", true);
+    setField(ftpTask, ASYNCAFTER, true);
 
     assertEquals(true, ftpTask.getAsyncAfter());
   }
 
   @Test
   void setAsyncAfterWorksTest() {
-    setField(ftpTask, "asyncAfter", false);
+    setField(ftpTask, ASYNCAFTER, false);
 
     ftpTask.setAsyncAfter(true);
-    assertEquals(true, getField(ftpTask, "asyncAfter"));
+    assertEquals(true, getField(ftpTask, ASYNCAFTER));
   }
 
   @Test
   void getOriginPathWorksTest() {
-    setField(ftpTask, "originPath", VALUE);
+    setField(ftpTask, ORIGINPATH, VALUE);
 
     assertEquals(VALUE, ftpTask.getOriginPath());
   }
 
   @Test
   void setOriginPathWorksTest() {
-    setField(ftpTask, "originPath", null);
+    setField(ftpTask, ORIGINPATH, null);
 
     ftpTask.setOriginPath(VALUE);
-    assertEquals(VALUE, getField(ftpTask, "originPath"));
+    assertEquals(VALUE, getField(ftpTask, ORIGINPATH));
   }
 
   @Test
   void getDestinationPathWorksTest() {
-    setField(ftpTask, "destinationPath", VALUE);
+    setField(ftpTask, DESTINATIONPATH, VALUE);
 
     assertEquals(VALUE, ftpTask.getDestinationPath());
   }
 
   @Test
   void setDestinationPathWorksTest() {
-    setField(ftpTask, "destinationPath", null);
+    setField(ftpTask, DESTINATIONPATH, null);
 
     ftpTask.setDestinationPath(VALUE);
-    assertEquals(VALUE, getField(ftpTask, "destinationPath"));
+    assertEquals(VALUE, getField(ftpTask, DESTINATIONPATH));
   }
 
   @Test
   void getOpWorksTest() {
-    setField(ftpTask, "op", GET);
+    setField(ftpTask, OP, GET);
 
     assertEquals(GET, ftpTask.getOp());
   }
 
   @Test
   void setOpWorksTest() {
-    setField(ftpTask, "op", null);
+    setField(ftpTask, OP, null);
 
     ftpTask.setOp(GET);
-    assertEquals(GET, getField(ftpTask, "op"));
+    assertEquals(GET, getField(ftpTask, OP));
   }
 
   @Test
   void getSchemeWorksTest() {
-    setField(ftpTask, "scheme", VALUE);
+    setField(ftpTask, SCHEME, VALUE);
 
     assertEquals(VALUE, ftpTask.getScheme());
   }
 
   @Test
   void setSchemeWorksTest() {
-    setField(ftpTask, "scheme", null);
+    setField(ftpTask, SCHEME, null);
 
     ftpTask.setScheme(VALUE);
-    assertEquals(VALUE, getField(ftpTask, "scheme"));
+    assertEquals(VALUE, getField(ftpTask, SCHEME));
   }
 
   @Test
   void getHostWorksTest() {
-    setField(ftpTask, "host", VALUE);
+    setField(ftpTask, HOST, VALUE);
 
     assertEquals(VALUE, ftpTask.getHost());
   }
 
   @Test
   void setHostWorksTest() {
-    setField(ftpTask, "host", null);
+    setField(ftpTask, HOST, null);
 
     ftpTask.setHost(VALUE);
-    assertEquals(VALUE, getField(ftpTask, "host"));
+    assertEquals(VALUE, getField(ftpTask, HOST));
   }
 
   @Test
   void getPortWorksTest() {
-    setField(ftpTask, "port", 1);
+    setField(ftpTask, PORT, 1);
 
     assertEquals(1, ftpTask.getPort());
   }
 
   @Test
   void setPortWorksTest() {
-    setField(ftpTask, "port", 0);
+    setField(ftpTask, PORT, 0);
 
     ftpTask.setPort(1);
-    assertEquals(1, getField(ftpTask, "port"));
+    assertEquals(1, getField(ftpTask, PORT));
   }
 
   @Test
   void getUsernameWorksTest() {
-    setField(ftpTask, "username", VALUE);
+    setField(ftpTask, USERNAME, VALUE);
 
     assertEquals(VALUE, ftpTask.getUsername());
   }
 
   @Test
   void setUsernameWorksTest() {
-    setField(ftpTask, "username", null);
+    setField(ftpTask, USERNAME, null);
 
     ftpTask.setUsername(VALUE);
-    assertEquals(VALUE, getField(ftpTask, "username"));
+    assertEquals(VALUE, getField(ftpTask, USERNAME));
   }
 
   @Test
   void getPasswordWorksTest() {
-    setField(ftpTask, "password", VALUE);
+    setField(ftpTask, PASSWORD, VALUE);
 
     assertEquals(VALUE, ftpTask.getPassword());
   }
 
   @Test
   void setPasswordWorksTest() {
-    setField(ftpTask, "password", null);
+    setField(ftpTask, PASSWORD, null);
 
     ftpTask.setPassword(VALUE);
-    assertEquals(VALUE, getField(ftpTask, "password"));
+    assertEquals(VALUE, getField(ftpTask, PASSWORD));
   }
 
   @Test
@@ -371,12 +388,12 @@ class FtpTaskTest {
   private static Map<String, Object> helperFieldMap(String destinationPath, String host, SftpOp op, String originPath, Integer port, String scheme ) {
     final Map<String, Object> map = new HashMap<>();
 
-    map.put("destinationPath", destinationPath);
-    map.put("host", host);
-    map.put("op", op);
-    map.put("originPath", originPath);
-    map.put("port", port);
-    map.put("scheme", scheme);
+    map.put(DESTINATIONPATH, destinationPath);
+    map.put(HOST, host);
+    map.put(OP, op);
+    map.put(ORIGINPATH, originPath);
+    map.put(PORT, port);
+    map.put(SCHEME, scheme);
 
     return map;
   }

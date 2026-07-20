@@ -24,6 +24,15 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 class EmbeddedRequestTest {
 
+  private static final String ACCEPT       = "accept";
+  private static final String BODYTEMPLATE = "bodyTemplate";
+  private static final String CONTENTTYPE  = "contentType";
+  private static final String ITERABLE     = "iterable";
+  private static final String ITERABLEKEY  = "iterableKey";
+  private static final String METHOD       = "method";
+  private static final String RESPONSEKEY  = "responseKey";
+  private static final String URL          = "url";
+
   private EmbeddedRequest embeddedRequest;
 
   @BeforeEach
@@ -33,122 +42,122 @@ class EmbeddedRequestTest {
 
   @Test
   void getUrlWorksTest() {
-    setField(embeddedRequest, "url", VALUE);
+    setField(embeddedRequest, URL, VALUE);
 
     assertEquals(VALUE, embeddedRequest.getUrl());
   }
 
   @Test
   void setUrlWorksTest() {
-    setField(embeddedRequest, "url", null);
+    setField(embeddedRequest, URL, null);
 
     embeddedRequest.setUrl(VALUE);
-    assertEquals(VALUE, getField(embeddedRequest, "url"));
+    assertEquals(VALUE, getField(embeddedRequest, URL));
   }
 
   @Test
   void getMethodWorksTest() {
-    setField(embeddedRequest, "method", DELETE);
+    setField(embeddedRequest, METHOD, DELETE);
 
     assertEquals(DELETE, embeddedRequest.getMethod());
   }
 
   @Test
   void setMethodWorksTest() {
-    setField(embeddedRequest, "method", null);
+    setField(embeddedRequest, METHOD, null);
 
     embeddedRequest.setMethod(DELETE);
-    assertEquals(DELETE, getField(embeddedRequest, "method"));
+    assertEquals(DELETE, getField(embeddedRequest, METHOD));
   }
 
   @Test
   void getContentTypeWorksTest() {
-    setField(embeddedRequest, "contentType", VALUE);
+    setField(embeddedRequest, CONTENTTYPE, VALUE);
 
     assertEquals(VALUE, embeddedRequest.getContentType());
   }
 
   @Test
   void setContentTypeWorksTest() {
-    setField(embeddedRequest, "contentType", null);
+    setField(embeddedRequest, CONTENTTYPE, null);
 
     embeddedRequest.setContentType(VALUE);
-    assertEquals(VALUE, getField(embeddedRequest, "contentType"));
+    assertEquals(VALUE, getField(embeddedRequest, CONTENTTYPE));
   }
 
   @Test
   void getAcceptWorksTest() {
-    setField(embeddedRequest, "accept", VALUE);
+    setField(embeddedRequest, ACCEPT, VALUE);
 
     assertEquals(VALUE, embeddedRequest.getAccept());
   }
 
   @Test
   void setAcceptWorksTest() {
-    setField(embeddedRequest, "accept", null);
+    setField(embeddedRequest, ACCEPT, null);
 
     embeddedRequest.setAccept(VALUE);
-    assertEquals(VALUE, getField(embeddedRequest, "accept"));
+    assertEquals(VALUE, getField(embeddedRequest, ACCEPT));
   }
 
   @Test
   void getBodyTemplateWorksTest() {
-    setField(embeddedRequest, "bodyTemplate", VALUE);
+    setField(embeddedRequest, BODYTEMPLATE, VALUE);
 
     assertEquals(VALUE, embeddedRequest.getBodyTemplate());
   }
 
   @Test
   void setBodyTemplateWorksTest() {
-    setField(embeddedRequest, "bodyTemplate", null);
+    setField(embeddedRequest, BODYTEMPLATE, null);
 
     embeddedRequest.setBodyTemplate(VALUE);
-    assertEquals(VALUE, getField(embeddedRequest, "bodyTemplate"));
+    assertEquals(VALUE, getField(embeddedRequest, BODYTEMPLATE));
   }
 
   @Test
   void getIterableWorksTest() {
-    setField(embeddedRequest, "iterable", true);
+    setField(embeddedRequest, ITERABLE, true);
 
     assertEquals(true, embeddedRequest.getIterable());
   }
 
   @Test
   void setIterableWorksTest() {
-    setField(embeddedRequest, "iterable", false);
+    setField(embeddedRequest, ITERABLE, false);
 
     embeddedRequest.setIterable(true);
-    assertEquals(true, getField(embeddedRequest, "iterable"));
+    assertEquals(true, getField(embeddedRequest, ITERABLE));
   }
 
   @Test
   void getIterableKeyWorksTest() {
-    setField(embeddedRequest, "iterableKey", VALUE);
+    setField(embeddedRequest, ITERABLEKEY, VALUE);
 
     assertEquals(VALUE, embeddedRequest.getIterableKey());
   }
 
   @Test
   void setIterableKeyWorksTest() {
-    setField(embeddedRequest, "iterableKey", null);
+    setField(embeddedRequest, ITERABLEKEY, null);
 
     embeddedRequest.setIterableKey(VALUE);
-    assertEquals(VALUE, getField(embeddedRequest, "iterableKey"));
+    assertEquals(VALUE, getField(embeddedRequest, ITERABLEKEY));
   }
 
   @Test
   void getResponseKeyWorksTest() {
-    setField(embeddedRequest, "responseKey", VALUE);
+    setField(embeddedRequest, RESPONSEKEY, VALUE);
 
     assertEquals(VALUE, embeddedRequest.getResponseKey());
   }
 
   @Test
   void setResponseKeyWorksTest() {
-    setField(embeddedRequest, "responseKey", null);
+    setField(embeddedRequest, RESPONSEKEY, null);
 
     embeddedRequest.setResponseKey(VALUE);
-    assertEquals(VALUE, getField(embeddedRequest, "responseKey"));
+    assertEquals(VALUE, getField(embeddedRequest, RESPONSEKEY));
   }
 
   @ParameterizedTest
@@ -217,11 +226,11 @@ class EmbeddedRequestTest {
   private static Map<String, Object> helperFieldMap(String accept, String bodyTemplate, String contentType, HttpMethod method, String url) {
     final Map<String, Object> map = new HashMap<>();
 
-    map.put("accept", accept);
-    map.put("bodyTemplate", bodyTemplate);
-    map.put("contentType", contentType);
-    map.put("method", method);
-    map.put("url", url);
+    map.put(ACCEPT, accept);
+    map.put(BODYTEMPLATE, bodyTemplate);
+    map.put(CONTENTTYPE, contentType);
+    map.put(METHOD, method);
+    map.put(URL, url);
 
     return map;
   }

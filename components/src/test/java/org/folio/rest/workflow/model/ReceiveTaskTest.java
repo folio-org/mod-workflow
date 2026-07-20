@@ -23,6 +23,16 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class ReceiveTaskTest {
 
+  private static final String ASYNCAFTER     = "asyncAfter";
+  private static final String ASYNCBEFORE    = "asyncBefore";
+  private static final String DESCRIPTION    = "description";
+  private static final String DESERIALIZEAS  = "deserializeAs";
+  private static final String ID             = "id";
+  private static final String INPUTVARIABLES = "inputVariables";
+  private static final String MESSAGE        = "message";
+  private static final String NAME           = "name";
+  private static final String OUTPUTVARIABLE = "outputVariable";
+
   @Mock
   private EmbeddedVariable embeddedVariable;
 
@@ -37,137 +47,137 @@ class ReceiveTaskTest {
 
   @Test
   void getIdWorksTest() {
-    setField(receiveTask, "id", VALUE);
+    setField(receiveTask, ID, VALUE);
 
     assertEquals(VALUE, receiveTask.getId());
   }
 
   @Test
   void setIdWorksTest() {
-    setField(receiveTask, "id", null);
+    setField(receiveTask, ID, null);
 
     receiveTask.setId(VALUE);
-    assertEquals(VALUE, getField(receiveTask, "id"));
+    assertEquals(VALUE, getField(receiveTask, ID));
   }
 
   @Test
   void getNameWorksTest() {
-    setField(receiveTask, "name", VALUE);
+    setField(receiveTask, NAME, VALUE);
 
     assertEquals(VALUE, receiveTask.getName());
   }
 
   @Test
   void setNameWorksTest() {
-    setField(receiveTask, "name", null);
+    setField(receiveTask, NAME, null);
 
     receiveTask.setName(VALUE);
-    assertEquals(VALUE, getField(receiveTask, "name"));
+    assertEquals(VALUE, getField(receiveTask, NAME));
   }
 
   @Test
   void getDescriptionWorksTest() {
-    setField(receiveTask, "description", VALUE);
+    setField(receiveTask, DESCRIPTION, VALUE);
 
     assertEquals(VALUE, receiveTask.getDescription());
   }
 
   @Test
   void setDescriptionWorksTest() {
-    setField(receiveTask, "description", null);
+    setField(receiveTask, DESCRIPTION, null);
 
     receiveTask.setDescription(VALUE);
-    assertEquals(VALUE, getField(receiveTask, "description"));
+    assertEquals(VALUE, getField(receiveTask, DESCRIPTION));
   }
 
   @Test
   void getDeserializeAsWorksTest() {
-    setField(receiveTask, "deserializeAs", VALUE);
+    setField(receiveTask, DESERIALIZEAS, VALUE);
 
     assertEquals(VALUE, receiveTask.getDeserializeAs());
   }
 
   @Test
   void setDeserializeAsWorksTest() {
-    setField(receiveTask, "deserializeAs", null);
+    setField(receiveTask, DESERIALIZEAS, null);
 
     receiveTask.setDeserializeAs(VALUE);
-    assertEquals(VALUE, getField(receiveTask, "deserializeAs"));
+    assertEquals(VALUE, getField(receiveTask, DESERIALIZEAS));
   }
 
   @Test
   void getInputVariablesWorksTest() {
-    setField(receiveTask, "inputVariables", inputVariables);
+    setField(receiveTask, INPUTVARIABLES, inputVariables);
 
     assertEquals(inputVariables, receiveTask.getInputVariables());
   }
 
   @Test
   void setInputVariablesWorksTest() {
-    setField(receiveTask, "inputVariables", null);
+    setField(receiveTask, INPUTVARIABLES, null);
 
     receiveTask.setInputVariables(inputVariables);
-    assertEquals(inputVariables, getField(receiveTask, "inputVariables"));
+    assertEquals(inputVariables, getField(receiveTask, INPUTVARIABLES));
   }
 
   @Test
   void getOutputVariableWorksTest() {
-    setField(receiveTask, "outputVariable", embeddedVariable);
+    setField(receiveTask, OUTPUTVARIABLE, embeddedVariable);
 
     assertEquals(embeddedVariable, receiveTask.getOutputVariable());
   }
 
   @Test
   void setOutputVariableWorksTest() {
-    setField(receiveTask, "outputVariable", null);
+    setField(receiveTask, OUTPUTVARIABLE, null);
 
     receiveTask.setOutputVariable(embeddedVariable);
-    assertEquals(embeddedVariable, getField(receiveTask, "outputVariable"));
+    assertEquals(embeddedVariable, getField(receiveTask, OUTPUTVARIABLE));
   }
 
   @Test
   void getAsyncBeforeWorksTest() {
-    setField(receiveTask, "asyncBefore", true);
+    setField(receiveTask, ASYNCBEFORE, true);
 
     assertEquals(true, receiveTask.getAsyncBefore());
   }
 
   @Test
   void setAsyncBeforeWorksTest() {
-    setField(receiveTask, "asyncBefore", false);
+    setField(receiveTask, ASYNCBEFORE, false);
 
     receiveTask.setAsyncBefore(true);
-    assertEquals(true, getField(receiveTask, "asyncBefore"));
+    assertEquals(true, getField(receiveTask, ASYNCBEFORE));
   }
 
   @Test
   void getAsyncAfterWorksTest() {
-    setField(receiveTask, "asyncAfter", true);
+    setField(receiveTask, ASYNCAFTER, true);
 
     assertEquals(true, receiveTask.getAsyncAfter());
   }
 
   @Test
   void setAsyncAfterWorksTest() {
-    setField(receiveTask, "asyncAfter", false);
+    setField(receiveTask, ASYNCAFTER, false);
 
     receiveTask.setAsyncAfter(true);
-    assertEquals(true, getField(receiveTask, "asyncAfter"));
+    assertEquals(true, getField(receiveTask, ASYNCAFTER));
   }
 
   @Test
   void getMessageWorksTest() {
-    setField(receiveTask, "message", VALUE);
+    setField(receiveTask, MESSAGE, VALUE);
 
     assertEquals(VALUE, receiveTask.getMessage());
   }
 
   @Test
   void setMessageWorksTest() {
-    setField(receiveTask, "message", null);
+    setField(receiveTask, MESSAGE, null);
 
     receiveTask.setMessage(VALUE);
-    assertEquals(VALUE, getField(receiveTask, "message"));
+    assertEquals(VALUE, getField(receiveTask, MESSAGE));
   }
 
   @ParameterizedTest
@@ -216,7 +226,7 @@ class ReceiveTaskTest {
   private static Map<String, Object> helperFieldMap(String message) {
     final Map<String, Object> map = new HashMap<>();
 
-    map.put("message", message);
+    map.put(MESSAGE, message);
 
     return map;
   }

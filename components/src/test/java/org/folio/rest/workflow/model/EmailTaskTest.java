@@ -24,6 +24,19 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class EmailTaskTest {
 
+  private static final String ASYNCAFTER     = "asyncAfter";
+  private static final String ASYNCBEFORE    = "asyncBefore";
+  private static final String DESCRIPTION    = "description";
+  private static final String DESERIALIZEAS  = "deserializeAs";
+  private static final String ID             = "id";
+  private static final String INPUTVARIABLES = "inputVariables";
+  private static final String MAILFROM       = "mailFrom";
+  private static final String MAILSUBJECT    = "mailSubject";
+  private static final String MAILTEXT       = "mailText";
+  private static final String MAILTO         = "mailTo";
+  private static final String NAME           = "name";
+  private static final String OUTPUTVARIABLE = "outputVariable";
+
   @Mock
   private EmbeddedVariable embeddedVariable;
 
@@ -40,137 +53,137 @@ class EmailTaskTest {
 
   @Test
   void getIdWorksTest() {
-    setField(emailTask, "id", VALUE);
+    setField(emailTask, ID, VALUE);
 
     assertEquals(VALUE, emailTask.getId());
   }
 
   @Test
   void setIdWorksTest() {
-    setField(emailTask, "id", null);
+    setField(emailTask, ID, null);
 
     emailTask.setId(VALUE);
-    assertEquals(VALUE, getField(emailTask, "id"));
+    assertEquals(VALUE, getField(emailTask, ID));
   }
 
   @Test
   void getNameWorksTest() {
-    setField(emailTask, "name", VALUE);
+    setField(emailTask, NAME, VALUE);
 
     assertEquals(VALUE, emailTask.getName());
   }
 
   @Test
   void setNameWorksTest() {
-    setField(emailTask, "name", null);
+    setField(emailTask, NAME, null);
 
     emailTask.setName(VALUE);
-    assertEquals(VALUE, getField(emailTask, "name"));
+    assertEquals(VALUE, getField(emailTask, NAME));
   }
 
   @Test
   void getDescriptionWorksTest() {
-    setField(emailTask, "description", VALUE);
+    setField(emailTask, DESCRIPTION, VALUE);
 
     assertEquals(VALUE, emailTask.getDescription());
   }
 
   @Test
   void setDescriptionWorksTest() {
-    setField(emailTask, "description", null);
+    setField(emailTask, DESCRIPTION, null);
 
     emailTask.setDescription(VALUE);
-    assertEquals(VALUE, getField(emailTask, "description"));
+    assertEquals(VALUE, getField(emailTask, DESCRIPTION));
   }
 
   @Test
   void getDeserializeAsWorksTest() {
-    setField(emailTask, "deserializeAs", VALUE);
+    setField(emailTask, DESERIALIZEAS, VALUE);
 
     assertEquals(VALUE, emailTask.getDeserializeAs());
   }
 
   @Test
   void setDeserializeAsWorksTest() {
-    setField(emailTask, "deserializeAs", null);
+    setField(emailTask, DESERIALIZEAS, null);
 
     emailTask.setDeserializeAs(VALUE);
-    assertEquals(VALUE, getField(emailTask, "deserializeAs"));
+    assertEquals(VALUE, getField(emailTask, DESERIALIZEAS));
   }
 
   @Test
   void getInputVariablesWorksTest() {
-    setField(emailTask, "inputVariables", inputVariables);
+    setField(emailTask, INPUTVARIABLES, inputVariables);
 
     assertEquals(inputVariables, emailTask.getInputVariables());
   }
 
   @Test
   void setInputVariablesWorksTest() {
-    setField(emailTask, "inputVariables", null);
+    setField(emailTask, INPUTVARIABLES, null);
 
     emailTask.setInputVariables(inputVariables);
-    assertEquals(inputVariables, getField(emailTask, "inputVariables"));
+    assertEquals(inputVariables, getField(emailTask, INPUTVARIABLES));
   }
 
   @Test
   void getOutputVariableWorksTest() {
-    setField(emailTask, "outputVariable", embeddedVariable);
+    setField(emailTask, OUTPUTVARIABLE, embeddedVariable);
 
     assertEquals(embeddedVariable, emailTask.getOutputVariable());
   }
 
   @Test
   void setOutputVariableWorksTest() {
-    setField(emailTask, "outputVariable", null);
+    setField(emailTask, OUTPUTVARIABLE, null);
 
     emailTask.setOutputVariable(embeddedVariable);
-    assertEquals(embeddedVariable, getField(emailTask, "outputVariable"));
+    assertEquals(embeddedVariable, getField(emailTask, OUTPUTVARIABLE));
   }
 
   @Test
   void getAsyncBeforeWorksTest() {
-    setField(emailTask, "asyncBefore", true);
+    setField(emailTask, ASYNCBEFORE, true);
 
     assertEquals(true, emailTask.getAsyncBefore());
   }
 
   @Test
   void setAsyncBeforeWorksTest() {
-    setField(emailTask, "asyncBefore", false);
+    setField(emailTask, ASYNCBEFORE, false);
 
     emailTask.setAsyncBefore(true);
-    assertEquals(true, getField(emailTask, "asyncBefore"));
+    assertEquals(true, getField(emailTask, ASYNCBEFORE));
   }
 
   @Test
   void getAsyncAfterWorksTest() {
-    setField(emailTask, "asyncAfter", true);
+    setField(emailTask, ASYNCAFTER, true);
 
     assertEquals(true, emailTask.getAsyncAfter());
   }
 
   @Test
   void setAsyncAfterWorksTest() {
-    setField(emailTask, "asyncAfter", false);
+    setField(emailTask, ASYNCAFTER, false);
 
     emailTask.setAsyncAfter(true);
-    assertEquals(true, getField(emailTask, "asyncAfter"));
+    assertEquals(true, getField(emailTask, ASYNCAFTER));
   }
 
   @Test
   void getMailToWorksTest() {
-    setField(emailTask, "mailTo", VALUE);
+    setField(emailTask, MAILTO, VALUE);
 
     assertEquals(VALUE, emailTask.getMailTo());
   }
 
   @Test
   void setMailToWorksTest() {
-    setField(emailTask, "mailTo", null);
+    setField(emailTask, MAILTO, null);
 
     emailTask.setMailTo(VALUE);
-    assertEquals(VALUE, getField(emailTask, "mailTo"));
+    assertEquals(VALUE, getField(emailTask, MAILTO));
   }
 
   @Test
@@ -205,47 +218,47 @@ class EmailTaskTest {
 
   @Test
   void getMailFromWorksTest() {
-    setField(emailTask, "mailFrom", VALUE);
+    setField(emailTask, MAILFROM, VALUE);
 
     assertEquals(VALUE, emailTask.getMailFrom());
   }
 
   @Test
   void setMailFromWorksTest() {
-    setField(emailTask, "mailFrom", null);
+    setField(emailTask, MAILFROM, null);
 
     emailTask.setMailFrom(VALUE);
-    assertEquals(VALUE, getField(emailTask, "mailFrom"));
+    assertEquals(VALUE, getField(emailTask, MAILFROM));
   }
 
   @Test
   void getMailSubjectWorksTest() {
-    setField(emailTask, "mailSubject", VALUE);
+    setField(emailTask, MAILSUBJECT, VALUE);
 
     assertEquals(VALUE, emailTask.getMailSubject());
   }
 
   @Test
   void setMailSubjectWorksTest() {
-    setField(emailTask, "mailSubject", null);
+    setField(emailTask, MAILSUBJECT, null);
 
     emailTask.setMailSubject(VALUE);
-    assertEquals(VALUE, getField(emailTask, "mailSubject"));
+    assertEquals(VALUE, getField(emailTask, MAILSUBJECT));
   }
 
   @Test
   void getMailTextWorksTest() {
-    setField(emailTask, "mailText", VALUE);
+    setField(emailTask, MAILTEXT, VALUE);
 
     assertEquals(VALUE, emailTask.getMailText());
   }
 
   @Test
   void setMailTextWorksTest() {
-    setField(emailTask, "mailText", null);
+    setField(emailTask, MAILTEXT, null);
 
     emailTask.setMailText(VALUE);
-    assertEquals(VALUE, getField(emailTask, "mailText"));
+    assertEquals(VALUE, getField(emailTask, MAILTEXT));
   }
 
   @Test
@@ -354,10 +367,10 @@ class EmailTaskTest {
   private static Map<String, Object> helperFieldMap(String mailFrom, String mailText, String mailTo, String mailSubject) {
     final Map<String, Object> map = new HashMap<>();
 
-    map.put("mailFrom", mailFrom);
-    map.put("mailText", mailText);
-    map.put("mailTo", mailTo);
-    map.put("mailSubject", mailSubject);
+    map.put(MAILFROM, mailFrom);
+    map.put(MAILTEXT, mailText);
+    map.put(MAILTO, mailTo);
+    map.put(MAILSUBJECT, mailSubject);
 
     return map;
   }

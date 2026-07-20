@@ -10,6 +10,11 @@ import org.junit.jupiter.api.Test;
 
 class EndEventTest {
 
+  private static final String DESCRIPTION   = "description";
+  private static final String DESERIALIZEAS = "deserializeAs";
+  private static final String ID            = "id";
+  private static final String NAME          = "name";
+
   private EndEvent endEvent;
 
   @BeforeEach
@@ -19,62 +24,62 @@ class EndEventTest {
 
   @Test
   void getIdWorksTest() {
-    setField(endEvent, "id", VALUE);
+    setField(endEvent, ID, VALUE);
 
     assertEquals(VALUE, endEvent.getId());
   }
 
   @Test
   void setIdWorksTest() {
-    setField(endEvent, "id", null);
+    setField(endEvent, ID, null);
 
     endEvent.setId(VALUE);
-    assertEquals(VALUE, getField(endEvent, "id"));
+    assertEquals(VALUE, getField(endEvent, ID));
   }
 
   @Test
   void getNameWorksTest() {
-    setField(endEvent, "name", VALUE);
+    setField(endEvent, NAME, VALUE);
 
     assertEquals(VALUE, endEvent.getName());
   }
 
   @Test
   void setNameWorksTest() {
-    setField(endEvent, "name", null);
+    setField(endEvent, NAME, null);
 
     endEvent.setName(VALUE);
-    assertEquals(VALUE, getField(endEvent, "name"));
+    assertEquals(VALUE, getField(endEvent, NAME));
   }
 
   @Test
   void getDescriptionWorksTest() {
-    setField(endEvent, "description", VALUE);
+    setField(endEvent, DESCRIPTION, VALUE);
 
     assertEquals(VALUE, endEvent.getDescription());
   }
 
   @Test
   void setDescriptionWorksTest() {
-    setField(endEvent, "description", null);
+    setField(endEvent, DESCRIPTION, null);
 
     endEvent.setDescription(VALUE);
-    assertEquals(VALUE, getField(endEvent, "description"));
+    assertEquals(VALUE, getField(endEvent, DESCRIPTION));
   }
 
   @Test
   void getDeserializeAsWorksTest() {
-    setField(endEvent, "deserializeAs", VALUE);
+    setField(endEvent, DESERIALIZEAS, VALUE);
 
     assertEquals(VALUE, endEvent.getDeserializeAs());
   }
 
   @Test
   void setDeserializeAsWorksTest() {
-    setField(endEvent, "deserializeAs", null);
+    setField(endEvent, DESERIALIZEAS, null);
 
     endEvent.setDeserializeAs(VALUE);
-    assertEquals(VALUE, getField(endEvent, "deserializeAs"));
+    assertEquals(VALUE, getField(endEvent, DESERIALIZEAS));
   }
 
   private static class Impl extends EndEvent { };

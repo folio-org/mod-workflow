@@ -22,6 +22,14 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class AbstractProcessTest {
 
+  private static final String ASYNCAFTER    = "asyncAfter";
+  private static final String ASYNCBEFORE   = "asyncBefore";
+  private static final String DESCRIPTION   = "description";
+  private static final String DESERIALIZEAS = "deserializeAs";
+  private static final String ID            = "id";
+  private static final String NAME          = "name";
+  private static final String NODES         = "nodes";
+
   @Mock
   private Node node;
 
@@ -38,107 +46,107 @@ class AbstractProcessTest {
 
   @Test
   void getIdWorksTest() {
-    setField(abstractProcess, "id", VALUE);
+    setField(abstractProcess, ID, VALUE);
 
     assertEquals(VALUE, abstractProcess.getId());
   }
 
   @Test
   void setIdWorksTest() {
-    setField(abstractProcess, "id", null);
+    setField(abstractProcess, ID, null);
 
     abstractProcess.setId(VALUE);
-    assertEquals(VALUE, getField(abstractProcess, "id"));
+    assertEquals(VALUE, getField(abstractProcess, ID));
   }
 
   @Test
   void getNameWorksTest() {
-    setField(abstractProcess, "name", VALUE);
+    setField(abstractProcess, NAME, VALUE);
 
     assertEquals(VALUE, abstractProcess.getName());
   }
 
   @Test
   void setNameWorksTest() {
-    setField(abstractProcess, "name", null);
+    setField(abstractProcess, NAME, null);
 
     abstractProcess.setName(VALUE);
-    assertEquals(VALUE, getField(abstractProcess, "name"));
+    assertEquals(VALUE, getField(abstractProcess, NAME));
   }
 
   @Test
   void getDescriptionWorksTest() {
-    setField(abstractProcess, "description", VALUE);
+    setField(abstractProcess, DESCRIPTION, VALUE);
 
     assertEquals(VALUE, abstractProcess.getDescription());
   }
 
   @Test
   void setDescriptionWorksTest() {
-    setField(abstractProcess, "description", null);
+    setField(abstractProcess, DESCRIPTION, null);
 
     abstractProcess.setDescription(VALUE);
-    assertEquals(VALUE, getField(abstractProcess, "description"));
+    assertEquals(VALUE, getField(abstractProcess, DESCRIPTION));
   }
 
   @Test
   void getDeserializeAsWorksTest() {
-    setField(abstractProcess, "deserializeAs", VALUE);
+    setField(abstractProcess, DESERIALIZEAS, VALUE);
 
     assertEquals(VALUE, abstractProcess.getDeserializeAs());
   }
 
   @Test
   void setDeserializeAsWorksTest() {
-    setField(abstractProcess, "deserializeAs", null);
+    setField(abstractProcess, DESERIALIZEAS, null);
 
     abstractProcess.setDeserializeAs(VALUE);
-    assertEquals(VALUE, getField(abstractProcess, "deserializeAs"));
+    assertEquals(VALUE, getField(abstractProcess, DESERIALIZEAS));
   }
 
   @Test
   void getAsyncBeforeWorksTest() {
-    setField(abstractProcess, "asyncBefore", true);
+    setField(abstractProcess, ASYNCBEFORE, true);
 
     assertEquals(true, abstractProcess.getAsyncBefore());
   }
 
   @Test
   void setAsyncBeforeWorksTest() {
-    setField(abstractProcess, "asyncBefore", false);
+    setField(abstractProcess, ASYNCBEFORE, false);
 
     abstractProcess.setAsyncBefore(true);
-    assertEquals(true, getField(abstractProcess, "asyncBefore"));
+    assertEquals(true, getField(abstractProcess, ASYNCBEFORE));
   }
 
   @Test
   void getAsyncAfterWorksTest() {
-    setField(abstractProcess, "asyncAfter", true);
+    setField(abstractProcess, ASYNCAFTER, true);
 
     assertEquals(true, abstractProcess.getAsyncAfter());
   }
 
   @Test
   void setAsyncAfterWorksTest() {
-    setField(abstractProcess, "asyncAfter", false);
+    setField(abstractProcess, ASYNCAFTER, false);
 
     abstractProcess.setAsyncAfter(true);
-    assertEquals(true, getField(abstractProcess, "asyncAfter"));
+    assertEquals(true, getField(abstractProcess, ASYNCAFTER));
   }
 
   @Test
   void getNodesWorksTest() {
-    setField(abstractProcess, "nodes", nodes);
+    setField(abstractProcess, NODES, nodes);
 
     assertEquals(nodes, abstractProcess.getNodes());
   }
 
   @Test
   void setNodesWorksTest() {
-    setField(abstractProcess, "nodes", null);
+    setField(abstractProcess, NODES, null);
 
     abstractProcess.setNodes(nodes);
-    assertEquals(nodes, getField(abstractProcess, "nodes"));
+    assertEquals(nodes, getField(abstractProcess, NODES));
   }
 
   @ParameterizedTest
@@ -201,9 +209,9 @@ class AbstractProcessTest {
   private static Map<String, Object> helperFieldMap(Boolean asyncBefore, Boolean asyncAfter, List<Node> nodes) {
     final Map<String, Object> map = new HashMap<>();
 
-    map.put("asyncBefore", asyncBefore);
-    map.put("asyncAfter", asyncAfter);
-    map.put("nodes", nodes);
+    map.put(ASYNCAFTER, asyncAfter);
+    map.put(ASYNCBEFORE, asyncBefore);
+    map.put(NODES, nodes);
 
     return map;
   }

@@ -21,6 +21,14 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 class StartEventTest {
 
+  private static final String ASYNCBEFORE   = "asyncBefore";
+  private static final String DESCRIPTION   = "description";
+  private static final String DESERIALIZEAS = "deserializeAs";
+  private static final String ID            = "id";
+  private static final String INTERRUPTING  = "interrupting";
+  private static final String NAME          = "name";
+  private static final String TYPE          = "type";
+
   private StartEvent startEvent;
 
   @BeforeEach
@@ -30,77 +38,77 @@ class StartEventTest {
 
   @Test
   void getIdWorksTest() {
-    setField(startEvent, "id", VALUE);
+    setField(startEvent, ID, VALUE);
 
     assertEquals(VALUE, startEvent.getId());
   }
 
   @Test
   void setIdWorksTest() {
-    setField(startEvent, "id", null);
+    setField(startEvent, ID, null);
 
     startEvent.setId(VALUE);
-    assertEquals(VALUE, getField(startEvent, "id"));
+    assertEquals(VALUE, getField(startEvent, ID));
   }
 
   @Test
   void getNameWorksTest() {
-    setField(startEvent, "name", VALUE);
+    setField(startEvent, NAME, VALUE);
 
     assertEquals(VALUE, startEvent.getName());
   }
 
   @Test
   void setNameWorksTest() {
-    setField(startEvent, "name", null);
+    setField(startEvent, NAME, null);
 
     startEvent.setName(VALUE);
-    assertEquals(VALUE, getField(startEvent, "name"));
+    assertEquals(VALUE, getField(startEvent, NAME));
   }
 
   @Test
   void getDescriptionWorksTest() {
-    setField(startEvent, "description", VALUE);
+    setField(startEvent, DESCRIPTION, VALUE);
 
     assertEquals(VALUE, startEvent.getDescription());
   }
 
   @Test
   void setDescriptionWorksTest() {
-    setField(startEvent, "description", null);
+    setField(startEvent, DESCRIPTION, null);
 
     startEvent.setDescription(VALUE);
-    assertEquals(VALUE, getField(startEvent, "description"));
+    assertEquals(VALUE, getField(startEvent, DESCRIPTION));
   }
 
   @Test
   void getDeserializeAsWorksTest() {
-    setField(startEvent, "deserializeAs", VALUE);
+    setField(startEvent, DESERIALIZEAS, VALUE);
 
     assertEquals(VALUE, startEvent.getDeserializeAs());
   }
 
   @Test
   void setDeserializeAsWorksTest() {
-    setField(startEvent, "deserializeAs", null);
+    setField(startEvent, DESERIALIZEAS, null);
 
     startEvent.setDeserializeAs(VALUE);
-    assertEquals(VALUE, getField(startEvent, "deserializeAs"));
+    assertEquals(VALUE, getField(startEvent, DESERIALIZEAS));
   }
 
   @Test
   void getTypeWorksTest() {
-    setField(startEvent, "type", MESSAGE_CORRELATION);
+    setField(startEvent, TYPE, MESSAGE_CORRELATION);
 
     assertEquals(MESSAGE_CORRELATION, startEvent.getType());
   }
 
   @Test
   void setTypeWorksTest() {
-    setField(startEvent, "type", null);
+    setField(startEvent, TYPE, null);
 
     startEvent.setType(MESSAGE_CORRELATION);
-    assertEquals(MESSAGE_CORRELATION, getField(startEvent, "type"));
+    assertEquals(MESSAGE_CORRELATION, getField(startEvent, TYPE));
   }
 
   @Test
@@ -120,32 +128,32 @@ class StartEventTest {
 
   @Test
   void getInterruptingWorksTest() {
-    setField(startEvent, "interrupting", true);
+    setField(startEvent, INTERRUPTING, true);
 
     assertEquals(true, startEvent.getInterrupting());
   }
 
   @Test
   void setInterruptingWorksTest() {
-    setField(startEvent, "interrupting", false);
+    setField(startEvent, INTERRUPTING, false);
 
     startEvent.setInterrupting(true);
-    assertEquals(true, getField(startEvent, "interrupting"));
+    assertEquals(true, getField(startEvent, INTERRUPTING));
   }
 
   @Test
   void getAsyncBeforeWorksTest() {
-    setField(startEvent, "asyncBefore", true);
+    setField(startEvent, ASYNCBEFORE, true);
 
     assertEquals(true, startEvent.getAsyncBefore());
   }
 
   @Test
   void setAsyncBeforeWorksTest() {
-    setField(startEvent, "asyncBefore", false);
+    setField(startEvent, ASYNCBEFORE, false);
 
     startEvent.setAsyncBefore(true);
-    assertEquals(true, getField(startEvent, "asyncBefore"));
+    assertEquals(true, getField(startEvent, ASYNCBEFORE));
   }
 
   @ParameterizedTest
@@ -204,9 +212,9 @@ class StartEventTest {
   private static Map<String, Object> helperFieldMap(Boolean asyncBefore, Boolean interrupting, StartEventType type) {
     final Map<String, Object> map = new HashMap<>();
 
-    map.put("asyncBefore", asyncBefore);
-    map.put("interrupting", interrupting);
-    map.put("type", type);
+    map.put(ASYNCBEFORE, asyncBefore);
+    map.put(INTERRUPTING, interrupting);
+    map.put(TYPE, type);
 
     return map;
   }

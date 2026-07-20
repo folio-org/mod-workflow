@@ -23,6 +23,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class MoveToNodeTest {
 
+  private static final String DESCRIPTION   = "description";
+  private static final String DESERIALIZEAS = "deserializeAs";
+  private static final String GATEWAY_ID    = "gatewayId";
+  private static final String ID            = "id";
+  private static final String NAME          = "name";
+  private static final String NODES         = "nodes";
+
   @Mock
   private Node node;
 
@@ -39,62 +46,62 @@ class MoveToNodeTest {
 
   @Test
   void getIdWorksTest() {
-    setField(moveToNode, "id", VALUE);
+    setField(moveToNode, ID, VALUE);
 
     assertEquals(VALUE, moveToNode.getId());
   }
 
   @Test
   void setIdWorksTest() {
-    setField(moveToNode, "id", null);
+    setField(moveToNode, ID, null);
 
     moveToNode.setId(VALUE);
-    assertEquals(VALUE, getField(moveToNode, "id"));
+    assertEquals(VALUE, getField(moveToNode, ID));
   }
 
   @Test
   void getNameWorksTest() {
-    setField(moveToNode, "name", VALUE);
+    setField(moveToNode, NAME, VALUE);
 
     assertEquals(VALUE, moveToNode.getName());
   }
 
   @Test
   void setNameWorksTest() {
-    setField(moveToNode, "name", null);
+    setField(moveToNode, NAME, null);
 
     moveToNode.setName(VALUE);
-    assertEquals(VALUE, getField(moveToNode, "name"));
+    assertEquals(VALUE, getField(moveToNode, NAME));
   }
 
   @Test
   void getDescriptionWorksTest() {
-    setField(moveToNode, "description", VALUE);
+    setField(moveToNode, DESCRIPTION, VALUE);
 
     assertEquals(VALUE, moveToNode.getDescription());
   }
 
   @Test
   void setDescriptionWorksTest() {
-    setField(moveToNode, "description", null);
+    setField(moveToNode, DESCRIPTION, null);
 
     moveToNode.setDescription(VALUE);
-    assertEquals(VALUE, getField(moveToNode, "description"));
+    assertEquals(VALUE, getField(moveToNode, DESCRIPTION));
   }
 
   @Test
   void getDeserializeAsWorksTest() {
-    setField(moveToNode, "deserializeAs", VALUE);
+    setField(moveToNode, DESERIALIZEAS, VALUE);
 
     assertEquals(VALUE, moveToNode.getDeserializeAs());
   }
 
   @Test
   void setDeserializeAsWorksTest() {
-    setField(moveToNode, "deserializeAs", null);
+    setField(moveToNode, DESERIALIZEAS, null);
 
     moveToNode.setDeserializeAs(VALUE);
-    assertEquals(VALUE, getField(moveToNode, "deserializeAs"));
+    assertEquals(VALUE, getField(moveToNode, DESERIALIZEAS));
   }
 
   @Test
@@ -114,17 +121,17 @@ class MoveToNodeTest {
 
   @Test
   void getNodesWorksTest() {
-    setField(moveToNode, "nodes", nodes);
+    setField(moveToNode, NODES, nodes);
 
     assertEquals(nodes, moveToNode.getNodes());
   }
 
   @Test
   void setNodesWorksTest() {
-    setField(moveToNode, "nodes", null);
+    setField(moveToNode, NODES, null);
 
     moveToNode.setNodes(nodes);
-    assertEquals(nodes, getField(moveToNode, "nodes"));
+    assertEquals(nodes, getField(moveToNode, NODES));
   }
 
   @ParameterizedTest
@@ -182,8 +189,8 @@ class MoveToNodeTest {
   private static Map<String, Object> helperFieldMap(String gatewayId, List<Node> nodes ) {
     final Map<String, Object> map = new HashMap<>();
 
-    map.put("gatewayId", gatewayId);
-    map.put("nodes", nodes);
+    map.put(GATEWAY_ID, gatewayId);
+    map.put(NODES, nodes);
 
     return map;
   }
