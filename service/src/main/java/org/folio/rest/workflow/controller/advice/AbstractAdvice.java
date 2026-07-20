@@ -25,7 +25,7 @@ abstract class AbstractAdvice extends RequestMappingHandlerMapping {
    *
    * @return The built error response entity.
    */
-  protected ResponseEntity<String>  buildError(Exception ex, HttpStatus code) {
+  protected ResponseEntity<String> buildError(Exception ex, HttpStatus code) {
     return buildError(ex, code, MediaType.APPLICATION_JSON);
   }
 
