@@ -32,6 +32,7 @@ public class WorkflowEngineService {
   private static final String WORKFLOW_ENGINE_ACTIVATE_URL_TEMPLATE = "%s%s/workflow-engine/workflows/activate";
   private static final String WORKFLOW_ENGINE_DEACTIVATE_URL_TEMPLATE = "%s%s/workflow-engine/workflows/deactivate";
 
+  private static final String PROCESS_DEFINITION_SORTED_URL_TEMPLATE = "%s%s/processDefinitionId=%s&sortBy=startTime&sortOrder=asc";
   private static final String PROCESS_DEFINITION_START_URL_TEMPLATE = "%s%s/process-definition/%s/start";
   private static final String PROCESS_DEFINITION_GET_URL_TEMPLATE = "%s%s/process-definition%s";
 
@@ -93,10 +94,14 @@ public class WorkflowEngineService {
   public void delete(String workflowId, String tenant, String token)
       throws WorkflowEngineServiceException {
 
-    try {
-      deactivate(workflowId, tenant, token);
-    } catch (WorkflowEngineServiceException e) {
-      throw new WorkflowEngineServiceException(String.format("Failed to delete Workflow '%s' due to deactivation failure: %s!", workflowId, e.getMessage()), e);
+    final ArrayNode node = fetchProcessInstanceHistory(workflowId, tenant, token);
+
+    if (!node.isEmpty()) {
+      try {
+        deactivate(workflowId, tenant, token);
+      } catch (WorkflowEngineServiceException e) {
+        throw new WorkflowEngineServiceException(String.format("Failed to delete Workflow '%s' due to deactivation failure: %s!", workflowId, e.getMessage()), e);
+      }
     }
 
     workflowRepo.deleteById(workflowId);
@@ -187,7 +192,7 @@ public class WorkflowEngineService {
 
     HttpEntity<Void> httpEntity = new HttpEntity<>(headers(tenant, token));
 
-    String arguments = String.format("?processDefinitionId=%s&sortBy=startTime&sortOrder=asc", processDefinitionId);
+    String arguments = String.format(PROCESS_DEFINITION_SORTED_URL_TEMPLATE, okapiUrl, restPath, processDefinitionId);
     String url = String.format(HISTORY_PROCESS_INSTANCE_URL_TEMPLATE, okapiUrl, restPath, arguments);
 
     try {

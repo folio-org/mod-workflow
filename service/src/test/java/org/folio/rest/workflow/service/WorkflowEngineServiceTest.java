@@ -9,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.contains;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.never;
@@ -40,11 +41,15 @@ import org.springframework.web.client.RestTemplate;
 import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.json.JsonMapper;
 import tools.jackson.databind.node.ArrayNode;
+import tools.jackson.databind.node.JsonNodeFactory;
 import tools.jackson.databind.node.ObjectNode;
 
 @ExtendWith(SpringExtension.class)
 @ExtendWith(MockitoExtension.class)
 class WorkflowEngineServiceTest {
+
+  private static final String PROCESS_DEFINITION_ID = "processDefinitionId=";
+  private static final String DEACTIVATE = "workflow-engine/workflows/deactivate";
 
   @Mock
   private WorkflowRepo workflowRepo;
@@ -132,12 +137,20 @@ class WorkflowEngineServiceTest {
 
   @Test
   void deleteWorksTest() throws WorkflowEngineServiceException {
-    WorkflowDto workflowDto = (WorkflowDto) workflow;
+
+    // The array node value is not expected to be processed beyond that the array is empty or not.
+    ArrayNode arrayNodeSingle = JsonNodeFactory.instance.arrayNode();
+    arrayNodeSingle.add("");
+
+    ResponseEntity<ArrayNode> responseArray = new ResponseEntity<>(arrayNodeSingle, HttpStatus.OK);
     ResponseEntity<Workflow> responseEntity = new ResponseEntity<>(HttpStatus.OK);
+
+    WorkflowDto workflowDto = (WorkflowDto) workflow;
     setField(responseEntity, "body", workflow);
 
     when(workflowRepo.getViewById(anyString(), ArgumentMatchers.<Class<WorkflowDto>>any())).thenReturn(workflowDto);
-    when(restTemplate.exchange(anyString(), any(HttpMethod.class), any(HttpEntity.class), ArgumentMatchers.<Class<Workflow>>any())).thenReturn(responseEntity);
+    when(restTemplate.exchange(contains(PROCESS_DEFINITION_ID), any(HttpMethod.class), any(HttpEntity.class), ArgumentMatchers.<Class<ArrayNode>>any())).thenReturn(responseArray);
+    when(restTemplate.exchange(contains(DEACTIVATE), any(HttpMethod.class), any(HttpEntity.class), ArgumentMatchers.<Class<Workflow>>any())).thenReturn(responseEntity);
     when(workflowRepo.save(any())).thenReturn(workflow);
     doNothing().when(workflowRepo).deleteById(anyString());
 
@@ -148,13 +161,29 @@ class WorkflowEngineServiceTest {
   }
 
   @Test
+  void deleteNotActiveWorksTest() throws WorkflowEngineServiceException {
+
+    // The array node value is not expected to be processed beyond that the array is empty or not.
+    ArrayNode arrayNodeSingle = JsonNodeFactory.instance.arrayNode();
+
+    ResponseEntity<ArrayNode> responseArray = new ResponseEntity<>(arrayNodeSingle, HttpStatus.OK);
+
+    when(restTemplate.exchange(contains(PROCESS_DEFINITION_ID), any(HttpMethod.class), any(HttpEntity.class), ArgumentMatchers.<Class<ArrayNode>>any())).thenReturn(responseArray);
+    doNothing().when(workflowRepo).deleteById(anyString());
+
+    workflowEngineService.delete(UUID, OKAPI_TENANT, OKAPI_TOKEN);
+
+    verify(workflowRepo).deleteById(anyString());
+  }
+
+  @Test
   void deleteThrowsExceptionUnableGetUpdatedTest() {
-    WorkflowDto workflowDto = (WorkflowDto) workflow;
+
     ResponseEntity<Workflow> responseEntity = new ResponseEntity<>(HttpStatus.ACCEPTED);
+
     setField(responseEntity, "body", workflow);
 
-    when(workflowRepo.getViewById(anyString(), ArgumentMatchers.<Class<WorkflowDto>>any())).thenReturn(workflowDto);
-    when(restTemplate.exchange(anyString(), any(HttpMethod.class), any(HttpEntity.class), ArgumentMatchers.<Class<Workflow>>any())).thenReturn(responseEntity);
+    when(restTemplate.exchange(contains(DEACTIVATE), any(HttpMethod.class), any(HttpEntity.class), ArgumentMatchers.<Class<Workflow>>any())).thenReturn(responseEntity);
 
     assertThrows(WorkflowEngineServiceException.class, () ->
       workflowEngineService.delete(UUID, OKAPI_TENANT, OKAPI_TOKEN)
@@ -166,12 +195,20 @@ class WorkflowEngineServiceTest {
 
   @Test
   void deleteThrowsExceptionFailedToSaveTest() {
-    WorkflowDto workflowDto = (WorkflowDto) workflow;
+
+    // The array node value is not expected to be processed beyond that the array is empty or not.
+    ArrayNode arrayNodeSingle = JsonNodeFactory.instance.arrayNode();
+    arrayNodeSingle.add("");
+
+    ResponseEntity<ArrayNode> responseArray = new ResponseEntity<>(arrayNodeSingle, HttpStatus.OK);
     ResponseEntity<Workflow> responseEntity = new ResponseEntity<>(HttpStatus.OK);
+
+    WorkflowDto workflowDto = (WorkflowDto) workflow;
     setField(responseEntity, "body", workflow);
 
     when(workflowRepo.getViewById(anyString(), ArgumentMatchers.<Class<WorkflowDto>>any())).thenReturn(workflowDto);
-    when(restTemplate.exchange(anyString(), any(HttpMethod.class), any(HttpEntity.class), ArgumentMatchers.<Class<Workflow>>any())).thenReturn(responseEntity);
+    when(restTemplate.exchange(contains(PROCESS_DEFINITION_ID), any(HttpMethod.class), any(HttpEntity.class), ArgumentMatchers.<Class<ArrayNode>>any())).thenReturn(responseArray);
+    when(restTemplate.exchange(contains(DEACTIVATE), any(HttpMethod.class), any(HttpEntity.class), ArgumentMatchers.<Class<Workflow>>any())).thenReturn(responseEntity);
     when(workflowRepo.save(any())).thenThrow(new RuntimeException("Trigger Failure"));
 
     assertThrows(WorkflowEngineServiceException.class, () -> {
@@ -184,12 +221,12 @@ class WorkflowEngineServiceTest {
 
   @Test
   void deleteThrowsExceptionFailedToSendWithNullResponseBodyTest() {
-    WorkflowDto workflowDto = (WorkflowDto) workflow;
+
     ResponseEntity<Workflow> responseEntity = new ResponseEntity<>(HttpStatus.OK);
+
     setField(responseEntity, "body", null);
 
-    when(workflowRepo.getViewById(anyString(), ArgumentMatchers.<Class<WorkflowDto>>any())).thenReturn(workflowDto);
-    when(restTemplate.exchange(anyString(), any(HttpMethod.class), any(HttpEntity.class), ArgumentMatchers.<Class<Workflow>>any())).thenReturn(responseEntity);
+    when(restTemplate.exchange(contains(DEACTIVATE), any(HttpMethod.class), any(HttpEntity.class), ArgumentMatchers.<Class<Workflow>>any())).thenReturn(responseEntity);
 
     assertThrows(WorkflowEngineServiceException.class, () -> {
       workflowEngineService.delete(UUID, OKAPI_TENANT, OKAPI_TOKEN);
@@ -336,6 +373,40 @@ class WorkflowEngineServiceTest {
 
     JsonNode response = workflowEngineService.history(UUID, OKAPI_TENANT, OKAPI_TOKEN);
     assertEquals(historyArrayNode, response);
+  }
+
+  @Test
+  void historyWorksWithoutOkFetchingIncidentsHistoryTest() throws WorkflowEngineServiceException {
+
+    WorkflowOperationalDto workflowOperationalDto = (WorkflowOperationalDto) workflowOperational;
+
+    ResponseEntity<ArrayNode> deploymentEntity = new ResponseEntity<>(HttpStatus.OK);
+    ResponseEntity<ArrayNode> processEntity = new ResponseEntity<>(HttpStatus.OK);
+    ResponseEntity<ArrayNode> incidentsEntity = new ResponseEntity<>(HttpStatus.FOUND);
+
+    ObjectNode deploymentNode = mapper.createObjectNode();
+    deploymentNode.put("id", UUID);
+
+    ObjectNode processNode = mapper.createObjectNode();
+    processNode.put("id", UUID);
+
+    ArrayNode deploymentArrayNode = mapper.createArrayNode();
+    deploymentArrayNode.add(deploymentNode);
+    setField(deploymentEntity, "body", deploymentArrayNode);
+
+    ArrayNode processArrayNode = mapper.createArrayNode();
+    processArrayNode.add(processNode);
+    setField(processEntity, "body", processArrayNode);
+
+    ArrayNode incidentsArrayNode = mapper.createArrayNode();
+    setField(incidentsEntity, "body", incidentsArrayNode);
+
+    when(workflowRepo.getViewById(anyString(), ArgumentMatchers.<Class<WorkflowOperationalDto>>any())).thenReturn(workflowOperationalDto);
+    when(restTemplate.exchange(anyString(), any(HttpMethod.class), any(HttpEntity.class), ArgumentMatchers.<Class<ArrayNode>>any()))
+      .thenReturn(processEntity, processEntity, incidentsEntity);
+
+    JsonNode response = workflowEngineService.history(UUID, OKAPI_TENANT, OKAPI_TOKEN);
+    assertEquals(processArrayNode, response);
   }
 
   @Test
