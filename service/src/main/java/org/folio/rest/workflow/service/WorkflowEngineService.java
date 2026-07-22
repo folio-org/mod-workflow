@@ -2,6 +2,7 @@ package org.folio.rest.workflow.service;
 
 import java.time.Instant;
 import java.util.Iterator;
+import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.folio.rest.workflow.dto.WorkflowDto;
@@ -10,6 +11,7 @@ import org.folio.rest.workflow.exception.WorkflowEngineServiceException;
 import org.folio.rest.workflow.exception.WorkflowNotFoundException;
 import org.folio.rest.workflow.model.Workflow;
 import org.folio.rest.workflow.model.repo.WorkflowRepo;
+import org.mockito.ArgumentMatchers;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.restclient.RestTemplateBuilder;
 import org.springframework.http.HttpEntity;
@@ -32,12 +34,11 @@ public class WorkflowEngineService {
   private static final String WORKFLOW_ENGINE_ACTIVATE_URL_TEMPLATE = "%s%s/workflow-engine/workflows/activate";
   private static final String WORKFLOW_ENGINE_DEACTIVATE_URL_TEMPLATE = "%s%s/workflow-engine/workflows/deactivate";
 
-  private static final String PROCESS_DEFINITION_SORTED_URL_TEMPLATE = "%s%s/processDefinitionId=%s&sortBy=startTime&sortOrder=asc";
-  private static final String PROCESS_DEFINITION_START_URL_TEMPLATE = "%s%s/process-definition/%s/start";
-  private static final String PROCESS_DEFINITION_GET_URL_TEMPLATE = "%s%s/process-definition%s";
+  private static final String PROCESS_DEFINITION_START_URL_TEMPLATE = "%s%s/process-definition/{arg1}/start";
+  private static final String PROCESS_DEFINITION_GET_URL_TEMPLATE = "%s%s/process-definition?deploymentId={arg1}&versionTag={arg2}&maxResults=1";
 
-  private static final String HISTORY_PROCESS_INSTANCE_URL_TEMPLATE = "%s%s/history/process-instance%s";
-  private static final String HISTORY_INCIDENT_URL_TEMPLATE = "%s%s/history/incident%s";
+  private static final String HISTORY_PROCESS_INSTANCE_URL_TEMPLATE = "%s%s/history/process-instance?processDefinitionId={arg1}&sortBy=startTime&sortOrder=asc";
+  private static final String HISTORY_INCIDENT_URL_TEMPLATE = "%s%s/history/incident?processInstanceId={arg1}&sortBy=createTime&sortOrder=asc";
 
   @Value("${tenant.headerName:X-Okapi-Tenant}")
   private String tenantHeaderName;
@@ -132,9 +133,11 @@ public class WorkflowEngineService {
 
     HttpEntity<JsonNode> contextHttpEntity = new HttpEntity<>(context, headers(tenant, token));
 
-    String url = String.format(PROCESS_DEFINITION_START_URL_TEMPLATE, okapiUrl, restPath, definitionId);
+    String url = String.format(PROCESS_DEFINITION_START_URL_TEMPLATE, okapiUrl, restPath);
+    Map<String, Object> params = Map.of("arg1", definitionId);
+
     try {
-      ResponseEntity<JsonNode> response = exchange(url, HttpMethod.POST, contextHttpEntity, JsonNode.class);
+      ResponseEntity<JsonNode> response = exchange(url, HttpMethod.POST, contextHttpEntity, JsonNode.class, params);
 
       return response.getBody();
     } catch (Exception e) {
@@ -170,11 +173,11 @@ public class WorkflowEngineService {
 
     HttpEntity<Void> httpEntity = new HttpEntity<>(headers(tenant, token));
 
-    String arguments = String.format("?deploymentId=%s&versionTag=%s&maxResults=1", deploymentId, version);
-    String url = String.format(PROCESS_DEFINITION_GET_URL_TEMPLATE, okapiUrl, restPath, arguments);
+    String url = String.format(PROCESS_DEFINITION_GET_URL_TEMPLATE, okapiUrl, restPath);
+    Map<String, Object> params = Map.of("arg1", deploymentId, "arg2", version);
 
     try {
-      ResponseEntity<ArrayNode> response = exchange(url, HttpMethod.GET, httpEntity, ArrayNode.class);
+      ResponseEntity<ArrayNode> response = exchange(url, HttpMethod.GET, httpEntity, ArrayNode.class, params);
 
       ArrayNode definitions = response.getBody();
       if (response.getStatusCode() == HttpStatus.OK && definitions != null && !definitions.isEmpty()) {
@@ -192,11 +195,11 @@ public class WorkflowEngineService {
 
     HttpEntity<Void> httpEntity = new HttpEntity<>(headers(tenant, token));
 
-    String arguments = String.format(PROCESS_DEFINITION_SORTED_URL_TEMPLATE, okapiUrl, restPath, processDefinitionId);
-    String url = String.format(HISTORY_PROCESS_INSTANCE_URL_TEMPLATE, okapiUrl, restPath, arguments);
+    String url = String.format(HISTORY_PROCESS_INSTANCE_URL_TEMPLATE, okapiUrl, restPath);
+    Map<String, Object> params = Map.of("arg1", processDefinitionId);
 
     try {
-      ResponseEntity<ArrayNode> response = exchange(url, HttpMethod.GET, httpEntity, ArrayNode.class);
+      ResponseEntity<ArrayNode> response = exchange(url, HttpMethod.GET, httpEntity, ArrayNode.class, params);
 
       ArrayNode definitions = response.getBody();
       if (response.getStatusCode() == HttpStatus.OK && definitions != null) {
@@ -213,11 +216,11 @@ public class WorkflowEngineService {
 
     HttpEntity<Void> httpEntity = new HttpEntity<>(headers(tenant, token));
 
-    String arguments = String.format("?processInstanceId=%s&sortBy=createTime&sortOrder=asc", processInstanceId);
-    String url = String.format(HISTORY_INCIDENT_URL_TEMPLATE, okapiUrl, restPath, arguments);
+    String url = String.format(HISTORY_INCIDENT_URL_TEMPLATE, okapiUrl, restPath);
+    Map<String, Object> params = Map.of("arg1", processInstanceId);
 
     try {
-      ResponseEntity<ArrayNode> response = exchange(url, HttpMethod.GET, httpEntity, ArrayNode.class);
+      ResponseEntity<ArrayNode> response = exchange(url, HttpMethod.GET, httpEntity, ArrayNode.class, params);
 
       ArrayNode incidents = response.getBody();
       if (response.getStatusCode() != HttpStatus.OK || incidents == null) {
@@ -249,10 +252,11 @@ public class WorkflowEngineService {
 
     HttpEntity<WorkflowDto> entity = new HttpEntity<>(workflow, headers(tenant, token));
     String url = String.format(requestPath, okapiUrl, basePath);
+
     LOG.debug(String.format("Send Okapi workflow engine request %s %s", HttpMethod.POST, url));
 
     try {
-      ResponseEntity<Workflow> response = exchange(url, HttpMethod.POST, entity, Workflow.class);
+      ResponseEntity<Workflow> response = exchange(url, HttpMethod.POST, entity, Workflow.class, Map.of());
 
       if (response.getStatusCode() == HttpStatus.OK) {
         Workflow responseWorkflow = response.getBody();
@@ -292,9 +296,9 @@ public class WorkflowEngineService {
     return requestHeaders;
   }
 
-  private <T> ResponseEntity<T> exchange(String url, HttpMethod method, HttpEntity<?> request, Class<T> responseType) {
+  private <T> ResponseEntity<T> exchange(String url, HttpMethod method, HttpEntity<?> request, Class<T> responseType, Map<String, ?> params) {
     LOG.debug(String.format("Exchange for %s %s %s", responseType.getSimpleName(), method, url));
-    return this.restTemplate.exchange(url, method, request, responseType, (Object[]) new String[0]);
+    return this.restTemplate.exchange(url, method, request, responseType, (Object[]) new String[0], params);
   }
 
 }
