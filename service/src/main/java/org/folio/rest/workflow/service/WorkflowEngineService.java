@@ -105,9 +105,9 @@ public class WorkflowEngineService {
       final ResponseEntity<ArrayNode> response = fetchDeploymentDefinitions(id, version, tenant, token);
 
       if (response.getStatusCode() == HttpStatus.OK || response.getStatusCode() == HttpStatus.NOT_FOUND) {
-        final ArrayNode definitions = !response.hasBody()
-          ? null
-          : response.getBody();
+        final ArrayNode definitions = response.hasBody()
+          ? response.getBody()
+          : null;
 
         if (definitions != null && response.getStatusCode() != HttpStatus.NOT_FOUND && !definitions.isEmpty()) {
           try {
@@ -197,10 +197,13 @@ public class WorkflowEngineService {
 
     while (iter.hasNext()) {
       JsonNode instance = iter.next();
-      String processInstanceId = instance.get("id").asString();
 
-      ((ObjectNode) instance).withArray("incidents")
-        .addAll(fetchIncidentsHistory(processInstanceId, tenant, token));
+      if (instance.has("id")) {
+        String processInstanceId = instance.get("id").asString();
+
+        ((ObjectNode) instance).withArray("incidents")
+          .addAll(fetchIncidentsHistory(processInstanceId, tenant, token));
+      }
     }
 
     return instances;
@@ -226,9 +229,9 @@ public class WorkflowEngineService {
     final ResponseEntity<ArrayNode> response = fetchDeploymentDefinitions(deploymentId, version, tenant, token);
 
     if (response.getStatusCode() == HttpStatus.OK || response.getStatusCode() == HttpStatus.NOT_FOUND) {
-      final ArrayNode definitions = !response.hasBody()
-        ? null
-        : response.getBody();
+      final ArrayNode definitions = response.hasBody()
+        ? response.getBody()
+        : null;
 
       if (definitions == null || response.getStatusCode() == HttpStatus.NOT_FOUND || definitions.isEmpty() || definitions.get(0) == null) {
         throw new WorkflowDeploymentNotFound(String.format("Workflow with Deployment ID '%s' for Workflow ID '%s' is not found.", deploymentId, workflowId));
@@ -281,8 +284,11 @@ public class WorkflowEngineService {
     try {
       ResponseEntity<ArrayNode> response = exchange(url, HttpMethod.GET, httpEntity, ArrayNode.class, params);
 
-      ArrayNode definitions = response.getBody();
-      if (response.getStatusCode() == HttpStatus.OK && definitions != null) {
+      final ArrayNode definitions = response.hasBody()
+        ? response.getBody()
+        : null;
+
+      if (definitions != null && response.getStatusCode() == HttpStatus.OK) {
         return definitions;
       }
 
@@ -302,8 +308,11 @@ public class WorkflowEngineService {
     try {
       ResponseEntity<ArrayNode> response = exchange(url, HttpMethod.GET, httpEntity, ArrayNode.class, params);
 
-      ArrayNode incidents = response.getBody();
-      if (response.getStatusCode() != HttpStatus.OK || incidents == null) {
+      ArrayNode incidents = response.hasBody()
+        ? response.getBody()
+        : null;
+
+      if (incidents == null || response.getStatusCode() != HttpStatus.OK) {
         LOG.debug("Unable to get workflow incidents history from workflow engine!");
 
         incidents = mapper.createArrayNode();

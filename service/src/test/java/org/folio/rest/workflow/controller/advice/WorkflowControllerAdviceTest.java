@@ -10,6 +10,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 import org.folio.rest.workflow.exception.WorkflowAlreadyActiveException;
+import org.folio.rest.workflow.exception.WorkflowCreateAlreadyExistsException;
 import org.folio.rest.workflow.exception.WorkflowDeploymentException;
 import org.folio.rest.workflow.exception.WorkflowDeploymentNotFound;
 import org.folio.rest.workflow.exception.WorkflowEngineServiceException;
@@ -36,6 +37,8 @@ import org.springframework.test.context.ActiveProfiles;
 class WorkflowControllerAdviceTest {
 
   private static final EntityNotFoundException ENF_EXC = new EntityNotFoundException(VALUE);
+
+  private static final WorkflowCreateAlreadyExistsException WCAE_EXC = new WorkflowCreateAlreadyExistsException(VALUE, VALUE);
 
   private static final WorkflowNotFoundException WNF_EXC = new WorkflowNotFoundException(VALUE);
 
@@ -74,6 +77,20 @@ class WorkflowControllerAdviceTest {
     assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     assertEquals(MediaType.APPLICATION_JSON, response.getHeaders().getContentType());
 
+    assertTrue(matchBody(response, simpleName));
+  }
+
+  @Test
+  void handleWorkflowCreateAlreadyExistsExceptionTest() {
+
+    final String simpleName = WorkflowCreateAlreadyExistsException.class.getSimpleName();
+    final ResponseEntity<String> response = advice.handleWorkflowCreateAlreadyExistsException(WCAE_EXC);
+
+    assertNotNull(response);
+    assertNotNull(response.getBody());
+
+    assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
+    assertEquals(MediaType.APPLICATION_JSON, response.getHeaders().getContentType());
     assertTrue(matchBody(response, simpleName));
   }
 
