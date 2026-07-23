@@ -11,6 +11,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Stream;
 import org.folio.rest.workflow.exception.WorkflowAlreadyActiveException;
 import org.folio.rest.workflow.exception.WorkflowDeploymentException;
+import org.folio.rest.workflow.exception.WorkflowDeploymentNotFound;
 import org.folio.rest.workflow.exception.WorkflowEngineServiceException;
 import org.folio.rest.workflow.exception.WorkflowImportAlreadyImported;
 import org.folio.rest.workflow.exception.WorkflowImportException;
@@ -41,6 +42,8 @@ class WorkflowControllerAdviceTest {
   private static final WorkflowAlreadyActiveException WAA_EXC = new WorkflowAlreadyActiveException(VALUE);
 
   private static final WorkflowDeploymentException WD_EXC = new WorkflowDeploymentException();
+
+  private static final WorkflowDeploymentNotFound WDNF_EXC = new WorkflowDeploymentNotFound(VALUE);
 
   private static final WorkflowEngineServiceException WES_EXC = new WorkflowEngineServiceException(VALUE);
 
@@ -112,6 +115,20 @@ class WorkflowControllerAdviceTest {
     assertNotNull(response.getBody());
 
     assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+    assertEquals(MediaType.APPLICATION_JSON, response.getHeaders().getContentType());
+    assertTrue(matchBody(response, simpleName));
+  }
+
+  @Test
+  void handleWorkflowDeploymentNotFoundTest() {
+
+    final String simpleName = WorkflowDeploymentNotFound.class.getSimpleName();
+    final ResponseEntity<String> response = advice.handleWorkflowDeploymentNotFound(WDNF_EXC);
+
+    assertNotNull(response);
+    assertNotNull(response.getBody());
+
+    assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     assertEquals(MediaType.APPLICATION_JSON, response.getHeaders().getContentType());
     assertTrue(matchBody(response, simpleName));
   }

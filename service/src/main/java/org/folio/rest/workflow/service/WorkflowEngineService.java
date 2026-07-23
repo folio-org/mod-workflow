@@ -7,11 +7,11 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.folio.rest.workflow.dto.WorkflowDto;
 import org.folio.rest.workflow.dto.WorkflowOperationalDto;
+import org.folio.rest.workflow.exception.WorkflowDeploymentNotFound;
 import org.folio.rest.workflow.exception.WorkflowEngineServiceException;
 import org.folio.rest.workflow.exception.WorkflowNotFoundException;
 import org.folio.rest.workflow.model.Workflow;
 import org.folio.rest.workflow.model.repo.WorkflowRepo;
-import org.mockito.ArgumentMatchers;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.restclient.RestTemplateBuilder;
 import org.springframework.http.HttpEntity;
@@ -20,6 +20,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.json.JsonMapper;
@@ -95,13 +96,34 @@ public class WorkflowEngineService {
   public void delete(String workflowId, String tenant, String token)
       throws WorkflowEngineServiceException {
 
-    final ArrayNode node = fetchProcessInstanceHistory(workflowId, tenant, token);
+    final WorkflowOperationalDto workflow = workflowRepo.getViewById(workflowId, WorkflowOperationalDto.class);
+    final String id = workflow.getDeploymentId();
+    final String version = workflow.getVersionTag();
 
-    if (!node.isEmpty()) {
-      try {
-        deactivate(workflowId, tenant, token);
-      } catch (WorkflowEngineServiceException e) {
-        throw new WorkflowEngineServiceException(String.format("Failed to delete Workflow '%s' due to deactivation failure: %s!", workflowId, e.getMessage()), e);
+    // Deployment ID will not exist if it has never been activated.
+    if (id != null) {
+      final ResponseEntity<ArrayNode> response = fetchDeploymentDefinitions(id, version, tenant, token);
+
+      if (response.getStatusCode() == HttpStatus.OK || response.getStatusCode() == HttpStatus.NOT_FOUND) {
+        final ArrayNode definitions = !response.hasBody()
+          ? null
+          : response.getBody();
+
+        if (definitions != null && response.getStatusCode() != HttpStatus.NOT_FOUND && !definitions.isEmpty()) {
+          try {
+            deactivate(workflowId, tenant, token);
+          } catch (WorkflowEngineServiceException e) {
+            final String message = String.format(
+              "Failed to delete Workflow ID '%s' for Deployment ID '%s' and Version Tag '%s' due to deactivation failure: %s!",
+              workflowId,
+              id,
+              version,
+              e.getMessage()
+            );
+
+            throw new WorkflowEngineServiceException(message, e);
+          }
+        }
       }
     }
 
@@ -122,13 +144,23 @@ public class WorkflowEngineService {
   }
 
   public JsonNode start(String workflowId, String tenant, String token, JsonNode context)
-      throws WorkflowEngineServiceException {
+      throws WorkflowDeploymentNotFound, WorkflowEngineServiceException, WorkflowNotFoundException {
 
     WorkflowOperationalDto workflow = workflowRepo.getViewById(workflowId, WorkflowOperationalDto.class);
+
+    if (workflow == null) {
+      throw new WorkflowNotFoundException(String.format("Workflow ID '%s'", workflowId));
+    }
+
     String id = workflow.getDeploymentId();
     String version = workflow.getVersionTag();
 
-    JsonNode definition = fetchDeploymentDefinition(id, version, tenant, token);
+    JsonNode definition = fetchFirstDeploymentDefinition(workflowId, id, version, tenant, token);
+
+    if (!definition.has("id") ) {
+      throw new WorkflowEngineServiceException(String.format("Workflow ID '%s' with Deployment ID '%s' has no definition ID!", workflowId, id));
+    }
+
     String definitionId = definition.get("id").asString();
 
     HttpEntity<JsonNode> contextHttpEntity = new HttpEntity<>(context, headers(tenant, token));
@@ -137,20 +169,26 @@ public class WorkflowEngineService {
     Map<String, Object> params = Map.of("arg1", definitionId);
 
     try {
-      ResponseEntity<JsonNode> response = exchange(url, HttpMethod.POST, contextHttpEntity, JsonNode.class, params);
+      final ResponseEntity<JsonNode> response = exchange(url, HttpMethod.POST, contextHttpEntity, JsonNode.class, params);
+
+      if (response.getStatusCode() == HttpStatus.NOT_FOUND) {
+        throw new WorkflowNotFoundException(String.format("Workflow ID '%s'", workflowId));
+      }
 
       return response.getBody();
-    } catch (Exception e) {
+    } catch (RestClientException e) {
       throw new WorkflowEngineServiceException(String.format("Failed to start workflow: %s!", e.getMessage()), e);
     }
   }
 
-  public JsonNode history(String workflowId, String tenant, String token) throws WorkflowEngineServiceException {
+  public JsonNode history(String workflowId, String tenant, String token)
+      throws WorkflowDeploymentNotFound, WorkflowEngineServiceException {
+
     WorkflowOperationalDto workflow = workflowRepo.getViewById(workflowId, WorkflowOperationalDto.class);
-    String deploymentId = workflow.getDeploymentId();
+    String id = workflow.getDeploymentId();
     String version = workflow.getVersionTag();
 
-    JsonNode processDefinition = fetchDeploymentDefinition(deploymentId, version, tenant, token);
+    JsonNode processDefinition = fetchFirstDeploymentDefinition(workflowId, id, version, tenant, token);
     String processDefinitionId = processDefinition.get("id").asString();
 
     ArrayNode instances = fetchProcessInstanceHistory(processDefinitionId, tenant, token);
@@ -168,24 +206,66 @@ public class WorkflowEngineService {
     return instances;
   }
 
-  private JsonNode fetchDeploymentDefinition(String deploymentId, String version, String tenant, String token)
-      throws WorkflowEngineServiceException {
+  /**
+   * Fetch the first matching deployment for the given workflow.
+   *
+   * @param workflowId   The Workflow ID, for use in exception logs.
+   * @param deploymentId The Deployment ID to find.
+   * @param version      The version tag to use.
+   * @param tenant       The FOLIO tenant.
+   * @param token        The session token.
+   *
+   * @return The first matching response.
+   *
+   * @throws WorkflowDeploymentNotFound     On not found.
+   * @throws WorkflowEngineServiceException On error.
+   */
+  private JsonNode fetchFirstDeploymentDefinition(String workflowId, String deploymentId, String version, String tenant, String token)
+      throws WorkflowDeploymentNotFound, WorkflowEngineServiceException {
 
-    HttpEntity<Void> httpEntity = new HttpEntity<>(headers(tenant, token));
+    final ResponseEntity<ArrayNode> response = fetchDeploymentDefinitions(deploymentId, version, tenant, token);
 
-    String url = String.format(PROCESS_DEFINITION_GET_URL_TEMPLATE, okapiUrl, restPath);
-    Map<String, Object> params = Map.of("arg1", deploymentId, "arg2", version);
+    if (response.getStatusCode() == HttpStatus.OK || response.getStatusCode() == HttpStatus.NOT_FOUND) {
+      final ArrayNode definitions = !response.hasBody()
+        ? null
+        : response.getBody();
 
-    try {
-      ResponseEntity<ArrayNode> response = exchange(url, HttpMethod.GET, httpEntity, ArrayNode.class, params);
-
-      ArrayNode definitions = response.getBody();
-      if (response.getStatusCode() == HttpStatus.OK && definitions != null && !definitions.isEmpty()) {
-        return definitions.get(0);
+      if (definitions == null || response.getStatusCode() == HttpStatus.NOT_FOUND || definitions.isEmpty() || definitions.get(0) == null) {
+        throw new WorkflowDeploymentNotFound(String.format("Workflow with Deployment ID '%s' for Workflow ID '%s' is not found.", deploymentId, workflowId));
       }
 
-      throw new WorkflowEngineServiceException("Unable to get workflow process definition from workflow engine!");
-    } catch (Exception e) {
+      return definitions.get(0);
+    }
+
+    throw new WorkflowEngineServiceException("Unable to get workflow process definition from workflow engine!");
+  }
+
+  /**
+   * Fetch all deployments, but return the response entity to allow caller to handle.
+   *
+   * @param deploymentId The activated Workflow deployment ID.
+   * @param version      The Workflow version number.
+   * @param tenant       The tenant.
+   * @param token        The token.
+   *
+   * @return The response entity.
+   *
+   * @throws WorkflowEngineServiceException On error.
+   */
+  private ResponseEntity<ArrayNode> fetchDeploymentDefinitions(String deploymentId, String version, String tenant, String token)
+      throws WorkflowEngineServiceException {
+
+    if (deploymentId == null) {
+      throw new WorkflowEngineServiceException("Failed to deployment definition: Deployment ID is missing!");
+    }
+
+    final HttpEntity<Void> httpEntity = new HttpEntity<>(headers(tenant, token));
+    final String url = String.format(PROCESS_DEFINITION_GET_URL_TEMPLATE, okapiUrl, restPath);
+    final Map<String, Object> params = Map.of("arg1", deploymentId, "arg2", version);
+
+    try {
+      return exchange(url, HttpMethod.GET, httpEntity, ArrayNode.class, params);
+    } catch (RestClientException e) {
       throw new WorkflowEngineServiceException(String.format("Failed to deployment definition: %s!", e.getMessage()), e);
     }
   }
@@ -207,7 +287,7 @@ public class WorkflowEngineService {
       }
 
       throw new WorkflowEngineServiceException("Unable to get workflow process instance history from workflow engine!");
-    } catch (Exception e) {
+    } catch (RestClientException e) {
       throw new WorkflowEngineServiceException(String.format("Failed to fetch process instance history: %s!", e.getMessage()), e);
     }
   }
@@ -230,7 +310,7 @@ public class WorkflowEngineService {
       }
 
       return incidents;
-    } catch (Exception e) {
+    } catch (RestClientException e) {
       throw new WorkflowEngineServiceException(String.format("Failed to fetch incident history: %s!", e.getMessage()), e);
     }
   }
@@ -273,7 +353,7 @@ public class WorkflowEngineService {
           return workflowRepo.save(responseWorkflow);
         }
       }
-    } catch (Exception e) {
+    } catch (RestClientException e) {
       throw new WorkflowEngineServiceException(String.format("Failed to send workflow request: %s!", e.getMessage()), e);
     }
 
@@ -296,9 +376,9 @@ public class WorkflowEngineService {
     return requestHeaders;
   }
 
-  private <T> ResponseEntity<T> exchange(String url, HttpMethod method, HttpEntity<?> request, Class<T> responseType, Map<String, ?> params) {
-    LOG.debug(String.format("Exchange for %s %s %s", responseType.getSimpleName(), method, url));
-    return this.restTemplate.exchange(url, method, request, responseType, (Object[]) new String[0], params);
+  private <T> ResponseEntity<T> exchange(String url, HttpMethod method, HttpEntity<?> request, Class<T> responseType, Map<String, ? extends Object> params) {
+    LOG.debug(String.format("Exchange for %s %s %s %s", responseType.getSimpleName(), method, url, params));
+    return this.restTemplate.exchange(url, method, request, responseType, params);
   }
 
 }
