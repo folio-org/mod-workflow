@@ -1,5 +1,6 @@
 package org.folio.rest.workflow.controller.advice;
 
+import static org.folio.spring.test.mock.MockMvcConstant.INT_VALUE;
 import static org.folio.spring.test.mock.MockMvcConstant.VALUE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -21,7 +22,6 @@ import org.folio.rest.workflow.exception.WorkflowImportJsonFileIsDirectory;
 import org.folio.rest.workflow.exception.WorkflowImportRequiredFileMissing;
 import org.folio.rest.workflow.exception.WorkflowNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -36,27 +36,43 @@ import org.springframework.test.context.ActiveProfiles;
 @ActiveProfiles("test")
 class WorkflowControllerAdviceTest {
 
-  private static final EntityNotFoundException ENF_EXC = new EntityNotFoundException(VALUE);
+  private static final RuntimeException R_EXC = new RuntimeException(VALUE);
 
-  private static final WorkflowCreateAlreadyExistsException WCAE_EXC = new WorkflowCreateAlreadyExistsException(VALUE, VALUE);
+  private static final EntityNotFoundException ENF_EXC1 = new EntityNotFoundException(VALUE);
+  private static final EntityNotFoundException ENF_EXC2 = new EntityNotFoundException(VALUE, R_EXC);
 
-  private static final WorkflowNotFoundException WNF_EXC = new WorkflowNotFoundException(VALUE);
+  private static final WorkflowCreateAlreadyExistsException WCAE_EXC1 = new WorkflowCreateAlreadyExistsException(VALUE, VALUE);
+  private static final WorkflowCreateAlreadyExistsException WCAE_EXC2 = new WorkflowCreateAlreadyExistsException(VALUE, VALUE, R_EXC);
 
-  private static final WorkflowAlreadyActiveException WAA_EXC = new WorkflowAlreadyActiveException(VALUE);
+  private static final WorkflowNotFoundException WNF_EXC1 = new WorkflowNotFoundException(VALUE);
+  private static final WorkflowNotFoundException WNF_EXC2 = new WorkflowNotFoundException(VALUE, R_EXC);
 
-  private static final WorkflowDeploymentException WD_EXC = new WorkflowDeploymentException();
+  private static final WorkflowAlreadyActiveException WAA_EXC1 = new WorkflowAlreadyActiveException(VALUE);
+  private static final WorkflowAlreadyActiveException WAA_EXC2 = new WorkflowAlreadyActiveException(VALUE, R_EXC);
 
-  private static final WorkflowDeploymentNotFound WDNF_EXC = new WorkflowDeploymentNotFound(VALUE);
+  private static final WorkflowDeploymentException WD_EXC1 = new WorkflowDeploymentException();
 
-  private static final WorkflowEngineServiceException WES_EXC = new WorkflowEngineServiceException(VALUE);
+  private static final WorkflowDeploymentNotFound WDNF_EXC1 = new WorkflowDeploymentNotFound(VALUE);
+  private static final WorkflowDeploymentNotFound WDNF_EXC2 = new WorkflowDeploymentNotFound(VALUE, R_EXC);
+  private static final WorkflowDeploymentNotFound WDNF_EXC3 = new WorkflowDeploymentNotFound(INT_VALUE);
+  private static final WorkflowDeploymentNotFound WDNF_EXC4 = new WorkflowDeploymentNotFound(INT_VALUE, R_EXC);
 
-  private static final WorkflowImportAlreadyImported WIAI_EXC = new WorkflowImportAlreadyImported(VALUE);
+  private static final WorkflowEngineServiceException WES_EXC1 = new WorkflowEngineServiceException(VALUE);
+  private static final WorkflowEngineServiceException WES_EXC2 = new WorkflowEngineServiceException(VALUE, R_EXC);
+  private static final WorkflowEngineServiceException WES_EXC3 = new WorkflowEngineServiceException(INT_VALUE);
+  private static final WorkflowEngineServiceException WES_EXC4 = new WorkflowEngineServiceException(INT_VALUE, R_EXC);
 
-  private static final WorkflowImportInvalidOrMissingProperty WIIOMP_EXC = new WorkflowImportInvalidOrMissingProperty(VALUE, VALUE);
+  private static final WorkflowImportAlreadyImported WIAI_EXC1 = new WorkflowImportAlreadyImported(VALUE);
+  private static final WorkflowImportAlreadyImported WIAI_EXC2 = new WorkflowImportAlreadyImported(VALUE, R_EXC);
 
-  private static final WorkflowImportJsonFileIsDirectory WIJFID_EXC = new WorkflowImportJsonFileIsDirectory(VALUE);
+  private static final WorkflowImportInvalidOrMissingProperty WIIOMP_EXC1 = new WorkflowImportInvalidOrMissingProperty(VALUE, VALUE);
+  private static final WorkflowImportInvalidOrMissingProperty WIIOMP_EXC2 = new WorkflowImportInvalidOrMissingProperty(VALUE, VALUE, R_EXC);
 
-  private static final WorkflowImportRequiredFileMissing WIRFM_EXC = new WorkflowImportRequiredFileMissing(VALUE);
+  private static final WorkflowImportJsonFileIsDirectory WIJFID_EXC1 = new WorkflowImportJsonFileIsDirectory(VALUE);
+  private static final WorkflowImportJsonFileIsDirectory WIJFID_EXC2 = new WorkflowImportJsonFileIsDirectory(VALUE, R_EXC);
+
+  private static final WorkflowImportRequiredFileMissing WIRFM_EXC1 = new WorkflowImportRequiredFileMissing(VALUE);
+  private static final WorkflowImportRequiredFileMissing WIRFM_EXC2 = new WorkflowImportRequiredFileMissing(VALUE, R_EXC);
 
   private WorkflowControllerAdvice advice;
 
@@ -65,26 +81,25 @@ class WorkflowControllerAdviceTest {
     advice = new WorkflowControllerAdvice();
   }
 
-  @Test
-  void handleEntityNotFoundExceptionTest() {
+  @ParameterizedTest
+  @MethodSource("provideEntityNotFoundExceptions")
+  void handleEntityNotFoundExceptionTest(EntityNotFoundException exception, String simpleName) {
 
-    final String simpleName = EntityNotFoundException.class.getSimpleName();
-    final ResponseEntity<String> response = advice.handleEntityNotFoundException(ENF_EXC);
+    final ResponseEntity<String> response = advice.handleEntityNotFoundException(exception);
 
     assertNotNull(response);
     assertNotNull(response.getBody());
 
     assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     assertEquals(MediaType.APPLICATION_JSON, response.getHeaders().getContentType());
-
     assertTrue(matchBody(response, simpleName));
   }
 
-  @Test
-  void handleWorkflowCreateAlreadyExistsExceptionTest() {
+  @ParameterizedTest
+  @MethodSource("provideWorkflowCreateAlreadyExistsExceptions")
+  void handleWorkflowCreateAlreadyExistsExceptionTest(WorkflowCreateAlreadyExistsException exception, String simpleName) {
 
-    final String simpleName = WorkflowCreateAlreadyExistsException.class.getSimpleName();
-    final ResponseEntity<String> response = advice.handleWorkflowCreateAlreadyExistsException(WCAE_EXC);
+    final ResponseEntity<String> response = advice.handleWorkflowCreateAlreadyExistsException(exception);
 
     assertNotNull(response);
     assertNotNull(response.getBody());
@@ -94,11 +109,11 @@ class WorkflowControllerAdviceTest {
     assertTrue(matchBody(response, simpleName));
   }
 
-  @Test
-  void handleWorkflowNotFoundExceptionTest() {
+  @ParameterizedTest
+  @MethodSource("provideWorkflowNotFoundExceptions")
+  void handleWorkflowNotFoundExceptionTest(WorkflowNotFoundException exception, String simpleName) {
 
-    final String simpleName = WorkflowNotFoundException.class.getSimpleName();
-    final ResponseEntity<String> response = advice.handleWorkflowNotFoundException(WNF_EXC);
+    final ResponseEntity<String> response = advice.handleWorkflowNotFoundException(exception);
 
     assertNotNull(response);
     assertNotNull(response.getBody());
@@ -108,11 +123,11 @@ class WorkflowControllerAdviceTest {
     assertTrue(matchBody(response, simpleName));
   }
 
-  @Test
-  void handleWorkflowAlreadyActiveExceptionTest() {
+  @ParameterizedTest
+  @MethodSource("provideWorkflowAlreadyActiveExceptions")
+  void handleWorkflowAlreadyActiveExceptionTest(WorkflowAlreadyActiveException exception, String simpleName) {
 
-    final String simpleName = WorkflowAlreadyActiveException.class.getSimpleName();
-    final ResponseEntity<String> response = advice.handleWorkflowAlreadyActiveException(WAA_EXC);
+    final ResponseEntity<String> response = advice.handleWorkflowAlreadyActiveException(exception);
 
     assertNotNull(response);
     assertNotNull(response.getBody());
@@ -122,11 +137,11 @@ class WorkflowControllerAdviceTest {
     assertTrue(matchBody(response, simpleName));
   }
 
-  @Test
-  void handleWorkflowDeploymentExceptionTest() {
+  @ParameterizedTest
+  @MethodSource("provideWorkflowDeploymentExceptions")
+  void handleWorkflowDeploymentExceptionTest(WorkflowDeploymentException exception, String simpleName) {
 
-    final String simpleName = WorkflowDeploymentException.class.getSimpleName();
-    final ResponseEntity<String> response = advice.handleWorkflowDeploymentException(WD_EXC);
+    final ResponseEntity<String> response = advice.handleWorkflowDeploymentException(exception);
 
     assertNotNull(response);
     assertNotNull(response.getBody());
@@ -136,11 +151,11 @@ class WorkflowControllerAdviceTest {
     assertTrue(matchBody(response, simpleName));
   }
 
-  @Test
-  void handleWorkflowDeploymentNotFoundTest() {
+  @ParameterizedTest
+  @MethodSource("provideWorkflowDeploymentNotFounds")
+  void handleWorkflowDeploymentNotFoundTest(WorkflowDeploymentNotFound exception, String simpleName) {
 
-    final String simpleName = WorkflowDeploymentNotFound.class.getSimpleName();
-    final ResponseEntity<String> response = advice.handleWorkflowDeploymentNotFound(WDNF_EXC);
+    final ResponseEntity<String> response = advice.handleWorkflowDeploymentNotFound(exception);
 
     assertNotNull(response);
     assertNotNull(response.getBody());
@@ -150,11 +165,11 @@ class WorkflowControllerAdviceTest {
     assertTrue(matchBody(response, simpleName));
   }
 
-  @Test
-  void handleWorkflowEngineServiceExceptionTest() {
+  @ParameterizedTest
+  @MethodSource("provideWorkflowEngineServiceExceptions")
+  void handleWorkflowEngineServiceExceptionTest(WorkflowEngineServiceException exception, String simpleName) {
 
-    final String simpleName = WorkflowEngineServiceException.class.getSimpleName();
-    final ResponseEntity<String> response = advice.handleWorkflowEngineServiceException(WES_EXC);
+    final ResponseEntity<String> response = advice.handleWorkflowEngineServiceException(exception);
 
     assertNotNull(response);
     assertNotNull(response.getBody());
@@ -195,6 +210,121 @@ class WorkflowControllerAdviceTest {
   }
 
   /**
+   * Helper function for parameterized test providing different types of EntityNotFoundException.
+   *
+   * @return
+   *   The arguments array stream with the stream columns as:
+   *     - Exception exception.
+   *     - String simpleName (exception name to match).
+   */
+  private static Stream<Arguments> provideEntityNotFoundExceptions() {
+
+    return Stream.of(
+      Arguments.of(ENF_EXC1,  EntityNotFoundException.class.getSimpleName()),
+      Arguments.of(ENF_EXC2, EntityNotFoundException.class.getSimpleName())
+    );
+  }
+
+  /**
+   * Helper function for parameterized test providing different types of WorkflowCreateAlreadyExistsException.
+   *
+   * @return
+   *   The arguments array stream with the stream columns as:
+   *     - Exception exception.
+   *     - String simpleName (exception name to match).
+   */
+  private static Stream<Arguments> provideWorkflowCreateAlreadyExistsExceptions() {
+
+    return Stream.of(
+      Arguments.of(WCAE_EXC1,  WorkflowCreateAlreadyExistsException.class.getSimpleName()),
+      Arguments.of(WCAE_EXC2, WorkflowCreateAlreadyExistsException.class.getSimpleName())
+    );
+  }
+
+  /**
+   * Helper function for parameterized test providing different types of WorkflowNotFoundException.
+   *
+   * @return
+   *   The arguments array stream with the stream columns as:
+   *     - Exception exception.
+   *     - String simpleName (exception name to match).
+   */
+  private static Stream<Arguments> provideWorkflowNotFoundExceptions() {
+
+    return Stream.of(
+      Arguments.of(WNF_EXC1,  WorkflowNotFoundException.class.getSimpleName()),
+      Arguments.of(WNF_EXC2, WorkflowNotFoundException.class.getSimpleName())
+    );
+  }
+
+  /**
+   * Helper function for parameterized test providing different types of WorkflowAlreadyActiveException.
+   *
+   * @return
+   *   The arguments array stream with the stream columns as:
+   *     - Exception exception.
+   *     - String simpleName (exception name to match).
+   */
+  private static Stream<Arguments> provideWorkflowAlreadyActiveExceptions() {
+
+    return Stream.of(
+      Arguments.of(WAA_EXC1,  WorkflowAlreadyActiveException.class.getSimpleName()),
+      Arguments.of(WAA_EXC2, WorkflowAlreadyActiveException.class.getSimpleName())
+    );
+  }
+
+  /**
+   * Helper function for parameterized test providing different types of WorkflowDeploymentException.
+   *
+   * @return
+   *   The arguments array stream with the stream columns as:
+   *     - Exception exception.
+   *     - String simpleName (exception name to match).
+   */
+  private static Stream<Arguments> provideWorkflowDeploymentExceptions() {
+
+    return Stream.of(
+      Arguments.of(WD_EXC1,  WorkflowDeploymentException.class.getSimpleName())
+    );
+  }
+
+  /**
+   * Helper function for parameterized test providing different types of WorkflowDeploymentNotFound.
+   *
+   * @return
+   *   The arguments array stream with the stream columns as:
+   *     - Exception exception.
+   *     - String simpleName (exception name to match).
+   */
+  private static Stream<Arguments> provideWorkflowDeploymentNotFounds() {
+
+    return Stream.of(
+      Arguments.of(WDNF_EXC1,  WorkflowDeploymentNotFound.class.getSimpleName()),
+      Arguments.of(WDNF_EXC2, WorkflowDeploymentNotFound.class.getSimpleName()),
+      Arguments.of(WDNF_EXC3, WorkflowDeploymentNotFound.class.getSimpleName()),
+      Arguments.of(WDNF_EXC4, WorkflowDeploymentNotFound.class.getSimpleName())
+    );
+  }
+
+  /**
+   * Helper function for parameterized test providing different types of WorkflowEngineServiceException.
+   *
+   * @return
+   *   The arguments array stream with the stream columns as:
+   *     - Exception exception.
+   *     - String simpleName (exception name to match).
+   */
+  private static Stream<Arguments> provideWorkflowEngineServiceExceptions() {
+
+    return Stream.of(
+      Arguments.of(WES_EXC1,  WorkflowEngineServiceException.class.getSimpleName()),
+      Arguments.of(WES_EXC2, WorkflowEngineServiceException.class.getSimpleName()),
+      Arguments.of(WES_EXC3, WorkflowEngineServiceException.class.getSimpleName()),
+      Arguments.of(WES_EXC4, WorkflowEngineServiceException.class.getSimpleName())
+    );
+  }
+
+  /**
    * Helper function for parameterized test providing different types of WorkflowImportException.
    *
    * @return
@@ -205,10 +335,14 @@ class WorkflowControllerAdviceTest {
   private static Stream<Arguments> provideWorkflowImportExceptions() {
 
     return Stream.of(
-      Arguments.of(WIAI_EXC,   WorkflowImportAlreadyImported.class.getSimpleName()),
-      Arguments.of(WIIOMP_EXC, WorkflowImportInvalidOrMissingProperty.class.getSimpleName()),
-      Arguments.of(WIJFID_EXC, WorkflowImportJsonFileIsDirectory.class.getSimpleName()),
-      Arguments.of(WIRFM_EXC,  WorkflowImportRequiredFileMissing.class.getSimpleName())
+      Arguments.of(WIAI_EXC1,   WorkflowImportAlreadyImported.class.getSimpleName()),
+      Arguments.of(WIAI_EXC2,   WorkflowImportAlreadyImported.class.getSimpleName()),
+      Arguments.of(WIIOMP_EXC1, WorkflowImportInvalidOrMissingProperty.class.getSimpleName()),
+      Arguments.of(WIIOMP_EXC2, WorkflowImportInvalidOrMissingProperty.class.getSimpleName()),
+      Arguments.of(WIJFID_EXC1, WorkflowImportJsonFileIsDirectory.class.getSimpleName()),
+      Arguments.of(WIJFID_EXC2, WorkflowImportJsonFileIsDirectory.class.getSimpleName()),
+      Arguments.of(WIRFM_EXC1,  WorkflowImportRequiredFileMissing.class.getSimpleName()),
+      Arguments.of(WIRFM_EXC2,  WorkflowImportRequiredFileMissing.class.getSimpleName())
     );
   }
 
