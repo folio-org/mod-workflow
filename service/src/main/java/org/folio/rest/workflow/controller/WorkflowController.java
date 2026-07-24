@@ -7,6 +7,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.folio.rest.workflow.exception.WorkflowDeploymentNotFound;
 import org.folio.rest.workflow.exception.WorkflowEngineServiceException;
 import org.folio.rest.workflow.exception.WorkflowImportException;
 import org.folio.rest.workflow.exception.WorkflowNotFoundException;
@@ -138,7 +139,7 @@ public class WorkflowController {
     @PathVariable String id,
     @TenantHeader String tenant,
     @TokenHeader String token
-  ) throws WorkflowEngineServiceException {
+  ) throws WorkflowDeploymentNotFound, WorkflowEngineServiceException {
     LOG.debug(String.format("Retrieving History: %s", sanitize(id)));
     return workflowEngineService.history(id, tenant, token);
   }
@@ -149,7 +150,7 @@ public class WorkflowController {
     @TenantHeader String tenant,
     @TokenHeader String token,
     @RequestBody JsonNode context
-  ) throws WorkflowEngineServiceException {
+  ) throws WorkflowDeploymentNotFound, WorkflowEngineServiceException, WorkflowNotFoundException {
     LOG.info(String.format("Starting: %s with context %s", sanitize(id), sanitize(context)));
     return workflowEngineService.start(id, tenant, token, context);
   }
