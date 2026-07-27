@@ -24,14 +24,15 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 class EmbeddedRequestTest {
 
-  private static final String ACCEPT       = "accept";
-  private static final String BODYTEMPLATE = "bodyTemplate";
-  private static final String CONTENTTYPE  = "contentType";
-  private static final String ITERABLE     = "iterable";
-  private static final String ITERABLEKEY  = "iterableKey";
-  private static final String METHOD       = "method";
-  private static final String RESPONSEKEY  = "responseKey";
-  private static final String URL          = "url";
+  private static final String ACCEPT        = "accept";
+  private static final String BODYTEMPLATE  = "bodyTemplate";
+  private static final String CONTENTTYPE   = "contentType";
+  private static final String ITERABLE      = "iterable";
+  private static final String ITERABLEKEY   = "iterableKey";
+  private static final String METHOD        = "method";
+  private static final String RESPONSEKEY   = "responseKey";
+  private static final String SENDEMPTYBODY = "sendEmptyBody";
+  private static final String URL           = "url";
 
   private EmbeddedRequest embeddedRequest;
 
@@ -160,6 +161,25 @@ class EmbeddedRequestTest {
     assertEquals(VALUE, getField(embeddedRequest, RESPONSEKEY));
   }
 
+  @Test
+  void getSendEmptyBodyWorksTest() {
+    final boolean value = false;
+
+    setField(embeddedRequest, SENDEMPTYBODY, value);
+
+    assertEquals(value, embeddedRequest.getSendEmptyBody());
+  }
+
+  @Test
+  void setSendEmptyBodyWorksTest() {
+    final boolean value = true;
+
+    setField(embeddedRequest, SENDEMPTYBODY, null);
+
+    embeddedRequest.setSendEmptyBody(value);
+    assertEquals(value, getField(embeddedRequest, SENDEMPTYBODY));
+  }
+
   @ParameterizedTest
   @MethodSource("providePrePersistFor")
   void prePersistWorksTest(Map<String, Object> initial, Map<String, Object> expected) {
@@ -186,28 +206,32 @@ class EmbeddedRequestTest {
 
     return List.of(
       Arguments.of(
-        helperFieldMap(NULL_STR, NULL_STR,    NULL_STR, null, NULL_STR),
-        helperFieldMap(APP_JSON, JSON_OBJECT, APP_JSON, GET,  "")
+        helperFieldMap(NULL_STR, NULL_STR,    NULL_STR, null, null,  NULL_STR),
+        helperFieldMap(APP_JSON, JSON_OBJECT, APP_JSON, GET,  true,  "")
       ),
       Arguments.of(
-        helperFieldMap(VALUE,    NULL_STR,    NULL_STR, null, NULL_STR),
-        helperFieldMap(VALUE,    JSON_OBJECT, APP_JSON, GET,  "")
+        helperFieldMap(VALUE,    NULL_STR,    NULL_STR, null, null,  NULL_STR),
+        helperFieldMap(VALUE,    JSON_OBJECT, APP_JSON, GET,  true,  "")
       ),
       Arguments.of(
-        helperFieldMap(NULL_STR, VALUE,       NULL_STR, null, NULL_STR),
-        helperFieldMap(APP_JSON, VALUE,       APP_JSON, GET,  "")
+        helperFieldMap(NULL_STR, VALUE,       NULL_STR, null, null,  NULL_STR),
+        helperFieldMap(APP_JSON, VALUE,       APP_JSON, GET,  true,  "")
       ),
       Arguments.of(
-        helperFieldMap(NULL_STR, NULL_STR,    VALUE,    null, NULL_STR),
-        helperFieldMap(APP_JSON, JSON_OBJECT, VALUE,    GET,  "")
+        helperFieldMap(NULL_STR, NULL_STR,    VALUE,    null, null,  NULL_STR),
+        helperFieldMap(APP_JSON, JSON_OBJECT, VALUE,    GET,  true,  "")
       ),
       Arguments.of(
-        helperFieldMap(NULL_STR, NULL_STR,    NULL_STR, POST, NULL_STR),
-        helperFieldMap(APP_JSON, JSON_OBJECT, APP_JSON, POST, "")
+        helperFieldMap(NULL_STR, NULL_STR,    NULL_STR, POST, null,  NULL_STR),
+        helperFieldMap(APP_JSON, JSON_OBJECT, APP_JSON, POST, true,  "")
       ),
       Arguments.of(
-        helperFieldMap(NULL_STR, NULL_STR,    NULL_STR, null, VALUE),
-        helperFieldMap(APP_JSON, JSON_OBJECT, APP_JSON, GET,  VALUE)
+        helperFieldMap(NULL_STR, NULL_STR,    NULL_STR, POST, false, NULL_STR),
+        helperFieldMap(APP_JSON, NULL_STR,    APP_JSON, POST, false, "")
+      ),
+      Arguments.of(
+        helperFieldMap(NULL_STR, NULL_STR,    NULL_STR, null, null,  VALUE),
+        helperFieldMap(APP_JSON, JSON_OBJECT, APP_JSON, GET,  true,  VALUE)
       )
     ).stream();
   }
@@ -215,21 +239,23 @@ class EmbeddedRequestTest {
   /**
    * Helper for reducing in line code repetition for assignments.
    *
-   * @param accept The accept value.
-   * @param bodyTemplate The bodyTemplate value.
-   * @param contentType The contentType value.
-   * @param method The method value.
-   * @param url The url value.
+   * @param accept        The accept value.
+   * @param bodyTemplate  The bodyTemplate value.
+   * @param contentType   The contentType value.
+   * @param method        The method value.
+   * @param sendEmptyBody The sendEmptyBody value.
+   * @param url           The url value.
    *
    * @return The built arguments map.
    */
-  private static Map<String, Object> helperFieldMap(String accept, String bodyTemplate, String contentType, HttpMethod method, String url) {
+  private static Map<String, Object> helperFieldMap(String accept, String bodyTemplate, String contentType, HttpMethod method, Boolean sendEmptyBody, String url) {
     final Map<String, Object> map = new HashMap<>();
 
     map.put(ACCEPT, accept);
     map.put(BODYTEMPLATE, bodyTemplate);
     map.put(CONTENTTYPE, contentType);
     map.put(METHOD, method);
+    map.put(SENDEMPTYBODY, sendEmptyBody);
     map.put(URL, url);
 
     return map;
