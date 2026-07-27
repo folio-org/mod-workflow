@@ -26,12 +26,17 @@ public class Request {
 
   private String responseKey;
 
+  @NotNull
+  private Boolean sendEmptyBody;
+
   public Request() {
     super();
-    contentType = MediaType.APPLICATION_JSON_VALUE;
+
     accept = MediaType.APPLICATION_JSON_VALUE;
-    bodyTemplate = "{}";
+    contentType = MediaType.APPLICATION_JSON_VALUE;
+    bodyTemplate = null;
     iterable = false;
+    sendEmptyBody = true;
   }
 
   /**
@@ -91,6 +96,15 @@ public class Request {
   }
 
   /**
+   * Get the sendEmptyBody value.
+   *
+   * @return The sendEmptyBody value.
+   */
+  public Boolean getSendEmptyBody() {
+    return sendEmptyBody;
+  }
+
+  /**
    * @param url the url to set
    */
   public void setUrl(String url) {
@@ -144,6 +158,15 @@ public class Request {
    */
   public void setResponseKey(String responseKey) {
     this.responseKey = responseKey;
+  }
+
+  /**
+   * Set the sendEmptyBody value.
+   *
+   * @param sendEmptyBody the sendEmptyBody to set
+   */
+  public void setSendEmptyBody(Boolean sendEmptyBody) {
+    this.sendEmptyBody = sendEmptyBody;
   }
 
 }

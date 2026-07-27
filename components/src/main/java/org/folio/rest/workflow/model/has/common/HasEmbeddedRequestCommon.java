@@ -13,7 +13,8 @@ public interface HasEmbeddedRequestCommon {
   public boolean getIterable();
   public String getIterableKey();
   public HttpMethod getMethod();
-  public String getResponseKey() ;
+  public String getResponseKey();
+  public Boolean getSendEmptyBody();
 
   public void setAccept(String accept);
   public void setBodyTemplate(String bodyTemplate);
@@ -22,5 +23,6 @@ public interface HasEmbeddedRequestCommon {
   public void setIterableKey(String iterableKey);
   public void setMethod(HttpMethod method);
   public void setResponseKey(String responseKey);
+  public void setSendEmptyBody(Boolean sendEmptyBody);
 
 }

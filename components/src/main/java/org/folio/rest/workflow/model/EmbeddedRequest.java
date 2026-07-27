@@ -19,7 +19,6 @@ public class EmbeddedRequest implements HasEmbeddedRequestCommon, HasUrl {
   @Column(nullable = true)
   private String accept;
 
-  // Must be designated as nullable even if this is not supposed to be NULL.
   @Column(columnDefinition = "TEXT", nullable = true)
   private String bodyTemplate;
 
@@ -40,6 +39,9 @@ public class EmbeddedRequest implements HasEmbeddedRequestCommon, HasUrl {
 
   private String responseKey;
 
+  @Column(nullable = false)
+  private Boolean sendEmptyBody;
+
   // Must be designated as nullable even if this is not supposed to be NULL.
   @NotNull
   @Column(nullable = true)
@@ -49,10 +51,11 @@ public class EmbeddedRequest implements HasEmbeddedRequestCommon, HasUrl {
     super();
 
     accept = MediaType.APPLICATION_JSON_VALUE;
-    bodyTemplate = "{}";
+    bodyTemplate = null;
     contentType = MediaType.APPLICATION_JSON_VALUE;
     iterable = false;
     method = HttpMethod.GET;
+    sendEmptyBody = true;
     url = "";
   }
 
@@ -62,8 +65,12 @@ public class EmbeddedRequest implements HasEmbeddedRequestCommon, HasUrl {
       accept = MediaType.APPLICATION_JSON_VALUE;
     }
 
-    if (bodyTemplate == null) {
-      bodyTemplate = "{}";
+    if (sendEmptyBody == null) {
+      sendEmptyBody = true;
+    }
+
+    if (bodyTemplate == null || bodyTemplate.isEmpty()) {
+      bodyTemplate = Boolean.TRUE.equals(sendEmptyBody) ? "{}" : null;
     }
 
     if (contentType == null) {
@@ -102,6 +109,11 @@ public class EmbeddedRequest implements HasEmbeddedRequestCommon, HasUrl {
   @Override
   public String getIterableKey() {
     return iterableKey;
+  }
+
+  @Override
+  public Boolean getSendEmptyBody() {
+    return sendEmptyBody;
   }
 
   @Override
@@ -157,6 +169,11 @@ public class EmbeddedRequest implements HasEmbeddedRequestCommon, HasUrl {
   @Override
   public void setUrl(String url) {
     this.url = url;
+  }
+
+  @Override
+  public void setSendEmptyBody(Boolean sendEmptyBody) {
+    this.sendEmptyBody = sendEmptyBody;
   }
 
 }

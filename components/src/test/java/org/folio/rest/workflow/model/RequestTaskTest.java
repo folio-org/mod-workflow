@@ -238,6 +238,20 @@ class RequestTaskTest {
     });
   }
 
+  @ParameterizedTest
+  @MethodSource("provideSendEmptyBodyFor")
+  void prePersistSendEmptyBodyWorksTest(final Boolean sendEmptyBody, final String bodyTemplate, final String expected) {
+
+    final EmbeddedRequest er = new EmbeddedRequest();
+
+    setField(er, "sendEmptyBody", sendEmptyBody);
+    setField(er, "bodyTemplate", bodyTemplate);
+
+    er.prePersist();
+
+    assertEquals(expected, getField(er, "bodyTemplate"));
+  }
+
   /**
    * Helper function for parameterized tests for the prePersist function.
    *
@@ -278,6 +292,27 @@ class RequestTaskTest {
         helperFieldMap(headerOutputVariables),
         helperPersistMap(true)
       )
+    ).stream();
+  }
+
+  /**
+   * Helper function for parameterized tests for the prePersist function.
+   *
+   * @return
+   *   The arguments array stream with the stream columns as:
+   *     - Arguments sendEmptyBody The initial sendEmptyBody value.
+   *     - Arguments bodyTemplate The initial bodyTemplate value.
+   *     - Arguments expect The expected bodyTemplate value.
+   */
+  private static Stream<Arguments> provideSendEmptyBodyFor() {
+
+    return List.of(
+      Arguments.of(true,  null,  "{}"),
+      Arguments.of(true,  "",    "{}"),
+      Arguments.of(false, null,  null),
+      Arguments.of(false, "",    null),
+      Arguments.of(true,  VALUE, VALUE),
+      Arguments.of(false, VALUE, VALUE)
     ).stream();
   }
 
