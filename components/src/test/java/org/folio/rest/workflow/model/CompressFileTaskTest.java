@@ -1,12 +1,16 @@
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import java.util.HashSet;
-import java.util.Set;
+package org.folio.rest.workflow.model;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class CompressFileTaskTest {
+import java.util.HashSet;
+import java.util.Set;
+import org.folio.rest.workflow.enums.CompressFileContainer;
+import org.folio.rest.workflow.enums.CompressFileFormat;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+class CompressFileTaskTest {
 
     private CompressFileTask compressFileTask;
 
@@ -18,15 +22,15 @@ public class CompressFileTaskTest {
     @Test
     void testInputVariablesGetterSetter() {
         Set<EmbeddedVariable> inputVariables = new HashSet<>();
-        inputVariables.add(new EmbeddedVariable("inputVar1", "value1"));
-        inputVariables.add(new EmbeddedVariable("inputVar2", "value2"));
+        inputVariables.add(new EmbeddedVariable());
+        inputVariables.add(new EmbeddedVariable());
         compressFileTask.setInputVariables(inputVariables);
         assertEquals(inputVariables, compressFileTask.getInputVariables());
     }
 
     @Test
     void testOutputVariableGetterSetter() {
-        EmbeddedVariable outputVariable = new EmbeddedVariable("outputVar", "outputValue");
+        EmbeddedVariable outputVariable = new EmbeddedVariable();
         compressFileTask.setOutputVariable(outputVariable);
         assertEquals(outputVariable, compressFileTask.getOutputVariable());
     }
@@ -34,13 +38,13 @@ public class CompressFileTaskTest {
     @Test
     void testAsyncBeforeGetterSetter() {
         compressFileTask.setAsyncBefore(true);
-        assertTrue(compressFileTask.isAsyncBefore());
+        assertTrue(compressFileTask.getAsyncBefore());
     }
 
     @Test
     void testAsyncAfterGetterSetter() {
         compressFileTask.setAsyncAfter(true);
-        assertTrue(compressFileTask.isAsyncAfter());
+        assertTrue(compressFileTask.getAsyncAfter());
     }
 
     @Test
