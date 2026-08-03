@@ -140,6 +140,7 @@ public class DeleteService {
    */
   void deleteSimpleEntity(String entityName, String id) {
 
+    @SuppressWarnings("S2077") // SonarQube false positive, the query is protected by extractEntityName() and cannot produce SQL escapes from entityName.
     final int total = entityManager.createQuery("DELETE FROM " + entityName + " e WHERE e.id = :id")
       .setParameter("id", id)
       .executeUpdate();
