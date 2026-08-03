@@ -91,7 +91,7 @@ public class DeleteService {
   void deleteEntity(String name, String id) {
 
     if (name == null || id == null) {
-      LOG.warn("Cannot delete with entity name {} and id {}, both values must not be NULL.", name, id);
+      LOG.warn("Cannot delete with entity name '{}' and id '{}', both values must not be NULL.", name, id);
 
       return;
     }
@@ -102,7 +102,7 @@ public class DeleteService {
       entityName = extractEntityName(NODE_ENTITIES, name);
 
       if (entityName == null) {
-        LOG.debug("Unknown name {} for id {}, got entityName {}.", name, id, entityName);
+        LOG.warn("Unknown name '{}' for id '{}', got entityName '{}'.", name, id, entityName);
 
         return;
       }
@@ -145,7 +145,7 @@ public class DeleteService {
       .setParameter("id", id)
       .executeUpdate();
 
-    LOG.debug("Deleted {} entities for entityName {} with id {}.", total, entityName, id);
+    LOG.debug("Deleted '{}' entities for entityName '{}' with id '{}'.", total, entityName, id);
   }
 
   /**

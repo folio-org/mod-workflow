@@ -94,6 +94,6 @@ class WorkflowOperationalNodeDtoTest {
     assertEquals(VALUE, getField(dto, "versionTag"));
   }
 
-  private static class Impl extends Workflow implements WorkflowOperationalNodeDto { };
+  private static class Impl extends Workflow implements WorkflowOperationalNodeDto { }
 
 }

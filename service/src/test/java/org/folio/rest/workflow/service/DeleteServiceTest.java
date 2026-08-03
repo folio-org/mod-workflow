@@ -242,6 +242,21 @@ class DeleteServiceTest {
     verify(typedQuery, never()).executeUpdate();
   }
 
+  @Test
+  void deleteNodesForMaliciousNodeTest() {
+
+    final MaliciousNode node = new MaliciousNode();
+
+    setField(node, "id", UUID);
+    setField(node, "name", VALUE);
+
+    nodes.add(node);
+
+    deleteService.deleteNodes(workflowOperationalNode);
+
+    verify(typedQuery, never()).executeUpdate();
+  }
+
   /**
    * Mocked node that is intended to return nothing when the getDeserializeAs() is called.
    */
@@ -277,7 +292,20 @@ class DeleteServiceTest {
     @Override
     public void setNodes(List<Node> nodes) {
 
-      nodes.forEach(n -> list.add(n));
+      nodes.forEach(list::add);
+    }
+
+  }
+
+  /**
+   * Mocked node that is intended to return a malicious SQL string when the getDeserializeAs() is called.
+   */
+  private class MaliciousNode extends Node {
+
+    @Override
+    public String getDeserializeAs() {
+
+      return "workflow; SELECT * from workflow";
     }
 
   }
