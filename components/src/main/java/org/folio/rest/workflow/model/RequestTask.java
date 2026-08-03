@@ -8,6 +8,8 @@ import java.util.HashSet;
 import java.util.Set;
 import org.folio.rest.workflow.model.components.DelegateTask;
 import org.folio.rest.workflow.model.has.common.HasRequestTaskCommon;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 /**
  * A task for regular HTTP requests.
@@ -18,6 +20,7 @@ import org.folio.rest.workflow.model.has.common.HasRequestTaskCommon;
 public class RequestTask extends AbstractTask implements DelegateTask, HasRequestTaskCommon {
 
   @ElementCollection
+  @OnDelete(action = OnDeleteAction.CASCADE)
   private Set<EmbeddedVariable> headerOutputVariables;
 
   @Embedded

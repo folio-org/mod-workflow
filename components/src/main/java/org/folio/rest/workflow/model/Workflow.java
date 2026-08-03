@@ -34,6 +34,8 @@ import org.folio.rest.workflow.model.has.HasVersionTag;
 import org.folio.rest.workflow.model.has.common.HasWorkflowCommon;
 import org.folio.spring.domain.model.AbstractBaseEntity;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.data.annotation.Version;
 import tools.jackson.databind.JsonNode;
 
@@ -69,6 +71,7 @@ public class Workflow extends AbstractBaseEntity implements HasChecksum, HasCrea
   @MapKeyColumn(name = "context_key")
   @Column(name = "context_value")
   @Convert(converter = JsonNodeConverter.class, attributeName = "value")
+  @OnDelete(action = OnDeleteAction.CASCADE)
   private Map<String, JsonNode> initialContext;
 
   @NotNull
