@@ -145,6 +145,10 @@ public class DeleteService {
       .setParameter("id", id)
       .executeUpdate();
 
+    if (total > 0) {
+      entityManager.clear();
+    }
+
     LOG.debug("Deleted '{}' entities for entityName '{}' with id '{}'.", total, entityName, id);
   }
 

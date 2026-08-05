@@ -21,6 +21,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import tools.jackson.databind.JsonNode;
@@ -95,6 +96,7 @@ public class WorkflowEngineService {
    *
    * @throws WorkflowEngineServiceException When the request fails in some way preventing the return of an HttpEntity.
    */
+  @Transactional
   public void delete(String workflowId, String tenant, String token)
       throws WorkflowEngineServiceException {
 
