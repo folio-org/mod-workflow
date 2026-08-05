@@ -23,7 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
  * Each entity, etc.., must be found and explicitly deleted.
  */
 @Service
-@Transactional
+@Transactional(rollbackFor = Exception.class)
 public class DeleteService {
 
   private static final Logger LOG = LoggerFactory.getLogger(DeleteService.class);
@@ -144,6 +144,10 @@ public class DeleteService {
     final int total = entityManager.createQuery("DELETE FROM " + entityName + " e WHERE e.id = :id")
       .setParameter("id", id)
       .executeUpdate();
+
+    if (total > 0) {
+      entityManager.clear();
+    }
 
     LOG.debug("Deleted '{}' entities for entityName '{}' with id '{}'.", total, entityName, id);
   }
