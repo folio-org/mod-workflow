@@ -6,11 +6,14 @@ import jakarta.persistence.PrePersist;
 import java.util.HashSet;
 import java.util.Set;
 import org.folio.rest.workflow.model.has.HasInputs;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 public class InputTask extends AbstractTask implements HasInputs {
 
   @ElementCollection
+  @OnDelete(action = OnDeleteAction.CASCADE)
   private Set<EmbeddedInput> inputs;
 
   public InputTask() {
