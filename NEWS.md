@@ -1,3 +1,6 @@
+## 1.2.1-SNAPSHOT In Progress
+
+
 ## 1.2.0 2026-09-17
 
 * [MODWRKFLOW-58](https://folio-org.atlassian.net/browse/MODWRKFLOW-58): Use GitHub Workflows for Maven.
