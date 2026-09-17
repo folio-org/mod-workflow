@@ -1,4 +1,4 @@
-## 2.1.0 2026-09-17
+## 1.2.0 2026-09-17
 
 * [MODWRKFLOW-58](https://folio-org.atlassian.net/browse/MODWRKFLOW-58): Use GitHub Workflows for Maven.
 * [MODWRKFLOW-59](https://folio-org.atlassian.net/browse/MODWRKFLOW-59): Remove ActiveMQ.
