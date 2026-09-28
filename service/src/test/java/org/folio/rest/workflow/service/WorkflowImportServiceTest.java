@@ -23,7 +23,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.test.context.ActiveProfiles;
@@ -62,85 +62,56 @@ class WorkflowImportServiceTest {
   @Mock
   private Page<Workflow> page;
 
-  @Value("classpath:fwz/unit_test_fake.fwz")
   private Resource fwzFakeResource;
 
-  @Value("classpath:fwz/unit_test_bzip2.tar.bz2")
   private Resource fwzBzip2AsBz2Resource;
 
-  @Value("classpath:fwz/unit_test_bzip2.fwz")
   private Resource fwzBzip2Resource;
 
-  @Value("classpath:fwz/unit_test_gzip.tar.gz")
   private Resource fwzGzipAsGzResource;
 
-  @Value("classpath:fwz/unit_test_gzip-bad_code.fwz")
   private Resource fwzGzipBadCodeResource;
 
-  @Value("classpath:fwz/unit_test_gzip-bad_deserializeas.fwz")
   private Resource fwzGzipBadDeserializeasResource;
 
-  @Value("classpath:fwz/unit_test_gzip-bad_id.fwz")
   private Resource fwzGzipBadIdResource;
 
-  @Value("classpath:fwz/unit_test_gzip-bad_nodes.fwz")
   private Resource fwzGzipBadNodesResource;
 
-  @Value("classpath:fwz/unit_test_gzip-bad_scriptformat.fwz")
   private Resource fwzGzipBadScriptformatResource;
 
-  @Value("classpath:fwz/unit_test_gzip-bad_version.fwz")
   private Resource fwzGzipBadVersionResource;
 
-  @Value("classpath:fwz/unit_test_gzip-java.fwz")
   private Resource fwzGzipJavaResource;
 
-  @Value("classpath:fwz/unit_test_gzip-missing_code.fwz")
   private Resource fwzGzipMisCodeResource;
 
-  @Value("classpath:fwz/unit_test_gzip-missing_deserializeas.fwz")
   private Resource fwzGzipMisDeserializeasResource;
 
-  @Value("classpath:fwz/unit_test_gzip-missing_id.fwz")
   private Resource fwzGzipMisIdResource;
 
-  @Value("classpath:fwz/unit_test_gzip-missing_id_workflow_json.fwz")
   private Resource fwzGzipMisIdWorkflowJsonResource;
 
-  @Value("classpath:fwz/unit_test_gzip-missing_script.fwz")
   private Resource fwzGzipMisScriptResource;
 
-  @Value("classpath:fwz/unit_test_gzip-missing_scriptformat.fwz")
-  private Resource fwzGzipMisScriptformatResource;
-
-  @Value("classpath:fwz/unit_test_gzip-missing_setup.fwz")
   private Resource fwzGzipMisSetupResource;
 
-  @Value("classpath:fwz/unit_test_gzip-missing_version.fwz")
   private Resource fwzGzipMisVersionResource;
 
-  @Value("classpath:fwz/unit_test_gzip-missing_workflow.fwz")
   private Resource fwzGzipMisWorkflowResource;
 
-  @Value("classpath:fwz/unit_test_gzip-odd_files.fwz")
   private Resource fwzGzipOddFilesResource;
 
-  @Value("classpath:fwz/unit_test_gzip-python.fwz")
   private Resource fwzGzipPythonResource;
 
-  @Value("classpath:fwz/unit_test_gzip.fwz")
   private Resource fwzGzipResource;
 
-  @Value("classpath:fwz/unit_test_gzip-ruby.fwz")
   private Resource fwzGzipRubyResource;
 
-  @Value("classpath:fwz/unit_test_gzip-unknown_version.fwz")
   private Resource fwzGzipUnVerResource;
 
-  @Value("classpath:fwz/unit_test_zip.zip")
   private Resource fwzZipAsZipResource;
 
-  @Value("classpath:fwz/unit_test_zip.fwz")
   private Resource fwzZipResource;
 
   private Workflow workflow;
@@ -151,6 +122,33 @@ class WorkflowImportServiceTest {
     workflow.setId(WORKFLOW_UUID);
 
     when(workflowRepo.save(any())).thenReturn(workflow);
+
+    fwzFakeResource = new ClassPathResource("fwz/unit_test_fake.fwz");
+    fwzBzip2AsBz2Resource = new ClassPathResource("fwz/unit_test_bzip2.tar.bz2");
+    fwzBzip2Resource = new ClassPathResource("fwz/unit_test_bzip2.fwz");
+    fwzGzipAsGzResource = new ClassPathResource("fwz/unit_test_gzip.tar.gz");
+    fwzGzipBadCodeResource = new ClassPathResource("fwz/unit_test_gzip-bad_code.fwz");
+    fwzGzipBadDeserializeasResource = new ClassPathResource("fwz/unit_test_gzip-bad_deserializeas.fwz");
+    fwzGzipBadIdResource = new ClassPathResource("fwz/unit_test_gzip-bad_id.fwz");
+    fwzGzipBadNodesResource = new ClassPathResource("fwz/unit_test_gzip-bad_nodes.fwz");
+    fwzGzipBadScriptformatResource = new ClassPathResource("fwz/unit_test_gzip-bad_scriptformat.fwz");
+    fwzGzipBadVersionResource = new ClassPathResource("fwz/unit_test_gzip-bad_version.fwz");
+    fwzGzipJavaResource = new ClassPathResource("fwz/unit_test_gzip-java.fwz");
+    fwzGzipMisCodeResource = new ClassPathResource("fwz/unit_test_gzip-missing_code.fwz");
+    fwzGzipMisDeserializeasResource = new ClassPathResource("fwz/unit_test_gzip-missing_deserializeas.fwz");
+    fwzGzipMisIdResource = new ClassPathResource("fwz/unit_test_gzip-missing_id.fwz");
+    fwzGzipMisIdWorkflowJsonResource = new ClassPathResource("fwz/unit_test_gzip-missing_id_workflow_json.fwz");
+    fwzGzipMisScriptResource = new ClassPathResource("fwz/unit_test_gzip-missing_script.fwz");
+    fwzGzipMisSetupResource = new ClassPathResource("fwz/unit_test_gzip-missing_setup.fwz");
+    fwzGzipMisVersionResource = new ClassPathResource("fwz/unit_test_gzip-missing_version.fwz");
+    fwzGzipMisWorkflowResource = new ClassPathResource("fwz/unit_test_gzip-missing_workflow.fwz");
+    fwzGzipOddFilesResource = new ClassPathResource("fwz/unit_test_gzip-odd_files.fwz");
+    fwzGzipPythonResource = new ClassPathResource("fwz/unit_test_gzip-python.fwz");
+    fwzGzipResource = new ClassPathResource("fwz/unit_test_gzip.fwz");
+    fwzGzipRubyResource = new ClassPathResource("fwz/unit_test_gzip-ruby.fwz");
+    fwzGzipUnVerResource = new ClassPathResource("fwz/unit_test_gzip-unknown_version.fwz");
+    fwzZipAsZipResource = new ClassPathResource("fwz/unit_test_zip.zip");
+    fwzZipResource = new ClassPathResource("fwz/unit_test_zip.fwz");
   }
 
   @Test
