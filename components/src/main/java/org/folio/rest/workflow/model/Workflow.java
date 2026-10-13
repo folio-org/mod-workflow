@@ -24,7 +24,8 @@ import java.util.Map;
 import org.folio.rest.workflow.model.converter.JsonNodeConverter;
 import org.folio.rest.workflow.model.has.HasChecksum;
 import org.folio.rest.workflow.model.has.HasCreatedOn;
-import org.folio.rest.workflow.model.has.HasDeploymentId;
+import org.folio.rest.workflow.model.has.HasTenantId;
+import org.folio.rest.workflow.model.has.HasDeploymentIds;
 import org.folio.rest.workflow.model.has.HasId;
 import org.folio.rest.workflow.model.has.HasInformational;
 import org.folio.rest.workflow.model.has.HasName;
@@ -41,7 +42,7 @@ import tools.jackson.databind.JsonNode;
 
 @Entity
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
-public class Workflow extends AbstractBaseEntity implements HasChecksum, HasCreatedOn, HasDeploymentId, HasId, HasInformational, HasName, HasNodes, HasUpdatedOn, HasVersionTag, HasWorkflowCommon {
+public class Workflow extends AbstractBaseEntity implements HasChecksum, HasCreatedOn, HasTenantId, HasDeploymentIds, HasId, HasInformational, HasName, HasNodes, HasUpdatedOn, HasVersionTag, HasWorkflowCommon {
 
   @Column(nullable = true)
   @ColumnDefault("false")
@@ -55,8 +56,13 @@ public class Workflow extends AbstractBaseEntity implements HasChecksum, HasCrea
   @Column(columnDefinition="TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW()")
   private Instant createdOn;
 
-  @Column(unique = true)
-  private String deploymentId;
+  @NotNull
+  @Column
+  private String tenantId;
+
+  @OneToMany 
+  @OrderColumn 
+  private String[] deploymentIds;
 
   @Size(min = 0, max = 512)
   @Column(nullable = true)
@@ -206,8 +212,13 @@ public class Workflow extends AbstractBaseEntity implements HasChecksum, HasCrea
   }
 
   @Override
-  public String getDeploymentId() {
-    return deploymentId;
+  public String getTenantId() {
+    return tenantId;
+  }
+
+  @Override
+  public String[] getDeploymentIds() {
+    return deploymentIds;
   }
 
   @Override
@@ -266,8 +277,13 @@ public class Workflow extends AbstractBaseEntity implements HasChecksum, HasCrea
   }
 
   @Override
-  public void setDeploymentId(String deploymentId) {
-    this.deploymentId = deploymentId;
+  public void setTenantId(String tenantId) {
+    this.tenantId = tenantId;
+  }
+
+  @Override
+  public void setDeploymentIds(String[] deploymentIds) {
+    this.deploymentIds = deploymentIds;
   }
 
   /**

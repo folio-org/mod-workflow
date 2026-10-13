@@ -33,7 +33,7 @@ class WorkflowTest {
   private static final String CHECKSUM          = "checksum";
   private static final String CREATEDON         = "createdOn";
   private static final String DESCRIPTION       = "description";
-  private static final String DEPLOYMENTID      = "deploymentId";
+  private static final String DEPLOYMENTIDS     = "deploymentIds";
   private static final String HISTORYTIMETOLIVE = "historyTimeToLive";
   private static final String ID                = "id";
   private static final String INITIALCONTEXT    = "initialContext";
@@ -75,12 +75,15 @@ class WorkflowTest {
 
   private Workflow workflow;
 
+  private String[] deploymentIds;
+
   @BeforeEach
   void beforeEach() {
     workflow = spy(Workflow.class);
     nodes = new ArrayList<>();
     nodes.add(node);
     initialContext = new HashMap<>();
+    deploymentIds = new String[]{VALUE};
 
     lenient().doReturn(NOW).when(workflow).now();
   }
@@ -221,18 +224,18 @@ class WorkflowTest {
   }
 
   @Test
-  void getDeploymentIdWorksTest() {
-    setField(workflow, DEPLOYMENTID, VALUE);
+  void getDeploymentIdsWorksTest() {
+    setField(workflow, DEPLOYMENTIDS, deploymentIds);
 
-    assertEquals(VALUE, workflow.getDeploymentId());
+    assertEquals(deploymentIds, workflow.getDeploymentIds());
   }
 
   @Test
-  void setDeploymentIdWorksTest() {
-    setField(workflow, DEPLOYMENTID, null);
+  void setDeploymentIdsWorksTest() {
+    setField(workflow, DEPLOYMENTIDS, null);
 
-    workflow.setDeploymentId(VALUE);
-    assertEquals(VALUE, getField(workflow, DEPLOYMENTID));
+    workflow.setDeploymentIds(deploymentIds);
+    assertEquals(deploymentIds, getField(workflow, DEPLOYMENTIDS));
   }
 
   @Test
