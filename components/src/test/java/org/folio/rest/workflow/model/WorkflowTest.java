@@ -83,7 +83,7 @@ class WorkflowTest {
     nodes = new ArrayList<>();
     nodes.add(node);
     initialContext = new HashMap<>();
-    deploymentIds = new String[]{VALUE};
+    deploymentIds = new String[] { VALUE };
 
     lenient().doReturn(NOW).when(workflow).now();
   }

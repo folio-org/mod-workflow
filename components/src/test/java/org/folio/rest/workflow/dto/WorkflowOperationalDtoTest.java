@@ -18,7 +18,7 @@ class WorkflowOperationalDtoTest {
   @BeforeEach
   void beforeEach() {
     workflowDto = new Impl();
-    deploymentIds = new String[]{VALUE};
+    deploymentIds = new String[] { VALUE };
   }
 
   @Test

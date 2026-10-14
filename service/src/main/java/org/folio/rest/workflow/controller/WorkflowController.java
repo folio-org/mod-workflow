@@ -101,7 +101,7 @@ public class WorkflowController {
   ) throws WorkflowEngineServiceException, WorkflowNotFoundException {
     LOG.info(String.format("Activating: %s", sanitize(id)));
 
-    workflowEngineService.exists(id);
+    workflowEngineService.exists(id, tenant);
 
     return workflowEngineService.activate(id, tenant, token);
   }
@@ -114,7 +114,7 @@ public class WorkflowController {
   ) throws WorkflowEngineServiceException, WorkflowNotFoundException {
     LOG.info(String.format("Deactivating: %s", sanitize(id)));
 
-    workflowEngineService.exists(id);
+    workflowEngineService.exists(id, tenant);
 
     return workflowEngineService.deactivate(id, tenant, token);
   }
@@ -127,7 +127,7 @@ public class WorkflowController {
   ) throws WorkflowEngineServiceException, WorkflowNotFoundException, WorkflowDeploymentNotActivated {
     LOG.info(String.format("Deleting: %s", sanitize(id)));
 
-    workflowEngineService.exists(id);
+    workflowEngineService.exists(id, tenant);
 
     workflowEngineService.delete(id, tenant, token);
 
@@ -146,6 +146,26 @@ public class WorkflowController {
     return workflowEngineService.history(id, tenant, token);
   }
 
+  /**
+   * Fetch the history of a workflow for a given deployment ID.
+   * 
+   * @param id The workflow ID.
+   * @param deploymentId The activated workflow deployment ID.
+   * @param tenant The tenant.
+   * @param token The token.
+   */
+  @GetMapping(value = "/{id}/history/{deploymentId}", produces = { MediaType.APPLICATION_JSON_VALUE })
+  public JsonNode workflowHistoryForDeployment(
+    @PathVariable String id,
+    @PathVariable String deploymentId,
+    @TenantHeader String tenant,
+    @TokenHeader String token
+  ) throws WorkflowDeploymentNotFound, WorkflowEngineServiceException, WorkflowDeploymentNotActivated, WorkflowNotFoundException {
+    LOG.debug(String.format("Retrieving History: %s", sanitize(id)));
+
+    return workflowEngineService.historyForDeployment(id, deploymentId, tenant, token);
+  }
+
   @PostMapping(value = "/{id}/start", produces = { MediaType.APPLICATION_JSON_VALUE })
   public JsonNode startWorkflow(
     @PathVariable String id,
@@ -155,6 +175,27 @@ public class WorkflowController {
   ) throws WorkflowDeploymentNotFound, WorkflowEngineServiceException, WorkflowNotFoundException, WorkflowDeploymentNotActivated {
     LOG.info(String.format("Starting: %s with context %s", sanitize(id), sanitize(context)));
     return workflowEngineService.start(id, tenant, token, context);
+  }
+
+  /**
+   * Start workflow for a given deployment ID.
+   * 
+   * @param id The workflow ID.
+   * @param deploymentId The activated workflow deployment ID.
+   * @param tenant The tenant.
+   * @param token The token.
+   * @param context The request body context.
+   */
+  @PostMapping(value = "/{id}/start/{deploymentId}", produces = { MediaType.APPLICATION_JSON_VALUE })
+  public JsonNode startWorkflowForDeployment(
+    @PathVariable String id,
+    @PathVariable String deploymentId,
+    @TenantHeader String tenant,
+    @TokenHeader String token,
+    @RequestBody JsonNode context
+  ) throws WorkflowDeploymentNotFound, WorkflowEngineServiceException, WorkflowNotFoundException, WorkflowDeploymentNotActivated {
+    LOG.info(String.format("Starting: %s with context %s", sanitize(id), sanitize(context)));
+    return workflowEngineService.startForDeployment(id, deploymentId, tenant, token, context);
   }
 
   /**

@@ -258,7 +258,7 @@ class WorkflowControllerTest {
   @ParameterizedTest
   @MethodSource("provideHeadersBodyStatusForDeleteWorkflow")
   void deleteWorkflowTest(HttpHeaders headers, String contentType, String accept, MediaType mediaType, MultiValueMap<String, String> parameters, String body, int status) throws Exception {
-    lenient().doNothing().when(workflowEngineService).exists(anyString());
+    lenient().doNothing().when(workflowEngineService).exists(anyString(), anyString());
     lenient().doNothing().when(workflowEngineService).delete(any(), any(), any());
 
     MockHttpServletRequestBuilder request = appendHeaders(delete(PATH_DELETE), headers, contentType, accept);
@@ -270,7 +270,7 @@ class WorkflowControllerTest {
 
   @Test
   void deleteWorkflowThrowsNotFoundTest() throws Exception {
-    lenient().doThrow(WorkflowNotFoundException.class).when(workflowEngineService).exists(anyString());
+    lenient().doThrow(WorkflowNotFoundException.class).when(workflowEngineService).exists(anyString(), anyString());
 
     Assertions.assertThatThrownBy(() -> {
       MockHttpServletRequestBuilder request = appendHeaders(delete(PATH_DELETE), OKAPI_HEAD_TENANT, APP_JSON, APP_JSON);
@@ -283,7 +283,7 @@ class WorkflowControllerTest {
 
   @Test
   void deleteWorkflowThrowsNotFoundInvalidIdSanitizeTest() throws Exception {
-    lenient().doThrow(WorkflowNotFoundException.class).when(workflowEngineService).exists(anyString());
+    lenient().doThrow(WorkflowNotFoundException.class).when(workflowEngineService).exists(anyString(), anyString());
 
     Assertions.assertThatThrownBy(() -> {
       MockHttpServletRequestBuilder request = appendHeaders(delete(PATH_DELETE_INVALID), OKAPI_HEAD_TENANT, APP_JSON, APP_JSON);
@@ -297,7 +297,7 @@ class WorkflowControllerTest {
   @ParameterizedTest
   @MethodSource("provideGetPatchPostPutFor")
   void deleteWorkflowFailsTest(Method method, HttpHeaders headers, String contentType, String accept, MediaType mediaType, MultiValueMap<String, String> parameters, String body, int status) throws Exception {
-    lenient().doNothing().when(workflowEngineService).exists(anyString());
+    lenient().doNothing().when(workflowEngineService).exists(anyString(), anyString());
 
     mvc.perform(invokeRequestBuilder(PATH_DELETE, method, headers, contentType, accept, parameters, body))
     .andDo(log()).andExpect(status().is(status));

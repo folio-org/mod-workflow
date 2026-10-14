@@ -83,27 +83,33 @@ class WorkflowEngineServiceTest {
 
   private JsonMapper mapper;
 
+  private String[] deploymentIds;
+
   @BeforeEach
   void beforeEach() {
     mapper = MapperHelper.build();
     workflowEngineService = new WorkflowEngineService(deleteService, workflowRepo, mapper, new RestTemplateBuilder());
 
     nodes = List.of();
+    deploymentIds = new String[] { UUID };
 
     workflow = new WorkflowAsDto();
     workflow.setId(UUID);
-    workflow.setDeploymentId(UUID);
+    workflow.setTenantId(OKAPI_TENANT);
+    workflow.setDeploymentIds(deploymentIds);
     workflow.setName(VALUE);
 
     workflowOperational = new WorkflowAsOperationalDto();
     workflowOperational.setId(UUID);
-    workflowOperational.setDeploymentId(UUID);
+    workflowOperational.setTenantId(OKAPI_TENANT);
+    workflowOperational.setDeploymentIds(deploymentIds);
     workflowOperational.setName(VALUE);
     workflowOperational.setVersionTag(VALUE);
 
     workflowOperationalNode = new WorkflowAsOperationalNodeDto();
     workflowOperationalNode.setId(UUID);
-    workflowOperationalNode.setDeploymentId(UUID);
+    workflowOperationalNode.setTenantId(OKAPI_TENANT);
+    workflowOperationalNode.setDeploymentIds(deploymentIds);
     workflowOperationalNode.setName(VALUE);
     workflowOperationalNode.setNodes(nodes);
     workflowOperationalNode.setVersionTag(VALUE);
@@ -115,7 +121,7 @@ class WorkflowEngineServiceTest {
   }
 
   @Test
-  void activateWorksTest() throws WorkflowEngineServiceException {
+  void activateWorksTest() throws WorkflowEngineServiceException, WorkflowNotFoundException {
     WorkflowDto workflowDto = (WorkflowDto) workflow;
     ResponseEntity<Workflow> responseEntity = new ResponseEntity<>(HttpStatus.OK);
     setField(responseEntity, "body", workflow);
@@ -134,7 +140,7 @@ class WorkflowEngineServiceTest {
   }
 
   @Test
-  void activateWithoutHeadersTest() throws WorkflowEngineServiceException {
+  void activateWithoutHeadersTest() throws WorkflowEngineServiceException, WorkflowNotFoundException {
     WorkflowDto workflowDto = (WorkflowDto) workflow;
     ResponseEntity<Workflow> responseEntity = new ResponseEntity<>(HttpStatus.OK);
     setField(responseEntity, "body", workflow);
@@ -153,7 +159,7 @@ class WorkflowEngineServiceTest {
   }
 
   @Test
-  void deactivateWorksTest() throws WorkflowEngineServiceException {
+  void deactivateWorksTest() throws WorkflowEngineServiceException, WorkflowNotFoundException {
     WorkflowDto workflowDto = (WorkflowDto) workflow;
     ResponseEntity<Workflow> responseEntity = new ResponseEntity<>(HttpStatus.OK);
     setField(responseEntity, "body", workflow);
@@ -172,7 +178,7 @@ class WorkflowEngineServiceTest {
   }
 
   @Test
-  void deleteWorksTest() throws WorkflowEngineServiceException, WorkflowDeploymentNotActivated {
+  void deleteWorksTest() throws WorkflowEngineServiceException, WorkflowDeploymentNotActivated, WorkflowNotFoundException {
 
     final ObjectNode objectNode = JsonNodeFactory.instance.objectNode();
     objectNode.put("id", UUID);
@@ -207,7 +213,7 @@ class WorkflowEngineServiceTest {
   }
 
   @Test
-  void deleteNotActiveWorksTest() throws WorkflowEngineServiceException, WorkflowDeploymentNotActivated {
+  void deleteNotActiveWorksTest() throws WorkflowEngineServiceException, WorkflowDeploymentNotActivated, WorkflowNotFoundException {
 
     ArrayNode arrayNodeSingle = JsonNodeFactory.instance.arrayNode();
 
@@ -331,7 +337,7 @@ class WorkflowEngineServiceTest {
   void existsWorksTest() {
     when(workflowRepo.existsById(anyString())).thenReturn(true);
 
-    assertDoesNotThrow(() -> workflowEngineService.exists(UUID));
+    assertDoesNotThrow(() -> workflowEngineService.exists(UUID, UUID));
   }
 
   @Test
@@ -339,7 +345,7 @@ class WorkflowEngineServiceTest {
     when(workflowRepo.existsById(anyString())).thenReturn(false);
 
     assertThrows(WorkflowNotFoundException.class, () -> {
-      workflowEngineService.exists(UUID);
+      workflowEngineService.exists(UUID, UUID);
     });
   }
 
@@ -427,7 +433,7 @@ class WorkflowEngineServiceTest {
   @Test
   void startThrowsExceptionDeploymentIdMissingTest() {
     WorkflowOperationalDto workflowOperationalDto = (WorkflowOperationalDto) workflowOperational;
-    workflowOperationalDto.setDeploymentId(null);
+    workflowOperationalDto.setDeploymentIds(null);
 
     ResponseEntity<ArrayNode> responseEntity = new ResponseEntity<>(HttpStatus.RESET_CONTENT);
     JsonNode context = mapper.createObjectNode();

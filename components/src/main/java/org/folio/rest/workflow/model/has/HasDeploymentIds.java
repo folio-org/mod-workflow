@@ -7,5 +7,5 @@ public interface HasDeploymentIds {
 
   public String[] getDeploymentIds();
 
-  public void setDeploymentIds(String[] deploymentId);
+  public void setDeploymentIds(String[] deploymentIds);
 }

@@ -3,6 +3,7 @@ package org.folio.rest.workflow.dto;
 import org.folio.rest.workflow.model.has.HasDeploymentIds;
 import org.folio.rest.workflow.model.has.HasId;
 import org.folio.rest.workflow.model.has.HasNodes;
+import org.folio.rest.workflow.model.has.HasTenantId;
 import org.folio.rest.workflow.model.has.HasVersionTag;
 
 /**
@@ -10,6 +11,6 @@ import org.folio.rest.workflow.model.has.HasVersionTag;
  *
  * This is intended to be used for a proper delete operation.
  */
-public interface WorkflowOperationalNodeDto extends HasDeploymentIds, HasId, HasNodes, HasVersionTag {
+public interface WorkflowOperationalNodeDto extends HasTenantId, HasDeploymentIds, HasId, HasNodes, HasVersionTag {
 
 }

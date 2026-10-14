@@ -36,7 +36,7 @@ class WorkflowDtoTest {
     workflowDto = new Impl();
     nodes = new ArrayList<>();
     nodes.add(node);
-    deploymentIds = new String[]{VALUE};
+    deploymentIds = new String[] { VALUE };
   }
 
   @Test

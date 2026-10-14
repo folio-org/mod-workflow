@@ -25,7 +25,7 @@ class WorkflowOperationalNodeDtoTest {
   @BeforeEach
   void beforeEach() {
     dto = new Impl();
-    deploymentids = new String[]{VALUE};
+    deploymentids = new String[] { VALUE };
   }
 
   @Test

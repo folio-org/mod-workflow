@@ -76,18 +76,24 @@ public class WorkflowEngineService {
   }
 
   public Workflow activate(String workflowId, String tenant, String token)
-      throws WorkflowEngineServiceException {
+      throws WorkflowEngineServiceException, WorkflowNotFoundException {
 
     WorkflowDto workflow = workflowRepo.getViewById(workflowId, WorkflowDto.class);
-    // TODO: check for tenantId match?
+    if (workflow == null || workflow.getTenantId() != tenant) {
+      throw new WorkflowNotFoundException(workflowId);
+    }
+
     return sendWorkflowRequest(workflow, WORKFLOW_ENGINE_ACTIVATE_URL_TEMPLATE, tenant, token);
   }
 
   public Workflow deactivate(String workflowId, String tenant, String token)
-      throws WorkflowEngineServiceException {
+      throws WorkflowEngineServiceException, WorkflowNotFoundException {
 
     WorkflowDto workflow = workflowRepo.getViewById(workflowId, WorkflowDto.class);
-    // TODO: check for tenantId match?
+    if (workflow == null || workflow.getTenantId() != tenant) {
+      throw new WorkflowNotFoundException(workflowId);
+    }
+
     return sendWorkflowRequest(workflow, WORKFLOW_ENGINE_DEACTIVATE_URL_TEMPLATE, tenant, token);
   }
 
@@ -103,11 +109,13 @@ public class WorkflowEngineService {
    */
   @Transactional(rollbackFor = Exception.class)
   public void delete(String workflowId, String tenant, String token)
-      throws WorkflowDeploymentNotActivated, WorkflowEngineServiceException {
+      throws WorkflowDeploymentNotActivated, WorkflowEngineServiceException, WorkflowNotFoundException {
 
     final WorkflowOperationalNodeDto workflow = workflowRepo.getViewById(workflowId, WorkflowOperationalNodeDto.class);
 
-    // TODO: check for tenantId match?
+    if (workflow == null || workflow.getTenantId() != tenant) {
+      throw new WorkflowNotFoundException(workflowId);
+    }
 
     // Deployment ID will not exist if it has not been activated.
     if (workflow.getDeploymentIds() != null && workflow.getDeploymentIds().length > 0) {
@@ -123,11 +131,17 @@ public class WorkflowEngineService {
    * Check that the Workflow exists or throw an exception.
    *
    * @param workflowId The Workflow to check.
+   * @param tenant The tenant of the workflow.
    *
    * @throws WorkflowNotFoundException The exception when the Workflow is not found.
    */
-  public void exists(String workflowId) throws WorkflowNotFoundException {
+  public void exists(String workflowId, String tenant) throws WorkflowNotFoundException {
     if (!workflowRepo.existsById(workflowId)) {
+      throw new WorkflowNotFoundException(workflowId);
+    }
+
+    WorkflowOperationalDto workflow = workflowRepo.getViewById(workflowId, WorkflowOperationalDto.class);
+    if (workflow == null || workflow.getTenantId() != tenant) {
       throw new WorkflowNotFoundException(workflowId);
     }
   }
@@ -137,19 +151,41 @@ public class WorkflowEngineService {
 
     WorkflowOperationalDto workflow = workflowRepo.getViewById(workflowId, WorkflowOperationalDto.class);
 
-    if (workflow == null) {
+    if (workflow == null || workflow.getTenantId() != tenant) {
       throw new WorkflowNotFoundException(workflowId);
     }
 
-    // TODO: check for tenant match?
-
     String[] deploymentIds = workflow.getDeploymentIds();
+    ArrayNode workflowStartNode = mapper.createArrayNode();
+
+    for (String deploymentId : deploymentIds) {
+      JsonNode deploymentStart = startForDeployment(workflowId, deploymentId, tenant, token, context);
+      
+      ObjectNode deploymentStartWrapper = mapper.createObjectNode();
+      deploymentStartWrapper.put("deploymentId", deploymentId)
+        .set("start", deploymentStart);
+      
+      workflowStartNode.add(deploymentStartWrapper);
+    }
+
+    return workflowStartNode;
+  }
+
+  public JsonNode startForDeployment(String workflowId, String deploymentId, String tenant, String token, JsonNode context)
+      throws WorkflowDeploymentNotFound, WorkflowEngineServiceException, WorkflowNotFoundException, WorkflowDeploymentNotActivated {
+    
+    WorkflowOperationalDto workflow = workflowRepo.getViewById(workflowId, WorkflowOperationalDto.class);
+
+    if (workflow == null || workflow.getTenantId() != tenant) {
+      throw new WorkflowNotFoundException(workflowId);
+    }
+
     String version = workflow.getVersionTag();
 
-    JsonNode definition = fetchFirstDeploymentDefinition(workflowId, deploymentIds, version, tenant, token);
+    JsonNode definition = fetchFirstDeploymentDefinition(workflowId, deploymentId, version, tenant, token);
 
     if (!definition.has("id") ) {
-      throw new WorkflowEngineServiceException(String.format("Workflow ID '%s' with Deployment IDs '%s' has no definition ID!", workflowId, Arrays.toString(deploymentIds)));
+      throw new WorkflowEngineServiceException(String.format("Workflow ID '%s' with Deployment ID '%s' has no definition ID!", workflowId, deploymentId));
     }
 
     String definitionId = definition.get("id").asString();
@@ -177,16 +213,46 @@ public class WorkflowEngineService {
 
     WorkflowOperationalDto workflow = workflowRepo.getViewById(workflowId, WorkflowOperationalDto.class);
 
-    if (workflow == null) {
+    if (workflow == null || workflow.getTenantId() != tenant) {
       throw new WorkflowNotFoundException(workflowId);
     }
 
-    // TODO: check for tenant match?
-
     String[] deploymentIds = workflow.getDeploymentIds();
+    ArrayNode workflowHistoryNode = mapper.createArrayNode();
+
+    for (String deploymentId : deploymentIds) {
+      JsonNode deploymentHistory = historyForDeployment(workflowId, deploymentId, tenant, token);
+
+      ObjectNode deploymentHistoryWrapper = mapper.createObjectNode();
+      deploymentHistoryWrapper.put("deploymentId", deploymentId)
+        .set("history", deploymentHistory);
+      
+        workflowHistoryNode.add(deploymentHistoryWrapper);
+    }
+
+    return workflowHistoryNode;
+  }
+
+  /**
+   * Fetch the history of a workflow for a given deployment ID.
+   * 
+   * @param workflowId The workflow ID.
+   * @param deploymentId The activated workflow deployment ID.
+   * @param tenant The tenant.
+   * @param token The token.
+   */
+  public JsonNode historyForDeployment(String workflowId, String deploymentId, String tenant, String token)
+      throws WorkflowDeploymentNotFound, WorkflowEngineServiceException, WorkflowDeploymentNotActivated, WorkflowNotFoundException {
+    
+    WorkflowOperationalDto workflow = workflowRepo.getViewById(workflowId, WorkflowOperationalDto.class);
+
+    if (workflow == null || workflow.getTenantId() != tenant) {
+      throw new WorkflowNotFoundException(workflowId);
+    }
+
     String version = workflow.getVersionTag();
 
-    JsonNode processDefinition = fetchFirstDeploymentDefinition(workflowId, deploymentIds, version, tenant, token);
+    JsonNode processDefinition = fetchFirstDeploymentDefinition(workflowId, deploymentId, version, tenant, token);
     String processDefinitionId = processDefinition.get("id").asString();
 
     ArrayNode instances = fetchProcessInstanceHistory(processDefinitionId, tenant, token);
@@ -218,35 +284,49 @@ public class WorkflowEngineService {
    * @throws WorkflowEngineServiceException When the request fails in some way preventing the return of an HttpEntity.
    */
   private void deleteDeployment(WorkflowOperationalNodeDto workflow, String tenant, String token)
-    throws WorkflowDeploymentNotActivated, WorkflowEngineServiceException{
+    throws WorkflowDeploymentNotActivated, WorkflowEngineServiceException, WorkflowNotFoundException {
 
     final String[] deploymentIds = workflow.getDeploymentIds();
     final String id = workflow.getId();
     final String version = workflow.getVersionTag();
 
-    final ResponseEntity<ArrayNode> response = fetchDeploymentDefinitions(id, deploymentIds, version, tenant, token);
+    for (String deploymentId : deploymentIds) {
 
-    if (response.getStatusCode() == HttpStatus.OK || response.getStatusCode() == HttpStatus.NOT_FOUND) {
+      final ResponseEntity<ArrayNode> response = fetchDeploymentDefinitions(id, deploymentId, version, tenant, token);
 
-      final ArrayNode definitions = response.hasBody()
-        ? response.getBody()
-        : null;
+      if (response.getStatusCode() == HttpStatus.OK || response.getStatusCode() == HttpStatus.NOT_FOUND) {
 
-      if (definitions != null && response.getStatusCode() != HttpStatus.NOT_FOUND && !definitions.isEmpty()) {
-        try {
-          deactivate(id, tenant, token);
-        } catch (WorkflowEngineServiceException e) {
-          final String message = String.format(
-            "Failed to delete Workflow ID '%s' for Deployment IDs '%s' and Version Tag '%s' due to deactivation failure: %s!",
-            id,
-            Arrays.toString(deploymentIds),
-            version,
-            e.getMessage()
-          );
+        final ArrayNode definitions = response.hasBody()
+          ? response.getBody()
+          : null;
 
-          throw new WorkflowEngineServiceException(message, e);
+        if (definitions != null && response.getStatusCode() != HttpStatus.NOT_FOUND && !definitions.isEmpty()) {
+          try {
+            deactivate(id, tenant, token);
+          } catch (WorkflowEngineServiceException e) {
+            final String message = String.format(
+              "Failed to delete Workflow ID '%s' for Deployment ID '%s' and Version Tag '%s' due to deactivation failure: %s!",
+              id,
+              deploymentId,
+              version,
+              e.getMessage()
+            );
+
+            throw new WorkflowEngineServiceException(message, e);
+          } catch (WorkflowNotFoundException e) {
+            final String message = String.format(
+              "Failed to delete Workflow ID '%s' for Deployment Id '%s' and Version Tag '%s' due to deactivation failure: %s!",
+              id,
+              deploymentId,
+              version,
+              e.getMessage()
+            );
+
+            throw new WorkflowNotFoundException(message, e);
+          }
         }
       }
+    
     }
   }
 
@@ -394,9 +474,7 @@ public class WorkflowEngineService {
       if (response.getStatusCode() == HttpStatus.OK) {
         Workflow responseWorkflow = response.getBody();
 
-        // TODO: check for tenantId match?
-
-        if (responseWorkflow != null) {
+        if (responseWorkflow != null && workflow.getTenantId() == tenant) {
           String[] deploymentIds = responseWorkflow.getDeploymentIds();
           Boolean active = responseWorkflow.getActive();
 
