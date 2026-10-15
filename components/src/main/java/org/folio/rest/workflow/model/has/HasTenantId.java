@@ -7,5 +7,5 @@ public interface HasTenantId {
 
   public String getTenantId();
 
-  public void setTenantId(String deploymentId);
+  public void setTenantId(String tenantId);
 }

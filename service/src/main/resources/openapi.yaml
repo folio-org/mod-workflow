@@ -10496,6 +10496,69 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/JsonNode"
+  /workflows/{id}/start/{deploymentId}:
+    post:
+      tags:
+      - workflow-controller
+      operationId: startWorkflowForDeployment
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: deploymentId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: tenant
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: token
+        in: query
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/JsonNode"
+        required: true
+      responses:
+        "500":
+          description: Internal Server Error
+          content:
+            application/hal+json:
+              schema:
+                $ref: "#/components/schemas/ResponseErrors"
+        "404":
+          description: Not Found
+          content:
+            application/hal+json:
+              schema:
+                $ref: "#/components/schemas/ResponseErrors"
+        "204":
+          description: No Content
+          content:
+            application/hal+json:
+              schema:
+                $ref: "#/components/schemas/ResponseErrors"
+        "400":
+          description: Bad Request
+          content:
+            application/hal+json:
+              schema:
+                $ref: "#/components/schemas/ResponseErrors"
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/JsonNode"
   /workflows/import:
     post:
       tags:
@@ -10730,6 +10793,63 @@ paths:
       operationId: workflowHistory
       parameters:
       - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: tenant
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: token
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        "500":
+          description: Internal Server Error
+          content:
+            application/hal+json:
+              schema:
+                $ref: "#/components/schemas/ResponseErrors"
+        "404":
+          description: Not Found
+          content:
+            application/hal+json:
+              schema:
+                $ref: "#/components/schemas/ResponseErrors"
+        "204":
+          description: No Content
+          content:
+            application/hal+json:
+              schema:
+                $ref: "#/components/schemas/ResponseErrors"
+        "400":
+          description: Bad Request
+          content:
+            application/hal+json:
+              schema:
+                $ref: "#/components/schemas/ResponseErrors"
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/JsonNode"
+  /workflows/{id}/history/{deploymentId}:
+    get:
+      tags:
+      - workflow-controller
+      operationId: workflowHistoryForDeployment
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: deploymentId
         in: path
         required: true
         schema:

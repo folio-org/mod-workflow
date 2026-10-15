@@ -5,7 +5,6 @@ import static org.folio.spring.test.mock.MockMvcConstant.APP_RAML;
 import static org.folio.spring.test.mock.MockMvcConstant.APP_SCHEMA;
 import static org.folio.spring.test.mock.MockMvcConstant.APP_STAR;
 import static org.folio.spring.test.mock.MockMvcConstant.APP_STREAM;
-import static org.folio.spring.test.mock.MockMvcConstant.ID_PARAM;
 import static org.folio.spring.test.mock.MockMvcConstant.JSON_OBJECT;
 import static org.folio.spring.test.mock.MockMvcConstant.KEY;
 import static org.folio.spring.test.mock.MockMvcConstant.MT_APP_JSON;
@@ -39,7 +38,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.lenient;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -130,6 +128,10 @@ class WorkflowControllerTest {
   private static final String PATH_HISTORY = PATH + "/" + UUID + "/history";
 
   private static final String PATH_START = PATH + "/" + UUID + "/start";
+
+  private static final String PATH_START_FOR_DEPLOYMENT = PATH_START + "/" + UUID;
+
+  private static final String PATH_HISTORY_FOR_DEPLOYMENT = PATH_HISTORY + "/" + UUID;
 
   private static final MultiValueMap<String, String> ID_PARAM = CollectionUtils.toMultiValueMap(Map.of(
     ID, List.of(UUID),
@@ -337,9 +339,38 @@ class WorkflowControllerTest {
   }
 
   @ParameterizedTest
+  @MethodSource("provideHeadersBodyStatusForStartWorkflow")
+  void startForDeploymentWorkflowTest(HttpHeaders headers, String contentType, String accept, MediaType mediaType, MultiValueMap<String, String> parameters, String body, int status) throws Exception {
+    ObjectNode objectNode = mapper.createObjectNode();
+    objectNode.put(KEY, VALUE);
+
+    lenient().when(workflowEngineService.startForDeployment(any(), any(), any(), any(), any())).thenReturn(objectNode);
+
+    MockHttpServletRequestBuilder request = appendHeaders(post(PATH_START_FOR_DEPLOYMENT), headers, contentType, accept);
+    request = appendParameters(request, parameters);
+
+    MvcResult result = mvc.perform(appendBody(request, body))
+      .andDo(log()).andExpect(status().is(status)).andReturn();
+
+    if (status == 200) {
+      MediaType responseType = MediaType.parseMediaType(result.getResponse().getContentType());
+
+      assertTrue(mediaType.isCompatibleWith(responseType));
+      assertEquals(objectNode.toString(), result.getResponse().getContentAsString());
+    }
+  }
+
+  @ParameterizedTest
   @MethodSource("provideDeleteGetPatchPutFor")
   void startWorkflowFailsTest(Method method, HttpHeaders headers, String contentType, String accept, MediaType mediaType, MultiValueMap<String, String> parameters, String body, int status) throws Exception {
     mvc.perform(invokeRequestBuilder(PATH_START, method, headers, contentType, accept, parameters, body))
+    .andDo(log()).andExpect(status().is(status));
+  }
+
+  @ParameterizedTest
+  @MethodSource("provideDeleteGetPatchPutFor")
+  void startForDeploymentWorkflowFailsTest(Method method, HttpHeaders headers, String contentType, String accept, MediaType mediaType, MultiValueMap<String, String> parameters, String body, int status) throws Exception {
+    mvc.perform(invokeRequestBuilder(PATH_START_FOR_DEPLOYMENT, method, headers, contentType, accept, parameters, body))
     .andDo(log()).andExpect(status().is(status));
   }
 
@@ -366,9 +397,38 @@ class WorkflowControllerTest {
   }
 
   @ParameterizedTest
+  @MethodSource("provideHeadersBodyStatusFor")
+  void workflowHistoryForDeploymentTest(HttpHeaders headers, String contentType, String accept, MediaType mediaType, MultiValueMap<String, String> parameters, String body, int status) throws Exception {
+    ObjectNode objectNode = mapper.createObjectNode();
+    objectNode.put(KEY, VALUE);
+
+    lenient().when(workflowEngineService.historyForDeployment(any(), any(), any(), any())).thenReturn(objectNode);
+
+    MockHttpServletRequestBuilder request = appendHeaders(get(PATH_HISTORY_FOR_DEPLOYMENT), headers, contentType, accept);
+    request = appendParameters(request, parameters);
+
+    MvcResult result = mvc.perform(appendBody(request, body))
+      .andDo(log()).andExpect(status().is(status)).andReturn();
+
+    if (status == 200) {
+      MediaType responseType = MediaType.parseMediaType(result.getResponse().getContentType());
+
+      assertTrue(mediaType.isCompatibleWith(responseType));
+      assertEquals(objectNode.toString(), result.getResponse().getContentAsString());
+    }
+  }
+
+  @ParameterizedTest
   @MethodSource("provideDeletePatchPostPutFor")
   void workflowHistoryFailsTest(Method method, HttpHeaders headers, String contentType, String accept, MediaType mediaType, MultiValueMap<String, String> parameters, String body, int status) throws Exception {
     mvc.perform(invokeRequestBuilder(PATH_HISTORY, method, headers, contentType, accept, parameters, body))
+    .andDo(log()).andExpect(status().is(status));
+  }
+
+  @ParameterizedTest
+  @MethodSource("provideDeletePatchPostPutFor")
+  void workflowHistoryForDeploymentFailsTest(Method method, HttpHeaders headers, String contentType, String accept, MediaType mediaType, MultiValueMap<String, String> parameters, String body, int status) throws Exception {
+    mvc.perform(invokeRequestBuilder(PATH_HISTORY_FOR_DEPLOYMENT, method, headers, contentType, accept, parameters, body))
     .andDo(log()).andExpect(status().is(status));
   }
 
