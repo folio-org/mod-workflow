@@ -156,6 +156,10 @@ public class WorkflowEngineService {
     }
 
     String[] deploymentIds = workflow.getDeploymentIds();
+    if (deploymentIds == null || deploymentIds.length == 0) {
+      throw new WorkflowEngineServiceException(String.format("Workflow ID '%s' has no associated Deployment ID!", workflowId));
+    }
+    
     ArrayNode workflowStartNode = mapper.createArrayNode();
 
     for (String deploymentId : deploymentIds) {
@@ -474,7 +478,7 @@ public class WorkflowEngineService {
       if (response.getStatusCode() == HttpStatus.OK) {
         Workflow responseWorkflow = response.getBody();
 
-        if (responseWorkflow != null && workflow.getTenantId() == tenant) {
+        if (responseWorkflow != null && responseWorkflow.getTenantId() == tenant) {
           String[] deploymentIds = responseWorkflow.getDeploymentIds();
           Boolean active = responseWorkflow.getActive();
 

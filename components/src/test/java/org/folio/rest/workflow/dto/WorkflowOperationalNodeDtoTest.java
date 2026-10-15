@@ -31,7 +31,7 @@ class WorkflowOperationalNodeDtoTest {
   @Test
   void getDeploymentIdWorksTest() {
 
-    setField(dto, "deploymentId", deploymentids);
+    setField(dto, "deploymentIds", deploymentids);
 
     assertEquals(deploymentids, dto.getDeploymentIds());
   }
@@ -39,10 +39,10 @@ class WorkflowOperationalNodeDtoTest {
   @Test
   void setDeploymentIdWorksTest() {
 
-    setField(dto, "deploymentId", null);
+    setField(dto, "deploymentIds", null);
 
     dto.setDeploymentIds(deploymentids);
-    assertEquals(deploymentids, getField(dto, "deploymentId"));
+    assertEquals(deploymentids, getField(dto, "deploymentIds"));
   }
 
   @Test

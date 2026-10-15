@@ -65,6 +65,8 @@ class DeleteServiceTest {
 
   private WorkflowAsOperationalNodeDto workflowOperationalNode;
 
+  private String[] deploymentIds;
+
   @BeforeEach
   void beforeEach() {
 
@@ -73,11 +75,12 @@ class DeleteServiceTest {
     startEvent = new StartEvent();
     subprocess = new Subprocess();
     workflowOperationalNode = new WorkflowAsOperationalNodeDto();
+    deploymentIds = new String[] { UUID };
 
     setField(deleteService, "entityManager", entityManager);
 
     setField(workflowOperationalNode, "id", UUID);
-    setField(workflowOperationalNode, "deploymentId", UUID);
+    setField(workflowOperationalNode, "deploymentIds", deploymentIds);
     setField(workflowOperationalNode, "name", VALUE);
     setField(workflowOperationalNode, "nodes", nodes);
     setField(workflowOperationalNode, "versionTag", VALUE);

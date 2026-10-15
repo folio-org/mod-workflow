@@ -5,6 +5,7 @@ import static org.folio.spring.test.mock.MockMvcConstant.APP_RAML;
 import static org.folio.spring.test.mock.MockMvcConstant.APP_SCHEMA;
 import static org.folio.spring.test.mock.MockMvcConstant.APP_STAR;
 import static org.folio.spring.test.mock.MockMvcConstant.APP_STREAM;
+import static org.folio.spring.test.mock.MockMvcConstant.ID_PARAM;
 import static org.folio.spring.test.mock.MockMvcConstant.JSON_OBJECT;
 import static org.folio.spring.test.mock.MockMvcConstant.KEY;
 import static org.folio.spring.test.mock.MockMvcConstant.MT_APP_JSON;
@@ -13,6 +14,7 @@ import static org.folio.spring.test.mock.MockMvcConstant.NULL_STR;
 import static org.folio.spring.test.mock.MockMvcConstant.OKAPI_HEAD_NO_URL;
 import static org.folio.spring.test.mock.MockMvcConstant.OKAPI_HEAD_TENANT;
 import static org.folio.spring.test.mock.MockMvcConstant.OKAPI_HEAD_TOKEN;
+import static org.folio.spring.test.mock.MockMvcConstant.OKAPI_TENANT;
 import static org.folio.spring.test.mock.MockMvcConstant.PLAIN_BODY;
 import static org.folio.spring.test.mock.MockMvcConstant.STAR;
 import static org.folio.spring.test.mock.MockMvcConstant.TEXT_PLAIN;
@@ -37,6 +39,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.lenient;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -88,6 +91,8 @@ class WorkflowControllerTest {
 
   private static final String ID = "id";
 
+  private static final String TENANT = "tenant";
+
   private static final String PATH = "/workflows";
 
   private static final String PATH_IMPORT = PATH + "/import";
@@ -126,9 +131,15 @@ class WorkflowControllerTest {
 
   private static final String PATH_START = PATH + "/" + UUID + "/start";
 
-  private static final MultiValueMap<String, String> ID_PARAM = CollectionUtils.toMultiValueMap(Map.of(ID, List.of(UUID)));
-
-  private static final MultiValueMap<String, String> ID_INVALID_PARAM = CollectionUtils.toMultiValueMap(Map.of(ID, List.of(UUID_INVALID)));
+  private static final MultiValueMap<String, String> ID_PARAM = CollectionUtils.toMultiValueMap(Map.of(
+    ID, List.of(UUID),
+    TENANT, List.of(OKAPI_TENANT)
+  ));
+  
+  private static final MultiValueMap<String, String> ID_INVALID_PARAM = CollectionUtils.toMultiValueMap(Map.of(
+    ID, List.of(UUID_INVALID),
+    TENANT, List.of(OKAPI_TENANT)
+  ));
 
   private static final MultiValueMap<String, String> LIM_PARAM = CollectionUtils.toMultiValueMap(Map.of(
     LIMIT, List.of(LIMIT_VALUE)
@@ -297,7 +308,7 @@ class WorkflowControllerTest {
   @ParameterizedTest
   @MethodSource("provideGetPatchPostPutFor")
   void deleteWorkflowFailsTest(Method method, HttpHeaders headers, String contentType, String accept, MediaType mediaType, MultiValueMap<String, String> parameters, String body, int status) throws Exception {
-    lenient().doNothing().when(workflowEngineService).exists(anyString(), anyString());
+    lenient().doNothing().when(workflowEngineService).exists(anyString(), any());
 
     mvc.perform(invokeRequestBuilder(PATH_DELETE, method, headers, contentType, accept, parameters, body))
     .andDo(log()).andExpect(status().is(status));
