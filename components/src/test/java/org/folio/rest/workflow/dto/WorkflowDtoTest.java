@@ -29,14 +29,14 @@ class WorkflowDtoTest {
 
   private WorkflowDto workflowDto;
 
-  private String[] deploymentIds;
+  private List<String> deploymentIds;
 
   @BeforeEach
   void beforeEach() {
     workflowDto = new Impl();
     nodes = new ArrayList<>();
     nodes.add(node);
-    deploymentIds = new String[] { VALUE };
+    deploymentIds = List.of(VALUE);
   }
 
   @Test

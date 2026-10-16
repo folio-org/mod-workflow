@@ -75,7 +75,7 @@ class WorkflowTest {
 
   private Workflow workflow;
 
-  private String[] deploymentIds;
+  private List<String> deploymentIds;
 
   @BeforeEach
   void beforeEach() {
@@ -83,7 +83,7 @@ class WorkflowTest {
     nodes = new ArrayList<>();
     nodes.add(node);
     initialContext = new HashMap<>();
-    deploymentIds = new String[] { VALUE };
+    deploymentIds = List.of(VALUE);
 
     lenient().doReturn(NOW).when(workflow).now();
   }

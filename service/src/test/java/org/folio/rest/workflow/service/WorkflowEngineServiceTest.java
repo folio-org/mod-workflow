@@ -82,7 +82,7 @@ class WorkflowEngineServiceTest {
 
   private JsonMapper mapper;
 
-  private String[] deploymentIds;
+  private List<String> deploymentIds;
 
   @BeforeEach
   void beforeEach() {
@@ -90,7 +90,7 @@ class WorkflowEngineServiceTest {
     workflowEngineService = new WorkflowEngineService(deleteService, workflowRepo, mapper, new RestTemplateBuilder());
 
     nodes = List.of();
-    deploymentIds = new String[] { UUID };
+    deploymentIds = List.of(UUID);
 
     workflow = new WorkflowAsDto();
     workflow.setId(UUID);

@@ -26,12 +26,12 @@ import java.util.Map;
 import org.folio.rest.workflow.model.converter.JsonNodeConverter;
 import org.folio.rest.workflow.model.has.HasChecksum;
 import org.folio.rest.workflow.model.has.HasCreatedOn;
-import org.folio.rest.workflow.model.has.HasTenantId;
 import org.folio.rest.workflow.model.has.HasDeploymentIds;
 import org.folio.rest.workflow.model.has.HasId;
 import org.folio.rest.workflow.model.has.HasInformational;
 import org.folio.rest.workflow.model.has.HasName;
 import org.folio.rest.workflow.model.has.HasNodes;
+import org.folio.rest.workflow.model.has.HasTenantId;
 import org.folio.rest.workflow.model.has.HasUpdatedOn;
 import org.folio.rest.workflow.model.has.HasVersionTag;
 import org.folio.rest.workflow.model.has.common.HasWorkflowCommon;
@@ -70,9 +70,10 @@ public class Workflow extends AbstractBaseEntity implements HasChecksum, HasCrea
   @Column
   private String tenantId;
 
-  @OneToMany 
-  @OrderColumn 
-  private String[] deploymentIds;
+  @ElementCollection
+  @OrderColumn(name = "position")
+  @Column(name = "deployment_id")
+  private List<String> deploymentIds;
 
   @Size(min = 0, max = 512)
   @Column(nullable = true)
@@ -118,10 +119,12 @@ public class Workflow extends AbstractBaseEntity implements HasChecksum, HasCrea
     active = false;
     checksum = null;
     createdOn = now();
+    deploymentIds = new ArrayList<>();
     name = "";
     historyTimeToLive = 0;
     initialContext = new HashMap<>();
     nodes = new ArrayList<>();
+    tenantId = "";
     updatedOn = now();
     versionTag = "1.0";
   }
@@ -134,6 +137,10 @@ public class Workflow extends AbstractBaseEntity implements HasChecksum, HasCrea
 
     if (createdOn == null) {
       createdOn = now();
+    }
+
+    if (deploymentIds == null) {
+      deploymentIds = new ArrayList<>();
     }
 
     if (historyTimeToLive == null) {
@@ -150,6 +157,10 @@ public class Workflow extends AbstractBaseEntity implements HasChecksum, HasCrea
 
     if (nodes == null) {
       nodes = new ArrayList<>();
+    }
+
+    if (tenantId == null) {
+      tenantId = "";
     }
 
     if (updatedOn == null) {
@@ -227,7 +238,7 @@ public class Workflow extends AbstractBaseEntity implements HasChecksum, HasCrea
   }
 
   @Override
-  public String[] getDeploymentIds() {
+  public List<String> getDeploymentIds() {
     return deploymentIds;
   }
 
@@ -292,7 +303,7 @@ public class Workflow extends AbstractBaseEntity implements HasChecksum, HasCrea
   }
 
   @Override
-  public void setDeploymentIds(String[] deploymentIds) {
+  public void setDeploymentIds(List<String> deploymentIds) {
     this.deploymentIds = deploymentIds;
   }
 

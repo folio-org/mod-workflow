@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.util.ReflectionTestUtils.getField;
 import static org.springframework.test.util.ReflectionTestUtils.setField;
 
+import java.util.List;
 import org.folio.rest.workflow.model.Workflow;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,12 +14,12 @@ class WorkflowOperationalDtoTest {
 
   private WorkflowOperationalDto workflowDto;
 
-  private String[] deploymentIds;
+  private List<String> deploymentIds;
 
   @BeforeEach
   void beforeEach() {
     workflowDto = new Impl();
-    deploymentIds = new String[] { VALUE };
+    deploymentIds = List.of(VALUE);
   }
 
   @Test

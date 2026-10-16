@@ -1,10 +1,9 @@
 package org.folio.rest.workflow.service;
 
 import java.time.Instant;
-import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.folio.rest.workflow.dto.WorkflowDto;
@@ -27,7 +26,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
-
 import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.json.JsonMapper;
 import tools.jackson.databind.node.ArrayNode;
@@ -120,7 +118,7 @@ public class WorkflowEngineService {
     }
 
     // Deployment ID will not exist if it has not been activated.
-    if (workflow.getDeploymentIds() != null && workflow.getDeploymentIds().length > 0) {
+    if (workflow.getDeploymentIds() != null && workflow.getDeploymentIds().isEmpty()) {
       deleteDeployedWorkflow(workflow, tenant, token);
     }
 
@@ -157,8 +155,8 @@ public class WorkflowEngineService {
       throw new WorkflowNotFoundException(workflowId);
     }
 
-    String[] deploymentIds = workflow.getDeploymentIds();
-    if (deploymentIds == null || deploymentIds.length == 0) {
+    List<String> deploymentIds = workflow.getDeploymentIds();
+    if (deploymentIds == null || deploymentIds.isEmpty()) {
       throw new WorkflowEngineServiceException(String.format("Workflow ID '%s' has no associated Deployment ID!", workflowId));
     }
     
@@ -223,7 +221,7 @@ public class WorkflowEngineService {
       throw new WorkflowNotFoundException(workflowId);
     }
 
-    String[] deploymentIds = workflow.getDeploymentIds();
+    List<String> deploymentIds = workflow.getDeploymentIds();
     ArrayNode workflowHistoryNode = mapper.createArrayNode();
 
     for (String deploymentId : deploymentIds) {
@@ -292,7 +290,7 @@ public class WorkflowEngineService {
   private void deleteDeployedWorkflow(WorkflowOperationalNodeDto workflow, String tenant, String token)
     throws WorkflowDeploymentNotActivated, WorkflowEngineServiceException, WorkflowNotFoundException {
 
-    final String[] deploymentIds = workflow.getDeploymentIds();
+    final List<String> deploymentIds = workflow.getDeploymentIds();
     final String version = workflow.getVersionTag();
 
     for (String deploymentId : deploymentIds) {
@@ -503,14 +501,14 @@ public class WorkflowEngineService {
         Workflow responseWorkflow = response.getBody();
 
         if (responseWorkflow != null && tenant != null && tenant.equals(responseWorkflow.getTenantId())) {
-          String[] deploymentIds = responseWorkflow.getDeploymentIds();
+          List<String> deploymentIds = responseWorkflow.getDeploymentIds();
           Boolean active = responseWorkflow.getActive();
 
           responseWorkflow.setChecksum(workflow.getChecksum());
           responseWorkflow.setCreatedOn(workflow.getCreatedOn());
           responseWorkflow.setUpdatedOn(Instant.now());
 
-          LOG.info(String.format("Workflow is active = %s, deploymentIDs = %s", Boolean.TRUE.equals(active), Arrays.toString(deploymentIds)));
+          LOG.info(String.format("Workflow is active = %s, deploymentIDs = %s", Boolean.TRUE.equals(active), deploymentIds.toString()));
           return workflowRepo.save(responseWorkflow);
         }
       }

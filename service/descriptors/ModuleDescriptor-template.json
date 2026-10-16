@@ -184,7 +184,7 @@
         {
           "methods": ["GET"],
           "pathPattern": "/workflows/{id}/history",
-          "permissionsRequired": ["workflow.workflows_history.item.get"]
+          "permissionsRequired": ["workflow.workflows_history.collection.get"]
         },
         {
           "methods": ["GET"],
@@ -194,7 +194,7 @@
         {
           "methods": ["POST"],
           "pathPattern": "/workflows/{id}/start",
-          "permissionsRequired": ["workflow.workflows_start_trigger.item.post"]
+          "permissionsRequired": ["workflow.workflows_start_trigger.collection.post"]
         },
         {
           "methods": ["POST"],
@@ -384,6 +384,11 @@
       "description": "Get workflow item"
     },
     {
+      "permissionName": "workflow.workflows_history.collection.get",
+      "displayName": "Workflow - item - get workflow history collection",
+      "description": "Get workflow collection"
+    },
+    {
       "permissionName": "workflow.workflows_history.item.get",
       "displayName": "Workflow - item - get workflow history item",
       "description": "Get workflow item"
@@ -417,6 +422,11 @@
       "permissionName": "workflow.workflows_start_trigger.item.get",
       "displayName": "Workflow - item - start trigger - get",
       "description": "Get a start trigger for a workflow item"
+    },
+    {
+      "permissionName": "workflow.workflows_start_trigger.collection.post",
+      "displayName": "Workflow - collection - start trigger - post",
+      "description": "Create a start trigger for each workflow item in a collection"
     },
     {
       "permissionName": "workflow.workflows_start_trigger.item.post",

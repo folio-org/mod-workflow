@@ -20,12 +20,12 @@ class WorkflowOperationalNodeDtoTest {
 
   private WorkflowOperationalNodeDto dto;
 
-  private String[] deploymentids;
+  private List<String> deploymentids;
 
   @BeforeEach
   void beforeEach() {
     dto = new Impl();
-    deploymentids = new String[] { VALUE };
+    deploymentids = List.of(VALUE);
   }
 
   @Test
