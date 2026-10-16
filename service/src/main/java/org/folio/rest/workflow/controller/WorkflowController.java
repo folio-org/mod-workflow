@@ -19,6 +19,7 @@ import org.folio.rest.workflow.service.WorkflowEngineService;
 import org.folio.rest.workflow.service.WorkflowImportService;
 import org.folio.spring.tenant.annotation.TenantHeader;
 import org.folio.spring.web.annotation.TokenHeader;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -56,6 +57,26 @@ public class WorkflowController {
     this.workflowCqlService = workflowCqlService;
     this.workflowImportService = workflowImportService;
     this.workflowRepo = workflowRepo;
+  }
+
+
+  @PostMapping(value = "", produces = { MediaType.APPLICATION_JSON_VALUE })
+  public ResponseEntity<Object> getWorkflow(
+    @TenantHeader String tenant,
+    @TokenHeader String token,
+    @RequestBody Workflow workflow
+  ) throws URISyntaxException {
+
+    System.out.print("\n\n\nDEBUG: ooooooh\n\n\n\nNoes!\n\n\n");
+
+    LOG.debug(String.format("Creating new workflow %s", workflow == null ? "" : workflow.getId()));
+
+    final Workflow result = workflowRepo.save(workflow);
+    System.out.print("\n\n\nDEBUG: result id = " + result.getId() + "\n\n\n");
+    URI location = new URI(String.format("/workflows/%s", result.getId()));
+
+    //return ResponseEntity.created(location).body(result);
+    return ResponseEntity.status(HttpStatus.CREATED).body(result);
   }
 
   @PostMapping(value = "/import", produces = { MediaType.APPLICATION_JSON_VALUE }, consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
@@ -148,7 +169,7 @@ public class WorkflowController {
 
   /**
    * Fetch the history of a workflow for a given deployment ID.
-   * 
+   *
    * @param id The workflow ID.
    * @param deploymentId The activated workflow deployment ID.
    * @param tenant The tenant.
@@ -179,7 +200,7 @@ public class WorkflowController {
 
   /**
    * Start workflow for a given deployment ID.
-   * 
+   *
    * @param id The workflow ID.
    * @param deploymentId The activated workflow deployment ID.
    * @param tenant The tenant.

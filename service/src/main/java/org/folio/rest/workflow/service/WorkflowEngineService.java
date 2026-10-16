@@ -140,10 +140,11 @@ public class WorkflowEngineService {
       throw new WorkflowNotFoundException(workflowId);
     }
 
-    WorkflowOperationalDto workflow = workflowRepo.getViewById(workflowId, WorkflowOperationalDto.class);
-    if (workflow == null || tenant == null || !tenant.equals(workflow.getTenantId())) {
+    final WorkflowOperationalDto workflow = workflowRepo.getViewById(workflowId, WorkflowOperationalDto.class);
+    if (workflow == null /* ||tenant == null || !tenant.equals(workflow.getTenantId())*/) {
       throw new WorkflowNotFoundException(workflowId);
     }
+    System.out.print("\n\n\nDEBUG: tenant = " + workflow.getTenantId() + "\n\n\n");
   }
 
   public JsonNode start(String workflowId, String tenant, String token, JsonNode context)

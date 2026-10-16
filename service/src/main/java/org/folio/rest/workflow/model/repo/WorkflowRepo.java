@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.data.rest.core.annotation.RestResource;
 
-@RepositoryRestResource
+@RepositoryRestResource/*(path = "workflows", itemResourceRel = "workflows")*/
 public interface WorkflowRepo extends JpaCqlRepository<Workflow, String> {
 
   public <T> T getViewById(String id, Class<T> type);
@@ -20,6 +20,10 @@ public interface WorkflowRepo extends JpaCqlRepository<Workflow, String> {
   @Override
   @RestResource(exported = false)
   public void deleteById(String id);
+
+  @Override
+  @RestResource(exported = false)
+  public Workflow save(Workflow workflow);
 
   @Query("SELECT COUNT(*) FROM Workflow")
   public long countAll();
