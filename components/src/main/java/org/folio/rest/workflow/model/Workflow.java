@@ -13,6 +13,8 @@ import jakarta.persistence.MapKeyColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OrderColumn;
 import jakarta.persistence.PrePersist;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -42,6 +44,14 @@ import tools.jackson.databind.JsonNode;
 
 @Entity
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
+@Table(
+  uniqueConstraints = {
+    @UniqueConstraint(
+      name = "tenant_to_workflow",
+      columnNames = { "tenantId", "id" }
+    )
+  }
+)
 public class Workflow extends AbstractBaseEntity implements HasChecksum, HasCreatedOn, HasTenantId, HasDeploymentIds, HasId, HasInformational, HasName, HasNodes, HasUpdatedOn, HasVersionTag, HasWorkflowCommon {
 
   @Column(nullable = true)

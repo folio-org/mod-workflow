@@ -187,8 +187,18 @@
           "permissionsRequired": ["workflow.workflows_history.item.get"]
         },
         {
+          "methods": ["GET"],
+          "pathPattern": "/workflows/{id}/history/{deploymentId}",
+          "permissionsRequired": ["workflow.workflows_history.item.get"]
+        },
+        {
           "methods": ["POST"],
           "pathPattern": "/workflows/{id}/start",
+          "permissionsRequired": ["workflow.workflows_start_trigger.item.post"]
+        },
+        {
+          "methods": ["POST"],
+          "pathPattern": "/workflows/{id}/start/{deploymentId}",
           "permissionsRequired": ["workflow.workflows_start_trigger.item.post"]
         },
         {
