@@ -1,7 +1,6 @@
 package org.folio.rest.workflow.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import jakarta.annotation.Nullable;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
@@ -14,8 +13,6 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OrderColumn;
 import jakarta.persistence.PrePersist;
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -47,23 +44,21 @@ public class Workflow extends AbstractBaseEntity implements HasChecksum, HasCrea
   @ColumnDefault("false")
   private Boolean active;
 
-  @Nullable
   @Column
   private String checksum;
 
-  @NotNull
-  @Column(columnDefinition="TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW()")
+  @Column(columnDefinition="TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW()", nullable = false)
   private Instant createdOn;
 
   @Column(unique = true)
   private String deploymentId;
 
-  @Size(min = 0, max = 512)
-  @Column(nullable = true)
+  @Column(columnDefinition = "TEXT", nullable = true)
   private String description;
 
   @Min(0)
   @Column(nullable = false)
+  @ColumnDefault("90")
   private Integer historyTimeToLive;
 
   @ElementCollection
@@ -74,9 +69,7 @@ public class Workflow extends AbstractBaseEntity implements HasChecksum, HasCrea
   @OnDelete(action = OnDeleteAction.CASCADE)
   private Map<String, JsonNode> initialContext;
 
-  @NotNull
-  @Size(min = 4, max = 64)
-  @Column(nullable = false, unique = true)
+  @Column(columnDefinition = "TEXT default false", unique = true)
   private String name;
 
   @OneToMany
@@ -86,14 +79,12 @@ public class Workflow extends AbstractBaseEntity implements HasChecksum, HasCrea
   @Embedded
   private Setup setup;
 
-  @NotNull
   @Column(columnDefinition="TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW()")
   private Instant updatedOn;
 
   @Version
-  @NotNull
-  @Size(min = 1, max = 64)
   @Column(nullable = false)
+  @ColumnDefault("'1.0'")
   private String versionTag;
 
   public Workflow() {
@@ -103,15 +94,17 @@ public class Workflow extends AbstractBaseEntity implements HasChecksum, HasCrea
     checksum = null;
     createdOn = now();
     name = "";
-    historyTimeToLive = 0;
+    historyTimeToLive = 90;
     initialContext = new HashMap<>();
     nodes = new ArrayList<>();
+    setup = new Setup();
     updatedOn = now();
     versionTag = "1.0";
   }
 
   @PrePersist
   public void prePersist() {
+
     if (active == null) {
       active = false;
     }
@@ -121,7 +114,7 @@ public class Workflow extends AbstractBaseEntity implements HasChecksum, HasCrea
     }
 
     if (historyTimeToLive == null) {
-      historyTimeToLive = 0;
+      historyTimeToLive = 90;
     }
 
     if (name == null) {

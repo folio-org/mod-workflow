@@ -6,11 +6,11 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.PrePersist;
-import jakarta.validation.constraints.NotNull;
 import org.folio.rest.workflow.enums.SubprocessType;
 import org.folio.rest.workflow.model.components.Branch;
 import org.folio.rest.workflow.model.components.MultiInstance;
 import org.folio.rest.workflow.model.has.HasSubProcessType;
+import org.hibernate.annotations.ColumnDefault;
 
 @Entity
 public class Subprocess extends AbstractProcess implements Branch, HasSubProcessType, MultiInstance {
@@ -18,8 +18,8 @@ public class Subprocess extends AbstractProcess implements Branch, HasSubProcess
   @Embedded
   private EmbeddedLoopReference loopRef;
 
-  @NotNull
   @Column(nullable = false)
+  @ColumnDefault("'EMBEDDED'")
   @Enumerated(EnumType.STRING)
   private SubprocessType type;
 

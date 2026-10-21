@@ -5,7 +5,6 @@ import jakarta.persistence.Convert;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import org.folio.rest.workflow.enums.InputAttribute;
@@ -35,8 +34,8 @@ public class EmbeddedInput implements HasEmbeddedInputCommon {
   private String fieldLabel;
 
   // Must be designated as nullable even if this is not supposed to be NULL.
-  @NotNull
   @Column(nullable = true)
+  @ColumnDefault("'TEXT'")
   @Enumerated(EnumType.STRING)
   private InputType inputType;
 

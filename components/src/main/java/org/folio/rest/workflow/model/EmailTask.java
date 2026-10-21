@@ -3,18 +3,19 @@ package org.folio.rest.workflow.model;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.PrePersist;
-import jakarta.validation.constraints.Size;
 import org.folio.rest.workflow.model.components.DelegateTask;
 import org.folio.rest.workflow.model.has.common.HasEmailTaskCommon;
-import org.jspecify.annotations.NonNull;
+import org.hibernate.annotations.ColumnDefault;
 
 @Entity
 public class EmailTask extends AbstractTask implements DelegateTask, HasEmailTaskCommon {
 
-  @Column(nullable = true)
+  @Column(columnDefinition = "TEXT", nullable = true)
   private String attachmentPath;
 
-  @Column(nullable = true)
+  // Must be String rather than Boolean to allow freemarker translation of variables.
+  @Column(nullable = false)
+  @ColumnDefault("'false'")
   private String includeAttachment;
 
   @Column(nullable = true)
@@ -23,32 +24,25 @@ public class EmailTask extends AbstractTask implements DelegateTask, HasEmailTas
   @Column(nullable = true)
   private String mailCc;
 
-  @NonNull
-  @Size(min = 3, max = 256)
   @Column(nullable = false)
   private String mailFrom;
 
-  @NonNull
-  @Size(min = 2)
   @Column(columnDefinition = "TEXT", nullable = false)
   private String mailText;
 
-  @NonNull
-  @Size(min = 3, max = 256)
   @Column(nullable = false)
   private String mailTo;
 
   @Column(columnDefinition = "TEXT", nullable = true)
   private String mailMarkup;
 
-  @NonNull
-  @Size(min = 2, max = 256)
-  @Column(nullable = false)
+  @Column(columnDefinition = "TEXT", nullable = false)
   private String mailSubject;
 
   public EmailTask() {
     super();
 
+    includeAttachment = "false";
     mailFrom = "";
     mailText = "";
     mailTo = "";
@@ -59,6 +53,10 @@ public class EmailTask extends AbstractTask implements DelegateTask, HasEmailTas
   @PrePersist
   public void prePersist() {
     super.prePersist();
+
+    if (includeAttachment == null) {
+      includeAttachment = "false";
+    }
 
     if (mailFrom == null) {
       mailFrom = "";
