@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.util.ReflectionTestUtils.getField;
 import static org.springframework.test.util.ReflectionTestUtils.setField;
 
+import java.util.List;
 import org.folio.rest.workflow.model.Workflow;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,9 +14,12 @@ class WorkflowOperationalDtoTest {
 
   private WorkflowOperationalDto workflowDto;
 
+  private List<String> deploymentIds;
+
   @BeforeEach
   void beforeEach() {
     workflowDto = new Impl();
+    deploymentIds = List.of(VALUE);
   }
 
   @Test
@@ -34,18 +38,18 @@ class WorkflowOperationalDtoTest {
   }
 
   @Test
-  void getDeploymentIdWorksTest() {
-    setField(workflowDto, "deploymentId", VALUE);
+  void getDeploymentIdsWorksTest() {
+    setField(workflowDto, "deploymentIds", deploymentIds);
 
-    assertEquals(VALUE, workflowDto.getDeploymentId());
+    assertEquals(deploymentIds, workflowDto.getDeploymentIds());
   }
 
   @Test
-  void setDeploymentIdWorksTest() {
-    setField(workflowDto, "deploymentId", null);
+  void setDeploymentIdsWorksTest() {
+    setField(workflowDto, "deploymentIds", null);
 
-    workflowDto.setDeploymentId(VALUE);
-    assertEquals(VALUE, getField(workflowDto, "deploymentId"));
+    workflowDto.setDeploymentIds(deploymentIds);
+    assertEquals(deploymentIds, getField(workflowDto, "deploymentIds"));
   }
 
   private static class Impl extends Workflow implements WorkflowOperationalDto { }

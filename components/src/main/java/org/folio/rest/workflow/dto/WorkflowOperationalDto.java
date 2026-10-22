@@ -1,6 +1,7 @@
 package org.folio.rest.workflow.dto;
 
-import org.folio.rest.workflow.model.has.HasDeploymentId;
+import org.folio.rest.workflow.model.has.HasTenantId;
+import org.folio.rest.workflow.model.has.HasDeploymentIds;
 import org.folio.rest.workflow.model.has.HasVersionTag;
 
 /**
@@ -8,6 +9,6 @@ import org.folio.rest.workflow.model.has.HasVersionTag;
  *
  * Examples are starting a {@link org.folio.rest.workflow.model.Workflow Workflow} or getting the {@link org.folio.rest.workflow.model.Workflow Workflow} history.
  */
-public interface WorkflowOperationalDto extends HasDeploymentId, HasVersionTag {
+public interface WorkflowOperationalDto extends HasTenantId, HasDeploymentIds, HasVersionTag {
 
 }

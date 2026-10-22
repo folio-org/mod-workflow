@@ -13,6 +13,8 @@ import jakarta.persistence.MapKeyColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OrderColumn;
 import jakarta.persistence.PrePersist;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -24,11 +26,12 @@ import java.util.Map;
 import org.folio.rest.workflow.model.converter.JsonNodeConverter;
 import org.folio.rest.workflow.model.has.HasChecksum;
 import org.folio.rest.workflow.model.has.HasCreatedOn;
-import org.folio.rest.workflow.model.has.HasDeploymentId;
+import org.folio.rest.workflow.model.has.HasDeploymentIds;
 import org.folio.rest.workflow.model.has.HasId;
 import org.folio.rest.workflow.model.has.HasInformational;
 import org.folio.rest.workflow.model.has.HasName;
 import org.folio.rest.workflow.model.has.HasNodes;
+import org.folio.rest.workflow.model.has.HasTenantId;
 import org.folio.rest.workflow.model.has.HasUpdatedOn;
 import org.folio.rest.workflow.model.has.HasVersionTag;
 import org.folio.rest.workflow.model.has.common.HasWorkflowCommon;
@@ -41,7 +44,15 @@ import tools.jackson.databind.JsonNode;
 
 @Entity
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
-public class Workflow extends AbstractBaseEntity implements HasChecksum, HasCreatedOn, HasDeploymentId, HasId, HasInformational, HasName, HasNodes, HasUpdatedOn, HasVersionTag, HasWorkflowCommon {
+@Table(
+  uniqueConstraints = {
+    @UniqueConstraint(
+      name = "tenant_to_workflow",
+      columnNames = { "tenantId", "id" }
+    )
+  }
+)
+public class Workflow extends AbstractBaseEntity implements HasChecksum, HasCreatedOn, HasTenantId, HasDeploymentIds, HasId, HasInformational, HasName, HasNodes, HasUpdatedOn, HasVersionTag, HasWorkflowCommon {
 
   @Column(nullable = true)
   @ColumnDefault("false")
@@ -55,8 +66,14 @@ public class Workflow extends AbstractBaseEntity implements HasChecksum, HasCrea
   @Column(columnDefinition="TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW()")
   private Instant createdOn;
 
-  @Column(unique = true)
-  private String deploymentId;
+  @NotNull
+  @Column
+  private String tenantId;
+
+  @ElementCollection
+  @OrderColumn(name = "position")
+  @Column(name = "deployment_id")
+  private List<String> deploymentIds;
 
   @Size(min = 0, max = 512)
   @Column(nullable = true)
@@ -102,10 +119,12 @@ public class Workflow extends AbstractBaseEntity implements HasChecksum, HasCrea
     active = false;
     checksum = null;
     createdOn = now();
+    deploymentIds = new ArrayList<>();
     name = "";
     historyTimeToLive = 0;
     initialContext = new HashMap<>();
     nodes = new ArrayList<>();
+    tenantId = "";
     updatedOn = now();
     versionTag = "1.0";
   }
@@ -118,6 +137,10 @@ public class Workflow extends AbstractBaseEntity implements HasChecksum, HasCrea
 
     if (createdOn == null) {
       createdOn = now();
+    }
+
+    if (deploymentIds == null) {
+      deploymentIds = new ArrayList<>();
     }
 
     if (historyTimeToLive == null) {
@@ -134,6 +157,10 @@ public class Workflow extends AbstractBaseEntity implements HasChecksum, HasCrea
 
     if (nodes == null) {
       nodes = new ArrayList<>();
+    }
+
+    if (tenantId == null) {
+      tenantId = "";
     }
 
     if (updatedOn == null) {
@@ -206,8 +233,13 @@ public class Workflow extends AbstractBaseEntity implements HasChecksum, HasCrea
   }
 
   @Override
-  public String getDeploymentId() {
-    return deploymentId;
+  public String getTenantId() {
+    return tenantId;
+  }
+
+  @Override
+  public List<String> getDeploymentIds() {
+    return deploymentIds;
   }
 
   @Override
@@ -266,8 +298,13 @@ public class Workflow extends AbstractBaseEntity implements HasChecksum, HasCrea
   }
 
   @Override
-  public void setDeploymentId(String deploymentId) {
-    this.deploymentId = deploymentId;
+  public void setTenantId(String tenantId) {
+    this.tenantId = tenantId;
+  }
+
+  @Override
+  public void setDeploymentIds(List<String> deploymentIds) {
+    this.deploymentIds = deploymentIds;
   }
 
   /**

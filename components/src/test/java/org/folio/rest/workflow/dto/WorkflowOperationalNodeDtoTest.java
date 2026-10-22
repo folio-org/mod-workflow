@@ -20,27 +20,29 @@ class WorkflowOperationalNodeDtoTest {
 
   private WorkflowOperationalNodeDto dto;
 
+  private List<String> deploymentids;
+
   @BeforeEach
   void beforeEach() {
-
     dto = new Impl();
+    deploymentids = List.of(VALUE);
   }
 
   @Test
   void getDeploymentIdWorksTest() {
 
-    setField(dto, "deploymentId", VALUE);
+    setField(dto, "deploymentIds", deploymentids);
 
-    assertEquals(VALUE, dto.getDeploymentId());
+    assertEquals(deploymentids, dto.getDeploymentIds());
   }
 
   @Test
   void setDeploymentIdWorksTest() {
 
-    setField(dto, "deploymentId", null);
+    setField(dto, "deploymentIds", null);
 
-    dto.setDeploymentId(VALUE);
-    assertEquals(VALUE, getField(dto, "deploymentId"));
+    dto.setDeploymentIds(deploymentids);
+    assertEquals(deploymentids, getField(dto, "deploymentIds"));
   }
 
   @Test

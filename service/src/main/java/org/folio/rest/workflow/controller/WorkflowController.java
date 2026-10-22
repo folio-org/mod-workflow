@@ -93,32 +93,82 @@ public class WorkflowController {
     return workflowRepo.getReferenceById(id);
   }
 
+
+  /**
+   * Activate a deployment for a workflow.
+   * 
+   * @param id The workflow ID.
+   * @param tenant The tenant.
+   * @param token The token.
+   */
   @PutMapping(value = "/{id}/activate", produces = { MediaType.APPLICATION_JSON_VALUE })
-  public Workflow activateWorkflow(
+  public String activateWorkflow(
     @PathVariable String id,
     @TenantHeader String tenant,
     @TokenHeader String token
   ) throws WorkflowEngineServiceException, WorkflowNotFoundException {
     LOG.info(String.format("Activating: %s", sanitize(id)));
 
-    workflowEngineService.exists(id);
+    workflowEngineService.exists(id, tenant);
 
     return workflowEngineService.activate(id, tenant, token);
   }
 
+  /**
+   * Deactivate all deployments from a workflow.
+   * 
+   * @param id The workflow ID.
+   * @param tenant The tenant.
+   * @param token The token.
+   */
   @PutMapping(value = "/{id}/deactivate", produces = { MediaType.APPLICATION_JSON_VALUE })
-  public Workflow deactivateWorkflow(
+  public ResponseEntity<Object> deactivateWorkflow(
     @PathVariable String id,
     @TenantHeader String tenant,
     @TokenHeader String token
   ) throws WorkflowEngineServiceException, WorkflowNotFoundException {
     LOG.info(String.format("Deactivating: %s", sanitize(id)));
 
-    workflowEngineService.exists(id);
+    workflowEngineService.exists(id, tenant);
 
-    return workflowEngineService.deactivate(id, tenant, token);
+    workflowEngineService.deactivateDeployments(id, tenant, token);
+
+    // Ensure that a HTTP 204 is returned on success.
+    return ResponseEntity.noContent().build();
   }
 
+  /**
+   * Deactivate a specified deployment from a workflow.
+   * 
+   * @param id The workflow ID.
+   * @param deploymentId The activated workflow deployment ID.
+   * @param tenant The tenant.
+   * @param token The token.
+   */
+  @PutMapping(value = "/{id}/deactivate/{deploymentId}", produces = { MediaType.APPLICATION_JSON_VALUE })
+  public ResponseEntity<Object> deactivateWorkflowForDeployment(
+    @PathVariable String id,
+    @PathVariable String deploymentId,
+    @TenantHeader String tenant,
+    @TokenHeader String token
+  ) throws WorkflowEngineServiceException, WorkflowNotFoundException {
+    LOG.info(String.format("Deactivating: %s, deployment ID: %s", sanitize(id), sanitize(deploymentId)));
+
+    workflowEngineService.exists(id, tenant);
+
+    workflowEngineService.deactivateDeployment(id, deploymentId, tenant, token);
+
+    // Ensure that a HTTP 204 is returned on success.
+    return ResponseEntity.noContent().build();
+  }
+
+  /**
+   * Delete a workflow.
+   * 
+   * @param id The workflow ID.
+   * @param tenant The tenant.
+   * @param token The token.
+   */
   @DeleteMapping(value = "/{id}/delete")
   public ResponseEntity<Object> deleteWorkflow(
     @PathVariable String id,
@@ -127,7 +177,7 @@ public class WorkflowController {
   ) throws WorkflowEngineServiceException, WorkflowNotFoundException, WorkflowDeploymentNotActivated {
     LOG.info(String.format("Deleting: %s", sanitize(id)));
 
-    workflowEngineService.exists(id);
+    workflowEngineService.exists(id, tenant);
 
     workflowEngineService.delete(id, tenant, token);
 
@@ -135,6 +185,14 @@ public class WorkflowController {
     return ResponseEntity.noContent().build();
   }
 
+
+  /**
+   * Fetch the history of a workflow.
+   * 
+   * @param id The workflow ID.
+   * @param tenant The tenant.
+   * @param token The token.
+   */
   @GetMapping(value = "/{id}/history", produces = { MediaType.APPLICATION_JSON_VALUE })
   public JsonNode workflowHistory(
     @PathVariable String id,
@@ -146,6 +204,34 @@ public class WorkflowController {
     return workflowEngineService.history(id, tenant, token);
   }
 
+  /**
+   * Fetch the history of a workflow for a given deployment ID.
+   * 
+   * @param id The workflow ID.
+   * @param deploymentId The activated workflow deployment ID.
+   * @param tenant The tenant.
+   * @param token The token.
+   */
+  @GetMapping(value = "/{id}/history/{deploymentId}", produces = { MediaType.APPLICATION_JSON_VALUE })
+  public JsonNode workflowHistoryForDeployment(
+    @PathVariable String id,
+    @PathVariable String deploymentId,
+    @TenantHeader String tenant,
+    @TokenHeader String token
+  ) throws WorkflowDeploymentNotFound, WorkflowEngineServiceException, WorkflowDeploymentNotActivated, WorkflowNotFoundException {
+    LOG.debug(String.format("Retrieving History: %s, deployment ID: %s", sanitize(id), sanitize(deploymentId)));
+
+    return workflowEngineService.historyForDeployment(id, deploymentId, tenant, token);
+  }
+
+  /**
+   * Start workflow.
+   * 
+   * @param id The workflow ID.
+   * @param tenant The tenant.
+   * @param token The token.
+   * @param context The request body context.
+   */
   @PostMapping(value = "/{id}/start", produces = { MediaType.APPLICATION_JSON_VALUE })
   public JsonNode startWorkflow(
     @PathVariable String id,
@@ -155,6 +241,27 @@ public class WorkflowController {
   ) throws WorkflowDeploymentNotFound, WorkflowEngineServiceException, WorkflowNotFoundException, WorkflowDeploymentNotActivated {
     LOG.info(String.format("Starting: %s with context %s", sanitize(id), sanitize(context)));
     return workflowEngineService.start(id, tenant, token, context);
+  }
+
+  /**
+   * Start workflow for a given deployment ID.
+   * 
+   * @param id The workflow ID.
+   * @param deploymentId The activated workflow deployment ID.
+   * @param tenant The tenant.
+   * @param token The token.
+   * @param context The request body context.
+   */
+  @PostMapping(value = "/{id}/start/{deploymentId}", produces = { MediaType.APPLICATION_JSON_VALUE })
+  public JsonNode startWorkflowForDeployment(
+    @PathVariable String id,
+    @PathVariable String deploymentId,
+    @TenantHeader String tenant,
+    @TokenHeader String token,
+    @RequestBody JsonNode context
+  ) throws WorkflowDeploymentNotFound, WorkflowEngineServiceException, WorkflowNotFoundException, WorkflowDeploymentNotActivated {
+    LOG.info(String.format("Starting: %s with context %s and deployment ID %s", sanitize(id), sanitize(context), sanitize(deploymentId)));
+    return workflowEngineService.startForDeployment(id, deploymentId, tenant, token, context);
   }
 
   /**
