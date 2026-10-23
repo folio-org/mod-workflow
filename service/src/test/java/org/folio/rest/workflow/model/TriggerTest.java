@@ -5,17 +5,43 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.util.ReflectionTestUtils.getField;
 import static org.springframework.test.util.ReflectionTestUtils.setField;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Stream;
 import org.folio.rest.workflow.enums.HttpMethod;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 class TriggerTest {
+
+  private static final String METHOD = "method";
 
   private Trigger trigger;
 
   @BeforeEach
   void beforeEach() {
+
     trigger = new Trigger();
+  }
+
+  @ParameterizedTest
+  @MethodSource("providePrePersistFor")
+  void prePersistWorksTest(Map<String, Object> initial, Map<String, Object> expected) {
+
+    initial.forEach((String attribute, Object value) -> {
+      setField(trigger, attribute, value);
+    });
+
+    trigger.prePersist();
+
+    expected.forEach((String attribute, Object value) -> {
+      assertEquals(value, getField(trigger, attribute));
+    });
   }
 
   @Test
@@ -91,6 +117,55 @@ class TriggerTest {
 
     trigger.setMethod(HttpMethod.DELETE);
     assertEquals(HttpMethod.DELETE, getField(trigger, "method"));
+  }
+
+  /**
+   * Helper function for parameterized tests for the prePersist function.
+   *
+   * @return
+   *   The arguments array stream with the stream columns as:
+   *     - Arguments initial The initial values.
+   *     - Arguments expect  The expected values.
+   */
+  private static Stream<Arguments> providePrePersistFor() {
+
+    final HttpMethod method = HttpMethod.DELETE;
+    final HttpMethod methodDefault = Trigger.DEFAULT_METHOD;
+
+    final List<Arguments> arguments = new ArrayList<>();
+
+    arguments.add(Arguments.of(
+      helperFieldMap(null),
+      helperFieldMap(methodDefault)
+    ));
+
+    arguments.add(Arguments.of(
+      helperFieldMap(null),
+      helperFieldMap(methodDefault)
+    ));
+
+    arguments.add(Arguments.of(
+      helperFieldMap(method),
+      helperFieldMap(method)
+    ));
+
+    return arguments.stream();
+  }
+
+  /**
+   * Helper for reducing in line code repetition for assignments.
+   *
+   * @param method The method value.
+   *
+   * @return The built arguments map.
+   */
+  private static Map<String, Object> helperFieldMap(HttpMethod method) {
+
+    final Map<String, Object> map = new HashMap<>();
+
+    map.put(METHOD, method);
+
+    return map;
   }
 
 }

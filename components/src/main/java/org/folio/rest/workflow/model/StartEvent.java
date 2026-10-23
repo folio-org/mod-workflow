@@ -16,15 +16,30 @@ import org.hibernate.annotations.ColumnDefault;
 @Entity
 public class StartEvent extends Node implements Event, HasAsyncBefore, HasExpression, HasInterrupting, HasStartEventType {
 
+  /**
+   * The default asyncBefore value.
+   */
+  static final boolean DEFAULT_ASYNC_BEFORE = false;
+
+  /**
+   * The default interrupting value.
+   */
+  static final boolean DEFAULT_INTERRUPTING = false;
+
+  /**
+   * The default messageCorrelation value.
+   */
+  static final StartEventType DEFAULT_MESSAGE_CORRELATION = StartEventType.MESSAGE_CORRELATION;
+
   @Column(nullable = false)
-  @ColumnDefault("false")
+  @ColumnDefault("" + DEFAULT_ASYNC_BEFORE)
   private Boolean asyncBefore;
 
   @Column(columnDefinition = "TEXT", nullable = true)
   private String expression;
 
   @Column(nullable = false)
-  @ColumnDefault("false")
+  @ColumnDefault("" + DEFAULT_INTERRUPTING)
   private Boolean interrupting;
 
   @Column(nullable = false)
@@ -35,9 +50,9 @@ public class StartEvent extends Node implements Event, HasAsyncBefore, HasExpres
   public StartEvent() {
     super();
 
-    asyncBefore = false;
-    interrupting = false;
-    type = StartEventType.MESSAGE_CORRELATION;
+    asyncBefore = DEFAULT_ASYNC_BEFORE;
+    interrupting = DEFAULT_INTERRUPTING;
+    type = DEFAULT_MESSAGE_CORRELATION;
   }
 
   @Override
@@ -46,15 +61,15 @@ public class StartEvent extends Node implements Event, HasAsyncBefore, HasExpres
     super.prePersist();
 
     if (asyncBefore == null) {
-      asyncBefore = false;
+      asyncBefore = DEFAULT_ASYNC_BEFORE;
     }
 
     if (interrupting == null) {
-      interrupting = false;
+      interrupting = DEFAULT_INTERRUPTING;
     }
 
     if (type == null) {
-      type = StartEventType.MESSAGE_CORRELATION;
+      type = DEFAULT_MESSAGE_CORRELATION;
     }
   }
 

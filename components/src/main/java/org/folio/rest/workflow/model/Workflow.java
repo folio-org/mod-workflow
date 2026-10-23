@@ -40,13 +40,29 @@ import tools.jackson.databind.JsonNode;
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class Workflow extends AbstractBaseEntity implements HasChecksum, HasCreatedOn, HasDeploymentId, HasId, HasInformational, HasName, HasNodes, HasUpdatedOn, HasVersionTag, HasWorkflowCommon {
 
+  /**
+   * The default active value.
+   */
+  static final boolean DEFAULT_ACTIVE = false;
+
+  /**
+   * The default historyTimeToLive value.
+   */
+  static final int DEFAULT_HISTORYTIMETOLIVE = 90;
+
+  /**
+   * The default versionTag value.
+   */
+  static final String DEFAULT_VERSIONTAG = "1.0";
+
   @Column(nullable = true)
-  @ColumnDefault("false")
+  @ColumnDefault("" + DEFAULT_ACTIVE)
   private Boolean active;
 
   @Column
   private String checksum;
 
+  // A static default cannot be provided because this is temporal.
   @Column(columnDefinition="TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW()", nullable = false)
   private Instant createdOn;
 
@@ -58,7 +74,7 @@ public class Workflow extends AbstractBaseEntity implements HasChecksum, HasCrea
 
   @Min(0)
   @Column(nullable = false)
-  @ColumnDefault("90")
+  @ColumnDefault("" + DEFAULT_HISTORYTIMETOLIVE)
   private Integer historyTimeToLive;
 
   @ElementCollection
@@ -69,7 +85,7 @@ public class Workflow extends AbstractBaseEntity implements HasChecksum, HasCrea
   @OnDelete(action = OnDeleteAction.CASCADE)
   private Map<String, JsonNode> initialContext;
 
-  @Column(columnDefinition = "TEXT default false", unique = true)
+  @Column(columnDefinition = "TEXT", unique = true)
   private String name;
 
   @OneToMany
@@ -79,27 +95,28 @@ public class Workflow extends AbstractBaseEntity implements HasChecksum, HasCrea
   @Embedded
   private Setup setup;
 
+  // A static default cannot be provided because this is temporal.
   @Column(columnDefinition="TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW()")
   private Instant updatedOn;
 
   @Version
   @Column(nullable = false)
-  @ColumnDefault("'1.0'")
+  @ColumnDefault("'" + DEFAULT_VERSIONTAG + "'")
   private String versionTag;
 
   public Workflow() {
     super();
 
-    active = false;
+    active = DEFAULT_ACTIVE;
     checksum = null;
     createdOn = now();
     name = "";
-    historyTimeToLive = 90;
+    historyTimeToLive = DEFAULT_HISTORYTIMETOLIVE;
     initialContext = new HashMap<>();
     nodes = new ArrayList<>();
     setup = new Setup();
     updatedOn = now();
-    versionTag = "1.0";
+    versionTag = DEFAULT_VERSIONTAG;
   }
 
   @PrePersist
@@ -114,7 +131,7 @@ public class Workflow extends AbstractBaseEntity implements HasChecksum, HasCrea
     }
 
     if (historyTimeToLive == null) {
-      historyTimeToLive = 90;
+      historyTimeToLive = DEFAULT_HISTORYTIMETOLIVE;
     }
 
     if (name == null) {
@@ -134,7 +151,7 @@ public class Workflow extends AbstractBaseEntity implements HasChecksum, HasCrea
     }
 
     if (versionTag == null) {
-      versionTag = "1.0";
+      versionTag = DEFAULT_VERSIONTAG;
     }
 
     // @Embeddable with @PrePersist do not consistently call PrePersist and so this must be manually triggered.

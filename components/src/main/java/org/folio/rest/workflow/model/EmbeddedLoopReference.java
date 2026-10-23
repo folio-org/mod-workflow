@@ -8,6 +8,11 @@ import org.hibernate.annotations.ColumnDefault;
 @Embeddable
 public class EmbeddedLoopReference implements HasEmbeddedLoopReferenceCommon {
 
+  /**
+   * The default parallel value.
+   */
+  static final boolean DEFAULT_PARALLEL = false;
+
   @Column(nullable = true)
   private String cardinalityExpression;
 
@@ -22,13 +27,13 @@ public class EmbeddedLoopReference implements HasEmbeddedLoopReferenceCommon {
 
   // Must be designated as nullable even if this is not supposed to be NULL.
   @Column(nullable = true)
-  @ColumnDefault("false")
+  @ColumnDefault("" + DEFAULT_PARALLEL)
   private Boolean parallel;
 
   public EmbeddedLoopReference() {
     super();
 
-    parallel = false;
+    parallel = DEFAULT_PARALLEL;
   }
 
   /**
@@ -39,7 +44,7 @@ public class EmbeddedLoopReference implements HasEmbeddedLoopReferenceCommon {
    */
   public void prePersist() {
     if (parallel == null) {
-      parallel = false;
+      parallel = DEFAULT_PARALLEL;
     }
   }
 

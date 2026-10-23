@@ -9,7 +9,10 @@ import org.folio.rest.workflow.model.has.common.HasScriptTaskCommon;
 @Entity
 public class ScriptTask extends AbstractTask implements HasCode, HasScriptTaskCommon {
 
-  static final String SCRIPT_FORMAT_DEFAULT = "javascript";
+  /**
+   * The default scriptFormat value.
+   */
+  static final String DEFAULT_SCRIPT_FORMAT = "javascript";
 
   @Column(columnDefinition = "TEXT default ''", nullable = false)
   private String code;
@@ -17,14 +20,14 @@ public class ScriptTask extends AbstractTask implements HasCode, HasScriptTaskCo
   @Column(nullable = true)
   private String resultVariable;
 
-  @Column(columnDefinition = "TEXT default '" + SCRIPT_FORMAT_DEFAULT + "'", nullable = false)
+  @Column(columnDefinition = "TEXT default '" + DEFAULT_SCRIPT_FORMAT + "'", nullable = false)
   private String scriptFormat;
 
   public ScriptTask() {
     super();
 
     code = "";
-    scriptFormat = SCRIPT_FORMAT_DEFAULT;
+    scriptFormat = DEFAULT_SCRIPT_FORMAT;
   }
 
   @Override
@@ -37,7 +40,7 @@ public class ScriptTask extends AbstractTask implements HasCode, HasScriptTaskCo
     }
 
     if (scriptFormat == null) {
-      scriptFormat = SCRIPT_FORMAT_DEFAULT;
+      scriptFormat = DEFAULT_SCRIPT_FORMAT;
     }
   }
 

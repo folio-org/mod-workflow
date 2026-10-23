@@ -17,6 +17,11 @@ import org.hibernate.annotations.ColumnDefault;
 @Entity
 public class Trigger extends AbstractBaseEntity implements HasId, HasInformational, HasMethod, HasName, HasPathPattern {
 
+  /**
+   * The default HTTP method.
+   */
+  static final HttpMethod DEFAULT_METHOD = HttpMethod.POST;
+
   @Column(columnDefinition = "TEXT", unique = true)
   private String name;
 
@@ -34,14 +39,14 @@ public class Trigger extends AbstractBaseEntity implements HasId, HasInformation
   public Trigger() {
     super();
 
-    method = HttpMethod.POST;
+    method = DEFAULT_METHOD;
   }
 
   @PrePersist
   public void prePersist() {
 
     if (method == null) {
-      method = HttpMethod.POST;
+      method = DEFAULT_METHOD;
     }
   }
 

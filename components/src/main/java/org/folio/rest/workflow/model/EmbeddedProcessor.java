@@ -12,9 +12,24 @@ import org.hibernate.annotations.ColumnDefault;
 @Embeddable
 public class EmbeddedProcessor implements HasEmbeddedProcessorCommon {
 
+  /**
+   * The default buffer value.
+   */
+  static final int DEFAULT_BUFFER = 0;
+
+  /**
+   * The default delay value.
+   */
+  static final int DEFAULT_DELAY = 0;
+
+  /**
+   * The default script value.
+   */
+  static final ScriptType DEFAULT_SCRIPT = ScriptType.JS;
+
   // Must be designated as nullable even if this is not supposed to be NULL.
   @Column(nullable = true)
-  @ColumnDefault("0")
+  @ColumnDefault("" + DEFAULT_BUFFER)
   private Integer buffer;
 
   // Must be designated as nullable even if this is not supposed to be NULL.
@@ -23,7 +38,7 @@ public class EmbeddedProcessor implements HasEmbeddedProcessorCommon {
 
   // Must be designated as nullable even if this is not supposed to be NULL.
   @Column(nullable = true)
-  @ColumnDefault("0")
+  @ColumnDefault("" + DEFAULT_DELAY)
   private Integer delay;
 
   // Must be designated as nullable even if this is not supposed to be NULL.
@@ -38,11 +53,11 @@ public class EmbeddedProcessor implements HasEmbeddedProcessorCommon {
   public EmbeddedProcessor() {
     super();
 
-    buffer = 0;
+    buffer = DEFAULT_BUFFER;
     code = "";
-    delay = 0;
+    delay = DEFAULT_DELAY;
     functionName = "";
-    scriptType = ScriptType.JS;
+    scriptType = DEFAULT_SCRIPT;
   }
 
   /**
@@ -54,7 +69,7 @@ public class EmbeddedProcessor implements HasEmbeddedProcessorCommon {
   @PrePersist
   public void prePersist() {
     if (buffer == null) {
-      buffer = 0;
+      buffer = DEFAULT_BUFFER;
     }
 
     if (code == null) {
@@ -62,7 +77,7 @@ public class EmbeddedProcessor implements HasEmbeddedProcessorCommon {
     }
 
     if (delay == null) {
-      delay = 0;
+      delay = DEFAULT_DELAY;
     }
 
     if (functionName == null) {
@@ -70,7 +85,7 @@ public class EmbeddedProcessor implements HasEmbeddedProcessorCommon {
     }
 
     if (scriptType == null) {
-      scriptType = ScriptType.JS;
+      scriptType = DEFAULT_SCRIPT;
     }
   }
 

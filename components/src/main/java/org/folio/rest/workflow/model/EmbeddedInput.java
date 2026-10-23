@@ -17,6 +17,16 @@ import org.hibernate.annotations.ColumnDefault;
 @Embeddable
 public class EmbeddedInput implements HasEmbeddedInputCommon {
 
+  /**
+   * The default required value.
+   */
+  static final boolean DEFAULT_REQUIRED = false;
+
+  /**
+   * The default inputType value.
+   */
+  static final InputType DEFAULT_INPUT_TYPE = InputType.TEXT;
+
   // Must be designated as nullable even if this is not supposed to be NULL.
   @Column(columnDefinition = "TEXT", nullable = true)
   @Convert(converter = InputAttributeListConverter.class)
@@ -46,7 +56,7 @@ public class EmbeddedInput implements HasEmbeddedInputCommon {
 
   // Must be designated as nullable even if this is not supposed to be NULL.
   @Column(nullable = true)
-  @ColumnDefault("false")
+  @ColumnDefault("" + DEFAULT_REQUIRED)
   private Boolean required;
 
   public EmbeddedInput() {
@@ -55,9 +65,9 @@ public class EmbeddedInput implements HasEmbeddedInputCommon {
     attributes = new ArrayList<>();
     fieldId = "";
     fieldLabel = "";
-    inputType = InputType.TEXT;
+    inputType = DEFAULT_INPUT_TYPE;
     options = new ArrayList<>();
-    required = false;
+    required = DEFAULT_REQUIRED;
   }
 
   /**
@@ -80,7 +90,7 @@ public class EmbeddedInput implements HasEmbeddedInputCommon {
     }
 
     if (inputType == null) {
-      inputType = InputType.TEXT;
+      inputType = DEFAULT_INPUT_TYPE;
     }
 
     if (options == null) {
@@ -88,7 +98,7 @@ public class EmbeddedInput implements HasEmbeddedInputCommon {
     }
 
     if (required == null) {
-      required = false;
+      required = DEFAULT_REQUIRED;
     }
   }
 

@@ -14,9 +14,34 @@ import org.springframework.http.MediaType;
 @Embeddable
 public class EmbeddedRequest implements HasEmbeddedRequestCommon, HasUrl {
 
+  /**
+   * The default accept value.
+   */
+  static final String DEFAULT_ACCEPT = MediaType.APPLICATION_JSON_VALUE;
+
+  /**
+   * The default contentType value.
+   */
+  static final String DEFAULT_CONTENT_TYPE = MediaType.APPLICATION_JSON_VALUE;
+
+  /**
+   * The default iterable value.
+   */
+  static final boolean DEFAULT_ITERABLE = false;
+
+  /**
+   * The default method value.
+   */
+  static final HttpMethod DEFAULT_METHOD = HttpMethod.GET;
+
+  /**
+   * The default sendEmptyBody value.
+   */
+  static final boolean DEFAULT_SEND_EMPTY_BODY = true;
+
   // Must be designated as nullable even if this is not supposed to be NULL.
   @Column(nullable = true)
-  @ColumnDefault("'" + MediaType.APPLICATION_JSON_VALUE + "'")
+  @ColumnDefault("'" + DEFAULT_ACCEPT + "'")
   private String accept;
 
   @Column(columnDefinition = "TEXT", nullable = true)
@@ -24,11 +49,11 @@ public class EmbeddedRequest implements HasEmbeddedRequestCommon, HasUrl {
 
   // Must be designated as nullable even if this is not supposed to be NULL.
   @Column(nullable = true)
-  @ColumnDefault("'" + MediaType.APPLICATION_JSON_VALUE + "'")
+  @ColumnDefault("'" + DEFAULT_CONTENT_TYPE + "'")
   private String contentType;
 
   @Column(nullable = false)
-  @ColumnDefault("false")
+  @ColumnDefault("" + DEFAULT_ITERABLE)
   private boolean iterable;
 
   private String iterableKey;
@@ -42,7 +67,7 @@ public class EmbeddedRequest implements HasEmbeddedRequestCommon, HasUrl {
   private String responseKey;
 
   @Column(nullable = false)
-  @ColumnDefault("true")
+  @ColumnDefault("" + DEFAULT_SEND_EMPTY_BODY)
   private Boolean sendEmptyBody;
 
   // Must be designated as nullable even if this is not supposed to be NULL.
@@ -52,23 +77,23 @@ public class EmbeddedRequest implements HasEmbeddedRequestCommon, HasUrl {
   public EmbeddedRequest() {
     super();
 
-    accept = MediaType.APPLICATION_JSON_VALUE;
-    bodyTemplate = null;
-    contentType = MediaType.APPLICATION_JSON_VALUE;
-    iterable = false;
-    method = HttpMethod.GET;
-    sendEmptyBody = true;
+    accept = DEFAULT_ACCEPT;
+    bodyTemplate = "{}";
+    contentType = DEFAULT_CONTENT_TYPE;
+    iterable = DEFAULT_ITERABLE;
+    method = DEFAULT_METHOD;
+    sendEmptyBody = DEFAULT_SEND_EMPTY_BODY;
     url = "";
   }
 
   @PrePersist
   public void prePersist() {
     if (accept == null) {
-      accept = MediaType.APPLICATION_JSON_VALUE;
+      accept = DEFAULT_ACCEPT;
     }
 
     if (sendEmptyBody == null) {
-      sendEmptyBody = true;
+      sendEmptyBody = DEFAULT_SEND_EMPTY_BODY;
     }
 
     if (bodyTemplate == null || bodyTemplate.isEmpty()) {
@@ -76,11 +101,11 @@ public class EmbeddedRequest implements HasEmbeddedRequestCommon, HasUrl {
     }
 
     if (contentType == null) {
-      contentType = MediaType.APPLICATION_JSON_VALUE;
+      contentType = DEFAULT_CONTENT_TYPE;
     }
 
     if (method == null) {
-      method = HttpMethod.GET;
+      method = DEFAULT_METHOD;
     }
 
     if (url == null) {

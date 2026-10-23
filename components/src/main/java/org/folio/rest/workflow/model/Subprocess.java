@@ -15,6 +15,11 @@ import org.hibernate.annotations.ColumnDefault;
 @Entity
 public class Subprocess extends AbstractProcess implements Branch, HasSubProcessType, MultiInstance {
 
+  /**
+   * The default type value.
+   */
+  static final SubprocessType DEFAULT_TYPE = SubprocessType.EMBEDDED;
+
   @Embedded
   private EmbeddedLoopReference loopRef;
 
@@ -26,7 +31,7 @@ public class Subprocess extends AbstractProcess implements Branch, HasSubProcess
   public Subprocess() {
     super();
 
-    type = SubprocessType.EMBEDDED;
+    type = DEFAULT_TYPE;
   }
 
   @Override
@@ -35,7 +40,7 @@ public class Subprocess extends AbstractProcess implements Branch, HasSubProcess
     super.prePersist();
 
     if (type == null) {
-      type = SubprocessType.EMBEDDED;
+      type = DEFAULT_TYPE;
     }
 
     // @Embeddable with @PrePersist do not consistently call PrePersist and so this must be manually triggered.

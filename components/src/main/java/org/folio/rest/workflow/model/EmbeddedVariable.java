@@ -11,6 +11,31 @@ import org.hibernate.annotations.ColumnDefault;
 @Embeddable
 public class EmbeddedVariable implements HasEmbeddedVariableCommon {
 
+  /**
+   * The default asArray value.
+   */
+  static final boolean DEFAULT_AS_ARRAY = false;
+
+  /**
+   * The default asJson value.
+   */
+  static final boolean DEFAULT_AS_JSON = false;
+
+  /**
+   * The default asTransient value.
+   */
+  static final boolean DEFAULT_AS_TRANSIENT = false;
+
+  /**
+   * The default spin value.
+   */
+  static final boolean DEFAULT_SPIN = false;
+
+  /**
+   * The default type value.
+   */
+  static final VariableType DEFAULT_TYPE = VariableType.PROCESS;
+
   @Column(name = "vkey", columnDefinition = "TEXT", nullable = true)
   private String key;
 
@@ -22,32 +47,32 @@ public class EmbeddedVariable implements HasEmbeddedVariableCommon {
 
   // Must be designated as nullable even if this is not supposed to be NULL.
   @Column(nullable = true)
-  @ColumnDefault("false")
+  @ColumnDefault("" + DEFAULT_SPIN)
   private Boolean spin;
 
   // Must be designated as nullable even if this is not supposed to be NULL.
   @Column(nullable = true)
-  @ColumnDefault("false")
+  @ColumnDefault("" + DEFAULT_AS_ARRAY)
   private Boolean asArray;
 
   // Must be designated as nullable even if this is not supposed to be NULL.
   @Column(nullable = true)
-  @ColumnDefault("false")
+  @ColumnDefault("" + DEFAULT_AS_JSON)
   private Boolean asJson;
 
   // Must be designated as nullable even if this is not supposed to be NULL.
   @Column(nullable = true)
-  @ColumnDefault("false")
+  @ColumnDefault("" + DEFAULT_AS_TRANSIENT)
   private Boolean asTransient;
 
   public EmbeddedVariable() {
     super();
 
-    asArray = false;
-    asJson = false;
-    asTransient = false;
-    spin = false;
-    type = VariableType.PROCESS;
+    asArray = DEFAULT_AS_ARRAY;
+    asJson = DEFAULT_AS_JSON;
+    asTransient = DEFAULT_AS_TRANSIENT;
+    spin = DEFAULT_SPIN;
+    type = DEFAULT_TYPE;
   }
 
   /**
@@ -58,23 +83,23 @@ public class EmbeddedVariable implements HasEmbeddedVariableCommon {
    */
   public void prePersist() {
     if (asArray == null) {
-      asArray = false;
+      asArray = DEFAULT_AS_ARRAY;
     }
 
     if (asJson == null) {
-      asJson = Boolean.TRUE.equals(spin);
+      asJson = Boolean.TRUE.equals(spin) || DEFAULT_AS_JSON;
     }
 
     if (asTransient == null) {
-      asTransient = false;
+      asTransient = DEFAULT_AS_TRANSIENT;
     }
 
     if (spin == null) {
-      spin = false;
+      spin = DEFAULT_SPIN;
     }
 
     if (type == null) {
-      type = VariableType.PROCESS;
+      type = DEFAULT_TYPE;
     }
   }
 

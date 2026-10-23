@@ -14,6 +14,11 @@ import org.hibernate.annotations.ColumnDefault;
 @Entity
 public class DirectoryTask extends AbstractTask implements DelegateTask, HasDirectoryTaskCommon, HasPath {
 
+  /**
+   * The default action value.
+   */
+  static final DirectoryAction DEFAULT_ACTION = DirectoryAction.LIST;
+
   @Column(nullable = false)
   private String path;
 
@@ -30,7 +35,7 @@ public class DirectoryTask extends AbstractTask implements DelegateTask, HasDire
 
     path = "";
     workflow = "";
-    action = DirectoryAction.LIST;
+    action = DEFAULT_ACTION;
   }
 
   @Override
@@ -47,7 +52,7 @@ public class DirectoryTask extends AbstractTask implements DelegateTask, HasDire
     }
 
     if (action == null) {
-      action = DirectoryAction.LIST;
+      action = DEFAULT_ACTION;
     }
   }
 

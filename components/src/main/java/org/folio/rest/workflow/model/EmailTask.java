@@ -10,12 +10,17 @@ import org.hibernate.annotations.ColumnDefault;
 @Entity
 public class EmailTask extends AbstractTask implements DelegateTask, HasEmailTaskCommon {
 
+  /**
+   * The default includeAttachment value.
+   */
+  static final String DEFAULT_INCLUDE_ATTACHMENT = "false";
+
   @Column(columnDefinition = "TEXT", nullable = true)
   private String attachmentPath;
 
   // Must be String rather than Boolean to allow freemarker translation of variables.
   @Column(nullable = false)
-  @ColumnDefault("'false'")
+  @ColumnDefault("'" + DEFAULT_INCLUDE_ATTACHMENT + "'")
   private String includeAttachment;
 
   @Column(nullable = true)
@@ -42,7 +47,7 @@ public class EmailTask extends AbstractTask implements DelegateTask, HasEmailTas
   public EmailTask() {
     super();
 
-    includeAttachment = "false";
+    includeAttachment = DEFAULT_INCLUDE_ATTACHMENT;
     mailFrom = "";
     mailText = "";
     mailTo = "";
@@ -55,7 +60,7 @@ public class EmailTask extends AbstractTask implements DelegateTask, HasEmailTas
     super.prePersist();
 
     if (includeAttachment == null) {
-      includeAttachment = "false";
+      includeAttachment = DEFAULT_INCLUDE_ATTACHMENT;
     }
 
     if (mailFrom == null) {

@@ -14,6 +14,11 @@ import org.hibernate.annotations.ColumnDefault;
 @Entity
 public class DatabaseQueryTask extends AbstractTask implements DelegateTask, HasDatabaseQueryTaskCommon, HasDesignation {
 
+  /**
+   * The default includeHeader value.
+   */
+  static final boolean DEFAULT_INCLUDE_HEADER = false;
+
   @Column(nullable = false)
   private String designation;
 
@@ -28,7 +33,7 @@ public class DatabaseQueryTask extends AbstractTask implements DelegateTask, Has
   private DatabaseResultType resultType;
 
   @Column(nullable = false)
-  @ColumnDefault("false")
+  @ColumnDefault("" + DEFAULT_INCLUDE_HEADER)
   private Boolean includeHeader;
 
   public DatabaseQueryTask() {
@@ -36,7 +41,7 @@ public class DatabaseQueryTask extends AbstractTask implements DelegateTask, Has
 
     designation = "";
     query = "";
-    includeHeader = false;
+    includeHeader = DEFAULT_INCLUDE_HEADER;
   }
 
   @Override
@@ -53,7 +58,7 @@ public class DatabaseQueryTask extends AbstractTask implements DelegateTask, Has
     }
 
     if (includeHeader == null) {
-      includeHeader = false;
+      includeHeader = DEFAULT_INCLUDE_HEADER;
     }
   }
 

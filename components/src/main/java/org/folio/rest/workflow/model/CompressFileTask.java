@@ -14,6 +14,16 @@ import org.hibernate.annotations.ColumnDefault;
 @Entity
 public class CompressFileTask extends AbstractTask implements DelegateTask, HasCompressFileTaskCommon {
 
+  /**
+   * The default container value.
+   */
+  static final CompressFileContainer DEFAULT_CONTAINER = CompressFileContainer.NONE;
+
+  /**
+   * The default format value.
+   */
+  static final CompressFileFormat DEFAULT_FORMAT = CompressFileFormat.ZIP;
+
   @Column(nullable = false)
   private String source;
 
@@ -35,8 +45,8 @@ public class CompressFileTask extends AbstractTask implements DelegateTask, HasC
 
     source = "";
     destination = "";
-    format = CompressFileFormat.ZIP;
-    container = CompressFileContainer.NONE;
+    format = DEFAULT_FORMAT;
+    container = DEFAULT_CONTAINER;
   }
 
   @Override
@@ -53,11 +63,11 @@ public class CompressFileTask extends AbstractTask implements DelegateTask, HasC
     }
 
     if (format == null) {
-      format = CompressFileFormat.ZIP;
+      format = DEFAULT_FORMAT;
     }
 
     if (container == null) {
-      container = CompressFileContainer.NONE;
+      container = DEFAULT_CONTAINER;
     }
   }
 

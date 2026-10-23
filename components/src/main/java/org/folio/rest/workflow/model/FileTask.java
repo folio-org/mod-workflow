@@ -14,6 +14,11 @@ import org.hibernate.annotations.ColumnDefault;
 @Entity
 public class FileTask extends AbstractTask implements DelegateTask, HasFileTaskCommon, HasPath {
 
+  /**
+   * The default op value.
+   */
+  static final FileOp DEFAULT_OP = FileOp.READ;
+
   @Column(nullable = true)
   private String line;
 
@@ -31,7 +36,7 @@ public class FileTask extends AbstractTask implements DelegateTask, HasFileTaskC
   public FileTask() {
     super();
 
-    op = FileOp.READ;
+    op = DEFAULT_OP;
     path = "";
   }
 
@@ -41,7 +46,7 @@ public class FileTask extends AbstractTask implements DelegateTask, HasFileTaskC
     super.prePersist();
 
     if (op  == null) {
-      op = FileOp.READ;
+      op = DEFAULT_OP;
     }
 
     if (path == null) {
