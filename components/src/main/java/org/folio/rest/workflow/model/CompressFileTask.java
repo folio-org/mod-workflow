@@ -9,9 +9,20 @@ import org.folio.rest.workflow.enums.CompressFileContainer;
 import org.folio.rest.workflow.enums.CompressFileFormat;
 import org.folio.rest.workflow.model.components.DelegateTask;
 import org.folio.rest.workflow.model.has.common.HasCompressFileTaskCommon;
+import org.hibernate.annotations.ColumnDefault;
 
 @Entity
 public class CompressFileTask extends AbstractTask implements DelegateTask, HasCompressFileTaskCommon {
+
+  /**
+   * The default container value.
+   */
+  static final CompressFileContainer DEFAULT_CONTAINER = CompressFileContainer.NONE;
+
+  /**
+   * The default format value.
+   */
+  static final CompressFileFormat DEFAULT_FORMAT = CompressFileFormat.ZIP;
 
   @Column(nullable = false)
   private String source;
@@ -21,10 +32,12 @@ public class CompressFileTask extends AbstractTask implements DelegateTask, HasC
 
   @Enumerated(EnumType.STRING)
   @Column(nullable = false)
+  @ColumnDefault("'ZIP'")
   private CompressFileFormat format;
 
   @Enumerated(EnumType.STRING)
   @Column(nullable = false)
+  @ColumnDefault("'NONE'")
   private CompressFileContainer container;
 
   public CompressFileTask() {
@@ -32,8 +45,8 @@ public class CompressFileTask extends AbstractTask implements DelegateTask, HasC
 
     source = "";
     destination = "";
-    format = CompressFileFormat.ZIP;
-    container = CompressFileContainer.NONE;
+    format = DEFAULT_FORMAT;
+    container = DEFAULT_CONTAINER;
   }
 
   @Override
@@ -50,11 +63,11 @@ public class CompressFileTask extends AbstractTask implements DelegateTask, HasC
     }
 
     if (format == null) {
-      format = CompressFileFormat.ZIP;
+      format = DEFAULT_FORMAT;
     }
 
     if (container == null) {
-      container = CompressFileContainer.NONE;
+      container = DEFAULT_CONTAINER;
     }
   }
 

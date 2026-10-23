@@ -6,27 +6,32 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.PrePersist;
-import jakarta.validation.constraints.NotNull;
 import org.folio.rest.workflow.enums.SubprocessType;
 import org.folio.rest.workflow.model.components.Branch;
 import org.folio.rest.workflow.model.components.MultiInstance;
 import org.folio.rest.workflow.model.has.HasSubProcessType;
+import org.hibernate.annotations.ColumnDefault;
 
 @Entity
 public class Subprocess extends AbstractProcess implements Branch, HasSubProcessType, MultiInstance {
 
+  /**
+   * The default type value.
+   */
+  static final SubprocessType DEFAULT_TYPE = SubprocessType.EMBEDDED;
+
   @Embedded
   private EmbeddedLoopReference loopRef;
 
-  @NotNull
   @Column(nullable = false)
+  @ColumnDefault("'EMBEDDED'")
   @Enumerated(EnumType.STRING)
   private SubprocessType type;
 
   public Subprocess() {
     super();
 
-    type = SubprocessType.EMBEDDED;
+    type = DEFAULT_TYPE;
   }
 
   @Override
@@ -35,7 +40,7 @@ public class Subprocess extends AbstractProcess implements Branch, HasSubProcess
     super.prePersist();
 
     if (type == null) {
-      type = SubprocessType.EMBEDDED;
+      type = DEFAULT_TYPE;
     }
 
     // @Embeddable with @PrePersist do not consistently call PrePersist and so this must be manually triggered.

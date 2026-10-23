@@ -4,8 +4,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.persistence.PrePersist;
 import org.folio.rest.workflow.enums.HttpMethod;
 import org.folio.rest.workflow.model.has.HasId;
 import org.folio.rest.workflow.model.has.HasInformational;
@@ -13,31 +12,42 @@ import org.folio.rest.workflow.model.has.HasMethod;
 import org.folio.rest.workflow.model.has.HasName;
 import org.folio.rest.workflow.model.has.HasPathPattern;
 import org.folio.spring.domain.model.AbstractBaseEntity;
+import org.hibernate.annotations.ColumnDefault;
 
 @Entity
 public class Trigger extends AbstractBaseEntity implements HasId, HasInformational, HasMethod, HasName, HasPathPattern {
 
-  @NotNull
-  @Size(min = 4, max = 64)
-  @Column(unique = true)
+  /**
+   * The default HTTP method.
+   */
+  static final HttpMethod DEFAULT_METHOD = HttpMethod.POST;
+
+  @Column(columnDefinition = "TEXT", unique = true)
   private String name;
 
-  @Size(min = 0, max = 256)
-  @Column(nullable = true)
+  @Column(columnDefinition = "TEXT", nullable = true)
   private String description;
 
-  @NotNull
-  @Size(min = 2, max = 256)
-  @Column(nullable = false)
+  @Column(columnDefinition = "TEXT", nullable = false)
   private String pathPattern;
 
-  @NotNull
   @Column(nullable = false)
+  @ColumnDefault("'POST'")
   @Enumerated(EnumType.STRING)
   private HttpMethod method;
 
   public Trigger() {
     super();
+
+    method = DEFAULT_METHOD;
+  }
+
+  @PrePersist
+  public void prePersist() {
+
+    if (method == null) {
+      method = DEFAULT_METHOD;
+    }
   }
 
   /**

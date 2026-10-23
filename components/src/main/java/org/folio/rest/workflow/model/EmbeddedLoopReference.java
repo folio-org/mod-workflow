@@ -2,12 +2,16 @@ package org.folio.rest.workflow.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
-import jakarta.validation.constraints.NotNull;
 import org.folio.rest.workflow.model.has.common.HasEmbeddedLoopReferenceCommon;
 import org.hibernate.annotations.ColumnDefault;
 
 @Embeddable
 public class EmbeddedLoopReference implements HasEmbeddedLoopReferenceCommon {
+
+  /**
+   * The default parallel value.
+   */
+  static final boolean DEFAULT_PARALLEL = false;
 
   @Column(nullable = true)
   private String cardinalityExpression;
@@ -22,15 +26,14 @@ public class EmbeddedLoopReference implements HasEmbeddedLoopReferenceCommon {
   private String inputDataName;
 
   // Must be designated as nullable even if this is not supposed to be NULL.
-  @NotNull
   @Column(nullable = true)
-  @ColumnDefault("false")
+  @ColumnDefault("" + DEFAULT_PARALLEL)
   private Boolean parallel;
 
   public EmbeddedLoopReference() {
     super();
 
-    parallel = false;
+    parallel = DEFAULT_PARALLEL;
   }
 
   /**
@@ -41,7 +44,7 @@ public class EmbeddedLoopReference implements HasEmbeddedLoopReferenceCommon {
    */
   public void prePersist() {
     if (parallel == null) {
-      parallel = false;
+      parallel = DEFAULT_PARALLEL;
     }
   }
 

@@ -9,15 +9,22 @@ import org.folio.rest.workflow.enums.FileOp;
 import org.folio.rest.workflow.model.components.DelegateTask;
 import org.folio.rest.workflow.model.has.HasPath;
 import org.folio.rest.workflow.model.has.common.HasFileTaskCommon;
+import org.hibernate.annotations.ColumnDefault;
 
 @Entity
 public class FileTask extends AbstractTask implements DelegateTask, HasFileTaskCommon, HasPath {
 
+  /**
+   * The default op value.
+   */
+  static final FileOp DEFAULT_OP = FileOp.READ;
+
   @Column(nullable = true)
   private String line;
 
-  @Enumerated(EnumType.STRING)
   @Column(nullable = false)
+  @ColumnDefault("'READ'")
+  @Enumerated(EnumType.STRING)
   private FileOp op;
 
   @Column(nullable = false)
@@ -29,7 +36,7 @@ public class FileTask extends AbstractTask implements DelegateTask, HasFileTaskC
   public FileTask() {
     super();
 
-    op = FileOp.READ;
+    op = DEFAULT_OP;
     path = "";
   }
 
@@ -39,7 +46,7 @@ public class FileTask extends AbstractTask implements DelegateTask, HasFileTaskC
     super.prePersist();
 
     if (op  == null) {
-      op = FileOp.READ;
+      op = DEFAULT_OP;
     }
 
     if (path == null) {
