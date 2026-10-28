@@ -1,7 +1,6 @@
 package org.folio.rest.workflow.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import jakarta.annotation.Nullable;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
@@ -14,8 +13,6 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OrderColumn;
 import jakarta.persistence.PrePersist;
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,27 +40,41 @@ import tools.jackson.databind.JsonNode;
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class Workflow extends AbstractBaseEntity implements HasChecksum, HasCreatedOn, HasDeploymentId, HasId, HasInformational, HasName, HasNodes, HasUpdatedOn, HasVersionTag, HasWorkflowCommon {
 
+  /**
+   * The default active value.
+   */
+  static final boolean DEFAULT_ACTIVE = false;
+
+  /**
+   * The default historyTimeToLive value.
+   */
+  static final int DEFAULT_HISTORYTIMETOLIVE = 90;
+
+  /**
+   * The default versionTag value.
+   */
+  static final String DEFAULT_VERSIONTAG = "1.0";
+
   @Column(nullable = true)
-  @ColumnDefault("false")
+  @ColumnDefault("" + DEFAULT_ACTIVE)
   private Boolean active;
 
-  @Nullable
   @Column
   private String checksum;
 
-  @NotNull
-  @Column(columnDefinition="TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW()")
+  // A static default cannot be provided because this is temporal.
+  @Column(columnDefinition="TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW()", nullable = false)
   private Instant createdOn;
 
   @Column(unique = true)
   private String deploymentId;
 
-  @Size(min = 0, max = 512)
-  @Column(nullable = true)
+  @Column(columnDefinition = "TEXT", nullable = true)
   private String description;
 
   @Min(0)
   @Column(nullable = false)
+  @ColumnDefault("" + DEFAULT_HISTORYTIMETOLIVE)
   private Integer historyTimeToLive;
 
   @ElementCollection
@@ -74,9 +85,7 @@ public class Workflow extends AbstractBaseEntity implements HasChecksum, HasCrea
   @OnDelete(action = OnDeleteAction.CASCADE)
   private Map<String, JsonNode> initialContext;
 
-  @NotNull
-  @Size(min = 4, max = 64)
-  @Column(nullable = false, unique = true)
+  @Column(columnDefinition = "TEXT", unique = true)
   private String name;
 
   @OneToMany
@@ -86,32 +95,33 @@ public class Workflow extends AbstractBaseEntity implements HasChecksum, HasCrea
   @Embedded
   private Setup setup;
 
-  @NotNull
+  // A static default cannot be provided because this is temporal.
   @Column(columnDefinition="TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW()")
   private Instant updatedOn;
 
   @Version
-  @NotNull
-  @Size(min = 1, max = 64)
   @Column(nullable = false)
+  @ColumnDefault("'" + DEFAULT_VERSIONTAG + "'")
   private String versionTag;
 
   public Workflow() {
     super();
 
-    active = false;
+    active = DEFAULT_ACTIVE;
     checksum = null;
     createdOn = now();
     name = "";
-    historyTimeToLive = 0;
+    historyTimeToLive = DEFAULT_HISTORYTIMETOLIVE;
     initialContext = new HashMap<>();
     nodes = new ArrayList<>();
+    setup = new Setup();
     updatedOn = now();
-    versionTag = "1.0";
+    versionTag = DEFAULT_VERSIONTAG;
   }
 
   @PrePersist
   public void prePersist() {
+
     if (active == null) {
       active = false;
     }
@@ -121,7 +131,7 @@ public class Workflow extends AbstractBaseEntity implements HasChecksum, HasCrea
     }
 
     if (historyTimeToLive == null) {
-      historyTimeToLive = 0;
+      historyTimeToLive = DEFAULT_HISTORYTIMETOLIVE;
     }
 
     if (name == null) {
@@ -141,7 +151,7 @@ public class Workflow extends AbstractBaseEntity implements HasChecksum, HasCrea
     }
 
     if (versionTag == null) {
-      versionTag = "1.0";
+      versionTag = DEFAULT_VERSIONTAG;
     }
 
     // @Embeddable with @PrePersist do not consistently call PrePersist and so this must be manually triggered.

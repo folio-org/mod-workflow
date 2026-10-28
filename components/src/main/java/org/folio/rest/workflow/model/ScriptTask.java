@@ -3,28 +3,31 @@ package org.folio.rest.workflow.model;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.PrePersist;
-import jakarta.validation.constraints.NotNull;
 import org.folio.rest.workflow.model.has.HasCode;
 import org.folio.rest.workflow.model.has.common.HasScriptTaskCommon;
 
 @Entity
 public class ScriptTask extends AbstractTask implements HasCode, HasScriptTaskCommon {
 
-  @NotNull
-  @Column(columnDefinition = "TEXT", nullable = false)
+  /**
+   * The default scriptFormat value.
+   */
+  static final String DEFAULT_SCRIPT_FORMAT = "javascript";
+
+  @Column(columnDefinition = "TEXT default ''", nullable = false)
   private String code;
 
   @Column(nullable = true)
   private String resultVariable;
 
-  @Column(nullable = false)
+  @Column(columnDefinition = "TEXT default '" + DEFAULT_SCRIPT_FORMAT + "'", nullable = false)
   private String scriptFormat;
 
   public ScriptTask() {
     super();
 
     code = "";
-    scriptFormat = "javaScript";
+    scriptFormat = DEFAULT_SCRIPT_FORMAT;
   }
 
   @Override
@@ -37,7 +40,7 @@ public class ScriptTask extends AbstractTask implements HasCode, HasScriptTaskCo
     }
 
     if (scriptFormat == null) {
-      scriptFormat = "javaScript";
+      scriptFormat = DEFAULT_SCRIPT_FORMAT;
     }
   }
 

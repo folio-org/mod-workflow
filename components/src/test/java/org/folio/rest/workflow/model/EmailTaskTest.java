@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.util.ReflectionTestUtils.getField;
 import static org.springframework.test.util.ReflectionTestUtils.setField;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -24,18 +25,23 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class EmailTaskTest {
 
-  private static final String ASYNCAFTER     = "asyncAfter";
-  private static final String ASYNCBEFORE    = "asyncBefore";
-  private static final String DESCRIPTION    = "description";
-  private static final String DESERIALIZEAS  = "deserializeAs";
-  private static final String ID             = "id";
-  private static final String INPUTVARIABLES = "inputVariables";
-  private static final String MAILFROM       = "mailFrom";
-  private static final String MAILSUBJECT    = "mailSubject";
-  private static final String MAILTEXT       = "mailText";
-  private static final String MAILTO         = "mailTo";
-  private static final String NAME           = "name";
-  private static final String OUTPUTVARIABLE = "outputVariable";
+  private static final String ASYNCAFTER        = "asyncAfter";
+  private static final String ASYNCBEFORE       = "asyncBefore";
+  private static final String ATTACHMENTPATH    = "attachmentPath";
+  private static final String DESCRIPTION       = "description";
+  private static final String DESERIALIZEAS     = "deserializeAs";
+  private static final String INCLUDEATTACHMENT = "includeAttachment";
+  private static final String ID                = "id";
+  private static final String INPUTVARIABLES    = "inputVariables";
+  private static final String MAILFROM          = "mailFrom";
+  private static final String MAILMARKUP        = "mailMarkup";
+  private static final String MAILSUBJECT       = "mailSubject";
+  private static final String MAILTEXT          = "mailText";
+  private static final String MAILTO            = "mailTo";
+  private static final String MAILCC            = "mailCc";
+  private static final String MAILBCC           = "mailBcc";
+  private static final String NAME              = "name";
+  private static final String OUTPUTVARIABLE    = "outputVariable";
 
   @Mock
   private EmbeddedVariable embeddedVariable;
@@ -46,6 +52,7 @@ class EmailTaskTest {
 
   @BeforeEach
   void beforeEach() {
+
     emailTask = new EmailTask();
     inputVariables = new HashSet<>();
     inputVariables.add(embeddedVariable);
@@ -188,32 +195,32 @@ class EmailTaskTest {
 
   @Test
   void getMailCcWorksTest() {
-    setField(emailTask, "mailCc", VALUE);
+    setField(emailTask, MAILCC, VALUE);
 
     assertEquals(VALUE, emailTask.getMailCc());
   }
 
   @Test
   void setMailCcWorksTest() {
-    setField(emailTask, "mailCc", null);
+    setField(emailTask, MAILCC, null);
 
     emailTask.setMailCc(VALUE);
-    assertEquals(VALUE, getField(emailTask, "mailCc"));
+    assertEquals(VALUE, getField(emailTask, MAILCC));
   }
 
   @Test
   void getMailBccWorksTest() {
-    setField(emailTask, "mailBcc", VALUE);
+    setField(emailTask, MAILBCC, VALUE);
 
     assertEquals(VALUE, emailTask.getMailBcc());
   }
 
   @Test
   void setMailBccWorksTest() {
-    setField(emailTask, "mailBcc", null);
+    setField(emailTask, MAILBCC, null);
 
     emailTask.setMailBcc(VALUE);
-    assertEquals(VALUE, getField(emailTask, "mailBcc"));
+    assertEquals(VALUE, getField(emailTask, MAILBCC));
   }
 
   @Test
@@ -263,47 +270,47 @@ class EmailTaskTest {
 
   @Test
   void getMailMarkupWorksTest() {
-    setField(emailTask, "mailMarkup", VALUE);
+    setField(emailTask, MAILMARKUP, VALUE);
 
     assertEquals(VALUE, emailTask.getMailMarkup());
   }
 
   @Test
   void setMailMarkupWorksTest() {
-    setField(emailTask, "mailMarkup", null);
+    setField(emailTask, MAILMARKUP, null);
 
     emailTask.setMailMarkup(VALUE);
-    assertEquals(VALUE, getField(emailTask, "mailMarkup"));
+    assertEquals(VALUE, getField(emailTask, MAILMARKUP));
   }
 
   @Test
   void getAttachmentPathWorksTest() {
-    setField(emailTask, "attachmentPath", VALUE);
+    setField(emailTask, ATTACHMENTPATH, VALUE);
 
     assertEquals(VALUE, emailTask.getAttachmentPath());
   }
 
   @Test
   void setAttachmentPathWorksTest() {
-    setField(emailTask, "attachmentPath", null);
+    setField(emailTask, ATTACHMENTPATH, null);
 
     emailTask.setAttachmentPath(VALUE);
-    assertEquals(VALUE, getField(emailTask, "attachmentPath"));
+    assertEquals(VALUE, getField(emailTask, ATTACHMENTPATH));
   }
 
   @Test
   void getIncludeAttachmentWorksTest() {
-    setField(emailTask, "includeAttachment", VALUE);
+    setField(emailTask, INCLUDEATTACHMENT, VALUE);
 
     assertEquals(VALUE, emailTask.getIncludeAttachment());
   }
 
   @Test
   void setIncludeAttachmentWorksTest() {
-    setField(emailTask, "includeAttachment", null);
+    setField(emailTask, INCLUDEATTACHMENT, null);
 
     emailTask.setIncludeAttachment(VALUE);
-    assertEquals(VALUE, getField(emailTask, "includeAttachment"));
+    assertEquals(VALUE, getField(emailTask, INCLUDEATTACHMENT));
   }
 
   @ParameterizedTest
@@ -330,43 +337,61 @@ class EmailTaskTest {
    */
   private static Stream<Arguments> providePrePersistFor() {
 
-    return List.of(
-      Arguments.of(
-        helperFieldMap(NULL_STR, NULL_STR, NULL_STR, NULL_STR),
-        helperFieldMap("",       "",       "",       "")
-      ),
-      Arguments.of(
-        helperFieldMap(VALUE,    NULL_STR, NULL_STR, NULL_STR),
-        helperFieldMap(VALUE,    "",       "",       "")
-      ),
-      Arguments.of(
-        helperFieldMap(NULL_STR, VALUE,    NULL_STR, NULL_STR),
-        helperFieldMap("",       VALUE,    "",       "")
-      ),
-      Arguments.of(
-        helperFieldMap(NULL_STR, NULL_STR, VALUE,    NULL_STR),
-        helperFieldMap("",       "",       VALUE,    "")
-      ),
-      Arguments.of(
-        helperFieldMap(NULL_STR, NULL_STR, NULL_STR, VALUE),
-        helperFieldMap("",       "",       "",       VALUE)
-      )
-    ).stream();
+    final List<Arguments> arguments = new ArrayList<>();
+
+    final String defaultIA = EmailTask.DEFAULT_INCLUDE_ATTACHMENT;
+
+    arguments.add(Arguments.of(
+      helperFieldMap(NULL_STR,  NULL_STR, NULL_STR, NULL_STR, NULL_STR),
+      helperFieldMap(defaultIA, "",       "",       "",       "")
+    ));
+
+    arguments.add(Arguments.of(
+      helperFieldMap(VALUE,     NULL_STR, NULL_STR, NULL_STR, NULL_STR),
+      helperFieldMap(VALUE,     "",       "",       "",       "")
+    ));
+
+    arguments.add(Arguments.of(
+      helperFieldMap(NULL_STR,  VALUE,    NULL_STR, NULL_STR, NULL_STR),
+      helperFieldMap(defaultIA, VALUE,    "",       "",       "")
+    ));
+
+    arguments.add(Arguments.of(
+      helperFieldMap(NULL_STR,  NULL_STR, VALUE,    NULL_STR, NULL_STR),
+      helperFieldMap(defaultIA, "",       VALUE,    "",       "")
+    ));
+
+    arguments.add(Arguments.of(
+      helperFieldMap(NULL_STR,  NULL_STR, NULL_STR, VALUE,    NULL_STR),
+      helperFieldMap(defaultIA, "",       "",       VALUE,    "")
+    ));
+
+    arguments.add(Arguments.of(
+      helperFieldMap(NULL_STR,  NULL_STR, NULL_STR, NULL_STR, VALUE),
+      helperFieldMap(defaultIA, "",       "",       "",       VALUE)
+    ));
+
+    return arguments.stream();
   }
 
   /**
    * Helper for reducing in line code repetition for assignments.
    *
-   * @param mailFrom The mailFrom value.
-   * @param mailText The mailText value.
-   * @param mailTo The mailTo value.
-   * @param mailSubject The mailSubject value.
+   * @param includeAttachment The includeAttachment value.
+   * @param mailFrom          The mailFrom value.
+   * @param mailText          The mailText value.
+   * @param mailTo            The mailTo value.
+   * @param mailSubject       The mailSubject value.
    *
    * @return The built arguments map.
    */
-  private static Map<String, Object> helperFieldMap(String mailFrom, String mailText, String mailTo, String mailSubject) {
+  private static Map<String, Object> helperFieldMap(
+    String includeAttachment, String mailFrom, String mailText, String mailTo, String mailSubject
+  ) {
+
     final Map<String, Object> map = new HashMap<>();
 
+    map.put(INCLUDEATTACHMENT, includeAttachment);
     map.put(MAILFROM, mailFrom);
     map.put(MAILTEXT, mailText);
     map.put(MAILTO, mailTo);

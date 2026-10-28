@@ -5,8 +5,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.PrePersist;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import org.folio.rest.workflow.enums.StartEventType;
 import org.folio.rest.workflow.model.components.Event;
 import org.folio.rest.workflow.model.has.HasAsyncBefore;
@@ -18,29 +16,43 @@ import org.hibernate.annotations.ColumnDefault;
 @Entity
 public class StartEvent extends Node implements Event, HasAsyncBefore, HasExpression, HasInterrupting, HasStartEventType {
 
+  /**
+   * The default asyncBefore value.
+   */
+  static final boolean DEFAULT_ASYNC_BEFORE = false;
+
+  /**
+   * The default interrupting value.
+   */
+  static final boolean DEFAULT_INTERRUPTING = false;
+
+  /**
+   * The default messageCorrelation value.
+   */
+  static final StartEventType DEFAULT_MESSAGE_CORRELATION = StartEventType.MESSAGE_CORRELATION;
+
   @Column(nullable = false)
-  @ColumnDefault("false")
+  @ColumnDefault("" + DEFAULT_ASYNC_BEFORE)
   private Boolean asyncBefore;
 
-  @Size(min = 4, max = 256)
-  @Column(nullable = true)
+  @Column(columnDefinition = "TEXT", nullable = true)
   private String expression;
 
   @Column(nullable = false)
-  @ColumnDefault("false")
+  @ColumnDefault("" + DEFAULT_INTERRUPTING)
   private Boolean interrupting;
 
-  @NotNull
   @Column(nullable = false)
+  @ColumnDefault("'MESSAGE_CORRELATION'")
   @Enumerated(EnumType.STRING)
   private StartEventType type;
 
   public StartEvent() {
     super();
 
-    asyncBefore = false;
-    interrupting = false;
-    type = StartEventType.NONE;
+    asyncBefore = DEFAULT_ASYNC_BEFORE;
+    interrupting = DEFAULT_INTERRUPTING;
+    type = DEFAULT_MESSAGE_CORRELATION;
   }
 
   @Override
@@ -49,15 +61,15 @@ public class StartEvent extends Node implements Event, HasAsyncBefore, HasExpres
     super.prePersist();
 
     if (asyncBefore == null) {
-      asyncBefore = false;
+      asyncBefore = DEFAULT_ASYNC_BEFORE;
     }
 
     if (interrupting == null) {
-      interrupting = false;
+      interrupting = DEFAULT_INTERRUPTING;
     }
 
     if (type == null) {
-      type = StartEventType.NONE;
+      type = DEFAULT_MESSAGE_CORRELATION;
     }
   }
 

@@ -11,9 +11,25 @@ import org.folio.rest.workflow.model.has.HasPassword;
 import org.folio.rest.workflow.model.has.HasService;
 import org.folio.rest.workflow.model.has.HasUsername;
 import org.folio.rest.workflow.model.has.common.HasFtpTaskCommon;
+import org.hibernate.annotations.ColumnDefault;
 
 @Entity
 public class FtpTask extends AbstractTask implements DelegateTask, HasFtpTaskCommon, HasPassword, HasService, HasUsername {
+
+  /**
+   * The default op value.
+   */
+  static final SftpOp DEFAULT_OP = SftpOp.GET;
+
+  /**
+   * The default port value.
+   */
+  static final int DEFAULT_PORT = 80;
+
+  /**
+   * The default scheme value.
+   */
+  static final String DEFAULT_SCHEME = "ftp";
 
   @Column(nullable = false)
   private String destinationPath;
@@ -21,8 +37,9 @@ public class FtpTask extends AbstractTask implements DelegateTask, HasFtpTaskCom
   @Column(nullable = false)
   private String host;
 
-  @Enumerated(EnumType.STRING)
   @Column(nullable = false)
+  @ColumnDefault("'GET'")
+  @Enumerated(EnumType.STRING)
   private SftpOp op;
 
   @Column(nullable = false)
@@ -32,9 +49,11 @@ public class FtpTask extends AbstractTask implements DelegateTask, HasFtpTaskCom
   private String password;
 
   @Column(nullable = false)
+  @ColumnDefault("" + DEFAULT_PORT)
   private Integer port;
 
   @Column(nullable = false)
+  @ColumnDefault("'" + DEFAULT_SCHEME + "'")
   private String scheme;
 
   @Column(nullable = true)
@@ -45,10 +64,10 @@ public class FtpTask extends AbstractTask implements DelegateTask, HasFtpTaskCom
 
     destinationPath = "";
     host = "";
-    op = SftpOp.GET;
+    op = DEFAULT_OP;
     originPath = "";
-    port = 80;
-    scheme = "";
+    port = DEFAULT_PORT;
+    scheme = DEFAULT_SCHEME;
   }
 
   @Override
@@ -65,7 +84,7 @@ public class FtpTask extends AbstractTask implements DelegateTask, HasFtpTaskCom
     }
 
     if (op == null) {
-      op = SftpOp.GET;
+      op = DEFAULT_OP;
     }
 
     if (originPath == null) {
@@ -73,11 +92,11 @@ public class FtpTask extends AbstractTask implements DelegateTask, HasFtpTaskCom
     }
 
     if (port == null) {
-      port = 80;
+      port = DEFAULT_PORT;
     }
 
     if (scheme == null) {
-      scheme = "";
+      scheme = DEFAULT_SCHEME;
     }
   }
 

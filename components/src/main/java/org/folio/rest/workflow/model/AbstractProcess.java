@@ -19,12 +19,22 @@ import org.hibernate.annotations.ColumnDefault;
 @MappedSuperclass
 public abstract class AbstractProcess extends Node implements HasAsync, HasNodes {
 
+  /**
+   * The default asyncAfter value.
+   */
+  static final boolean DEFAULT_ASYNC_AFTER = false;
+
+  /**
+   * The default asyncBefore value.
+   */
+  static final boolean DEFAULT_ASYNC_BEFORE = false;
+
   @Column(nullable = false)
-  @ColumnDefault("false")
+  @ColumnDefault("" + DEFAULT_ASYNC_AFTER)
   private Boolean asyncAfter;
 
   @Column(nullable = false)
-  @ColumnDefault("false")
+  @ColumnDefault("" + DEFAULT_ASYNC_BEFORE)
   private Boolean asyncBefore;
 
   @OneToMany
@@ -34,8 +44,8 @@ public abstract class AbstractProcess extends Node implements HasAsync, HasNodes
   AbstractProcess() {
     super();
 
-    asyncAfter = false;
-    asyncBefore = false;
+    asyncAfter = DEFAULT_ASYNC_AFTER;
+    asyncBefore = DEFAULT_ASYNC_BEFORE;
     nodes = new ArrayList<>();
   }
 
@@ -45,11 +55,11 @@ public abstract class AbstractProcess extends Node implements HasAsync, HasNodes
     super.prePersist();
 
     if (asyncAfter == null) {
-      asyncAfter = false;
+      asyncAfter = DEFAULT_ASYNC_AFTER;
     }
 
     if (asyncBefore == null) {
-      asyncBefore = false;
+      asyncBefore = DEFAULT_ASYNC_BEFORE;
     }
 
     if (nodes == null) {

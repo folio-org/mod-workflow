@@ -4,47 +4,60 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.persistence.PrePersist;
 import org.folio.rest.workflow.enums.ScriptType;
 import org.folio.rest.workflow.model.has.common.HasEmbeddedProcessorCommon;
+import org.hibernate.annotations.ColumnDefault;
 
 @Embeddable
 public class EmbeddedProcessor implements HasEmbeddedProcessorCommon {
 
+  /**
+   * The default buffer value.
+   */
+  static final int DEFAULT_BUFFER = 0;
+
+  /**
+   * The default delay value.
+   */
+  static final int DEFAULT_DELAY = 0;
+
+  /**
+   * The default script value.
+   */
+  static final ScriptType DEFAULT_SCRIPT = ScriptType.JS;
+
   // Must be designated as nullable even if this is not supposed to be NULL.
   @Column(nullable = true)
+  @ColumnDefault("" + DEFAULT_BUFFER)
   private Integer buffer;
 
   // Must be designated as nullable even if this is not supposed to be NULL.
-  @NotNull
-  @Column(columnDefinition = "TEXT", nullable = true)
+  @Column(columnDefinition = "TEXT default ''", nullable = true)
   private String code;
 
   // Must be designated as nullable even if this is not supposed to be NULL.
   @Column(nullable = true)
+  @ColumnDefault("" + DEFAULT_DELAY)
   private Integer delay;
 
   // Must be designated as nullable even if this is not supposed to be NULL.
-  @NotNull
-  @Size(min = 4, max = 128)
   @Column(nullable = true)
   private String functionName;
 
   // Must be designated as nullable even if this is not supposed to be NULL.
-  @NotNull
-  @Column(nullable = true)
+  @Column(columnDefinition = "TEXT default 'js'", nullable = true)
   @Enumerated(EnumType.STRING)
   private ScriptType scriptType;
 
   public EmbeddedProcessor() {
     super();
 
-    buffer = 0;
+    buffer = DEFAULT_BUFFER;
     code = "";
-    delay = 0;
+    delay = DEFAULT_DELAY;
     functionName = "";
-    scriptType = ScriptType.JS;
+    scriptType = DEFAULT_SCRIPT;
   }
 
   /**
@@ -53,9 +66,10 @@ public class EmbeddedProcessor implements HasEmbeddedProcessorCommon {
    * Embeddables do not utilize @PrePersist annotation due to it not working well in certain circumstances.
    * Therefore, this must be manually called by the class utilizing this class.
    */
+  @PrePersist
   public void prePersist() {
     if (buffer == null) {
-      buffer = 0;
+      buffer = DEFAULT_BUFFER;
     }
 
     if (code == null) {
@@ -63,7 +77,7 @@ public class EmbeddedProcessor implements HasEmbeddedProcessorCommon {
     }
 
     if (delay == null) {
-      delay = 0;
+      delay = DEFAULT_DELAY;
     }
 
     if (functionName == null) {
@@ -71,7 +85,7 @@ public class EmbeddedProcessor implements HasEmbeddedProcessorCommon {
     }
 
     if (scriptType == null) {
-      scriptType = ScriptType.JS;
+      scriptType = DEFAULT_SCRIPT;
     }
   }
 
