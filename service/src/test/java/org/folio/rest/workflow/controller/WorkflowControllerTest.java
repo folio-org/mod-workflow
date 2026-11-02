@@ -88,6 +88,8 @@ class WorkflowControllerTest {
 
   private static final String ID = "id";
 
+  private static final String DEPLOYMENT_ID = "deploymentId";
+
   private static final String PATH = "/workflows";
 
   private static final String PATH_IMPORT = PATH + "/import";
@@ -125,6 +127,10 @@ class WorkflowControllerTest {
   private static final String PATH_HISTORY = PATH + "/" + UUID + "/history";
 
   private static final String PATH_START = PATH + "/" + UUID + "/start";
+
+  private static final String PATH_START_FOR_DEPLOYMENT = PATH_START + "/" + DEPLOYMENT_ID;
+
+  private static final String PATH_HISTORY_FOR_DEPLOYMENT = PATH_HISTORY + "/" + DEPLOYMENT_ID;
 
   private static final MultiValueMap<String, String> ID_PARAM = CollectionUtils.toMultiValueMap(Map.of(ID, List.of(UUID)));
 
@@ -194,9 +200,8 @@ class WorkflowControllerTest {
   @ParameterizedTest
   @MethodSource("provideHeadersBodyStatusFor")
   void activateWorkflowTest(HttpHeaders headers, String contentType, String accept, MediaType mediaType, MultiValueMap<String, String> parameters, String body, int status) throws Exception {
-    Workflow workflow = new Workflow();
-
-    lenient().when(workflowEngineService.activate(any(), any(), any())).thenReturn(workflow);
+    
+    lenient().when(workflowEngineService.activate(any(), any(), any())).thenReturn(DEPLOYMENT_ID);
 
     MockHttpServletRequestBuilder request = appendHeaders(put(PATH_ACTIVATE), headers, contentType, accept);
     request = appendParameters(request, parameters);
@@ -206,13 +211,12 @@ class WorkflowControllerTest {
 
     if (status == 200) {
       MediaType responseType = MediaType.parseMediaType(result.getResponse().getContentType());
-      String workflowJson = mapper.writeValueAsString(workflow);
 
       assertTrue(mediaType.isCompatibleWith(responseType));
 
-      Workflow responseWorkflow = mapper.readValue(result.getResponse().getContentAsString(), Workflow.class);
+      String responseId = result.getResponse().getContentAsString();
 
-      assertEquals(workflowJson, mapper.writeValueAsString(responseWorkflow));
+      assertEquals(DEPLOYMENT_ID, responseId);
     }
   }
 
@@ -224,28 +228,16 @@ class WorkflowControllerTest {
   }
 
   @ParameterizedTest
-  @MethodSource("provideHeadersBodyStatusFor")
+  @MethodSource("provideHeadersBodyStatusForDeactivateWorkflow")
   void deactivateWorkflowTest(HttpHeaders headers, String contentType, String accept, MediaType mediaType, MultiValueMap<String, String> parameters, String body, int status) throws Exception {
-    Workflow workflow = new Workflow();
-
-    lenient().when(workflowEngineService.deactivate(any(), any(), any())).thenReturn(workflow);
+    
+    lenient().doNothing().when(workflowEngineService).deactivateDeployments(any(), any(), any());
 
     MockHttpServletRequestBuilder request = appendHeaders(put(PATH_DEACTIVATE), headers, contentType, accept);
     request = appendParameters(request, parameters);
 
-    MvcResult result = mvc.perform(appendBody(request, body))
+    mvc.perform(appendBody(request, body))
       .andDo(log()).andExpect(status().is(status)).andReturn();
-
-    if (status == 200) {
-      MediaType responseType = MediaType.parseMediaType(result.getResponse().getContentType());
-      String workflowJson = mapper.writeValueAsString(workflow);
-
-      assertTrue(mediaType.isCompatibleWith(responseType));
-
-      Workflow responseWorkflow = mapper.readValue(result.getResponse().getContentAsString(), Workflow.class);
-
-      assertEquals(workflowJson, mapper.writeValueAsString(responseWorkflow));
-    }
   }
 
   @ParameterizedTest
@@ -305,7 +297,7 @@ class WorkflowControllerTest {
 
   @ParameterizedTest
   @MethodSource("provideHeadersBodyStatusForStartWorkflow")
-  void startWorkflowTest(HttpHeaders headers, String contentType, String accept, MediaType mediaType, MultiValueMap<String, String> parameters, String body, int status) throws Exception {
+  void workflowStartTest(HttpHeaders headers, String contentType, String accept, MediaType mediaType, MultiValueMap<String, String> parameters, String body, int status) throws Exception {
     ObjectNode objectNode = mapper.createObjectNode();
     objectNode.put(KEY, VALUE);
 
@@ -326,9 +318,38 @@ class WorkflowControllerTest {
   }
 
   @ParameterizedTest
+  @MethodSource("provideHeadersBodyStatusForStartWorkflow")
+  void workflowStartForDeploymentTest(HttpHeaders headers, String contentType, String accept, MediaType mediaType, MultiValueMap<String, String> parameters, String body, int status) throws Exception {
+    ObjectNode objectNode = mapper.createObjectNode();
+    objectNode.put(KEY, VALUE);
+
+    lenient().when(workflowEngineService.startForDeployment(any(), any(), any(), any(), any())).thenReturn(objectNode);
+
+    MockHttpServletRequestBuilder request = appendHeaders(post(PATH_START_FOR_DEPLOYMENT), headers, contentType, accept);
+    request = appendParameters(request, parameters);
+
+    MvcResult result = mvc.perform(appendBody(request, body))
+      .andDo(log()).andExpect(status().is(status)).andReturn();
+
+    if (status == 200) {
+      MediaType responseType = MediaType.parseMediaType(result.getResponse().getContentType());
+
+      assertTrue(mediaType.isCompatibleWith(responseType));
+      assertEquals(objectNode.toString(), result.getResponse().getContentAsString());
+    }
+  }
+
+  @ParameterizedTest
   @MethodSource("provideDeleteGetPatchPutFor")
-  void startWorkflowFailsTest(Method method, HttpHeaders headers, String contentType, String accept, MediaType mediaType, MultiValueMap<String, String> parameters, String body, int status) throws Exception {
+  void workflowStartFailsTest(Method method, HttpHeaders headers, String contentType, String accept, MediaType mediaType, MultiValueMap<String, String> parameters, String body, int status) throws Exception {
     mvc.perform(invokeRequestBuilder(PATH_START, method, headers, contentType, accept, parameters, body))
+    .andDo(log()).andExpect(status().is(status));
+  }
+ 
+  @ParameterizedTest
+  @MethodSource("provideDeleteGetPatchPutFor")
+  void workflowStartForDeploymentFailsTest(Method method, HttpHeaders headers, String contentType, String accept, MediaType mediaType, MultiValueMap<String, String> parameters, String body, int status) throws Exception {
+    mvc.perform(invokeRequestBuilder(PATH_START_FOR_DEPLOYMENT, method, headers, contentType, accept, parameters, body))
     .andDo(log()).andExpect(status().is(status));
   }
 
@@ -353,11 +374,40 @@ class WorkflowControllerTest {
       assertEquals(objectNode.toString(), result.getResponse().getContentAsString());
     }
   }
+ 
+  @ParameterizedTest
+  @MethodSource("provideHeadersBodyStatusFor")
+  void workflowHistoryForDeploymentTest(HttpHeaders headers, String contentType, String accept, MediaType mediaType, MultiValueMap<String, String> parameters, String body, int status) throws Exception {
+    ObjectNode objectNode = mapper.createObjectNode();
+    objectNode.put(KEY, VALUE);
+
+    lenient().when(workflowEngineService.historyForDeployment(any(), any(), any(), any())).thenReturn(objectNode);
+
+    MockHttpServletRequestBuilder request = appendHeaders(get(PATH_HISTORY_FOR_DEPLOYMENT), headers, contentType, accept);
+    request = appendParameters(request, parameters);
+
+    MvcResult result = mvc.perform(appendBody(request, body))
+      .andDo(log()).andExpect(status().is(status)).andReturn();
+
+    if (status == 200) {
+      MediaType responseType = MediaType.parseMediaType(result.getResponse().getContentType());
+
+      assertTrue(mediaType.isCompatibleWith(responseType));
+      assertEquals(objectNode.toString(), result.getResponse().getContentAsString());
+    }
+  }
 
   @ParameterizedTest
   @MethodSource("provideDeletePatchPostPutFor")
   void workflowHistoryFailsTest(Method method, HttpHeaders headers, String contentType, String accept, MediaType mediaType, MultiValueMap<String, String> parameters, String body, int status) throws Exception {
     mvc.perform(invokeRequestBuilder(PATH_HISTORY, method, headers, contentType, accept, parameters, body))
+    .andDo(log()).andExpect(status().is(status));
+  }
+ 
+  @ParameterizedTest
+  @MethodSource("provideDeletePatchPostPutFor")
+  void workflowHistoryForDeploymentFailsTest(Method method, HttpHeaders headers, String contentType, String accept, MediaType mediaType, MultiValueMap<String, String> parameters, String body, int status) throws Exception {
+    mvc.perform(invokeRequestBuilder(PATH_HISTORY_FOR_DEPLOYMENT, method, headers, contentType, accept, parameters, body))
     .andDo(log()).andExpect(status().is(status));
   }
 
@@ -615,6 +665,52 @@ class WorkflowControllerTest {
       Arguments.of(OKAPI_HEAD_TENANT, APP_STREAM, NULL_STR,   MT_APP_JSON, ID_PARAM, JSON_OBJECT, 200),
       Arguments.of(OKAPI_HEAD_TENANT, APP_STREAM, APP_STAR,   MT_APP_JSON, ID_PARAM, JSON_OBJECT, 200),
       Arguments.of(OKAPI_HEAD_TENANT, APP_STREAM, STAR,       MT_APP_JSON, ID_PARAM, JSON_OBJECT, 200)
+    );
+
+    Object[] params = { };
+
+    Stream<Arguments> stream2 = Stream.concat(stream1, buildAppJsonBodyStatus(OKAPI_HEAD_TOKEN, params));
+    return Stream.concat(stream2, buildAppJsonBodyStatus(OKAPI_HEAD_TENANT, params));
+  }
+ 
+  /**
+   * Helper function for parameterized test providing tests with headers, body, and status for the deactivate workflow end point.
+   *
+   * This is intended to be used for when the correct HTTP method is being used in the request.
+   *
+   * @return
+   *   The arguments array stream with the stream columns as:
+   *     - HttpHeaders headers.
+   *     - String contentType (Content-Type request).
+   *     - String accept (ask for this Content-Type on response).
+   *       String mediaType (response Content-Type).
+   *     - MultiValueMap<String, String> parameters.
+   *     - String body (request body).
+   *     - int status (response HTTP status code).
+   */
+  private static Stream<Arguments> provideHeadersBodyStatusForDeactivateWorkflow() {
+    Stream<Arguments> stream1 = Stream.of(
+      Arguments.of(OKAPI_HEAD_TENANT, APP_JSON,   APP_SCHEMA, MT_APP_JSON, ID_PARAM, JSON_OBJECT, 406),
+      Arguments.of(OKAPI_HEAD_TENANT, APP_JSON,   APP_JSON,   MT_APP_JSON, ID_PARAM, JSON_OBJECT, 204),
+      Arguments.of(OKAPI_HEAD_TENANT, APP_JSON,   TEXT_PLAIN, MT_APP_JSON, ID_PARAM, JSON_OBJECT, 406),
+      Arguments.of(OKAPI_HEAD_TENANT, APP_JSON,   APP_STREAM, MT_APP_JSON, ID_PARAM, JSON_OBJECT, 406),
+      Arguments.of(OKAPI_HEAD_TENANT, APP_JSON,   NULL_STR,   MT_APP_JSON, ID_PARAM, JSON_OBJECT, 204),
+      Arguments.of(OKAPI_HEAD_TENANT, APP_JSON,   APP_STAR,   MT_APP_JSON, ID_PARAM, JSON_OBJECT, 204),
+      Arguments.of(OKAPI_HEAD_TENANT, APP_JSON,   STAR,       MT_APP_JSON, ID_PARAM, JSON_OBJECT, 204),
+      Arguments.of(OKAPI_HEAD_TENANT, TEXT_PLAIN, APP_SCHEMA, MT_APP_JSON, ID_PARAM, PLAIN_BODY,  406),
+      Arguments.of(OKAPI_HEAD_TENANT, TEXT_PLAIN, APP_JSON,   MT_APP_JSON, ID_PARAM, PLAIN_BODY,  204),
+      Arguments.of(OKAPI_HEAD_TENANT, TEXT_PLAIN, TEXT_PLAIN, MT_APP_JSON, ID_PARAM, PLAIN_BODY,  406),
+      Arguments.of(OKAPI_HEAD_TENANT, TEXT_PLAIN, APP_STREAM, MT_APP_JSON, ID_PARAM, PLAIN_BODY,  406),
+      Arguments.of(OKAPI_HEAD_TENANT, TEXT_PLAIN, NULL_STR,   MT_APP_JSON, ID_PARAM, PLAIN_BODY,  204),
+      Arguments.of(OKAPI_HEAD_TENANT, TEXT_PLAIN, STAR,       MT_APP_JSON, ID_PARAM, PLAIN_BODY,  204),
+      Arguments.of(OKAPI_HEAD_TENANT, TEXT_PLAIN, APP_STAR,   MT_APP_JSON, ID_PARAM, PLAIN_BODY,  204),
+      Arguments.of(OKAPI_HEAD_TENANT, APP_STREAM, APP_SCHEMA, MT_APP_JSON, ID_PARAM, JSON_OBJECT, 406),
+      Arguments.of(OKAPI_HEAD_TENANT, APP_STREAM, APP_JSON,   MT_APP_JSON, ID_PARAM, JSON_OBJECT, 204),
+      Arguments.of(OKAPI_HEAD_TENANT, APP_STREAM, TEXT_PLAIN, MT_APP_JSON, ID_PARAM, JSON_OBJECT, 406),
+      Arguments.of(OKAPI_HEAD_TENANT, APP_STREAM, APP_STREAM, MT_APP_JSON, ID_PARAM, JSON_OBJECT, 406),
+      Arguments.of(OKAPI_HEAD_TENANT, APP_STREAM, NULL_STR,   MT_APP_JSON, ID_PARAM, JSON_OBJECT, 204),
+      Arguments.of(OKAPI_HEAD_TENANT, APP_STREAM, APP_STAR,   MT_APP_JSON, ID_PARAM, JSON_OBJECT, 204),
+      Arguments.of(OKAPI_HEAD_TENANT, APP_STREAM, STAR,       MT_APP_JSON, ID_PARAM, JSON_OBJECT, 204)
     );
 
     Object[] params = { };

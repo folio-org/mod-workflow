@@ -21,7 +21,7 @@ import java.util.Map;
 import org.folio.rest.workflow.model.converter.JsonNodeConverter;
 import org.folio.rest.workflow.model.has.HasChecksum;
 import org.folio.rest.workflow.model.has.HasCreatedOn;
-import org.folio.rest.workflow.model.has.HasDeploymentId;
+import org.folio.rest.workflow.model.has.HasDeploymentIds;
 import org.folio.rest.workflow.model.has.HasId;
 import org.folio.rest.workflow.model.has.HasInformational;
 import org.folio.rest.workflow.model.has.HasName;
@@ -38,7 +38,7 @@ import tools.jackson.databind.JsonNode;
 
 @Entity
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
-public class Workflow extends AbstractBaseEntity implements HasChecksum, HasCreatedOn, HasDeploymentId, HasId, HasInformational, HasName, HasNodes, HasUpdatedOn, HasVersionTag, HasWorkflowCommon {
+public class Workflow extends AbstractBaseEntity implements HasChecksum, HasCreatedOn, HasDeploymentIds, HasId, HasInformational, HasName, HasNodes, HasUpdatedOn, HasVersionTag, HasWorkflowCommon {
 
   /**
    * The default active value.
@@ -66,8 +66,10 @@ public class Workflow extends AbstractBaseEntity implements HasChecksum, HasCrea
   @Column(columnDefinition="TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW()", nullable = false)
   private Instant createdOn;
 
-  @Column(unique = true)
-  private String deploymentId;
+  @ElementCollection
+  @OrderColumn(name = "position")
+  @Column(name = "deployment_id")
+  private List<String> deploymentIds;
 
   @Column(columnDefinition = "TEXT", nullable = true)
   private String description;
@@ -113,6 +115,7 @@ public class Workflow extends AbstractBaseEntity implements HasChecksum, HasCrea
     name = "";
     historyTimeToLive = DEFAULT_HISTORYTIMETOLIVE;
     initialContext = new HashMap<>();
+    deploymentIds = new ArrayList<>();
     nodes = new ArrayList<>();
     setup = new Setup();
     updatedOn = now();
@@ -140,6 +143,10 @@ public class Workflow extends AbstractBaseEntity implements HasChecksum, HasCrea
 
     if (initialContext == null) {
       initialContext = new HashMap<>();
+    }
+
+    if (deploymentIds == null) {
+      deploymentIds = new ArrayList<>();
     }
 
     if (nodes == null) {
@@ -216,8 +223,8 @@ public class Workflow extends AbstractBaseEntity implements HasChecksum, HasCrea
   }
 
   @Override
-  public String getDeploymentId() {
-    return deploymentId;
+  public List<String> getDeploymentIds() {
+    return deploymentIds;
   }
 
   @Override
@@ -276,8 +283,8 @@ public class Workflow extends AbstractBaseEntity implements HasChecksum, HasCrea
   }
 
   @Override
-  public void setDeploymentId(String deploymentId) {
-    this.deploymentId = deploymentId;
+  public void setDeploymentIds(List<String> deploymentIds) {
+    this.deploymentIds = deploymentIds;
   }
 
   /**

@@ -16,31 +16,32 @@ class WorkflowOperationalNodeDtoTest {
 
   private static final StartEvent NODE = new StartEvent();
 
+  private static final List<String> DEPLOYMENT_IDS = List.of(VALUE);
+
   private static final List<Node> NODES = List.of(NODE);
 
   private WorkflowOperationalNodeDto dto;
 
   @BeforeEach
   void beforeEach() {
-
     dto = new Impl();
   }
 
   @Test
-  void getDeploymentIdWorksTest() {
+  void getDeploymentIdsWorksTest() {
 
-    setField(dto, "deploymentId", VALUE);
+    setField(dto, "deploymentIds", DEPLOYMENT_IDS);
 
-    assertEquals(VALUE, dto.getDeploymentId());
+    assertEquals(DEPLOYMENT_IDS, dto.getDeploymentIds());
   }
 
   @Test
-  void setDeploymentIdWorksTest() {
+  void setDeploymentIdsWorksTest() {
 
-    setField(dto, "deploymentId", null);
+    setField(dto, "deploymentIds", null);
 
-    dto.setDeploymentId(VALUE);
-    assertEquals(VALUE, getField(dto, "deploymentId"));
+    dto.setDeploymentIds(DEPLOYMENT_IDS);
+    assertEquals(DEPLOYMENT_IDS, getField(dto, "deploymentIds"));
   }
 
   @Test

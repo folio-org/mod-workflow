@@ -27,6 +27,8 @@ class WorkflowDtoTest {
 
   private List<Node> nodes;
 
+  private List<String> deploymentIds;
+
   private WorkflowDto workflowDto;
 
   @BeforeEach
@@ -34,6 +36,7 @@ class WorkflowDtoTest {
     workflowDto = new Impl();
     nodes = new ArrayList<>();
     nodes.add(node);
+    deploymentIds = List.of(VALUE);
   }
 
   @Test
@@ -142,18 +145,18 @@ class WorkflowDtoTest {
   }
 
   @Test
-  void getDeploymentIdWorksTest() {
-    setField(workflowDto, "deploymentId", VALUE);
+  void getDeploymentIdsWorksTest() {
+    setField(workflowDto, "deploymentIds", deploymentIds);
 
-    assertEquals(VALUE, workflowDto.getDeploymentId());
+    assertEquals(deploymentIds, workflowDto.getDeploymentIds());
   }
 
   @Test
-  void setDeploymentIdWorksTest() {
-    setField(workflowDto, "deploymentId", null);
+  void setDeploymentIdsWorksTest() {
+    setField(workflowDto, "deploymentIds", null);
 
-    workflowDto.setDeploymentId(VALUE);
-    assertEquals(VALUE, getField(workflowDto, "deploymentId"));
+    workflowDto.setDeploymentIds(deploymentIds);
+    assertEquals(deploymentIds, getField(workflowDto, "deploymentIds"));
   }
 
   @Test
@@ -171,6 +174,6 @@ class WorkflowDtoTest {
     assertEquals(setup, getField(workflowDto, "setup"));
   }
 
-  private static class Impl extends Workflow implements WorkflowDto { };
+  private static class Impl extends Workflow implements WorkflowDto { }
 
 }

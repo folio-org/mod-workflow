@@ -55,6 +55,8 @@ class DeleteServiceTest {
   @Spy
   private DeleteService deleteService;
 
+  private List<String> deploymentIds;
+
   private List<Node> nodes;
 
   private RequestTask requestTask;
@@ -68,6 +70,7 @@ class DeleteServiceTest {
   @BeforeEach
   void beforeEach() {
 
+    deploymentIds = List.of(UUID);
     nodes = new ArrayList<>();
     requestTask = new RequestTask();
     startEvent = new StartEvent();
@@ -77,7 +80,7 @@ class DeleteServiceTest {
     setField(deleteService, "entityManager", entityManager);
 
     setField(workflowOperationalNode, "id", UUID);
-    setField(workflowOperationalNode, "deploymentId", UUID);
+    setField(workflowOperationalNode, "deploymentIds", deploymentIds);
     setField(workflowOperationalNode, "name", VALUE);
     setField(workflowOperationalNode, "nodes", nodes);
     setField(workflowOperationalNode, "versionTag", VALUE);
