@@ -9246,12 +9246,6 @@ components:
           type: boolean
         float:
           type: boolean
-        valueNode:
-          type: boolean
-        container:
-          type: boolean
-        missingNode:
-          type: boolean
         nodeType:
           type: string
           enum:
@@ -9290,6 +9284,12 @@ components:
         boolean:
           type: boolean
         binary:
+          type: boolean
+        valueNode:
+          type: boolean
+        container:
+          type: boolean
+        missingNode:
           type: boolean
         number:
           type: boolean

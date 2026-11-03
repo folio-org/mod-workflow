@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.folio.rest.workflow.dto.WorkflowDto;
@@ -27,6 +28,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
+
 import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.json.JsonMapper;
 import tools.jackson.databind.node.ArrayNode;
@@ -79,7 +81,7 @@ public class WorkflowEngineService {
   /**
    * Activate a workflow.
    * 
-   * @param workflowId The workflow to start.
+   * @param workflowId The workflow to activate.
    * @param tenant The tenant.
    * @param token The token.
    * 
@@ -95,10 +97,11 @@ public class WorkflowEngineService {
   /**
    * Deactivate a workflow with all respective deployment IDs.
    * 
-   * @param workflowId The workflow to start.
+   * @param workflowId The workflow to deactivate.
    * @param tenant The tenant.
    * @param token The token.
    */
+  @Transactional(rollbackFor = Exception.class)
   public void deactivateDeployments(String workflowId, String tenant, String token)
       throws WorkflowEngineServiceException {
 
@@ -109,11 +112,12 @@ public class WorkflowEngineService {
   /**
    * Deactivate a workflow, using a specified deployment ID.
    * 
-   * @param workflowId The workflow to start.
+   * @param workflowId The workflow to deactivate.
    * @param deploymentId The activated workflow deployment ID.
    * @param tenant The tenant.
    * @param token The token.
    */
+  @Transactional(rollbackFor = Exception.class)
   public void deactivateDeployment(String workflowId, String deploymentId, String tenant, String token)
       throws WorkflowEngineServiceException {
     
@@ -138,9 +142,8 @@ public class WorkflowEngineService {
 
     final WorkflowOperationalNodeDto workflow = workflowRepo.getViewById(workflowId, WorkflowOperationalNodeDto.class);
 
-    // Deployment ID will not exist if it has not been activated.
     if (workflow.getDeploymentIds() != null && !workflow.getDeploymentIds().isEmpty()) {
-      deleteWorkflowDeployments(workflow, tenant, token);
+      deleteWorkflowDeployments(workflowId, tenant, token);
     }
 
     deleteService.deleteNodes(workflow);
@@ -327,15 +330,17 @@ public class WorkflowEngineService {
   /**
    * Delete all deployments of a workflow.
    *
-   * @param workflow The workflow to delete the deployment of.
+   * @param workflowId The workflow ID.
    * @param tenant   The tenant to use.
    * @param token    The token to use.
    *
    * @throws WorkflowDeploymentNotActivated If workflow is not activated.
    * @throws WorkflowEngineServiceException When the request fails in some way preventing the return of an HttpEntity.
    */
-  private void deleteWorkflowDeployments(WorkflowOperationalNodeDto workflow, String tenant, String token)
+  private void deleteWorkflowDeployments(String workflowId, String tenant, String token)
     throws WorkflowDeploymentNotActivated, WorkflowEngineServiceException {
+    
+    final WorkflowDto workflow = workflowRepo.getViewById(workflowId, WorkflowDto.class);
 
     final List<String> deploymentIds = workflow.getDeploymentIds();
     for (String deploymentId : deploymentIds) {
@@ -355,7 +360,7 @@ public class WorkflowEngineService {
    * @throws WorkflowDeploymentNotActivated If workflow is not activated.
    * @throws WorkflowEngineServiceException When the request fails in some way preventing the return of an HttpEntity.
    */
-  private void deleteWorkflowDeployment(WorkflowOperationalNodeDto workflow, String deploymentId, String tenant, String token)
+  private void deleteWorkflowDeployment(WorkflowDto workflow, String deploymentId, String tenant, String token)
     throws WorkflowDeploymentNotActivated, WorkflowEngineServiceException {
 
     final String workflowId = workflow.getId();
@@ -369,7 +374,7 @@ public class WorkflowEngineService {
 
       if (definitions != null && response.getStatusCode() != HttpStatus.NOT_FOUND && !definitions.isEmpty()) {
         try {
-          deactivateDeployment(workflowId, deploymentId, tenant, token);
+          sendWorkflowDeactivateRequest(workflow, List.of(deploymentId), WORKFLOW_ENGINE_DEACTIVATE_URL_TEMPLATE, tenant, token);
         } catch (WorkflowEngineServiceException e) {
           final String message = String.format(
             "Failed to delete Workflow ID '%s' for Deployment ID '%s' and Version Tag '%s' due to deactivation failure: %s!",
@@ -549,7 +554,8 @@ public class WorkflowEngineService {
   private void sendWorkflowDeactivateRequest(WorkflowDto workflow, List<String> deploymentIds, String requestPath, String tenant, String token)
       throws WorkflowEngineServiceException {
 
-    HttpEntity<WorkflowDto> entity = new HttpEntity<>(workflow, headers(tenant, token));
+    final ArrayList<String> deploymentIdArrayList = new ArrayList<>(deploymentIds);
+    HttpEntity<ArrayList<String>> entity = new HttpEntity<>(deploymentIdArrayList, headers(tenant, token));
     String url = String.format(requestPath, okapiUrl, basePath);
 
     LOG.debug(String.format("Send Okapi workflow engine request %s %s", HttpMethod.POST, url));
@@ -577,7 +583,6 @@ public class WorkflowEngineService {
    * @param deploymentIds The list of deployment IDs to set in the workflow.
    * @return The Resulting `Workflow` model as a result of saving.
    */
-  @Transactional(rollbackFor = Exception.class)
   private Workflow sendWorkflowRequestSaveDeployments(String workflowId, List<String> deploymentIds) {
     final Workflow workflow = workflowRepo.getReferenceById(workflowId);
 

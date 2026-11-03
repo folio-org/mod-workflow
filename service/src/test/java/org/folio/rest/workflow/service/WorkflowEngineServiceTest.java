@@ -218,7 +218,10 @@ class WorkflowEngineServiceTest {
 
     ResponseEntity<ArrayNode> responseArray = new ResponseEntity<>(arrayNodeSingle, HttpStatus.OK);
 
+    final WorkflowDto workflowDto = (WorkflowDto) workflow;
+
     when(workflowRepo.getViewById(anyString(), eq(WorkflowOperationalNodeDto.class))).thenReturn(workflowOperationalNode);
+    when(workflowRepo.getViewById(anyString(), eq(WorkflowDto.class))).thenReturn(workflowDto);
 
     when(restTemplate.exchange(anyString(), eq(HttpMethod.GET), any(HttpEntity.class), eq(ArrayNode.class), anyMap()))
       .thenReturn(responseArray);
