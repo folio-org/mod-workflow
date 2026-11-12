@@ -4,6 +4,9 @@ import org.folio.spring.liquibase.FolioSpringLiquibase;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * Provide custom overrides to FOLIO Spring Support Liquibase related configuration.
+ */
 @Configuration
 public class FolioSpringLiquibaseConfig {
 
