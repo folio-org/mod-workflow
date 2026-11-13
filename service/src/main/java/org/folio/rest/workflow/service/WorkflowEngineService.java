@@ -50,7 +50,7 @@ public class WorkflowEngineService {
   @Value("${okapi.auth.tokenHeaderName:X-Okapi-Token}")
   private String tokenHeaderName;
 
-  @Value("${okapi.url}")
+  @Value("${folio.gateway.url}")
   private String okapiUrl;
 
   @Value("${okapi.camunda.base-path:/}")

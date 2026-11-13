@@ -36,7 +36,7 @@ public class OkapiDiscoveryService {
   @Value("${tenant.headerName:X-Okapi-Tenant}")
   private String tenantHeaderName;
 
-  @Value("${okapi.url}")
+  @Value("${folio.gateway.url}")
   private String okapiUrl;
 
   @Value("${okapi.camunda.base-path:/}")

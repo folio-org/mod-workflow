@@ -111,6 +111,9 @@ event:
     path: events
 
 folio:
+  gateway:
+    url: ${OKAPI_URL:http://localhost:9130}
+
   tenant.validation: false
 
 tenant:
@@ -128,7 +131,6 @@ tenant:
   schema-scripts:
 
 okapi:
-  url: ${OKAPI_URL:http://localhost:9130}
   camunda:
     base-path: /
     rest-path: /camunda
