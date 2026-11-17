@@ -11,6 +11,13 @@ import org.springframework.context.annotation.Configuration;
 public class FolioSpringLiquibaseConfig {
 
   /**
+   * Initializer.
+   */
+  FolioSpringLiquibaseConfig() {
+    // Do nothing.
+  }
+
+  /**
    * Enable liquibase to work-around problems where FolioSpringLiquibase requires it but it causes problems and workflow doesn't use it.
    *
    * Specifically disable running using configuration.

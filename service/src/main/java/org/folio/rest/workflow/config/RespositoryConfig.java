@@ -12,6 +12,13 @@ import org.springframework.context.annotation.Primary;
 @Configuration
 public class RespositoryConfig {
 
+  /**
+   * Initializer.
+   */
+  RespositoryConfig() {
+    // Do nothing.
+  }
+
   @Bean
   @Primary
   DataSource dataSource(DataSourceProperties props, SchemaService schemaService) {
