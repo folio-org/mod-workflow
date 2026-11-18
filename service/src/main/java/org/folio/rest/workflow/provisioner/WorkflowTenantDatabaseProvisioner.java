@@ -1,7 +1,5 @@
 package org.folio.rest.workflow.provisioner;
 
-import com.zaxxer.hikari.HikariDataSource;
-import jakarta.annotation.PreDestroy;
 import jakarta.persistence.EntityManagerFactory;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -15,7 +13,6 @@ import org.folio.spring.tenant.storage.ThreadLocalStorage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
-import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 
 /**
@@ -42,13 +39,9 @@ public class WorkflowTenantDatabaseProvisioner implements TenantDatabaseProvisio
   }
 
   @Override
-  public void provisionSchema(String schema, String tenant, Connection connection) throws SQLException {
+  public void provisionSchema(String schema, String tenant) throws SQLException {
 
     LOG.debug("Provisioning schema '{}' for tenant '{}'.", schema, tenant);
-
-    try (final Statement statement = connection.createStatement()) {
-      statement.execute(String.format("CREATE SCHEMA IF NOT EXISTS %s", schema));
-    }
 
     final String originalTlsTenant = ThreadLocalStorage.getTenant();
 
@@ -67,15 +60,6 @@ public class WorkflowTenantDatabaseProvisioner implements TenantDatabaseProvisio
   }
 
   /**
-   * Properly close the Hikari provisioning data source.
-   */
-  @PreDestroy
-  public void preDestroy() {
-
-    ((HikariDataSource) provisioningDataSource).close();
-  }
-
-  /**
    * Perform the provisioning for the schema using the custom provisioning data source.
    *
    * @param schema The schema to provision.
@@ -85,35 +69,31 @@ public class WorkflowTenantDatabaseProvisioner implements TenantDatabaseProvisio
     final LocalContainerEntityManagerFactoryBean primaryEmf
       = (LocalContainerEntityManagerFactoryBean) applicationContext.getBean("&entityManagerFactory");
 
-    final Map<String, Object> jpaProps = new HashMap<>(primaryEmf.getJpaPropertyMap());
-    final JpaVendorAdapter vendorAdapter = primaryEmf.getJpaVendorAdapter();
-
-    // Strip all connection-related properties so that Hibernate uses setDataSource().
-    jpaProps.remove("jakarta.persistence.jdbc.url");
-    jpaProps.remove("jakarta.persistence.jdbc.driver-class");
-    jpaProps.remove("jakarta.persistence.jdbc.user");
-    jpaProps.remove("jakarta.persistence.jdbc.password");
-    jpaProps.remove("hibernate.connection.url");
-    jpaProps.remove("hibernate.connection.driver_class");
-    jpaProps.remove("hibernate.connection.username");
-    jpaProps.remove("hibernate.connection.password");
-    jpaProps.remove("hibernate.connection.provider_class");
-    jpaProps.remove("hibernate.connection.datasource");
-
+    final Map<String, Object> jpaProps = new HashMap<>();
+    jpaProps.put("hibernate.dialect", primaryEmf.getJpaPropertyMap().get("hibernate.dialect"));
     jpaProps.put("hibernate.default_schema", schema);
-    jpaProps.put("hibernate.hbm2ddl.auto", "update");
+    jpaProps.put("hibernate.hbm2ddl.auto", "update"); // TODO: expose this as a custom configuration setting.
+
+    // Must be explicitly set to override and take precedence.
+    jpaProps.put("hibernate.connection.datasource", provisioningDataSource);
 
     final LocalContainerEntityManagerFactoryBean tenantEmf = new LocalContainerEntityManagerFactoryBean();
     tenantEmf.setDataSource(provisioningDataSource);
-    tenantEmf.setJpaVendorAdapter(vendorAdapter);
+    tenantEmf.setJpaVendorAdapter(primaryEmf.getJpaVendorAdapter());
     tenantEmf.setPackagesToScan(HibernateMultiTenantConfig.PACKAGES_TO_SCAN);
     tenantEmf.setJpaPropertyMap(jpaProps);
     tenantEmf.setPersistenceUnitName(String.format("%s_%s", WorkflowTenantDatabaseProvisioner.class, schema));
 
     try {
+      try (
+        final Connection connection = provisioningDataSource.getConnection();
+        final Statement statement = connection.createStatement()
+      ) {
+        statement.execute(String.format("CREATE SCHEMA IF NOT EXISTS %s", schema));
+      }
+
       tenantEmf.afterPropertiesSet();
       final EntityManagerFactory emf = tenantEmf.getObject();
-      emf.close();
     } catch (Exception e) {
       throw new RuntimeException(String.format("Failed to provision schema '%s'.", schema), e);
     } finally {
