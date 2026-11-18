@@ -1,15 +1,22 @@
 package org.folio.rest.workflow.provisioner;
 
+import com.zaxxer.hikari.HikariDataSource;
+import jakarta.annotation.PreDestroy;
 import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.SchemaManager;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.HashMap;
+import java.util.Map;
+import javax.sql.DataSource;
+import org.folio.spring.tenant.config.HibernateMultiTenantConfig;
 import org.folio.spring.tenant.interfaces.TenantDatabaseProvisioner;
 import org.folio.spring.tenant.storage.ThreadLocalStorage;
-import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.orm.jpa.JpaVendorAdapter;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 
 /**
  * Workflow-specific implementation of TenantDatabasProvisioner.
@@ -18,16 +25,20 @@ public class WorkflowTenantDatabaseProvisioner implements TenantDatabaseProvisio
 
   private static final Logger LOG = LoggerFactory.getLogger(WorkflowTenantDatabaseProvisioner.class);
 
-  private final EntityManagerFactory entityManagerFactory;
+  private final ApplicationContext applicationContext;
+
+  private final DataSource provisioningDataSource;
 
   /**
    * Initializer.
    *
-   * @param entityManagerFactory The entity m anager factory.
+   * @param applicationContext     The application context.
+   * @param provisioningDataSource The data source used only to provision.
    */
-  public WorkflowTenantDatabaseProvisioner(EntityManagerFactory entityManagerFactory) {
+  public WorkflowTenantDatabaseProvisioner(ApplicationContext applicationContext, DataSource provisioningDataSource) {
 
-    this.entityManagerFactory = entityManagerFactory;
+    this.applicationContext = applicationContext;
+    this.provisioningDataSource = provisioningDataSource;
   }
 
   @Override
@@ -39,36 +50,62 @@ public class WorkflowTenantDatabaseProvisioner implements TenantDatabaseProvisio
       statement.execute(String.format("CREATE SCHEMA IF NOT EXISTS %s", schema));
     }
 
-    /* Entity manager example:
-    LocalContainerEntityManagerFactoryBean emf = new LocalContainerEntityManagerFactoryBean();
-    emf.setDataSource(dataSource);
-    emf.setPackagesToScan("org.folio.rest.workflow");
-    emf.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
-
-    Map<String, Object> props = new HashMap<>();
-    props.put("hibernate.hbm2ddl.auto", "update");
-    props.put("hibernate.default_schema", schema);
-    emf.setJpaPropertyMap(props);
-
-    emf.afterPropertiesSet();
-    emf.destroy();
-    */
-
     final String originalTlsTenant = ThreadLocalStorage.getTenant();
 
-    // Set the tenant context so the MultiTenantConnectionProvider routes correctly
+    // Set the tenant context so the MultiTenantConnectionProvider routes correctly.
     ThreadLocalStorage.setTenant(tenant);
+
     try {
-        SessionFactory sessionFactory = entityManagerFactory.unwrap(SessionFactory.class);
-        SchemaManager schemaManager = sessionFactory.getSchemaManager();
-        schemaManager.create(false);
-        //schemaManager.update(false);
+      provisionSchema(schema);
     } finally {
       ThreadLocalStorage.unload();
     }
 
     if (originalTlsTenant != null) {
       ThreadLocalStorage.setTenant(originalTlsTenant);
+    }
+  }
+
+  /**
+   * Properly close the Hikari provisioning data source.
+   */
+  @PreDestroy
+  public void preDestroy() {
+
+    ((HikariDataSource) provisioningDataSource).close();
+  }
+
+  /**
+   * Perform the provisioning for the schema using the custom provisioning data source.
+   *
+   * @param schema The schema to provision.
+   */
+  private void provisionSchema(String schema) {
+
+    final LocalContainerEntityManagerFactoryBean primaryEmf
+      = (LocalContainerEntityManagerFactoryBean) applicationContext.getBean("&entityManagerFactory");
+
+    final Map<String, Object> jpaProps = new HashMap<>(primaryEmf.getJpaPropertyMap());
+    final JpaVendorAdapter vendorAdapter = primaryEmf.getJpaVendorAdapter();
+
+    jpaProps.put("hibernate.default_schema", schema);
+    jpaProps.put("hibernate.hbm2ddl.auto", "update");
+
+    final LocalContainerEntityManagerFactoryBean tenantEmf = new LocalContainerEntityManagerFactoryBean();
+    tenantEmf.setDataSource(provisioningDataSource);
+    tenantEmf.setJpaVendorAdapter(vendorAdapter);
+    tenantEmf.setPackagesToScan(HibernateMultiTenantConfig.PACKAGES_TO_SCAN);
+    tenantEmf.setJpaPropertyMap(jpaProps);
+    tenantEmf.setPersistenceUnitName(String.format("%s_%s", WorkflowTenantDatabaseProvisioner.class, schema));
+
+    try {
+      tenantEmf.afterPropertiesSet();
+      final EntityManagerFactory emf = tenantEmf.getObject();
+      emf.close();
+    } catch (Exception e) {
+      throw new RuntimeException(String.format("Failed to provision schema '%s'.", schema), e);
+    } finally {
+      tenantEmf.destroy();
     }
   }
 

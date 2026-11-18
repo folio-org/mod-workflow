@@ -1,2 +1,2 @@
 org.folio.spring.tenant.interfaces.TenantDatabaseProvisioner=\
-org.folio.rest.workflow.provisioner.WorkflowTenantDatabasProvisioner   
+org.folio.rest.workflow.provisioner.WorkflowTenantDatabaseProvisioner
