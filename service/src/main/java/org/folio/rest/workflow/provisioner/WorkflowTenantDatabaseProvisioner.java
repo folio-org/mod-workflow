@@ -88,6 +88,18 @@ public class WorkflowTenantDatabaseProvisioner implements TenantDatabaseProvisio
     final Map<String, Object> jpaProps = new HashMap<>(primaryEmf.getJpaPropertyMap());
     final JpaVendorAdapter vendorAdapter = primaryEmf.getJpaVendorAdapter();
 
+    // Strip all connection-related properties so that Hibernate uses setDataSource().
+    jpaProps.remove("jakarta.persistence.jdbc.url");
+    jpaProps.remove("jakarta.persistence.jdbc.driver-class");
+    jpaProps.remove("jakarta.persistence.jdbc.user");
+    jpaProps.remove("jakarta.persistence.jdbc.password");
+    jpaProps.remove("hibernate.connection.url");
+    jpaProps.remove("hibernate.connection.driver_class");
+    jpaProps.remove("hibernate.connection.username");
+    jpaProps.remove("hibernate.connection.password");
+    jpaProps.remove("hibernate.connection.provider_class");
+    jpaProps.remove("hibernate.connection.datasource");
+
     jpaProps.put("hibernate.default_schema", schema);
     jpaProps.put("hibernate.hbm2ddl.auto", "update");
 
