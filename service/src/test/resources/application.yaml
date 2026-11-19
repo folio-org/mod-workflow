@@ -78,7 +78,7 @@ spring:
 
     properties.hibernate:
       jdbc.lob.non_contextual_creation: true
-      default-schema: ${DB_SCHEMA:mod_workflow}
+      default_schema: ${DB_SCHEMA:mod_workflow}
 
     generate-ddl: false
     hibernate.ddl-auto: none
