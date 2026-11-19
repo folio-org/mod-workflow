@@ -1,6 +1,5 @@
 package org.folio.rest.workflow.provisioner;
 
-import jakarta.persistence.EntityManagerFactory;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -8,7 +7,9 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.sql.DataSource;
 import org.folio.spring.tenant.config.HibernateMultiTenantConfig;
+import org.folio.spring.tenant.hibernate.HibernateSchemaDataSource;
 import org.folio.spring.tenant.interfaces.TenantDatabaseProvisioner;
+import org.folio.spring.tenant.service.SchemaService;
 import org.folio.spring.tenant.storage.ThreadLocalStorage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,18 +25,22 @@ public class WorkflowTenantDatabaseProvisioner implements TenantDatabaseProvisio
 
   private final ApplicationContext applicationContext;
 
-  private final DataSource provisioningDataSource;
+  private final DataSource dataSource;
+
+  private final SchemaService schemaService;
 
   /**
    * Initializer.
    *
-   * @param applicationContext     The application context.
-   * @param provisioningDataSource The data source used only to provision.
+   * @param applicationContext The application context.
+   * @param dataSource         The provisioning data source.
+   * @param schemaService      The schema service.
    */
-  public WorkflowTenantDatabaseProvisioner(ApplicationContext applicationContext, DataSource provisioningDataSource) {
+  public WorkflowTenantDatabaseProvisioner(ApplicationContext applicationContext, DataSource dataSource, SchemaService schemaService) {
 
     this.applicationContext = applicationContext;
-    this.provisioningDataSource = provisioningDataSource;
+    this.dataSource = dataSource;
+    this.schemaService = schemaService;
   }
 
   @Override
@@ -69,31 +74,34 @@ public class WorkflowTenantDatabaseProvisioner implements TenantDatabaseProvisio
     final LocalContainerEntityManagerFactoryBean primaryEmf
       = (LocalContainerEntityManagerFactoryBean) applicationContext.getBean("&entityManagerFactory");
 
+    try (
+      final Connection connection = dataSource.getConnection();
+      final Statement statement = connection.createStatement()
+    ) {
+      statement.execute(String.format("CREATE SCHEMA IF NOT EXISTS %s", schema));
+    } catch (SQLException e) {
+      throw new RuntimeException(String.format("Failed to create schema '%s'.", schema), e);
+    }
+
     final Map<String, Object> jpaProps = new HashMap<>();
     jpaProps.put("hibernate.dialect", primaryEmf.getJpaPropertyMap().get("hibernate.dialect"));
     jpaProps.put("hibernate.default_schema", schema);
     jpaProps.put("hibernate.hbm2ddl.auto", "update"); // TODO: expose this as a custom configuration setting.
 
     // Must be explicitly set to override and take precedence.
-    jpaProps.put("hibernate.connection.datasource", provisioningDataSource);
+    final DataSource tenantDataSource = new HibernateSchemaDataSource(dataSource, schemaService);
+    jpaProps.put("hibernate.connection.datasource", tenantDataSource);
 
     final LocalContainerEntityManagerFactoryBean tenantEmf = new LocalContainerEntityManagerFactoryBean();
-    tenantEmf.setDataSource(provisioningDataSource);
+    tenantEmf.setDataSource(tenantDataSource);
     tenantEmf.setJpaVendorAdapter(primaryEmf.getJpaVendorAdapter());
     tenantEmf.setPackagesToScan(HibernateMultiTenantConfig.PACKAGES_TO_SCAN);
     tenantEmf.setJpaPropertyMap(jpaProps);
     tenantEmf.setPersistenceUnitName(String.format("%s_%s", WorkflowTenantDatabaseProvisioner.class, schema));
 
     try {
-      try (
-        final Connection connection = provisioningDataSource.getConnection();
-        final Statement statement = connection.createStatement()
-      ) {
-        statement.execute(String.format("CREATE SCHEMA IF NOT EXISTS %s", schema));
-      }
-
       tenantEmf.afterPropertiesSet();
-      final EntityManagerFactory emf = tenantEmf.getObject();
+      //final EntityManagerFactory emf = tenantEmf.getObject();
     } catch (Exception e) {
       throw new RuntimeException(String.format("Failed to provision schema '%s'.", schema), e);
     } finally {
