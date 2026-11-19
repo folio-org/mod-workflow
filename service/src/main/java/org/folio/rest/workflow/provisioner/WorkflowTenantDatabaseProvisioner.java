@@ -46,9 +46,9 @@ public class WorkflowTenantDatabaseProvisioner implements TenantDatabaseProvisio
   @Override
   public void provisionSchema(String schema, String tenant) throws SQLException {
 
-    LOG.debug("Provisioning schema '{}' for tenant '{}'.", schema, tenant);
-
     final String originalTlsTenant = ThreadLocalStorage.getTenant();
+
+    LOG.debug("Provisioning schema '{}' for tenant '{}', original tenant is '{}'.", schema, tenant, originalTlsTenant);
 
     // Set the tenant context so the MultiTenantConnectionProvider routes correctly.
     ThreadLocalStorage.setTenant(tenant);
@@ -101,7 +101,6 @@ public class WorkflowTenantDatabaseProvisioner implements TenantDatabaseProvisio
 
     try {
       tenantEmf.afterPropertiesSet();
-      //final EntityManagerFactory emf = tenantEmf.getObject();
     } catch (Exception e) {
       throw new RuntimeException(String.format("Failed to provision schema '%s'.", schema), e);
     } finally {
