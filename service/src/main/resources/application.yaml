@@ -84,7 +84,7 @@ spring:
 
     generate-ddl: false
     hibernate.ddl-auto: update
-    #hibernate.hbm2ddl.auto: none
+    hibernate.hbm2ddl.auto: none
     open-in-view: true
     show-sql: false
 
