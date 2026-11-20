@@ -39,7 +39,7 @@ import java.util.List;
 import java.util.stream.Stream;
 import org.folio.rest.workflow.model.Action;
 import org.folio.rest.workflow.service.OkapiDiscoveryService;
-import org.folio.spring.tenant.properties.TenantProperties;
+import org.folio.spring.tenant.config.TenantProperties;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;

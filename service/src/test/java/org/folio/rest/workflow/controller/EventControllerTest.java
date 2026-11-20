@@ -21,7 +21,7 @@ import org.folio.rest.workflow.dto.TriggerDto;
 import org.folio.rest.workflow.enums.HttpMethod;
 import org.folio.rest.workflow.kafka.EventProducer;
 import org.folio.rest.workflow.model.repo.TriggerRepo;
-import org.folio.spring.tenant.properties.TenantProperties;
+import org.folio.spring.tenant.config.TenantProperties;
 import org.folio.spring.tenant.resolver.TenantHeaderResolver;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;

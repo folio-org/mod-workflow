@@ -57,7 +57,7 @@ import org.folio.rest.workflow.model.repo.WorkflowRepo;
 import org.folio.rest.workflow.service.WorkflowCqlService;
 import org.folio.rest.workflow.service.WorkflowEngineService;
 import org.folio.rest.workflow.service.WorkflowImportService;
-import org.folio.spring.tenant.properties.TenantProperties;
+import org.folio.spring.tenant.config.TenantProperties;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
